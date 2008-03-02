@@ -1,0 +1,6 @@
+all:
+
+cleanup: 
+	@rm -rf *~
+
+

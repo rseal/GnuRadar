@@ -6,6 +6,8 @@
 #include <gnuradar/Lock.h>
 #include <gnuradar/ProducerConsumerExceptions.h>
 #include <gnuradar/SThread.h>
+#include <gnuradar/Device.h>
+
 #include <boost/shared_ptr.hpp>
 #include <iostream>
 #include <sstream>
@@ -30,6 +32,8 @@ struct ProducerConsumerModel: public SThread {
     const int& bytes_;
     const int& buffers_;
     const std::string& baseFileName_;
+    Device& device_;
+
     std::auto_ptr<ProducerThread> pThread_;
     std::auto_ptr<ConsumerThread> cThread_;
     int head_;
@@ -45,7 +49,6 @@ struct ProducerConsumerModel: public SThread {
     vector< boost::shared_ptr<SharedMemory> > bufferPtr_;
     bool stop_;
     bool overFlow_;
-  
     
     std::string FileName(){
 	//lock head_ variable
@@ -92,13 +95,13 @@ struct ProducerConsumerModel: public SThread {
 public:
     ProducerConsumerModel(const int& bytes, void* destination, 
 			  const int& buffers, const int& dataWidth, 
-			  const std::string baseFileName):
+			  const std::string baseFileName, Device& device):
 	bytes_(bytes), destination_(destination),buffers_(buffers), 
-	baseFileName_(baseFileName),head_(),tail_(),depth_(),
+	baseFileName_(baseFileName), device_(device), head_(),tail_(),depth_(),
 	dataWidth_(dataWidth),stop_(false),overFlow_(false){
 
 	//create producer and consumer
-	pThread_.reset(new ProducerThread(bytes_));
+	pThread_.reset(new ProducerThread(bytes_,device_));
 	cThread_.reset(new ConsumerThread(bytes_,destination_));
 	
 	//create vector of memory buffers in /dev/shm using POSIX shared memory (tmpfs)
@@ -117,6 +120,7 @@ public:
 	    if(OverFlow()) throw PCException::OverFlow();
 	    //Request Data From Hardware And Return Error Status
 	    pThread_->RequestData((bufferPtr_[head_])->GetPtr());
+	    //cout << "producer thread " << head_ << endl;
 	    //Sync Thread To Keep Data Streaming Properly
 	    pThread_->Wait();
 	    //Increment Head
@@ -126,23 +130,27 @@ public:
 	    cThread_->Wake();
 	    //sleep(1);
 	}
+	pThread_->Stop();
     }
 
     void RequestData(void* memory){
-	if(DataAvailable()){
+	while(!stop_){
+	    if(!DataAvailable()){
+		cThread_->Pause();
+		cout << "sleeping" << endl;
+	    }
 	    cThread_->RequestData((bufferPtr_[tail_])->GetPtr());
 	    Debug();
 	    cThread_->Wait();
 	    IncrementTail();
 	    DecrementDepth();
-	}else{
-	    cThread_->Sleep();
-	    cout << "consumer sleeping" << endl;
 	}
     }
     
     const bool& OverFlow() { return overFlow_;}
-
+    void Stop(){ 
+	stop_ = true;
+    }
 };
 
 #endif

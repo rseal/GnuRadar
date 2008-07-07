@@ -1,4 +1,4 @@
-all: consumer test
+all: test
 
 consumer: ConsumerThread.cpp
 	@echo "Building ----> Consumer"
@@ -6,7 +6,7 @@ consumer: ConsumerThread.cpp
 
 test: GnuRadioTest.cpp 
 	@echo "Building ----> GnuRadioTest"
-	@g++ -o test GnuRadioTest.cpp ConsumerThread.o -lrt -lusrp -lusb 
+	@g++ -o test GnuRadioTest.cpp -lrt -lusrp -lusb 
 
 clean:
 	@rm -rf *~ test ConsumerThread.o

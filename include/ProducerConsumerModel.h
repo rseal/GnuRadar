@@ -13,6 +13,8 @@
 #include <sstream>
 #include <vector>
 
+#include <simpleHeader/Shs.h>
+
 using std::string;
 using std::vector;
 using boost::shared_ptr;
@@ -48,6 +50,8 @@ struct ProducerConsumerModel: public SThread {
 
     vector< boost::shared_ptr<SharedMemory> > bufferPtr_;
     bool stop_;
+    bool stopProducer_;
+    bool stopConsumer_;
     bool overFlow_;
     
     std::string FileName(){
@@ -89,20 +93,22 @@ struct ProducerConsumerModel: public SThread {
     //track variables for debugging/testing
     void Debug(){
 	ScopedLock scopedLock(mutex_);
-	cout << "head = " << head_ << " tail = " << tail_ << " depth = " << depth_ << endl;
+	cout << endl << ">>> head = " << head_ << " tail = " << tail_ << " depth = " << depth_ << endl;
     }
 
 public:
     ProducerConsumerModel(const int& bytes, void* destination, 
 			  const int& buffers, const int& dataWidth, 
-			  const std::string baseFileName, Device& device):
+			  const std::string baseFileName, Device& device, 
+			  SimpleHeader<short,2>& shs):
 	bytes_(bytes), destination_(destination),buffers_(buffers), 
-	baseFileName_(baseFileName), device_(device), head_(),tail_(),depth_(),
-	dataWidth_(dataWidth),stop_(false),overFlow_(false){
+	baseFileName_(baseFileName), device_(device), head_(),
+	tail_(),depth_(),dataWidth_(dataWidth),stop_(false),
+	stopProducer_(false),stopConsumer_(false),overFlow_(false){
 
 	//create producer and consumer
 	pThread_.reset(new ProducerThread(bytes_,device_));
-	cThread_.reset(new ConsumerThread(bytes_,destination_));
+	cThread_.reset(new ConsumerThread(bytes_,destination_, shs));
 	
 	//create vector of memory buffers in /dev/shm using POSIX shared memory (tmpfs)
 	for(int i=0; i<buffers_; ++i){
@@ -115,8 +121,12 @@ public:
     }
    
     virtual void Run(){
+
+	stopProducer_ = false;
+	stopConsumer_ = false;
+
 	//Run Until User Tells Us To Stop
-	while(!stop_){
+	while(!stopProducer_){
 	    if(OverFlow()) throw PCException::OverFlow();
 	    //Request Data From Hardware And Return Error Status
 	    pThread_->RequestData((bufferPtr_[head_])->GetPtr());
@@ -131,26 +141,31 @@ public:
 	    //sleep(1);
 	}
 	pThread_->Stop();
+	cout << "ProducerConsumerModel: Producer Stopped" << endl;
+	stopConsumer_=true;
     }
 
     void RequestData(void* memory){
-	while(!stop_){
-	    if(!DataAvailable()){
-		cThread_->Pause();
-		cout << "sleeping" << endl;
-	    }
+
+	while(!stopConsumer_){
+
+	    if(!DataAvailable()) cThread_->Pause();
+
 	    cThread_->RequestData((bufferPtr_[tail_])->GetPtr());
 	    Debug();
 	    cThread_->Wait();
 	    IncrementTail();
 	    DecrementDepth();
 	}
+	cout << "ProducerConsumerModel: Consumer Stopped" << endl;
     }
     
     const bool& OverFlow() { return overFlow_;}
-    void Stop(){ 
-	stop_ = true;
-    }
+
+    void Stop(void){ 
+	stopProducer_ = true;
+	cout << "ProducerConsumerModel: System Stop activated" << endl;
+    } 
 };
 
 #endif

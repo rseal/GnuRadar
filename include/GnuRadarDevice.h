@@ -3,6 +3,8 @@
 
 #include<gnuradar/GnuRadarSettings.h>
 #include<gnuradar/DataFormat.h>
+#include <gnuradar/Device.h>
+
 #include <iostream>
 #include<usrp_standard.h>
 
@@ -16,15 +18,15 @@ public:
 	grSettings_(grSettings),overrun_(false),firstCall_(true){
 
 	usrp_.reset(usrp_standard_rx::make(
-			grSettings.whichBoard,
-			grSettings.decimationRate,
-			grSettings.numChannels,
-			grSettings.mux,
-			grSettings.mode,
- 			grSettings.fUsbBlockSize,
-			grSettings.fUsbNblocks,
-			grSettings.fpgaFileName,
-			grSettings.firmwareFileName
+			grSettings_.whichBoard,
+			grSettings_.decimationRate,
+			grSettings_.numChannels,
+			grSettings_.mux,
+			grSettings_.mode,
+ 			grSettings_.fUsbBlockSize,
+			grSettings_.fUsbNblocks,
+			grSettings_.fpgaFileName,
+			grSettings_.firmwareFileName
 			));
 	
 	//check to see if device is connected
@@ -33,11 +35,15 @@ public:
 	    exit(0);
 	}
 
-	usrp_->set_decim_rate(grSettings_.decimationRate);
-	usrp_->set_nchannels(grSettings_.numChannels);
-	usrp_->set_mux(grSettings_.mux);
-	usrp_->set_rx_freq(0,grSettings_.Tune(0));
-	usrp_->set_ddc_phase(0,grSettings_.Phase(0));
+	//	usrp_->set_decim_rate(grSettings_.decimationRate);
+	//	usrp_->set_nchannels(grSettings_.numChannels);
+	//	usrp_->set_mux(grSettings_.mux);
+	for(int i=0; i<grSettings_.numChannels; ++i){
+	  usrp_->set_rx_freq(i,grSettings_.Tune(i));
+	  usrp_->set_ddc_phase(i,0);
+	}
+
+
 	usrp_->start();
     }
 

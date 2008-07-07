@@ -26,7 +26,7 @@ int main(void)
     bool overrun(false);
 
     usrp_standard_rx* usrp = usrp_standard_rx::make(0,16);
-    usrp->set_rx_freq(0,9.9e6);
+    usrp->set_rx_freq(0,14e6);
     usrp->start();
     sleep(1);
     //for(int i=0; i<16384; ++i){

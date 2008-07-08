@@ -7,46 +7,29 @@
 #include <simpleHeader/Time.h>
 
 class ConsumerThread: public BaseThread, public SThread{
-  void* destination_;
-  SimpleHeader<short,2>& shs_;
+    void* destination_;
+    SimpleHeader<short,2>& shs_;
 
- public:
-
-  ConsumerThread(const int& bytes, void* destination, SimpleHeader<short,2>& shs)
-    :BaseThread(bytes),SThread(),destination_(destination),shs_(shs){
-  }
+public:
+    
+    ConsumerThread(const int& bytes, void* destination, SimpleHeader<short,2>& shs)
+	:BaseThread(bytes),SThread(),destination_(destination),shs_(shs){
+    }
 
     virtual void Stop(){ 
-      //cleanup code for hardware here
+	//cleanup code for hardware here
     }
 
     virtual void RequestData(void* address){ 
-      address_ = address;
-      //run thread called here - might have to sync here as well
-      this->Start();
+	address_ = address;
+	//run thread called here - might have to sync here as well
+	this->Start();
     }
     
-    //redefine run method for threading - define this external for 
-    //modularity
-    virtual void Run(){
-      static bool keywordInit = false;
-      Time time;
+    //redefine run method locally for threading - this provides 
+    //modularity and a clean interface for testing/verification
+    virtual void Run();
     
-      if(!keywordInit){
-	//create constants in data table shs_
-	shs_.data.Add("TIME", time.GetTime(), "System time (CDT)");
-	keywordInit = true;
-      } 
-      else{
-	shs_.data.Value("TIME", time.GetTime());
-      }    
-
-      shs_.WriteTable(reinterpret_cast<short*>(address_),bytes_);
-    }
-
-    //{
-    //get data from hardware and write to memory location
-    //}
 };    
 
 #endif

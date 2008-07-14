@@ -37,8 +37,28 @@ public:
     const char*  SampleRateString() { return lexical_cast<string>(sampleRate_/1e6).c_str();}
     const int&   Decimation()       { return decimation_;}
     const float& Bandwidth()        { return bandwidth_;}
+
     const char* BandwidthString()   {
 	return lexical_cast<string>(static_cast<float>(bandwidth_/1e6)).c_str();
+    }
+
+    const char* BandwidthStringFancy() {
+	string bw,units;
+	if(bandwidth_ >= 1e6){
+	    units = " MHz";
+	    bw = lexical_cast<string>(bandwidth_/1000000.0f);
+	}
+	else
+	    if(bandwidth_ >= 1e3){
+		units = " KHz";
+		bw = lexical_cast<string>(bandwidth_/1000.0f);
+	    }
+	    else{
+		units = " Hz";
+		bw = lexical_cast<string>(bandwidth_);
+	    }
+	string temp = bw + units;
+	return temp.c_str();
     }
 
     void Decimation(const int& decimation) { 

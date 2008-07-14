@@ -12,17 +12,34 @@
 #include <FL/Fl_File_Browser.H>
 #include <FL/Fl_Window.h>
 #include <FL/Fl_Value_Slider.h>
+#include <FL/Fl_Choice.h>
 
 #include <gnuradar/UsrpParameters.h>
 #include <boost/lexical_cast.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <iostream>
+#include <vector>
+
+#include "ChannelInterface.h"
 
 using std::auto_ptr;
+using std::vector;
+using boost::shared_ptr;
 
 class UserInterface : public Fl_Window 
 {
+    const int maxChannels_;
     UsrpParameters usrpParameters_;
+
+    typedef shared_ptr<ChannelInterface> ChannelInterfacePtr;
+    vector<ChannelInterfacePtr> channelGroupPtr_;
+
+    auto_ptr<ChannelInterface> channelGroup_;
+
+    Fl_Color windowColor_;
+    Fl_Color buttonColor_;
+    Fl_Color tabColor_;
 
     auto_ptr<Fl_Button>       buttonQuit_;
     auto_ptr<Fl_Button>       buttonSave_;
@@ -32,7 +49,7 @@ class UserInterface : public Fl_Window
     auto_ptr<Fl_Group>        tab2Group_;
     auto_ptr<Fl_File_Browser> fileBrowserFPGA_;
     auto_ptr<Fl_Float_Input>  tab1Input1_;
-    auto_ptr<Fl_Input>        tab1Input2_;
+//    auto_ptr<Fl_Input>        tab1Input2_;
     auto_ptr<Fl_Input>        tab1Input3_;
     auto_ptr<Fl_Input>        tab1Input4_;
     auto_ptr<Fl_Output>       tab1Output1_;
@@ -42,6 +59,7 @@ class UserInterface : public Fl_Window
     auto_ptr<Fl_Input>        tab2Input4_;
     auto_ptr<Fl_Input>        tab2Input5_;
     auto_ptr<Fl_Value_Slider> tab1Slider_;
+    auto_ptr<Fl_Choice>       tab1Channels_;
 
     
    static void Quit(Fl_Widget* flw){
@@ -65,7 +83,14 @@ class UserInterface : public Fl_Window
 	usrpParameters_.SampleRate(sampleRate);
 	usrpParameters_.Decimation(decimation);
 	tab1Output1_->value(usrpParameters_.BandwidthString());
+	cout << "Bandwidth = " << usrpParameters_.BandwidthStringFancy() << endl;
     }
+
+    static void UpdateChannel(Fl_Widget* flw, void* userData){
+	Fl_Choice* channel = reinterpret_cast<Fl_Choice*>(flw);
+	int numChannels = lexical_cast<int>(channel->text());
+    };
+
 public:
     UserInterface(int X, int Y);
 };

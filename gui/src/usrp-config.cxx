@@ -1,4 +1,4 @@
-#include "usrp-config-gui.h"
+#include "../include/usrp-config-gui.h"
 
 int main(){
     UserInterface ui(450,500);

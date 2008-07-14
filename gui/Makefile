@@ -8,7 +8,7 @@ usrp-config-gui: usrp-config-gui.cxx usrp-config-gui.h
 usrp-config-gui-debug: usrp-config-gui.cxx usrp-config-gui.h
 	g++ `fltk-config --cxxflags` -g -O0 -c usrp-config-gui.cxx 
 
-usrp-config: usrp-config.cxx usrp-config-gui.cxx usrp-config-gui.h
+usrp-config: usrp-config.cxx usrp-config-gui.cxx usrp-config-gui.h ../include/UsrpParameters.h
 	g++ `fltk-config --cxxflags` -o usrp-config usrp-config-gui.o `fltk-config --ldflags` usrp-config.cxx
 
 usrp-config-debug: usrp-config.cxx usrp-config-gui.cxx usrp-config-gui.h

@@ -21,17 +21,16 @@ class ParserTestFixture: public CppUnit::TestFixture{
   //test for size failure
   void Create(){
     Parser parse("./parseFile.test");
-    parse.AddComment("This is really purposely a long comment to test the wraparound effect and look at the \
-alignment of the comment made");
-    parse.Put("key1", "string1");
-    parse.Put("key5", "string5");
-    parse.Put("key6", "string6");
-    parse.AddComment("KEY2");
-    parse.Put("key2", "string2");
-    parse.AddComment("KEY3");
-    parse.Put("key3", 5);
-    parse.AddComment("KEY4");
-    parse.Put("key4", 6.0f);
+    parse.AddComment("This is really purposely a long comment to test the wraparound effect and look at the"
+		     "alignment of the comment made");
+    parse.AddComment("USRP External Clock Rate");
+    parse.Put("RefClk", "50 MHz");
+    parse.AddComment("USRP Decimation");
+    parse.Put("Decimation", "2");
+    parse.AddComment("Complex Sample Size (bytes)");
+    parse.Put("SampleWidth", 4);
+    parse.AddComment("USRP Mux Setting");
+    parse.PutHex("Mux", 0x0f0f1f1f);
     parse.Write();
   }
   

@@ -39,7 +39,9 @@ public:
     const float& Bandwidth()        { return bandwidth_;}
 
     const char* BandwidthString()   {
-	return lexical_cast<string>(static_cast<float>(bandwidth_/1e6)).c_str();
+	string str = lexical_cast<string>(bandwidth_/1000000.0f).c_str();
+	const char* hack = str.c_str();
+	return hack;
     }
 
     const char* BandwidthStringFancy() {

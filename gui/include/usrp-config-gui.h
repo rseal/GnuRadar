@@ -22,6 +22,7 @@
 #include <vector>
 
 #include "ChannelInterface.h"
+#include "SettingsInterface.h"
 
 using std::auto_ptr;
 using std::vector;
@@ -31,6 +32,8 @@ class UserInterface : public Fl_Window
 {
     const int maxChannels_;
     UsrpParameters usrpParameters_;
+
+    auto_ptr<SettingsInterface> settingsInterface_;
 
     typedef shared_ptr<ChannelInterface> ChannelInterfacePtr;
     vector<ChannelInterfacePtr> channelGroupPtr_;
@@ -44,6 +47,7 @@ class UserInterface : public Fl_Window
     auto_ptr<Fl_Button>       buttonQuit_;
     auto_ptr<Fl_Button>       buttonSave_;
     auto_ptr<Fl_Button>       buttonApply_;
+
     auto_ptr<Fl_Tabs>         tabWindow_;
     auto_ptr<Fl_Group>        tab1Group_;
     auto_ptr<Fl_Group>        tab2Group_;

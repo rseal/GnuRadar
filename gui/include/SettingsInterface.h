@@ -52,11 +52,12 @@ class SettingsInterface : public Fl_Group
     void UpdateParameters(){
 	float sampleRate = lexical_cast<float>(sampleRate_->value())*1000000.0f;
 	int decimation = decimation_->value();
+	int channels = lexical_cast<int>(channels_->text());
 	usrpParameters_.SampleRate(sampleRate);
 	usrpParameters_.Decimation(decimation);
+	usrpParameters_.Channels(channels);
 	float bw = usrpParameters_.Bandwidth();
 	string unitsStr;
-	
 
 	if(bw >= 1e6){
 	    bw = bw/1000000.0f;
@@ -76,8 +77,10 @@ class SettingsInterface : public Fl_Group
     }
 
     static void UpdateChannel(Fl_Widget* flw, void* userData){
-	Fl_Choice* channel = reinterpret_cast<Fl_Choice*>(flw);
-	int numChannels = lexical_cast<int>(channel->text());
+	//Fl_Choice* channel = reinterpret_cast<Fl_Choice*>(flw);
+	//int numChannels = lexical_cast<int>(channel->text());
+	SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*>(userData);
+	settingsInterface->UpdateParameters();
     };
 
 public:

@@ -14,7 +14,8 @@ struct UsrpParameters{
     float sampleRate_;
     int   decimation_;
     float bandwidth_;
-    
+    int   channels_;
+
     const bool ValidateParameters() { 
         bool valid(true);
 	if(sampleRate_ < 1e6 || sampleRate_ > 64e6) valid = false;
@@ -25,18 +26,19 @@ struct UsrpParameters{
 
     Update(){
 	if(ValidateParameters())
-	    bandwidth_ = sampleRate_ / decimation_;
+	    bandwidth_ = sampleRate_ / (channels_ * decimation_);
 	else
 	    cout << "Invalid input parameter given - NO CHANGES MADE" << endl;
     }
 
 public:
-    UsrpParameters(): sampleRate_(64e6), decimation_(8), bandwidth_(8e6){}
+    UsrpParameters(): sampleRate_(64e6), decimation_(8), bandwidth_(8e6), channels_(1){}
 
     const float& SampleRate()       { return sampleRate_;}
     const char*  SampleRateString() { return lexical_cast<string>(sampleRate_/1e6).c_str();}
     const int&   Decimation()       { return decimation_;}
     const float& Bandwidth()        { return bandwidth_;}
+    const int&   Channels()         { return channels_;}
 
     const char* BandwidthString()   {
 	string str = lexical_cast<string>(bandwidth_/1000000.0f).c_str();
@@ -78,6 +80,15 @@ public:
 	else
 	    sampleRate_ = sampleRate;
 
+	Update();
+    }
+
+    void Channels(const int& channels){
+	if((channels != 1) && (channels != 2) && (channels != 4)) 
+	    cout << "ERROR: invalid number of channels selected" << endl;
+	else
+	    channels_ = channels;
+	
 	Update();
     }
 };

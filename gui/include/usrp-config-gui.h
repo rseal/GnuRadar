@@ -7,7 +7,8 @@
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Float_Input.H>
-
+#include <FL/Fl_Menu_Bar.H>
+#include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Output.H>
 #include <FL/Fl_File_Browser.H>
 #include <FL/Fl_Window.h>
@@ -33,12 +34,14 @@ class UserInterface : public Fl_Window
     const int maxChannels_;
     UsrpParameters usrpParameters_;
 
+    auto_ptr<Fl_Menu_Bar> menuBar_;
+
     auto_ptr<SettingsInterface> settingsInterface_;
 
-    typedef shared_ptr<ChannelInterface> ChannelInterfacePtr;
-    vector<ChannelInterfacePtr> channelGroupPtr_;
+//     typedef shared_ptr<ChannelInterface> ChannelInterfacePtr;
+//     vector<ChannelInterfacePtr> channelGroupPtr_;
 
-    auto_ptr<ChannelInterface> channelGroup_;
+    auto_ptr<ChannelInterface> channelTab_;
 
     Fl_Color windowColor_;
     Fl_Color buttonColor_;
@@ -66,7 +69,7 @@ class UserInterface : public Fl_Window
     auto_ptr<Fl_Choice>       tab1Channels_;
 
     
-   static void Quit(Fl_Widget* flw){
+    static void Quit(Fl_Widget* flw, void* userData){
        std::cout << "quit" << std::endl;
        exit(0);
     }

@@ -3,44 +3,33 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Group.H>
-#include <FL/Fl_Float_Input.H>
-#include <FL/Fl_Choice.h>
+#include <FL/Fl_Tabs.h>
 
-#include <gnuradar/UsrpParameters.h>
 #include <boost/lexical_cast.hpp>
+#include <boost/shared_ptr.hpp>
+
+#include "ChannelGroup.h"
 
 #include <iostream>
 #include <vector>
 
+using boost::lexical_cast;
 using std::auto_ptr;
 using std::vector;
+using std::string;
 
-class ChannelInterface: public Fl_Group 
+class ChannelInterface: public Fl_Tabs 
 {
-    UsrpParameters& usrpParameters_;
-
+    typedef boost::shared_ptr<ChannelGroup> ChannelGroupPtr;
     Fl_Color windowColor_;
-    Fl_Color buttonColor_;
-    Fl_Color tabColor_;
-
-    auto_ptr<Fl_Group>        group_;
-    auto_ptr<Fl_Input>        ddc_;
-    auto_ptr<Fl_Choice>       units_;
-    
-    
-    static void Quit(Fl_Widget* flw){
-	std::cout << "quit" << std::endl;
-	exit(0);
-    }
-
     static void UpdateDDC(Fl_Widget* flw, void* userData){
 	//UserInterface* userInterface = reinterpret_cast<UserInterface*>(userData);
 	//userInterface->UpdateParameters();
     }
+    vector<ChannelGroupPtr> channelArray_;
+    vector<string> labelArray_;
 
 public:
-    ChannelInterface(int X, int Y, int width, int height, 
-		     const char* label, UsrpParameters& usrpParameters);
-
+    ChannelInterface(int X, int Y, int width, int height, const char* label);
 };
 #endif

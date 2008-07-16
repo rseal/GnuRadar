@@ -1,7 +1,7 @@
 INCLUDE_DIR=../include
 SRC_DIR=../src
 
-all: settings-interface-gui channel-interface-gui usrp-config-gui usrp-config
+all: settings-interface-gui channel-group-gui channel-interface-gui usrp-config-gui usrp-config
 debug: usrp-config-gui-debug usrp-config-debug
 
 usrp-config-gui: $(SRC_DIR)/usrp-config-gui.cxx $(INCLUDE_DIR)/usrp-config-gui.h
@@ -13,10 +13,13 @@ usrp-config-gui-debug: $(SRC_DIR)/usrp-config-gui.cxx $(INCLUDE_DIR)/usrp-config
 usrp-config: $(SRC_DIR)/usrp-config.cxx $(SRC_DIR)/usrp-config-gui.cxx $(INCLUDE_DIR)/usrp-config-gui.h \
 	../../include/UsrpParameters.h
 	g++ `fltk-config --cxxflags` -o ../bin/usrp-config usrp-config-gui.o ChannelInterface.o \
-	SettingsInterface.o `fltk-config --ldflags` $(SRC_DIR)/usrp-config.cxx
+	SettingsInterface.o ChannelGroup.o `fltk-config --ldflags` $(SRC_DIR)/usrp-config.cxx
+
+channel-group-gui: $(SRC_DIR)/ChannelGroup.cxx $(INCLUDE_DIR)/ChannelGroup.h 
+	g++ `fltk-config --cxxflags` -c $(SRC_DIR)/ChannelGroup.cxx
 
 channel-interface-gui: $(SRC_DIR)/ChannelInterface.cxx $(INCLUDE_DIR)/ChannelInterface.h 
-	g++ `fltk-config --cxxflags` -c $(SRC_DIR)/ChannelInterface.cxx
+	g++ `fltk-config --cxxflags` -c $(SRC_DIR)/ChannelInterface.cxx 
 
 settings-interface-gui: $(SRC_DIR)/SettingsInterface.cxx $(INCLUDE_DIR)/SettingsInterface.h 
 	g++ `fltk-config --cxxflags` -c $(SRC_DIR)/SettingsInterface.cxx
@@ -28,7 +31,7 @@ usrp-config-debug: $(SRC_DIR)/usrp-config.cxx $(SRC_DIR)/usrp-config-gui.cxx $(I
 clean: 
 	@echo "Cleaned USRP-CONFIG Project"
 	@rm -rf *~ ../bin/usrp-config usrp-config-gui.o ../bin/usrp-config-debug usrp-config-gui-debug \
-	ChannelInterface.o ../src/*~ ../include/*~ ../../include/*~ SettingsInterface.o
+	ChannelInterface.o ../src/*~ ../include/*~ ../../include/*~ SettingsInterface.o ChannelGroup.o
 
 
 

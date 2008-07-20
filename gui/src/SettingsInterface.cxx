@@ -17,19 +17,20 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     int sp1 = 40;
     int sp2 = w1+120;
     Fl_Color wColor_ = fl_rgb_color(220,220,220);
-									
-    this->color(wColor_);
+    color1_ = fl_rgb_color(180,180,180);									
+//    this->color(wColor_);
 
     sampleRate_ = auto_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0, w0, h1, "Sample Rate"));
     sampleRate_->value(usrpParameters_.SampleRateString());
     sampleRate_->callback(SettingsInterface::UpdateSampleRate,this);
+//    sampleRate_->box(FL_PLASTIC_UP_BOX);
     sampleRate_->color(FL_WHITE);
     this->add(sampleRate_.get());
 
     units1_ = auto_ptr<Fl_Output>(new Fl_Output(x0+60,y0, 40, h1));
     units1_->value("MHz");
     units1_->color(wColor_);
-    units1_->box(FL_NO_BOX);
+    units1_->box(FL_PLASTIC_UP_BOX);
     this->add(units1_.get());
 
     //add channel options to Fl_Choice widget
@@ -44,6 +45,7 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     channels_->add(chNum[2].c_str(),0,0);
     channels_->value(0);
     channels_->callback(SettingsInterface::UpdateChannel,this);
+    channels_->box(FL_PLASTIC_UP_BOX);
     this->add(channels_.get());
 
     decimation_ = auto_ptr<Fl_Value_Slider>(new Fl_Value_Slider(x0, y0+sp1, w1, h1, "Decimation"));
@@ -52,20 +54,21 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     decimation_->step(2);
     decimation_->range(8,256);
     decimation_->value(8);
+    decimation_->box(FL_PLASTIC_UP_BOX);
     decimation_->color(FL_WHITE);
     decimation_->callback(SettingsInterface::UpdateDecimation,this);
     this->add(decimation_.get());
 
     bandwidth_ = auto_ptr<Fl_Output>(new Fl_Output(x0+sp2, y0+sp1, w0, h1, "Bandwidth"));
     bandwidth_->value("8");
+    bandwidth_->box(FL_PLASTIC_UP_BOX);
     bandwidth_->color(wColor_);
     bandwidth_->align(FL_ALIGN_LEFT);
     this->add(bandwidth_.get());
 
     units2_ = auto_ptr<Fl_Output>(new Fl_Output(x0+sp2+60,y0+sp1, 40, h1));
     units2_->value("MHz");
-    units2_->color(wColor_);
-    units2_->box(FL_NO_BOX);
+    units2_->box(FL_PLASTIC_UP_BOX);
     this->add(units2_.get());
 
     this->end();

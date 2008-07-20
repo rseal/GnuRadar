@@ -1,0 +1,5 @@
+#let git-status ignore these files
+usrpSVN/
+*.o
+*~
+gui/3rdParty

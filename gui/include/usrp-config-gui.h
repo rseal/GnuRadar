@@ -32,6 +32,8 @@ using boost::shared_ptr;
 class UserInterface : public Fl_Window 
 {
     const int maxChannels_;
+    int numChannels_;
+
     UsrpParameters usrpParameters_;
 
     auto_ptr<Fl_Menu_Bar> menuBar_;
@@ -98,6 +100,22 @@ class UserInterface : public Fl_Window
 	int numChannels = lexical_cast<int>(channel->text());
     };
 
+    static void NumChannels(Fl_Widget* flw, void* userData){
+ 	Fl_Choice* w = reinterpret_cast<Fl_Choice*>(flw);
+ 	CustomTab* channelTab = reinterpret_cast<CustomTab*>(userData);
+ 	int numChannels = lexical_cast<int>(w->text());
+ 	int index = 0;
+	//cout << "num channels = " << numChannels << endl;
+
+	for(int i=0; i<4; ++i)
+	    channelTab->Disable(i);
+
+	for(index=0; index<numChannels; ++index){
+	    channelTab->Enable(index);
+	}
+	
+    }
+	
 public:
     UserInterface(int X, int Y);
 };

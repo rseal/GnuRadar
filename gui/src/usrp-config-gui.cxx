@@ -8,14 +8,14 @@ UserInterface::UserInterface(int X, int Y): Fl_Window(X, Y), maxChannels_(4)
     int width2=80;
     int tab1Height=30;
 
-    windowColor_     = fl_rgb_color(1,1,5);
+    windowColor_     = fl_rgb_color(200,200,200);
     buttonColor_     = fl_rgb_color(180,180,180);
     tabColor_        = fl_rgb_color(200,200,255);
     Fl_Color wColor_ = fl_rgb_color(220,220,220);
 
     this->label("Universal Software Radio Peripheral Configuration Interface (v-0.99)");
     this->color(windowColor_);
-    this->box(FL_PLASTIC_UP_BOX);
+    this->box(FL_PLASTIC_UP_BOX);//PLASTIC_UP_BOX);
     
     Fl_Menu_Item menuItems[] = {
 
@@ -48,16 +48,19 @@ UserInterface::UserInterface(int X, int Y): Fl_Window(X, Y), maxChannels_(4)
 	{ 0 }
     };
 
-    menuBar_ = auto_ptr<Fl_Menu_Bar>(new Fl_Menu_Bar(0, 0, 480, 30, ""));
-    menuBar_->box(FL_PLASTIC_DOWN_BOX);
+    menuBar_ = auto_ptr<Fl_Menu_Bar>(new Fl_Menu_Bar(5, 5, 740, 30, ""));
+//    menuBar_->box(FL_PLASTIC_UP_BOX);
+    menuBar_->box(FL_ENGRAVED_BOX);
     menuBar_->copy(menuItems);
 
     settingsInterface_ = auto_ptr<SettingsInterface>( 
-	new SettingsInterface(10, 40, 400, 100, "", usrpParameters_));
-    settingsInterface_->box(FL_PLASTIC_DOWN_BOX);
-    //settingsInterface_->box(FL_NO_BOX);
-    settingsInterface_->color(buttonColor_);
-    
+	new SettingsInterface(5, 40, 410, 120, "", usrpParameters_));
+    //settingsInterface_->box(FL_PLASTIC_DOWN_BOX);
+    //settingsInterface_->box(FL_PLASTIC_UP_BOX);
+    settingsInterface_->box(FL_ENGRAVED_BOX);
+    //settingsInterface_->color(buttonColor_);
+    //settingsInterface_->color(wColor_);
+
     this->add(settingsInterface_.get());
     //create vector of channel labels for use with looping constructors
     vector<string> chLabels(maxChannels_);
@@ -70,10 +73,22 @@ UserInterface::UserInterface(int X, int Y): Fl_Window(X, Y), maxChannels_(4)
     fileBrowserFPGA_->load("../../fpga");
     this->add(fileBrowserFPGA_.get());
 
-    channelTab_ = auto_ptr<ChannelInterface>(new ChannelInterface(10,150,400,130,""));
-    channelTab_->box(FL_PLASTIC_DOWN_BOX);
+    channelTab_ = auto_ptr<ChannelInterface>(new ChannelInterface(5,165,410,120,""));
+    //channelTab_->box(FL_PLASTIC_UP_BOX);
+    channelTab_->box(FL_ENGRAVED_BOX);
+    //channelTab_->color(wColor_);
     this->add(channelTab_.get());
 
+    channelTab_->Enable(0);
+    channelTab_->value(0);
+    
+
+    //disable channels 2-4
+    for(int i=1; i<4; ++i)
+	channelTab_->Disable(i);
+
+    //channelTab_->callback(
+    settingsInterface_->ChannelRef()->callback(UserInterface::NumChannels,channelTab_.get());
 //     tab1Group_->add(settingsInterface_.get());
 //     tab1Group_->add(fileBrowserFPGA_.get());
 

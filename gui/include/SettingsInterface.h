@@ -31,6 +31,7 @@ class SettingsInterface : public Fl_Group
     // decimation  - fl_value_slider
     // bandwidth   - fl_output
     // channels    - fl_choice
+    Fl_Color color1_;
 
     auto_ptr<Fl_Output> units1_;
     auto_ptr<Fl_Output> units2_;
@@ -48,6 +49,7 @@ class SettingsInterface : public Fl_Group
 	SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*>(userData);
 	settingsInterface->UpdateParameters();
     }
+
 
     void UpdateParameters(){
 	float sampleRate = lexical_cast<float>(sampleRate_->value())*1000000.0f;
@@ -70,10 +72,11 @@ class SettingsInterface : public Fl_Group
 	    }
 	    else unitsStr = "Hz";
 	
+	units2_->value("");
 	units2_->value(unitsStr.c_str());
 	string str = lexical_cast<string>(bw);
 	bandwidth_->value(str.c_str());
-	this->redraw();
+//	this->redraw();
     }
 
     static void UpdateChannel(Fl_Widget* flw, void* userData){
@@ -88,5 +91,7 @@ public:
 		      UsrpParameters& usrpParameters);
 	
 
+    const int NumChannels(){ return lexical_cast<int>(channels_->text());}
+    Fl_Choice* ChannelRef() { return channels_.get();}
 };
 #endif

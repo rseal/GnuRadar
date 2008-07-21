@@ -29,7 +29,7 @@ using std::auto_ptr;
 using std::vector;
 using boost::shared_ptr;
 
-class UserInterface : public Fl_Window 
+class UsrpInterface : public Fl_Window 
 {
     const int maxChannels_;
     int numChannels_;
@@ -72,17 +72,20 @@ class UserInterface : public Fl_Window
 
     
     static void Quit(Fl_Widget* flw, void* userData){
-       std::cout << "quit" << std::endl;
-       exit(0);
+	UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
+	std::cout << "Goodbye" << std::endl;
+	//call gui's dtor to release allocated memory
+	userInterface->~UsrpInterface();
+	//exit(0);
     }
 
     static void UpdateDecimation(Fl_Widget* flw, void* userData){
-	UserInterface* userInterface = reinterpret_cast<UserInterface*>(userData);
+	UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
 	userInterface->UpdateParameters();
     }
 
     static void UpdateSampleRate(Fl_Widget* flw, void* userData){
-	UserInterface* userInterface = reinterpret_cast<UserInterface*>(userData);
+	UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
 	userInterface->UpdateParameters();
     }
 
@@ -117,6 +120,7 @@ class UserInterface : public Fl_Window
     }
 	
 public:
-    UserInterface(int X, int Y);
+    UsrpInterface(int X, int Y);
+    ~UsrpInterface(){exit(0);};
 };
 #endif

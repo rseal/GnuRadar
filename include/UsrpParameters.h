@@ -35,7 +35,10 @@ public:
     UsrpParameters(): sampleRate_(64e6), decimation_(8), bandwidth_(8e6), channels_(1){}
 
     const float& SampleRate()       { return sampleRate_;}
-    const char*  SampleRateString() { return lexical_cast<string>(sampleRate_/1e6).c_str();}
+    const char*  SampleRateString() { 
+	string str = lexical_cast<string>(sampleRate_/1e6);
+	return str.c_str();
+    }
     const int&   Decimation()       { return decimation_;}
     const float& Bandwidth()        { return bandwidth_;}
     const int&   Channels()         { return channels_;}

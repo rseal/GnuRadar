@@ -1,6 +1,6 @@
-#include "../include/usrp-config-gui.h"
+#include "../include/UsrpInterface.h"
 
-UserInterface::UserInterface(int X, int Y): Fl_Window(X, Y), maxChannels_(4)
+UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y), maxChannels_(4)
 {
     int baseX = 25;
     int baseY = 25;
@@ -27,7 +27,7 @@ UserInterface::UserInterface(int X, int Y): Fl_Window(X, Y), maxChannels_(4)
 	{ "Save File &As...", FL_CTRL + FL_SHIFT + 's',0, 0, FL_MENU_DIVIDER },
 	{ "New &View", FL_ALT + 'v', 0, 0 },
 	{ "&Close View", FL_CTRL + 'w', 0, 0, FL_MENU_DIVIDER },
-	{ "E&xit", FL_CTRL + 'q', UserInterface::Quit, 0 },
+	{ "E&xit", FL_CTRL + 'q', UsrpInterface::Quit, this },
 	{ 0 },
 
 	{ "&Edit", 0, 0, 0, FL_SUBMENU },
@@ -48,13 +48,13 @@ UserInterface::UserInterface(int X, int Y): Fl_Window(X, Y), maxChannels_(4)
 	{ 0 }
     };
 
-    menuBar_ = auto_ptr<Fl_Menu_Bar>(new Fl_Menu_Bar(5, 5, 740, 30, ""));
+    menuBar_ = auto_ptr<Fl_Menu_Bar>(new Fl_Menu_Bar(5, 5, 740, 30, 0));
 //    menuBar_->box(FL_PLASTIC_UP_BOX);
     menuBar_->box(FL_ENGRAVED_BOX);
     menuBar_->copy(menuItems);
 
     settingsInterface_ = auto_ptr<SettingsInterface>( 
-	new SettingsInterface(5, 40, 410, 120, "", usrpParameters_));
+	new SettingsInterface(5, 40, 410, 120, 0, usrpParameters_));
     //settingsInterface_->box(FL_PLASTIC_DOWN_BOX);
     //settingsInterface_->box(FL_PLASTIC_UP_BOX);
     settingsInterface_->box(FL_ENGRAVED_BOX);
@@ -73,7 +73,7 @@ UserInterface::UserInterface(int X, int Y): Fl_Window(X, Y), maxChannels_(4)
     fileBrowserFPGA_->load("../../fpga");
     this->add(fileBrowserFPGA_.get());
 
-    channelTab_ = auto_ptr<ChannelInterface>(new ChannelInterface(5,165,410,120,""));
+    channelTab_ = auto_ptr<ChannelInterface>(new ChannelInterface(5,165,410,120,0));
     //channelTab_->box(FL_PLASTIC_UP_BOX);
     channelTab_->box(FL_ENGRAVED_BOX);
     //channelTab_->color(wColor_);
@@ -88,7 +88,7 @@ UserInterface::UserInterface(int X, int Y): Fl_Window(X, Y), maxChannels_(4)
 	channelTab_->Disable(i);
 
     //channelTab_->callback(
-    settingsInterface_->ChannelRef()->callback(UserInterface::NumChannels,channelTab_.get());
+    settingsInterface_->ChannelRef()->callback(UsrpInterface::NumChannels,channelTab_.get());
 //     tab1Group_->add(settingsInterface_.get());
 //     tab1Group_->add(fileBrowserFPGA_.get());
 

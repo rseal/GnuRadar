@@ -8,7 +8,7 @@ ChannelInterface::ChannelInterface(int x, int y, int width, int height,
     colorVector_.push_back(fl_rgb_color(100,100,100));
 
     for(int i=0; i<4; ++i){
-	string str("Channel ");
+	string str = "Channel ";
 	str += lexical_cast<string>(i+1);
 	labelArray_.push_back(str);
     }

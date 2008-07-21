@@ -1,7 +1,7 @@
-#include "../include/usrp-config-gui.h"
+#include "../include/UsrpInterface.h"
 
 int main(){
-    UserInterface ui(750,470);
-    ui.show();
+    UsrpInterface*  ui = new UsrpInterface(750,470);
+    ui->show();
     return Fl::run();
 };

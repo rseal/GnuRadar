@@ -75,6 +75,11 @@ class SettingsInterface : public Fl_Group
 	units2_->value("");
 	units2_->value(unitsStr.c_str());
 	string str = lexical_cast<string>(bw);
+
+	//limit float precision to 2 decimal places
+	int index = str.find(".");
+	if(index != string::npos) str.erase(index+3);
+
 	bandwidth_->value(str.c_str());
 //	this->redraw();
     }

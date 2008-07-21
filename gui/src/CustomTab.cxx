@@ -78,8 +78,10 @@ const int CustomTab::Index(const Fl_Widget* w){
 
 //Public member
 //accepts tab location index and returns pointer to child widget
-const Fl_Widget* CustomTab::GetPtr(const int& tab){
+Fl_Widget* CustomTab::GetPtr(const int& tab){
+    //cout << "requested tab " << child(tab) << endl;
     if(!ValidateTabIndex(tab)) return 0;
+    //cout << "valid" << endl;
     return this->child(tab);
 }
 
@@ -89,11 +91,9 @@ void CustomTab::Enable(const int& tab){
     if(!ValidateTabIndex(tab)) return;
 
     Fl_Widget* w = this->child(tab);
-    //cout << "enable tab " << w << endl;
     w->set_visible_focus();
     w->labelcolor(enColor_);
     this->redraw();
-	
 }
 
 //Public member
@@ -110,6 +110,11 @@ const bool CustomTab::CurrentVisible(const int& tab){
     return this->current() == GetPtr(tab);
 }
 
+// const int CustomTab::ActiveTab(){
+//     const int numChildren = this->children();
+//     int index;
+//     for(index = 0; index < numChildren; ++index)
+	
 // return the left edges of each tab (plus a fake left edge for a tab
 // past the right-hand one).  These position are actually of the left
 // edge of the slope.  They are either seperated by the correct distance
@@ -125,7 +130,7 @@ int CustomTab::tab_positions(int* p, int* wp) {
     p[0] = Fl::box_dx(box());
 
     for (i=0; i<children(); ++i) {
-	Fl_Widget* o = this->child(i);//*a++;
+	Fl_Widget* o = this->child(i);
 	if (o->visible()) selected = i;
 
 	int wt = 0; int ht = 0;
@@ -211,7 +216,8 @@ int CustomTab::handle(int event) {
 
     Fl_Widget *o;
     int i;
-
+    int numChildren = this->children();
+ 
     switch (event) {
 
     case FL_PUSH: {
@@ -234,18 +240,17 @@ int CustomTab::handle(int event) {
 	// redraw tabs. 
 	if(o && o->visible_focus() && (this->current() != o)){
 	    value(Index(o));
-	    set_changed();
+	    //set focus to selected tab
+	    o->take_focus();
+            set_changed();
 	    do_callback();
 	    redraw_tabs();
-
-	    //update current widget - focus should handle this ??
-	    this->current(reinterpret_cast<Fl_Group*>(o));
 	    Fl_Tooltip::current(o);
 	}
 	return 1;
 
     case FL_MOVE: {
-	//cerr << "FL_MOVE" << endl;
+//	cout << "FL_MOVE" << endl;
 	int ret = Fl_Group::handle(event);
 	Fl_Widget *o = Fl_Tooltip::current(), *n = o;
 	int H = tab_height();
@@ -264,7 +269,16 @@ int CustomTab::handle(int event) {
 
     case FL_FOCUS:
 
+	//activate first tab when user TABs into tab widget
+	if(Fl::event_key(FL_Tab)){
+	    value(0);
+	    redraw_tabs();
+	    set_changed();
+	    do_callback();
+	}
+
     case FL_UNFOCUS:
+//	cout << "FL_UNFOCUS" << endl;
 	if (!Fl::visible_focus()) return Fl_Group::handle(event);
 	if (Fl::event() == FL_RELEASE ||
 	    Fl::event() == FL_SHORTCUT ||
@@ -278,30 +292,51 @@ int CustomTab::handle(int event) {
 
     case FL_KEYBOARD:
 	switch (Fl::event_key()) {
+
 	case FL_Left:
-	    if (child(0)->visible()) return 0;
-	    for (i = 1; i < children(); i ++)
-		if (child(i)->visible()) break;
-	    value(Index(child(i - 1)));
+	    //cout << "FL_Left" << endl;
+
+	    //if first child visible - return focus
+	    if (CurrentVisible(0)) return 0;
+	    
+	    for (i = 1; i < numChildren; ++i)
+		if (CurrentVisible(i)) break;
+
+	    //set tab to left active
+	    value(i-1);
 	    set_changed();
 	    do_callback();
+
 	    return 1;
 
 	case FL_Right:
-	    if (child(children() - 1)->visible()) return 0;
-	    for (i = 0; i < children(); i ++)
-		if (child(i)->visible()) break;
-	    value(Index(child(i + 1)));
-	    set_changed();
+	    //cout << "FL_Right" << endl;
+
+	    //if last child is active - do nothing
+	    if (CurrentVisible(numChildren - 1)) return 0;
+	    
+
+	    for (i = 0; i < numChildren-1; ++i){
+		if (CurrentVisible(i)) break;
+	    }
+
+	    //set tab to right active
+	    value(i+1);
+            set_changed();
 	    do_callback();
+	    redraw_tabs();
+
 	    return 1;
 	
 	case FL_Down:
+
 	    redraw();
 	    return Fl_Group::handle(FL_FOCUS);
+
 	default:
 	    break;
 	}
+
 	return Fl_Group::handle(event);
     
     case FL_SHORTCUT:
@@ -318,7 +353,12 @@ int CustomTab::handle(int event) {
 	return Fl_Group::handle(event);
    
     case FL_SHOW:
+	//cout << "FL_SHOW" << endl;
 	value(); // update visibilities and fall through
+	
+    case FL_ENTER:
+	//cout << "FL_ENTER" << endl;
+
     default:
 	return Fl_Group::handle(event);
 
@@ -327,6 +367,7 @@ int CustomTab::handle(int event) {
 
 // Locate and return first visible child - hide others 
 Fl_Widget* CustomTab::value() {
+    
     Fl_Widget *visible,*current;
     int numChildren = this->children();
     bool childrenVisible=false;
@@ -354,17 +395,24 @@ Fl_Widget* CustomTab::value() {
 // Public Member
 // Sets requested tab visible - hides others
 const int CustomTab::value(const int& newvalue){
+    Fl_Widget* w;
+
     //valid index requested?
     if(!ValidateTabIndex(newvalue)) return -1;
+
     //can child accept focus?
     if(!this->child(newvalue)->visible_focus()) return -2;
-
+    
+    //show active - hide others
     for(int i=0; i<this->children(); ++i){
-	Fl_Widget* w = this->child(i);
-	if( GetPtr(i) != w) w->hide();
-	else w->show();
+	w = this->child(i);
+	if( GetPtr(newvalue) != w) w->hide();
+	else{
+	    w->show();
+            //set active widget
+	    this->current(reinterpret_cast<Fl_Group*>(w));
+	}
     }
-
     return 0;
 };
 
@@ -374,7 +422,8 @@ void CustomTab::draw() {
     Fl_Widget *v = value();
     int H = tab_height();
 
-    if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
+    //modified from & to && assuming bug
+    if (damage() && FL_DAMAGE_ALL) { // redraw the entire thing:
 	Fl_Color c = v ? v->color() : color();
 
 	draw_box(box(), x(), y()+(H>=0?H:0), w(), h()-(H>=0?H:-H), c);
@@ -394,7 +443,9 @@ void CustomTab::draw() {
     } else { // redraw the child
 	if (v) update_child(*v);
     }
-    if (damage() & (FL_DAMAGE_SCROLL|FL_DAMAGE_ALL)) {
+
+    //modified & and | to && and || assuming bug
+    if (damage() && (FL_DAMAGE_SCROLL || FL_DAMAGE_ALL)) {
 	int p[128]; int wp[128];
 	int selected = tab_positions(p,wp);
 	int i;
@@ -444,7 +495,8 @@ void CustomTab::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 	// Restore the original label color...
 	o->labelcolor(oc);
 
-	if (Fl::focus() == this && o->visible())
+
+	if(CurrentVisible(Index(o)))
 	    draw_focus(box(), x1, y(), W, H);
 
 	fl_pop_clip();
@@ -470,7 +522,7 @@ void CustomTab::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 	// Restore the original label color...
 	o->labelcolor(oc);
 
-	if (Fl::focus() == this && o->visible())
+	if(CurrentVisible(Index(o)))
 	    draw_focus(box(), x1, y() + h() - H, W, H);
 
 	fl_pop_clip();

@@ -78,15 +78,13 @@ class SettingsInterface : public Fl_Group
 
 	//limit float precision to 2 decimal places
 	int index = str.find(".");
+	//correct indexing bug when only tenths exist
+	if(str.length() < index+3) str += "0";
 	if(index != string::npos) str.erase(index+3);
-
 	bandwidth_->value(str.c_str());
-//	this->redraw();
     }
 
     static void UpdateChannel(Fl_Widget* flw, void* userData){
-	//Fl_Choice* channel = reinterpret_cast<Fl_Choice*>(flw);
-	//int numChannels = lexical_cast<int>(channel->text());
 	SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*>(userData);
 	settingsInterface->UpdateParameters();
     };

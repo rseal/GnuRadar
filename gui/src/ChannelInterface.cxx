@@ -22,18 +22,3 @@ ChannelInterface::ChannelInterface(int x, int y, int width, int height,
     this->end();
 };
 
-// void ChannelInterface::Enable(const int& channel, const bool& enable)
-// {
-//     if(channel < 1 || channel > 4) cerr << "ERROR: ChannelInterface::Enable - invalid channel selection" << endl;
-//     else{
-// 	channelArray_[channel-1]->labelcolor(colorVector_[enable]);
-// 	channelArray_[channel-1]->color(colorVector_[enable]);
-// //	channelArray_[channel-1]->when(enable ? 4:0);
-// 	if(enable)
-// 	    channelArray_[channel-1]->show();
-// 	else{
-// 	    cout << "channel off" << endl;
-// 	    channelArray_[channel-1]->set_output();
-// 	}
-//     }
-// }

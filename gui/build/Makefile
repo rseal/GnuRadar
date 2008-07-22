@@ -4,9 +4,11 @@ SRC_DIR=../src
 DEBUG_FLAGS = #-g -O0
 DEBUG_EXT = #-debug
 CXX_FLAGS=`fltk-config --cxxflags`
-OBJS = ChannelInterface.o UsrpInterface.o SettingsInterface.o ChannelGroup.o CustomTab.o
+OBJS = ChannelInterface.o UsrpInterface.o SettingsInterface.o ChannelGroup.o \
+       CustomTab.o HeaderInterface.o
 
-all: CustomTab SettingsInterface ChannelGroup ChannelInterface UsrpInterface usrp-config
+all: CustomTab SettingsInterface ChannelGroup ChannelInterface HeaderInterface \
+     UsrpInterface usrp-config
 
 CustomTab: $(SRC_DIR)/CustomTab.cxx $(INC_DIR)/CustomTab.h
 	@echo "BUILDING ---> CustomTab.o"
@@ -22,6 +24,10 @@ ChannelGroup: $(SRC_DIR)/ChannelGroup.cxx $(INC_DIR)/ChannelGroup.h
 
 ChannelInterface: $(SRC_DIR)/ChannelInterface.cxx $(INC_DIR)/ChannelInterface.h 
 	@echo "BUILDING ---> ChannelInterface.o"
+	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
+
+HeaderInterface: $(SRC_DIR)/HeaderInterface.cxx $(INC_DIR)/HeaderInterface.h
+	@echo "BUILDING ---> HeaderInterface.o"
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
 UsrpInterface: $(SRC_DIR)/UsrpInterface.cxx $(INC_DIR)/UsrpInterface.h

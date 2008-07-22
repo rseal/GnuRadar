@@ -79,9 +79,7 @@ const int CustomTab::Index(const Fl_Widget* w){
 //Public member
 //accepts tab location index and returns pointer to child widget
 Fl_Widget* CustomTab::GetPtr(const int& tab){
-    //cout << "requested tab " << child(tab) << endl;
     if(!ValidateTabIndex(tab)) return 0;
-    //cout << "valid" << endl;
     return this->child(tab);
 }
 
@@ -110,11 +108,6 @@ const bool CustomTab::CurrentVisible(const int& tab){
     return this->current() == GetPtr(tab);
 }
 
-// const int CustomTab::ActiveTab(){
-//     const int numChildren = this->children();
-//     int index;
-//     for(index = 0; index < numChildren; ++index)
-	
 // return the left edges of each tab (plus a fake left edge for a tab
 // past the right-hand one).  These position are actually of the left
 // edge of the slope.  They are either seperated by the correct distance
@@ -122,7 +115,6 @@ const bool CustomTab::CurrentVisible(const int& tab){
 // Return value is the index of the selected item.
 int CustomTab::tab_positions(int* p, int* wp) {
     int selected = 0;
-    //Fl_Widget*const* a = array();
     int i;
     char prev_draw_shortcut = fl_draw_shortcut;
     fl_draw_shortcut = 1;
@@ -494,7 +486,6 @@ void CustomTab::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 
 	// Restore the original label color...
 	o->labelcolor(oc);
-
 
 	if(CurrentVisible(Index(o)))
 	    draw_focus(box(), x1, y(), W, H);

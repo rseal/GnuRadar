@@ -2,18 +2,12 @@
 #define USRP_CONFIG_GUI_H
 
 #include <FL/Fl.H>
-#include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Float_Input.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_Output.H>
 #include <FL/Fl_File_Browser.H>
 #include <FL/Fl_Window.h>
-#include <FL/Fl_Value_Slider.h>
-#include <FL/Fl_Choice.h>
+#include <FL/Fl_Group.h>
 
 #include <gnuradar/UsrpParameters.h>
 #include <boost/lexical_cast.hpp>
@@ -24,10 +18,11 @@
 
 #include "ChannelInterface.h"
 #include "SettingsInterface.h"
+#include "HeaderInterface.h"
 
 using std::auto_ptr;
-using std::vector;
 using boost::shared_ptr;
+using std::vector;
 
 class UsrpInterface : public Fl_Window 
 {
@@ -37,13 +32,9 @@ class UsrpInterface : public Fl_Window
     UsrpParameters usrpParameters_;
 
     auto_ptr<Fl_Menu_Bar> menuBar_;
-
     auto_ptr<SettingsInterface> settingsInterface_;
-
-//     typedef shared_ptr<ChannelInterface> ChannelInterfacePtr;
-//     vector<ChannelInterfacePtr> channelGroupPtr_;
-
     auto_ptr<ChannelInterface> channelTab_;
+    auto_ptr<HeaderInterface> headerInterface_;
 
     Fl_Color windowColor_;
     Fl_Color buttonColor_;
@@ -52,63 +43,21 @@ class UsrpInterface : public Fl_Window
     auto_ptr<Fl_Button>       buttonQuit_;
     auto_ptr<Fl_Button>       buttonSave_;
     auto_ptr<Fl_Button>       buttonApply_;
-
-    auto_ptr<Fl_Tabs>         tabWindow_;
-    auto_ptr<Fl_Group>        tab1Group_;
-    auto_ptr<Fl_Group>        tab2Group_;
     auto_ptr<Fl_File_Browser> fileBrowserFPGA_;
-    auto_ptr<Fl_Float_Input>  tab1Input1_;
-//    auto_ptr<Fl_Input>        tab1Input2_;
-    auto_ptr<Fl_Input>        tab1Input3_;
-    auto_ptr<Fl_Input>        tab1Input4_;
-    auto_ptr<Fl_Output>       tab1Output1_;
-    auto_ptr<Fl_Input>        tab2Input1_;
-    auto_ptr<Fl_Input>        tab2Input2_;
-    auto_ptr<Fl_Input>        tab2Input3_;
-    auto_ptr<Fl_Input>        tab2Input4_;
-    auto_ptr<Fl_Input>        tab2Input5_;
-    auto_ptr<Fl_Value_Slider> tab1Slider_;
-    auto_ptr<Fl_Choice>       tab1Channels_;
+    auto_ptr<Fl_Group> fpgaGroup_;
 
-    
     static void Quit(Fl_Widget* flw, void* userData){
 	UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
 	std::cout << "Goodbye" << std::endl;
 	//call gui's dtor to release allocated memory
 	userInterface->~UsrpInterface();
-	//exit(0);
     }
-
-    static void UpdateDecimation(Fl_Widget* flw, void* userData){
-	UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
-	userInterface->UpdateParameters();
-    }
-
-    static void UpdateSampleRate(Fl_Widget* flw, void* userData){
-	UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
-	userInterface->UpdateParameters();
-    }
-
-    void UpdateParameters(){
-	float sampleRate = lexical_cast<float>(tab1Input1_->value())*1e6;
-	int decimation = tab1Slider_->value();
-	usrpParameters_.SampleRate(sampleRate);
-	usrpParameters_.Decimation(decimation);
-	tab1Output1_->value(usrpParameters_.BandwidthString());
-	cout << "Bandwidth = " << usrpParameters_.BandwidthStringFancy() << endl;
-    }
-
-    static void UpdateChannel(Fl_Widget* flw, void* userData){
-	Fl_Choice* channel = reinterpret_cast<Fl_Choice*>(flw);
-	int numChannels = lexical_cast<int>(channel->text());
-    };
 
     static void NumChannels(Fl_Widget* flw, void* userData){
  	Fl_Choice* w = reinterpret_cast<Fl_Choice*>(flw);
  	CustomTab* channelTab = reinterpret_cast<CustomTab*>(userData);
  	int numChannels = lexical_cast<int>(w->text());
  	int index = 0;
-	//cout << "num channels = " << numChannels << endl;
 
 	for(int i=0; i<4; ++i)
 	    channelTab->Disable(i);

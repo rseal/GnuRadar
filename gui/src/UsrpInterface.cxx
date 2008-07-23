@@ -1,7 +1,12 @@
 #include "../include/UsrpInterface.h"
 
-UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,340), maxChannels_(4)
+UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels_(4)
 {
+    int width = 750;
+    int height = 460;
+
+    this->resize(X,Y,width,height);
+
     int baseX = 25;
     int baseY = 25;
     int tab1Width=50;
@@ -20,7 +25,7 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,340), maxChannels
     Fl_Menu_Item menuItems[] = {
 
 	{ "&File",              0, 0, 0, FL_SUBMENU },
-	{ "&Open File...",    FL_CTRL + 'o'},
+	{ "&Load File...",    FL_CTRL + 'o'},
 	{ "&Save File",       FL_CTRL + 's'},
 	{ "E&xit", FL_CTRL + 'q', UsrpInterface::Quit, this },
 	{ 0 },
@@ -31,7 +36,7 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,340), maxChannels
 	{ 0 }
     };
 
-    menuBar_ = auto_ptr<Fl_Menu_Bar>(new Fl_Menu_Bar(5, 5, 740, 30, 0));
+    menuBar_ = auto_ptr<Fl_Menu_Bar>(new Fl_Menu_Bar(5, 5, width-10, 30, 0));
     menuBar_->box(FL_ENGRAVED_BOX);
     menuBar_->copy(menuItems);
 
@@ -45,7 +50,7 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,340), maxChannels
     for(int i=0; i<maxChannels_; ++i)
 	chLabels.push_back("Channel " + lexical_cast<string>(i));
 
-    channelTab_ = auto_ptr<ChannelInterface>(new ChannelInterface(5,165,410,120,0));
+    channelTab_ = auto_ptr<ChannelInterface>(new ChannelInterface(5,165,width-340,120,0));
     channelTab_->box(FL_ENGRAVED_BOX);
     channelTab_->Enable(0);
     channelTab_->value(0);
@@ -55,23 +60,37 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,340), maxChannels
     for(int i=1; i<4; ++i)
 	channelTab_->Disable(i);
 
-    settingsInterface_->ChannelRef()->callback(UsrpInterface::NumChannels,channelTab_.get());
+    settingsInterface_->callback(UsrpInterface::UpdateChannels,channelTab_.get());
 
-    headerInterface_ = auto_ptr<HeaderInterface>(new HeaderInterface(420,40));
+    headerInterface_ = auto_ptr<HeaderInterface>(new HeaderInterface(width-330,40));
     headerInterface_->box(FL_ENGRAVED_BOX);
     this->add(headerInterface_.get());
 
+    dataInterface_ = auto_ptr<DataInterface>(new DataInterface(5,290,width-340,120,0));
+    dataInterface_->box(FL_ENGRAVED_BOX);
+    this->add(dataInterface_.get());
+
+    fpgaGroup_ = auto_ptr<Fl_Group>(new Fl_Group(420,290,325,120));
+    fpgaGroup_->box(FL_ENGRAVED_BOX);
+    this->add(fpgaGroup_.get());
+
     fileBrowserFPGA_ = auto_ptr<Fl_File_Browser>(
-	new Fl_File_Browser(125, 295, 225, 25, "FPGA Bit Image"));
+	new Fl_File_Browser(545, 320, 190, 25, "FPGA Bit Image"));
     fileBrowserFPGA_->align(FL_ALIGN_LEFT);
     fileBrowserFPGA_->load("../../fpga");
-
-    fpgaGroup_ = auto_ptr<Fl_Group>(new Fl_Group(5,290,740,40));
-    fpgaGroup_->box(FL_ENGRAVED_BOX);
-
     fpgaGroup_->add(fileBrowserFPGA_.get());
     fpgaGroup_->end();
-    this->add(fpgaGroup_.get());
+
+    buttonLoad_ = auto_ptr<Fl_Button>(new Fl_Button(20,420,70,25,"&Load"));
+    buttonLoad_->box(FL_PLASTIC_DOWN_BOX);
+    this->add(buttonLoad_.get());
+    buttonSave_ = auto_ptr<Fl_Button>(new Fl_Button(100,420,70,25,"&Save"));
+    buttonSave_->box(FL_PLASTIC_DOWN_BOX);
+    this->add(buttonSave_.get());
+    buttonQuit_ = auto_ptr<Fl_Button>(new Fl_Button(660,420,70,25,"&Quit"));
+    buttonQuit_->box(FL_PLASTIC_DOWN_BOX);
+    buttonQuit_->callback(UsrpInterface::Quit);
+    this->add(buttonQuit_.get());
 
     this->end();
 }

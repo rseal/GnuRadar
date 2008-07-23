@@ -5,10 +5,11 @@ DEBUG_FLAGS = #-g -O0
 DEBUG_EXT = #-debug
 CXX_FLAGS=`fltk-config --cxxflags`
 OBJS = ChannelInterface.o UsrpInterface.o SettingsInterface.o ChannelGroup.o \
-       CustomTab.o HeaderInterface.o
+       CustomTab.o HeaderInterface.o DataGroup.o DataWindowInterface.o \
+       DataInterface.o 
 
 all: CustomTab SettingsInterface ChannelGroup ChannelInterface HeaderInterface \
-     UsrpInterface usrp-config
+     DataGroup DataWindowInterface DataInterface UsrpInterface usrp-config
 
 CustomTab: $(SRC_DIR)/CustomTab.cxx $(INC_DIR)/CustomTab.h
 	@echo "BUILDING ---> CustomTab.o"
@@ -30,9 +31,22 @@ HeaderInterface: $(SRC_DIR)/HeaderInterface.cxx $(INC_DIR)/HeaderInterface.h
 	@echo "BUILDING ---> HeaderInterface.o"
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
+DataGroup: $(SRC_DIR)/DataGroup.cxx $(INC_DIR)/DataGroup.h
+	@echo "BUILDING ---> DataGroup.o"
+	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
+
+DataInterface: $(SRC_DIR)/DataInterface.cxx $(INC_DIR)/DataInterface.h
+	@echo "BUILDING ---> DataInterface.o"
+	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
+
+DataWindowInterface: $(SRC_DIR)/DataWindowInterface.cxx $(INC_DIR)/DataWindowInterface.h
+	@echo "BUILDING ---> DataWindowInterface.o"
+	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
+
 UsrpInterface: $(SRC_DIR)/UsrpInterface.cxx $(INC_DIR)/UsrpInterface.h
 	@echo "BUILDING ---> usrp-config-gui.o"
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
+
 
 usrp-config: $(SRC_DIR)/usrp-config.cxx $(SRC_DIR)/UsrpInterface.cxx $(INC_DIR)/UsrpInterface.h \
 	../../include/UsrpParameters.h $(OBJS)

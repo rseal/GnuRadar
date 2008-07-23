@@ -19,6 +19,7 @@
 #include "ChannelInterface.h"
 #include "SettingsInterface.h"
 #include "HeaderInterface.h"
+#include "DataInterface.h"
 
 using std::auto_ptr;
 using boost::shared_ptr;
@@ -35,6 +36,7 @@ class UsrpInterface : public Fl_Window
     auto_ptr<SettingsInterface> settingsInterface_;
     auto_ptr<ChannelInterface> channelTab_;
     auto_ptr<HeaderInterface> headerInterface_;
+    auto_ptr<DataInterface> dataInterface_;
 
     Fl_Color windowColor_;
     Fl_Color buttonColor_;
@@ -42,21 +44,22 @@ class UsrpInterface : public Fl_Window
 
     auto_ptr<Fl_Button>       buttonQuit_;
     auto_ptr<Fl_Button>       buttonSave_;
-    auto_ptr<Fl_Button>       buttonApply_;
+    auto_ptr<Fl_Button>       buttonLoad_;
     auto_ptr<Fl_File_Browser> fileBrowserFPGA_;
     auto_ptr<Fl_Group> fpgaGroup_;
 
     static void Quit(Fl_Widget* flw, void* userData){
 	UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
 	std::cout << "Goodbye" << std::endl;
+	exit(0);
 	//call gui's dtor to release allocated memory
-	userInterface->~UsrpInterface();
+//	userInterface->~UsrpInterface();
     }
 
-    static void NumChannels(Fl_Widget* flw, void* userData){
- 	Fl_Choice* w = reinterpret_cast<Fl_Choice*>(flw);
- 	CustomTab* channelTab = reinterpret_cast<CustomTab*>(userData);
- 	int numChannels = lexical_cast<int>(w->text());
+    static void UpdateChannels(Fl_Widget* flw, void* userData){
+ 	SettingsInterface* w = reinterpret_cast<SettingsInterface*>(flw);
+	CustomTab* channelTab = reinterpret_cast<CustomTab*>(userData);
+ 	int numChannels = lexical_cast<int>(w->ChannelRef()->text());
  	int index = 0;
 
 	for(int i=0; i<4; ++i)

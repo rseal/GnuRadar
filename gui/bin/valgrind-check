@@ -1,0 +1,4 @@
+#!/bin/bash
+
+valgrind --leak-check=full --num-callers=8 --show-reachable=yes ./usrp-config-debug 
+#--gen-suppressions=yes

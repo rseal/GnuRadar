@@ -43,8 +43,8 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     channels_->add(chNum[1].c_str(),0,0);
     channels_->add(chNum[2].c_str(),0,0);
     channels_->value(0);
-    channels_->callback(SettingsInterface::UpdateChannel,this);
     channels_->box(FL_PLASTIC_UP_BOX);
+    channels_->callback(SettingsInterface::UpdateChannel,this);
     this->add(channels_.get());
 
     decimation_ = auto_ptr<Fl_Value_Slider>(new Fl_Value_Slider(x0, y0+sp1, w1+25, h1, "Decimation"));

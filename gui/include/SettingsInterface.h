@@ -50,51 +50,57 @@ class SettingsInterface : public Fl_Group
 	settingsInterface->UpdateParameters();
     }
 
+void UpdateParameters(){
+    float sampleRate = lexical_cast<float>(sampleRate_->value())*1000000.0f;
+    int decimation = decimation_->value();
+    int channels = lexical_cast<int>(channels_->text());
+    usrpParameters_.SampleRate(sampleRate);
+    usrpParameters_.Decimation(decimation);
+    usrpParameters_.Channels(channels);
+    float bw = usrpParameters_.Bandwidth();
+    string unitsStr;
 
-    void UpdateParameters(){
-	float sampleRate = lexical_cast<float>(sampleRate_->value())*1000000.0f;
-	int decimation = decimation_->value();
-	int channels = lexical_cast<int>(channels_->text());
-	usrpParameters_.SampleRate(sampleRate);
-	usrpParameters_.Decimation(decimation);
-	usrpParameters_.Channels(channels);
-	float bw = usrpParameters_.Bandwidth();
-	string unitsStr;
-
-	if(bw >= 1e6){
-	    bw = bw/1000000.0f;
-	    unitsStr = "MHz";
-	}
-	else 
-	    if(bw >= 1e3){
-		bw = bw/1000.0f;
-		unitsStr = "KHz";
-	    }
-	    else unitsStr = "Hz";
-	
-	units2_->value("");
-	units2_->value(unitsStr.c_str());
-	string str = lexical_cast<string>(bw);
-
-	//limit float precision to 2 decimal places
-	int index = str.find(".");
-	//correct indexing bug when only tenths exist
-	if(str.length() < index+3) str += "0";
-	if(index != string::npos) str.erase(index+3);
-	bandwidth_->value(str.c_str());
+    if(bw >= 1e6){
+	bw = bw/1000000.0f;
+	unitsStr = "MHz";
     }
+    else if(bw >= 1e3){
+	bw = bw/1000.0f;
+	unitsStr = "KHz";
+    }
+    else unitsStr = "Hz";
+	
+    units2_->value("");
+    units2_->value(unitsStr.c_str());
+    string str = lexical_cast<string>(bw);
+	
+    //cout << "bw1 = " << str << endl;
+	
+    //limit float precision to 2 decimal places
+    int index = str.find(".");
+    //cout << "index = " << index << endl;
+    //correct indexing bug when only tenths exist
+    if(str.length() < index+3 && index != string::npos)
+	str += "0";
+	
+    if(index != string::npos) str.erase(index+3);
+    bandwidth_->value(str.c_str());
 
-    static void UpdateChannel(Fl_Widget* flw, void* userData){
-	SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*>(userData);
-	settingsInterface->UpdateParameters();
-    };
+    //parameters changed - activate SettingsInterface::callback()
+    this->do_callback();
+}
+
+static void UpdateChannel(Fl_Widget* flw, void* userData){
+    SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*>(userData);
+    settingsInterface->UpdateParameters();
+}
 
 public:
-    SettingsInterface(int x, int y, int width, int height, const char* label,
-		      UsrpParameters& usrpParameters);
+SettingsInterface(int x, int y, int width, int height, const char* label,
+		  UsrpParameters& usrpParameters);
 	
 
-    const int NumChannels(){ return lexical_cast<int>(channels_->text());}
-    Fl_Choice* ChannelRef() { return channels_.get();}
+const int NumChannels(){ return lexical_cast<int>(channels_->text());}
+Fl_Choice* ChannelRef() { return channels_.get();}
 };
 #endif

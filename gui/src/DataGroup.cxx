@@ -20,12 +20,13 @@ DataGroup::DataGroup(int x, int y, int width, int height, const char* label):
     this->add(sizeInput_.get());
 
     unitChoice_ = auto_ptr<Fl_Choice>(new Fl_Choice(x0+85, y0, 80, h0, "Units"));
-    unitChoice_->add("SAMPLES");
-    unitChoice_->add("USEC");
-    unitChoice_->add("KM");
+    unitChoice_->add("SMPL");
+    unitChoice_->add("usec");
+    unitChoice_->add("Km");
     unitChoice_->align(FL_ALIGN_BOTTOM);
+    unitChoice_->value(0);
     this->add(unitChoice_.get());
-
+   
     this->end();
    
 }

@@ -4,7 +4,7 @@
 #include <FL/Fl_Group.h>
 #include <FL/Fl_Int_Input.h>
 #include <FL/Fl_Choice.h>
-
+#include <memory>
 #include <boost/lexical_cast.hpp>
 
 using boost::lexical_cast;

@@ -5,22 +5,69 @@
 //#include <FL/Fl_Color.h>
 
 #include <iostream>
+#include <vector>
+
+using std::vector;
 using std::cerr;
 using std::endl;
 using std::cout;
 
+struct TabDim{
+    int x_;
+    int y_;
+    int width_;
+    int height_;
+
+public:
+    TabDim(): x_(0), y_(0), width_(0), height_(0){}
+    const int Width() { return width_;}
+    const int Height() { return height_;}
+    const int X() {return x_;}
+    const int Y() {return y_;}
+    const int End() { return x_ + width_;}
+    const bool Selected(const int& event_x, const int& event_y) {
+	return (event_x > x_ && event_x < x_+width_) && 
+	    (event_y < y_ && event_y > y_-height_);
+    }
+    void Adjust(const int& x, const int& y, const int& width, const int& height){
+	x_ = x; y_ = y; width_ = width; height_ = height;
+    }
+
+    void Print() {
+	cout << "X = " << x_ << "\n";
+	cout << "Y = " << y_ << "\n";
+	cout << "W = " << width_ << "\n";
+	cout << "H = " << height_ << endl;
+    }
+};
+
+
 class CustomTab: public Fl_Group {
     Fl_Color enColor_;
     Fl_Color disColor_;
-
     Fl_Widget *value_;
-    Fl_Widget *push_;
+    const Fl_Widget *activeChild_;
+    //Fl_Widget* push_;
+    bool topTab_;
+    //int activeChild_;
+    int labelWidth_;
+    int labelHeight_;
+    vector<TabDim> tabDimArray_;
     int tab_positions(int*, int*);
     int tab_height();
     void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
     const bool ValidateTabIndex(const int& tab);
     const bool CurrentVisible(const int& tab);
-
+    void UpdateTabs();
+    const int SelectedTab(const int& event_x, const int& event_y) {
+	int ret = -1;
+	for(int i=0; i<tabDimArray_.size(); ++i)
+	    if(tabDimArray_[i].Selected(event_x,event_y)) ret = i;
+	return ret;
+    }
+    const Fl_Widget* ActiveChild() { return activeChild_;}
+    void ActiveChild(const Fl_Widget* activeChild) { activeChild_ = activeChild;}
+    const int ActiveChildIndex() { return Index(activeChild_);}
 protected:
     void redraw_tabs();
     void draw();
@@ -30,7 +77,7 @@ public:
     Fl_Widget *value();
     //int value(Fl_Widget *);
     const int value(const int& tab);
-    Fl_Widget *push() const {return push_;}
+//    Fl_Widget *push() const {return push_;}
     int push(Fl_Widget *);
     Fl_Widget* GetPtr(const int& tab);
     CustomTab(int,int,int,int,const char * = 0);

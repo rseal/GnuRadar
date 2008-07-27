@@ -24,11 +24,11 @@ DataInterface::DataInterface(int x, int y, int width, int height,
     ippInput_ = auto_ptr<Fl_Int_Input>(new Fl_Int_Input(x0+30,y0+20,50,25,"IPP"));
     this->add(ippInput_.get());
 
-    unitsChoice_ = auto_ptr<Fl_Choice>(new Fl_Choice(x0+90,y0+20,60,25,NULL));
+    unitsChoice_ = auto_ptr<Fl_Choice>(new Fl_Choice(x0+90,y0+20,70,25,NULL));
     unitsChoice_->box(FL_PLASTIC_DOWN_BOX);
-    unitsChoice_->add("MS");
-    unitsChoice_->add("US");
-    unitsChoice_->add("KM");
+    unitsChoice_->add("msec");
+    unitsChoice_->add("usec");
+    unitsChoice_->add("Km");
     unitsChoice_->value(0);
     this->add(unitsChoice_.get());
 

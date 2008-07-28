@@ -4,6 +4,7 @@
 //#include <FL/Fl.H>
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Choice.h>
+#include <FL/fl_ask.H>
 
 #include "CustomTab.h"
 #include "DataGroup.h"
@@ -20,23 +21,23 @@ using std::string;
 using std::vector;
 using boost::shared_ptr;
 
-//contains the following components
-// institution name      - fl_input
-// observer              - fl_input
-// object of observation - fl_input
-// observing instrument  - fl_input
-// collection instrument - fl_input
-
 class DataWindowInterface : public CustomTab
 {
     typedef shared_ptr<DataGroup> DataGroupPtr;
     vector<DataGroupPtr> dataGroupArray_;
+    bool firstWindow_;
+    bool arrayTouched_;
+    int x0_;
+    int y0_;
+    int w0_;
+    int h0_;
+
 
 public:
     DataWindowInterface(int x, int y, int width=325, int height=245, const char* label=NULL);
-    void Add(const int& start, const int& size, const string& label);
-    void Remove(const string& label);
-    void Modify(const int& start, const int& size, const string& label);
+    void Add(const string& label);
+    void Remove(const string label);
+    void Modify(const string oldLabel, const string newLabel);
     void Units(const int& units);
 };
 #endif

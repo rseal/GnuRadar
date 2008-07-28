@@ -15,10 +15,14 @@ DataInterface::DataInterface(int x, int y, int width, int height,
 
     addButton_ = auto_ptr<Fl_Button>(new Fl_Button(x0+10,y0+70,70,25,"Add"));
     addButton_->box(FL_PLASTIC_DOWN_BOX);
+    addButton_->callback(DataInterface::AddClicked,
+			 dataWindowInterface_.get());
     this->add(addButton_.get());
 
     removeButton_ = auto_ptr<Fl_Button>(new Fl_Button(x0+90,y0+70,70,25,"Remove"));
     removeButton_->box(FL_PLASTIC_DOWN_BOX);
+    removeButton_->callback(DataInterface::RemoveClicked,
+			    dataWindowInterface_.get());
     this->add(removeButton_.get());
     
     ippInput_ = auto_ptr<Fl_Int_Input>(new Fl_Int_Input(x0+30,y0+20,50,25,"IPP"));
@@ -33,21 +37,4 @@ DataInterface::DataInterface(int x, int y, int width, int height,
     this->add(unitsChoice_.get());
 
     this->end();
-}
-
-
-void DataInterface::Add(const int& start, const int& size, const string& label){
-
-}
-
-void DataInterface::Remove(const string& label){
-
-}
-
-void DataInterface::Modify(const int& start, const int& size, const string& label){
-
-}
-
-void DataInterface::Units(const int& units){
-
 }

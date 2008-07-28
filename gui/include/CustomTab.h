@@ -58,7 +58,6 @@ class CustomTab: public Fl_Group {
     void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
     const bool ValidateTabIndex(const int& tab);
     const bool CurrentVisible(const int& tab);
-    void UpdateTabs();
     const int SelectedTab(const int& event_x, const int& event_y) {
 	int ret = -1;
 	for(int i=0; i<tabDimArray_.size(); ++i)
@@ -71,6 +70,7 @@ class CustomTab: public Fl_Group {
 protected:
     void redraw_tabs();
     void draw();
+    void UpdateTabs();
 
 public:
     int handle(int);

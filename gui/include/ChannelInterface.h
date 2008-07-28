@@ -3,14 +3,12 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Group.H>
-//#include <FL/Fl_Tabs.h>
+
+#include "ChannelGroup.h"
 #include "CustomTab.h"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/shared_ptr.hpp>
-
-#include "ChannelGroup.h"
-
 #include <iostream>
 #include <vector>
 

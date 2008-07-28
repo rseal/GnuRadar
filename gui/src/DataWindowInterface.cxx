@@ -34,9 +34,6 @@ void DataWindowInterface::Add(const string& label){
 	this->add(dataGroupArray_[dataGroupArray_.size()-1].get());
 	arrayTouched_ = true;
     }
-
-    this->draw();
-
 }
 
 void DataWindowInterface::Remove(const string label){
@@ -51,7 +48,6 @@ void DataWindowInterface::Remove(const string label){
 		this->remove(it->get());
 		//delete this widget from the array
 		dataGroupArray_.erase(it);
-		this->draw();
 		break;
 	    }
 	    ++it;

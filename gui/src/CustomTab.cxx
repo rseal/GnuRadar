@@ -42,16 +42,28 @@ void CustomTab::UpdateTabs(){
 	//compute offset for box style
 	xOffset = Fl::box_dx(this->box());
 
-	//measure child label size to compute tab w and h
-	this->child(0)->measure_label(labelWidth,labelHeight);
-	tabWidth = labelWidth + 2*hSpace;
-	tabHeight = labelHeight + 2*vSpace;
 
-	for(int i=0; i<numTabs; ++i)
-	    tabDimArray_[i].Adjust(x() + xOffset + i*tabWidth,
-				   this->child(0)->y(),
+	//setup first label's dimensions
+	this->child(0)->measure_label(labelWidth,labelHeight);
+	tabHeight = labelHeight + 2*vSpace;
+	tabWidth = labelWidth + 2*hSpace;
+	tabDimArray_[0].Adjust(x() + xOffset,
+			       this->child(0)->y(),
+			       tabWidth,
+			       tabHeight);
+
+
+	//store remaining dimensions referenced from first
+	for(int i=1; i<numTabs; ++i){
+	    this->child(i)->measure_label(labelWidth,labelHeight);
+	    tabHeight = labelHeight + 2*vSpace;
+	    tabWidth = labelWidth + 2*hSpace;
+	    tabDimArray_[i].Adjust(tabDimArray_[i-1].End(),
+				   this->child(i)->y(),
 				   tabWidth,
 				   tabHeight);
+
+	}
     }
 }
 
@@ -113,20 +125,7 @@ const bool CustomTab::CurrentVisible(const int& tab){
     return this->current() == GetPtr(tab);
 }
 
-// int CustomTab::push(Fl_Widget *o) {
-//   if (push_ == o) return 0;
-//   if (push_ && !push_->visible() || o && !o->visible())
-//     redraw_tabs();
-//   return 1;
-// }
 
-// return the left edges of each tab (plus a fake left edge for a tab
-// past the right-hand one).  These position are actually of the left
-// edge of the slope.  They are either seperated by the correct distance
-// or by EXTRASPACE or by zero.
-// Return value is the index of the selected item.
-//p = left edge of tab 
-//wp = tab width
 int CustomTab::tab_positions(int* tabCorner, int* tabWidth) {
     int selected = 0;
     char prev_draw_shortcut = fl_draw_shortcut;
@@ -149,6 +148,7 @@ int CustomTab::tab_positions(int* tabCorner, int* tabWidth) {
     if(it->End() < widgetWidth) return selected;
 
     //if not - deal with that in future development
+    cout << "tab extends beyond container widget" << endl;
 }
 
 //return tab height - negative for bottom tabs
@@ -156,6 +156,7 @@ int CustomTab::tab_height() {
 
     //if no children, don't bother
     if(!this->children()) return 0;
+
     topTab_ = true;
     Fl_Widget* o = this->child(0);
     int topHeight = o->y() - y();

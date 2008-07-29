@@ -17,11 +17,8 @@
 
 CustomTab::CustomTab(int X,int Y,int W, int H, const char *l) :
     Fl_Group(X,Y,W,H,l), enColor_(FL_BLACK), disColor_(FL_WHITE),
-    topTab_(true),activeChild_(0)
-{
+    topTab_(true),activeChild_(0){
     box(FL_THIN_UP_BOX);
-    //push_ = 0;
-    
 }
 
 void CustomTab::UpdateTabs(){
@@ -34,14 +31,13 @@ void CustomTab::UpdateTabs(){
     const int vSpace = 0;
 
     //should do this only when size changes
-    if(numTabs != tabDimArray_.size()){
+    if(numTabs != tabDimArray_.size() || numTabs==1){
 	
 	//resize vector
 	tabDimArray_.resize(numTabs);
 
 	//compute offset for box style
 	xOffset = Fl::box_dx(this->box());
-
 
 	//setup first label's dimensions
 	this->child(0)->measure_label(labelWidth,labelHeight);
@@ -51,7 +47,6 @@ void CustomTab::UpdateTabs(){
 			       this->child(0)->y(),
 			       tabWidth,
 			       tabHeight);
-
 
 	//store remaining dimensions referenced from first
 	for(int i=1; i<numTabs; ++i){
@@ -125,32 +120,6 @@ const bool CustomTab::CurrentVisible(const int& tab){
     return this->current() == GetPtr(tab);
 }
 
-
-int CustomTab::tab_positions(int* tabCorner, int* tabWidth) {
-    int selected = 0;
-    char prev_draw_shortcut = fl_draw_shortcut;
-    fl_draw_shortcut = 1;
-
-    for(int i=children()-1; i>=0; --i)
-	if(this->child(i)->visible()) selected = i;
-
-    UpdateTabs();
-
-    fl_draw_shortcut = prev_draw_shortcut;
-
-    //width of tab container
-    int widgetWidth = w();
-
-    //setup iterator
-    vector<TabDim>::iterator it = tabDimArray_.end()-1;
-
-    //if last label inside widget area - we are good
-    if(it->End() < widgetWidth) return selected;
-
-    //if not - deal with that in future development
-    cout << "tab extends beyond container widget" << endl;
-}
-
 //return tab height - negative for bottom tabs
 int CustomTab::tab_height() {
 
@@ -210,8 +179,7 @@ int CustomTab::handle(int event) {
 	    return 1;
 	}
 
-	value(!ActiveChild() && children() ? 
-	      0 : ActiveChildIndex());
+	value(!ActiveChild() && children() ? 0 : ActiveChildIndex());
 
 	//needs to be here
 	return Fl_Group::handle(event);
@@ -223,18 +191,6 @@ int CustomTab::handle(int event) {
 
     case FL_RELEASE:{
 	//cout << "FL_RELEASE" << endl;
-
-	//determine which tab was released - if any
-//  	Fl_Widget* o = which(Fl::event_x(), Fl::event_y());
-
-// 	//if tab clicked change focus
-// 	if(o){
-// 	    value(Index(o));
-// 	    Fl_Tooltip::current(o);
-// 	    //  cout << "FL_RELEASE END" << endl;
-// 	    return 1;
-// 	}
-
 	//pass to children?
 	return Fl_Group::handle(event);
     }
@@ -529,11 +485,8 @@ void CustomTab::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 	// Restore the original label color...
 	o->labelcolor(oc);
 
-	if(Fl::focus()){
-	    //cout << "Focus = " << Fl::focus()->parent() << " " << " this = " << ActiveChild() << endl;
-	    if(ActiveChild() == Fl::focus()->parent()) draw_focus(box(), x1, y(), W, H);
-	}
-
+	if(Fl::focus() && ActiveChild() == Fl::focus()->parent()) draw_focus(box(), x1, y(), W, H);
+	
 	fl_pop_clip();
 
     } else {

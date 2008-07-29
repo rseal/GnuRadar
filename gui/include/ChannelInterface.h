@@ -31,7 +31,7 @@ class ChannelInterface: public CustomTab
 	//userInterface->UpdateParameters();
     }
     vector<ChannelGroupPtr> channelArray_;
-    vector<string> labelArray_;
+//    vector<string> labelArray_;
 
 public:
     ChannelInterface(int X, int Y, int width, int height, const char* label);

@@ -53,7 +53,7 @@ class CustomTab: public Fl_Group {
     int labelWidth_;
     int labelHeight_;
     vector<TabDim> tabDimArray_;
-    int tab_positions(int*, int*);
+//    int tab_positions(int*, int*);
     int tab_height();
     void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
     const bool ValidateTabIndex(const int& tab);

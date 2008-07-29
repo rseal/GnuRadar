@@ -29,12 +29,35 @@ class DataInterface : public Fl_Group
 
     static void AddClicked(Fl_Widget* flw, void* userData){
 	DataWindowInterface* dwi = reinterpret_cast<DataWindowInterface*>(userData);
-	dwi->Add(fl_input("Enter a label for this data window."));
+
+	//really screwed up way to catch exception - until I find the proper method
+	string str;
+	try { 
+	    string str2(fl_input("Enter a label for new data window."));
+	    str = str2;
+	}
+	catch(std::exception){
+	    cout << "DataInterface::AddClicked - Empty string" << endl;
+	}
+	
+	if(str.size() != 0) dwi->Add(str.c_str());
     }
 
     static void RemoveClicked(Fl_Widget* flw, void* userData){
 	DataWindowInterface* dwi = reinterpret_cast<DataWindowInterface*>(userData);
-	dwi->Remove(fl_input("Enter a label for this data window."));
+
+	//really screwed up way to catch exception - until I find the proper method
+	string str;
+	try { 
+	    string str2(fl_input("Enter the label for removal."));
+	    str = str2;
+	}
+	catch(std::exception){
+	    cerr << "DataInterface::RemoveClicked - Empty string" << endl;
+	}
+	
+	if(str.size() != 0) dwi->Remove(str.c_str());
+
     }
 
 public:

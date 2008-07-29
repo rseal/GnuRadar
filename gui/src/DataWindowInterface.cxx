@@ -1,14 +1,14 @@
 #include "../include/DataWindowInterface.h"
 
 DataWindowInterface::DataWindowInterface(int x, int y, int width, int height, const char* label):
-    CustomTab(x,y,width,height,label), firstWindow_(true), arrayTouched_(false)
+    CustomTab(x,y,width,height,label), defaultWindow_(true)
 {
     x0_ = x + 5;
     y0_ = y + 15;
     w0_ = 220;
     h0_ = 70;
 
-    DataGroupPtr dgp = DataGroupPtr(new DataGroup(x0_,y0_, w0_, h0_, "Data"));
+    DataGroupPtr dgp = DataGroupPtr(new DataGroup(x0_,y0_, w0_, h0_, "SampleWindow"));
     dataGroupArray_.push_back(dgp);
     this->add(dataGroupArray_[0].get());
     this->end();
@@ -21,37 +21,37 @@ void DataWindowInterface::Add(const string& label){
     //to give user an example of a data window
     //this window will be overwritten when add is called
     //must be replaced by example when array is empty
-    if((arrayTouched_ && dataGroupArray_.size() == 1) || 
-       firstWindow_){
+    if(dataGroupArray_.size() == 1 && defaultWindow_){
 	dataGroupArray_[0]->copy_label(label.c_str());
-	firstWindow_ = false;
-	arrayTouched_ = false;
+	defaultWindow_ = false;
     }
     else{
 	DataGroupPtr dgp = DataGroupPtr(new DataGroup(x0_,y0_, w0_, h0_, ""));
 	dgp->copy_label(label.c_str());
 	dataGroupArray_.push_back(dgp);
 	this->add(dataGroupArray_[dataGroupArray_.size()-1].get());
-	arrayTouched_ = true;
     }
 }
 
 void DataWindowInterface::Remove(const string label){
     
     //search array for label and remove if found
-    if(dataGroupArray_.size() == 1) dataGroupArray_[0]->copy_label("Data");
-    else{
-	vector<DataGroupPtr>::iterator it = dataGroupArray_.begin();
-	while(it != dataGroupArray_.end()){
-	    if(label.compare((*it)->label()) == 0){
+    //if last element - replace with default window
+    vector<DataGroupPtr>::iterator it = dataGroupArray_.begin();
+    while(it != dataGroupArray_.end()){
+	if(label.compare((*it)->label()) == 0){
+	    if(dataGroupArray_.size() == 1){
+		dataGroupArray_[0]->copy_label("SampleWindow");
+		defaultWindow_ = true;
+	    }
+	    else{
 		//gotta remove widget from group or segfault
 		this->remove(it->get());
-		//delete this widget from the array
 		dataGroupArray_.erase(it);
-		break;
 	    }
-	    ++it;
+	    break;
 	}
+	++it;
     }
 }
 

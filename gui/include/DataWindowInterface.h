@@ -25,7 +25,7 @@ class DataWindowInterface : public CustomTab
 {
     typedef shared_ptr<DataGroup> DataGroupPtr;
     vector<DataGroupPtr> dataGroupArray_;
-    bool firstWindow_;
+    bool defaultWindow_;
     bool arrayTouched_;
     int x0_;
     int y0_;

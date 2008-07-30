@@ -27,7 +27,7 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
 	{ "&File",              0, 0, 0, FL_SUBMENU },
 	{ "&Load File...",    FL_CTRL + 'o'},
 	{ "&Save File",       FL_CTRL + 's'},
-	{ "E&xit", FL_CTRL + 'q', UsrpInterface::Quit, this },
+	{ "E&xit", FL_CTRL + 'q', UsrpInterface::QuitClicked, this },
 	{ 0 },
 	
 	{ "&Help", 0, 0, 0, FL_SUBMENU},
@@ -83,13 +83,17 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
 
     buttonLoad_ = auto_ptr<Fl_Button>(new Fl_Button(20,420,70,25,"&Load"));
     buttonLoad_->box(FL_PLASTIC_DOWN_BOX);
+    buttonLoad_->callback(UsrpInterface::LoadClicked,this);
     this->add(buttonLoad_.get());
+
     buttonSave_ = auto_ptr<Fl_Button>(new Fl_Button(100,420,70,25,"&Save"));
     buttonSave_->box(FL_PLASTIC_DOWN_BOX);
+    buttonSave_->callback(UsrpInterface::SaveClicked,this);
     this->add(buttonSave_.get());
+
     buttonQuit_ = auto_ptr<Fl_Button>(new Fl_Button(660,420,70,25,"&Quit"));
     buttonQuit_->box(FL_PLASTIC_DOWN_BOX);
-    buttonQuit_->callback(UsrpInterface::Quit);
+    buttonQuit_->callback(UsrpInterface::QuitClicked);
     this->add(buttonQuit_.get());
 
     this->end();

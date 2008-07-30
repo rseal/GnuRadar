@@ -8,6 +8,7 @@
 #include <FL/Fl_File_Browser.H>
 #include <FL/Fl_Window.h>
 #include <FL/Fl_Group.h>
+#include <FL/Fl_File_Chooser.H>
 
 #include <gnuradar/UsrpParameters.h>
 #include <boost/lexical_cast.hpp>
@@ -20,6 +21,8 @@
 #include "SettingsInterface.h"
 #include "HeaderInterface.h"
 #include "DataInterface.h"
+#include "UsrpConfigStruct.h"
+#include "Parser.h"
 
 using std::auto_ptr;
 using boost::shared_ptr;
@@ -29,7 +32,7 @@ class UsrpInterface : public Fl_Window
 {
     const int maxChannels_;
     int numChannels_;
-
+    UsrpConfigStruct usrpConfig_;
     UsrpParameters usrpParameters_;
 
     auto_ptr<Fl_Menu_Bar> menuBar_;
@@ -48,13 +51,43 @@ class UsrpInterface : public Fl_Window
     auto_ptr<Fl_File_Browser> fileBrowserFPGA_;
     auto_ptr<Fl_Group> fpgaGroup_;
 
-    static void Quit(Fl_Widget* flw, void* userData){
+    static void QuitClicked(Fl_Widget* flw, void* userData){
 	UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
 	std::cout << "Goodbye" << std::endl;
 	exit(0);
-	//call gui's dtor to release allocated memory
-//	userInterface->~UsrpInterface();
     }
+
+    static void LoadClicked(Fl_Widget* flw, void* userData){
+	UsrpInterface* usrpInterface = reinterpret_cast<UsrpInterface*>(userData);
+	//really screwed up way to catch exception - until I find the proper method
+	string str;
+	try { 
+	    string str2(fl_file_chooser("Choose USRP Configuration File", "*.ucf", NULL));
+	    str = str2;
+	}
+	catch(std::exception){
+	    cerr << "UsrpInterface::LoadClicked - Empty string" << endl;
+	}
+	
+	if(str.size() != 0) Parser parser(str);
+
+	cout << "Clicked Load" << endl;	
+    };
+    
+    static void SaveClicked(Fl_Widget* flw, void* userData){
+	UsrpInterface* usrpInterface = reinterpret_cast<UsrpInterface*>(userData);
+	string str;
+	try { 
+	    string str2(fl_file_chooser("Choose USRP Configuration File", "*.ucf", NULL));
+	    str = str2;
+	}
+	catch(std::exception){
+	    cerr << "UsrpInterface::SaveClicked - Empty string" << endl;
+	}
+	
+	if(str.size() != 0) Parser parser(str);
+	cout << "Clicked Save" << endl;
+    };
 
     static void UpdateChannels(Fl_Widget* flw, void* userData){
  	SettingsInterface* w = reinterpret_cast<SettingsInterface*>(flw);

@@ -6,45 +6,47 @@ DEBUG_EXT = #-debug
 CXX_FLAGS=`fltk-config --cxxflags`
 OBJS = CustomTab ChannelGroup ChannelInterface SettingsInterface \
        HeaderInterface DataGroup DataWindowInterface DataInterface \
-       UsrpInterface
+       UsrpConfigStruct UsrpInterface
 
-all:  usrp-config CustomTab ChannelGroup ChannelInterface \
-      SettingsInterface HeaderInterface DataGroup \
-      DataWindowInterface DataInterface UsrpInterface 
+all:  usrp-config $(OBJS)
 
-CustomTab: $(SRC_DIR)/CustomTab.cxx $(INC_DIR)/CustomTab.h
+CustomTab: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
 	@echo "BUILDING ---> "$@.o
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx
 
-ChannelGroup: $(SRC_DIR)/ChannelGroup.cxx $(INC_DIR)/ChannelGroup.h 
+ChannelGroup: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
 	@echo "BUILDING ---> "$@.o
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx
 
-ChannelInterface: $(SRC_DIR)/ChannelInterface.cxx $(INC_DIR)/ChannelInterface.h 
+ChannelInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h) 
 	@echo "BUILDING ---> "$@.o
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
-SettingsInterface: $(SRC_DIR)/SettingsInterface.cxx $(INC_DIR)/SettingsInterface.h 
+SettingsInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h) 
 	@echo "BUILDING ---> "$@.o
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx
 
-HeaderInterface: $(SRC_DIR)/HeaderInterface.cxx $(INC_DIR)/HeaderInterface.h
+HeaderInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
 	@echo "BUILDING ---> "$@.o
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
-DataGroup: $(SRC_DIR)/DataGroup.cxx $(INC_DIR)/DataGroup.h
+DataGroup: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
 	@echo "BUILDING ---> "$@.o
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
-DataWindowInterface: $(SRC_DIR)/DataWindowInterface.cxx $(INC_DIR)/DataWindowInterface.h 
+DataWindowInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
 	@echo "BUILDING ---> "$@.o
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
-DataInterface: $(SRC_DIR)/DataInterface.cxx $(INC_DIR)/DataInterface.h 
+DataInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
 	@echo "BUILDING ---> "$@.o
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
-UsrpInterface: $(SRC_DIR)/UsrpInterface.cxx $(INC_DIR)/UsrpInterface.h 
+UsrpInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
+	@echo "BUILDING ---> "$@.o
+	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
+
+UsrpConfigStruct: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
 	@echo "BUILDING ---> "$@.o
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
@@ -56,7 +58,7 @@ usrp-config: $(SRC_DIR)/usrp-config.cxx $(OBJS)
 clean: 
 	@echo "Cleaned USRP-CONFIG Project"
 	@rm -rf *~ ../bin/usrp-config usrp-config-gui.o ../bin/usrp-config-debug usrp-config-gui-debug \
-	$(OBJS) ../src/*~ ../include/*~ ../../include/*~ 
+	$(OBJS:=.o) ../src/*~ ../include/*~ ../../include/*~ 
 
 
 

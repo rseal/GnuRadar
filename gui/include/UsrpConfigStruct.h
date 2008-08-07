@@ -41,7 +41,8 @@ private:
 
 public:
     UsrpConfigStruct(); 
-    void Channel(const int& chNum, const float& ddc, const float& phase);
+    void Channel(const int& chNum, const float& ddc, const int& ddcUnits,
+		 const float& phase, const int& phaseUnits);
     void SampleRate(const float& sampleRate); //complete
     void NumChannels(const int& numChannels); //complete
     void IPP(const int& ipp, const int& units); //complete

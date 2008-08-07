@@ -101,12 +101,12 @@ class UsrpInterface : public Fl_Window
 
     ///Callback used to update channel settings
     static void UpdateChannels(Fl_Widget* flw, void* userData){
- 	SettingsInterface* w = reinterpret_cast<SettingsInterface*>(flw);
-	CustomTab* channelTab = reinterpret_cast<CustomTab*>(userData);
- 	int numChannels = lexical_cast<int>(w->ChannelRef()->text());
- 	int index = 0;
-	for(int i=0; i<4; ++i) channelTab->Disable(i);
-	for(index=0; index<numChannels; ++index) channelTab->Enable(index);
+ 	SettingsInterface* siPtr = reinterpret_cast<SettingsInterface*>(flw);
+	CustomTab* ctPtr         = reinterpret_cast<CustomTab*>(userData);
+ 	int numChannels          = siPtr->NumChannels();
+ 	int index                = 0;
+	for(int i=0; i<4; ++i) ctPtr->Disable(i);
+	for(index=0; index<numChannels; ++index) ctPtr->Enable(index);
     }
 
     ///Not currently implemented

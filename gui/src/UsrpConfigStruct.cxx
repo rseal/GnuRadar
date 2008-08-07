@@ -20,14 +20,19 @@ UsrpConfigStruct::UsrpConfigStruct():
 }
 
 ///Stores DDC and Phase settings for the specified channel.
-void UsrpConfigStruct::Channel(const int& chNum, const float& ddc, 
-				const float& phase){
-    if(chNum != 1 || chNum !=2 || chNum !=4)
+void UsrpConfigStruct::Channel(const int& chNum, 
+			       const float& ddc,
+			       const int& ddcUnits,
+			       const float& phase,
+			       const int& phaseUnits){
+    if(chNum != 1 && chNum !=2 && chNum !=4)
 	cerr << "UsrpConfigStruct::ProgramChannel - invalid channel number " 
 	     << chNum << " requested" << endl;
     else{
-	channels_[chNum].ddc = ddc;
-	channels_[chNum].phase = phase;
+	channels_[chNum].ddc        = ddc;
+	channels_[chNum].ddcUnits   = ddcUnits;
+	channels_[chNum].phase      = phase;
+	channels_[chNum].phaseUnits = phaseUnits;
     }    
 }
 
@@ -48,7 +53,7 @@ void UsrpConfigStruct::SampleRate(const float& sampleRate){
 
 ///Validates and stores the number of channels used.
 void UsrpConfigStruct::NumChannels(const int& numChannels){
-    if(numChannels != 1 || numChannels !=2 || numChannels !=4)
+    if(numChannels != 1 && numChannels !=2 && numChannels !=4)
 	cerr << "UsrpConfigStruct::NumChannels - invalid number of channels " 
 	     << numChannels << " requested" << endl;
     else numChannels_ = numChannels;

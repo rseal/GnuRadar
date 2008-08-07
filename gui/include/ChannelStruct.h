@@ -13,7 +13,9 @@
 struct ChannelStruct{
 public:
     float ddc;
+    int ddcUnits;
     float phase;
+    int phaseUnits;
 };
 
 #endif

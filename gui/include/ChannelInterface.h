@@ -38,7 +38,20 @@ class ChannelInterface: public CustomTab
     vector<Fl_Color> colorVector_;
 
     vector<ChannelGroupPtr> channelArray_;
-    const bool ChannelValid(const int& chNum) { return chNum >= 0 || chNum <= 3;}
+
+    static void Update(Fl_Widget* flw, void* userData){
+	ChannelGroup* cgPtr = reinterpret_cast<ChannelGroup*>(flw);
+	UsrpConfigStruct* ucPtr = reinterpret_cast<UsrpConfigStruct*>(userData);
+	//which channel is calling?
+	int id = cgPtr->ID();
+	//update global structure for this channel
+	ucPtr->Channel(id, 
+		       cgPtr->DDC(),
+		       cgPtr->DDCUnits(),
+		       cgPtr->Phase(),
+		       cgPtr->PhaseUnits());
+	cout << "ChannelInterface::Update" << endl;
+    }
 
 public:
     ///Constructor
@@ -46,40 +59,40 @@ public:
 		     int width, int height, const char* label);
     
     ///Returns DDC frequency for selected channel
-    const float DDC(const int& chNum) {
-	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
-	if(ChannelValid(chNum)) return cg->DDC();
+//     const float DDC(const int& chNum) {
+// 	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
+// 	if(ChannelValid(chNum)) return cg->DDC();
 	
-	cerr << "ChannelInterface::DDC - invalid channel requested" << endl;
-	return 0.0f;
-    };
+// 	cerr << "ChannelInterface::DDC - invalid channel requested" << endl;
+// 	return 0.0f;
+//     };
 
     ///Returns DDC units for selected channel
-    const int DDCUnits(const int& chNum) {
-	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
-	if(ChannelValid(chNum)) return cg->DDCUnits();
+//     const int DDCUnits(const int& chNum) {
+// 	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
+// 	if(ChannelValid(chNum)) return cg->DDCUnits();
 	
-	cerr << "ChannelInterface::DDCUnits - invalid channel requested" << endl;
-	return 0;
-    };
+// 	cerr << "ChannelInterface::DDCUnits - invalid channel requested" << endl;
+// 	return 0;
+//     };
 
     ///Returns Phase for selected channel
-    const float Phase(const int& chNum) {
-	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
-	if(ChannelValid(chNum)) return cg->Phase();
+//     const float Phase(const int& chNum) {
+// 	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
+// 	if(ChannelValid(chNum)) return cg->Phase();
 	
-	cerr << "ChannelInterface::Phase - invalid channel requested" << endl;
-	return 0.0f;
-    };
+// 	cerr << "ChannelInterface::Phase - invalid channel requested" << endl;
+// 	return 0.0f;
+//     };
 
     ///Returns phase units for selected channel
-    const float PhaseUnits(const int& chNum) {
-	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
-	if(ChannelValid(chNum)) return cg->DDC();
+//     const float PhaseUnits(const int& chNum) {
+// 	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
+// 	if(ChannelValid(chNum)) return cg->DDC();
 	
-	cerr << "ChannelInterface::PhaseUnits - invalid channel requested" << endl;
-	return 0.0f;
-    };	    
+// 	cerr << "ChannelInterface::PhaseUnits - invalid channel requested" << endl;
+// 	return 0.0f;
+//     };	    
 };
 
 #endif

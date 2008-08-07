@@ -20,8 +20,9 @@ ChannelInterface::ChannelInterface(UsrpConfigStruct& usrpConfigStruct,
     for(int i=0; i<4; ++i){
 	string str = "Channel ";
 	str += lexical_cast<string>(i+1);
-	ChannelGroupPtr ptr(new ChannelGroup(x+15,y+20,230,100,""));
+	ChannelGroupPtr ptr(new ChannelGroup(i,x+15,y+20,230,100,""));
 	ptr->copy_label(str.c_str());
+	ptr->callback(ChannelInterface::Update,&usrpConfigStruct_);
 	channelArray_.push_back(ptr);
 	this->add(channelArray_[i].get());
     }

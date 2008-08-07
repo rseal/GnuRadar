@@ -61,9 +61,9 @@ class SettingsInterface : public Fl_Group
     }
 
     ///Returns current sample rate
-    const float SampleRate() { return settingsCompute_->SampleRate();}
+    //    const float SampleRate() { return settingsCompute_->SampleRate();}
     ///Returns current decimation rate
-    const int   Decimation() { return settingsCompute_->Decimation();}
+    //const int   Decimation() { return settingsCompute_->Decimation();}
 
     ///Updates all parameters defined in SettingsInterface class
     void UpdateParameters(){
@@ -122,7 +122,5 @@ public:
 	UsrpConfigStruct& usrpConfigStruct);
     ///Returns number of defined channels
     const int NumChannels(){ return lexical_cast<int>(channels_->text());}
-    ///Returns pointer to channel container
-    Fl_Choice* ChannelRef() { return channels_.get();}
 };
 #endif

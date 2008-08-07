@@ -22,16 +22,22 @@ using boost::lexical_cast;
 ///Class definition
 class ChannelGroup: public Fl_Group 
 {
+    const int id_;
     auto_ptr<Fl_Float_Input>  ddc_;
     auto_ptr<Fl_Choice>       ddcUnits_;
     auto_ptr<Fl_Float_Input>  phase_;
     auto_ptr<Fl_Choice>       phaseUnits_;
 
+    static void Update(Fl_Widget* flw, void* userData){
+	ChannelGroup* cgPtr = reinterpret_cast<ChannelGroup*>(userData);
+	cgPtr->do_callback();
+    }
+
 public:
     ///Constructor
-    ChannelGroup(int X, int Y, int width, int height, 
+    ChannelGroup(const int& id, int X, int Y, int width, int height, 
 		     const char* label);
-
+    const int&  ID() { return id_;}
     const float DDC()        { return lexical_cast<float>(ddc_->value());}
     const int   DDCUnits()   { return ddcUnits_->value();}
     const float Phase()      { return lexical_cast<float>(phase_->value());}

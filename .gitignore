@@ -3,3 +3,4 @@ usrpSVN/
 *.o
 *~
 gui/3rdParty
+gui/doc

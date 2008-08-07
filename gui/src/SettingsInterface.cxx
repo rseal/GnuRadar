@@ -1,12 +1,20 @@
+////////////////////////////////////////////////////////////////////////////////
+///SettingsInterface.cxx
+///
+///Provides interactive formatting and display of sample rate, bandwidth, 
+///and decimation 
+///
+///Author: Ryan Seal
+///Modified: 08/06/08
+////////////////////////////////////////////////////////////////////////////////
 #include "../include/SettingsInterface.h"
 #include <iostream>
 
 SettingsInterface::SettingsInterface(int x, int y, int width, int height, 
-				     const char* label, UsrpParameters& usrpParameters):
-    usrpParameters_(usrpParameters), Fl_Group(x,y,width,height,label)
+				     const char* label):
+    Fl_Group(x,y,width,height,label)
 {
-    //this->labeltype(FL_NORMAL_LABEL);
-    //this->align(FL_ALIGN_TOP);
+    settingsCompute_ = auto_ptr<SettingsCompute>(new SettingsCompute);
     
     int x0 = x + 100;
     int y0 = y + 20;
@@ -20,7 +28,7 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     color1_ = fl_rgb_color(180,180,180);									
 
     sampleRate_ = auto_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0, w0, h1, "Sample Rate"));
-    sampleRate_->value(usrpParameters_.SampleRateString());
+    sampleRate_->value(settingsCompute_->SampleRateString());
     sampleRate_->callback(SettingsInterface::UpdateSampleRate,this);
     sampleRate_->color(FL_WHITE);
     this->add(sampleRate_.get());

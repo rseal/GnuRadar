@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+///DataGroup.cxx
+///
+///Used to add/remove data window used in data acquisition
+///
+///Author: Ryan Seal
+///Modified: 08/06/08
+////////////////////////////////////////////////////////////////////////////////
 #include "../include/DataGroup.h"
 
 DataGroup::DataGroup(int x, int y, int width, int height, const char* label):

@@ -1,9 +1,13 @@
-
-// This is the "file card tabs" interface to allow you to put lots and lots
-// of buttons and switches in a panel, as popularized by many toolkits.
-
-// Each child widget is a card, and it's label() is printed on the card tab.
-// Clicking the tab makes that card visible.
+////////////////////////////////////////////////////////////////////////////////
+///CustomTab.cxx
+///
+///Almost complete rewrite of existing Fl_Tabs class. Provides enabling and 
+///disabling of windows as needed. Also removed several strange / redundant
+///methods used to determine graphical object positions.
+///
+///Author: Ryan Seal
+///Modified: 08/06/08
+////////////////////////////////////////////////////////////////////////////////
 
 #include <stdio.h>
 #include <FL/Fl.H>

@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+///HeaderInterface.cxx
+///
+///Records and displays information required for Header system. 
+///
+///Author: Ryan Seal
+///Modified: 08/06/08
+////////////////////////////////////////////////////////////////////////////////
 #include "../include/HeaderInterface.h"
 
 HeaderInterface::HeaderInterface(int x, int y, int width, int height, const char* label): 

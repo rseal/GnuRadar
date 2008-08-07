@@ -1,3 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////
+///CustomTab.h
+///
+///Almost complete rewrite of existing Fl_Tabs class. Provides enabling and 
+///disabling of windows as needed. Also removed several strange / redundant
+///methods used to determine graphical object positions.
+///
+///Author: Ryan Seal
+///Modified: 08/06/08
+////////////////////////////////////////////////////////////////////////////////
 #ifndef CUSTOM_TAB_H
 #define CUSTOM_TAB_H
 

@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+///UsrpInterface.h
+///
+///Primary Display window for USRP configuration GUI interface.
+///
+///Author: Ryan Seal
+///Modified: 08/06/08
+////////////////////////////////////////////////////////////////////////////////
 #ifndef USRP_CONFIG_GUI_H
 #define USRP_CONFIG_GUI_H
 
@@ -10,7 +18,6 @@
 #include <FL/Fl_Group.h>
 #include <FL/Fl_File_Chooser.H>
 
-#include <gnuradar/UsrpParameters.h>
 #include <boost/lexical_cast.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -31,9 +38,8 @@ using std::vector;
 class UsrpInterface : public Fl_Window 
 {
     const int maxChannels_;
-    int numChannels_;
-    UsrpConfigStruct usrpConfig_;
-    UsrpParameters usrpParameters_;
+    //int numChannels_;
+    auto_ptr<UsrpConfigStruct> usrpConfig_;
 
     auto_ptr<Fl_Menu_Bar> menuBar_;
     auto_ptr<SettingsInterface> settingsInterface_;
@@ -70,8 +76,6 @@ class UsrpInterface : public Fl_Window
 	}
 	
 	if(str.size() != 0) Parser parser(str);
-
-	cout << "Clicked Load" << endl;	
     };
     
     static void SaveClicked(Fl_Widget* flw, void* userData){
@@ -86,7 +90,8 @@ class UsrpInterface : public Fl_Window
 	}
 	
 	if(str.size() != 0) Parser parser(str);
-	cout << "Clicked Save" << endl;
+
+	usrpInterface->GetParameters();
     };
 
     static void UpdateChannels(Fl_Widget* flw, void* userData){
@@ -94,16 +99,12 @@ class UsrpInterface : public Fl_Window
 	CustomTab* channelTab = reinterpret_cast<CustomTab*>(userData);
  	int numChannels = lexical_cast<int>(w->ChannelRef()->text());
  	int index = 0;
-
-	for(int i=0; i<4; ++i)
-	    channelTab->Disable(i);
-
-	for(index=0; index<numChannels; ++index){
-	    channelTab->Enable(index);
-	}
-	
+	for(int i=0; i<4; ++i) channelTab->Disable(i);
+	for(index=0; index<numChannels; ++index) channelTab->Enable(index);
     }
-	
+
+    void GetParameters();
+
 public:
     UsrpInterface(int X, int Y);
     ~UsrpInterface(){exit(0);};

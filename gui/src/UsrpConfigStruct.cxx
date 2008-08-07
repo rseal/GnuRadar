@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////////////////////////
+///UsrpConfigStruct.cxx
+///
+///Provides necessary rule checking and conversions for displayed/stored 
+///configuration data.
+///
+///Author: Ryan Seal
+///Modified: 08/06/08
+////////////////////////////////////////////////////////////////////////////////
 #include "../include/UsrpConfigStruct.h"
 
 UsrpConfigStruct::UsrpConfigStruct(): 

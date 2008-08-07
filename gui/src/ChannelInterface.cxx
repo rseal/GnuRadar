@@ -8,9 +8,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/ChannelInterface.h"
 
-ChannelInterface::ChannelInterface(int x, int y, int width, int height, 
+ChannelInterface::ChannelInterface(UsrpConfigStruct& usrpConfigStruct,
+				   int x, int y, int width, int height, 
 				   const char* label): 
-    CustomTab(x,y,width,height,label)
+    CustomTab(x,y,width,height,label), usrpConfigStruct_(usrpConfigStruct)
 {
     colorVector_.push_back(fl_rgb_color(230,230,230));
     colorVector_.push_back(fl_rgb_color(100,100,100));

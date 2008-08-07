@@ -8,8 +8,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/HeaderInterface.h"
 
-HeaderInterface::HeaderInterface(int x, int y, int width, int height, const char* label): 
-    Fl_Group(x,y,width,height,label){
+HeaderInterface::HeaderInterface(UsrpConfigStruct& usrpConfigStruct, int x, 
+				 int y, int width, int height, 
+				 const char* label):
+    Fl_Group(x,y,width,height,label), usrpConfigStruct_(usrpConfigStruct) 
+{
 
     int x0=x+150;
     int y0=y+20;
@@ -18,6 +21,7 @@ HeaderInterface::HeaderInterface(int x, int y, int width, int height, const char
     int sp=15;
     int numInputs=5;
    
+    headerStruct_ = auto_ptr<HeaderStruct>(new HeaderStruct);
 
     for(int i=0; i<numInputs; ++i){
 	InputPtr ip = InputPtr(new Fl_Input(x0,y0+i*(h0+sp),w0,h0));
@@ -29,4 +33,7 @@ HeaderInterface::HeaderInterface(int x, int y, int width, int height, const char
     inputArray_[2]->label("Object of Observation");
     inputArray_[3]->label("Observing Instrument");
     inputArray_[4]->label("Collection Instrument");
+        
+    for(int i=0; i<numInputs; ++i)
+	inputArray_[i]->callback(HeaderInterface::Update,this);
 }

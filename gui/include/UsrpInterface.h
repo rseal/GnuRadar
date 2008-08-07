@@ -39,7 +39,7 @@ class UsrpInterface : public Fl_Window
 {
     const int maxChannels_;
     //int numChannels_;
-    auto_ptr<UsrpConfigStruct> usrpConfig_;
+    UsrpConfigStruct usrpConfigStruct_;
 
     auto_ptr<Fl_Menu_Bar> menuBar_;
     auto_ptr<SettingsInterface> settingsInterface_;

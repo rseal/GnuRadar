@@ -38,6 +38,7 @@ class SettingsInterface : public Fl_Group
 {
     Fl_Color color1_;
 
+    UsrpConfigStruct& usrpConfigStruct_;
     auto_ptr<SettingsCompute> settingsCompute_;
     auto_ptr<Fl_Output>       units1_;
     auto_ptr<Fl_Output>       units2_;
@@ -69,6 +70,11 @@ class SettingsInterface : public Fl_Group
 	float bw = settingsCompute_->Bandwidth();
 	string unitsStr;
 
+	//update global structure
+	usrpConfigStruct_.SampleRate(sampleRate);
+	usrpConfigStruct_.Decimation(decimation);
+	usrpConfigStruct_.NumChannels(channels);
+	
 	if(bw >= 1e6){
 	    bw = bw/1000000.0f;
 	    unitsStr = "MHz";
@@ -104,7 +110,8 @@ class SettingsInterface : public Fl_Group
     }
 
 public:
-    SettingsInterface(int x, int y, int width, int height, const char* label);
+    SettingsInterface(int x, int y, int width, int height, const char* label,
+	UsrpConfigStruct& usrpConfigStruct);
     const int NumChannels(){ return lexical_cast<int>(channels_->text());}
     Fl_Choice* ChannelRef() { return channels_.get();}
 };

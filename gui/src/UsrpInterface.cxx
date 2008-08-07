@@ -15,11 +15,11 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
 
     this->resize(X,Y,width,height);
 
-    int baseX = 25;
-    int baseY = 25;
-    int tab1Width=50;
-    int width2=80;
-    int tab1Height=30;
+    int baseX      = 25;
+    int baseY      = 25;
+    int tab1Width  = 50;
+    int width2     = 80;
+    int tab1Height = 30;
 
     windowColor_     = fl_rgb_color(200,200,200);
     buttonColor_     = fl_rgb_color(180,180,180);
@@ -45,8 +45,6 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
 	{ 0 }
     };
 
-    usrpConfig_ = auto_ptr<UsrpConfigStruct>(new UsrpConfigStruct);
-
     //menu bar at top of main window
     menuBar_ = auto_ptr<Fl_Menu_Bar>(new Fl_Menu_Bar(5, 5, width-10, 30, 0));
     menuBar_->box(FL_ENGRAVED_BOX);
@@ -54,7 +52,8 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
 
     //channel options interface
     channelTab_ = 
-	auto_ptr<ChannelInterface>(new ChannelInterface(5,165,width-340,120,0));
+	auto_ptr<ChannelInterface>
+	(new ChannelInterface(usrpConfigStruct_,5,165,width-340,120,0));
     channelTab_->box(FL_ENGRAVED_BOX);
     channelTab_->Enable(0);
     channelTab_->value(0);
@@ -65,22 +64,26 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
 
     //general settings interface
     settingsInterface_ = auto_ptr<SettingsInterface>
-	(new SettingsInterface(5, 40, 410, 120, 0));
+	(new SettingsInterface(5, 40, 410, 120, 0,usrpConfigStruct_));
     settingsInterface_->box(FL_ENGRAVED_BOX);
     settingsInterface_->callback(UsrpInterface::UpdateChannels,channelTab_.get());
 
     //header system group box interface
-    headerInterface_ = auto_ptr<HeaderInterface>(new HeaderInterface(width-330,40));
+    headerInterface_ = auto_ptr<HeaderInterface>
+	(new HeaderInterface(usrpConfigStruct_,width-330,40));
     headerInterface_->box(FL_ENGRAVED_BOX);
 
     //data window group box interface
-    dataInterface_ = auto_ptr<DataInterface>(new DataInterface(5,290,width-340,120,0));
+    dataInterface_ = auto_ptr<DataInterface>
+	(new DataInterface(usrpConfigStruct_,5,290,width-340,120,0));
     dataInterface_->box(FL_ENGRAVED_BOX);
 
     //fpga bit image interface
     fpgaGroup_ = auto_ptr<Fl_Group>(new Fl_Group(420,290,325,120));
     fpgaGroup_->box(FL_ENGRAVED_BOX);
 
+    // !!!! this needs to be modified to load a selectable image 
+    //      into the UsrpConfigStruct to be useful !!!!
     fileBrowserFPGA_ = auto_ptr<Fl_File_Browser>(
 	new Fl_File_Browser(545, 320, 190, 25, "FPGA Bit Image"));
     fileBrowserFPGA_->align(FL_ALIGN_LEFT);
@@ -116,21 +119,8 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     this->end();
 }
 
+//this is garbage - need to simply pass UsrpConfigStruct
+//reference to these structures and let them fill required
+//information.
 void UsrpInterface::GetParameters(){
-    SettingsInterface* si = settingsInterface_.get();
-    UsrpConfigStruct*  uc = usrpConfig_.get();
-    ChannelInterface*  ci = channelInterface_.get();
-
-    uc->NumChannels(si->NumChannels());
-
-    for(int i=0; i<si->NumChannels(); ++i)
-	uc->Channel(i, ci->DDC(i), ci->Phase(i));
- 
-    uc->SampleRate(si->SampleRate());
-    uc->Decimation(si->Decimation());
-
-//     void IPP(const int& ipp, const int& units);
-//     void FPGAImage(const string& fpgaImage);
-//     void DataWindow(const int& start, const int& size, const int& units);
-//     void Header(const HeaderStruct& header);
 }

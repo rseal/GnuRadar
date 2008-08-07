@@ -16,19 +16,19 @@
 #include <FL/fl_ask.H>
 
 #include "DataWindowInterface.h"
-
-//#include <boost/lexical_cast.hpp>
-//#include <boost/shared_ptr.hpp>
+#include "UsrpConfigStruct.h"
 
 #include <iostream>
-//#include <vector>
+#include <boost/lexical_cast.hpp>
 
 using std::auto_ptr;
 using std::cout; 
 using std::endl;
+using boost::lexical_cast;
 
 class DataInterface : public Fl_Group
 {
+    UsrpConfigStruct& usrpConfigStruct_;
     auto_ptr<DataWindowInterface> dataWindowInterface_;
     auto_ptr<Fl_Button> addButton_;
     auto_ptr<Fl_Button> removeButton_;
@@ -68,7 +68,16 @@ class DataInterface : public Fl_Group
 
     }
 
+    static void Update(Fl_Widget* flw, void* userData){
+	DataInterface* dwiPtr = reinterpret_cast<DataInterface*>(userData);
+	int ipp = lexical_cast<int>(dwiPtr->ippInput_->value());
+	int units = dwiPtr->unitsChoice_->value();
+	//update global structure
+	dwiPtr->usrpConfigStruct_.IPP(ipp,units);
+	cout << "DataInterface::Update" << endl;
+    }
 public:
-    DataInterface(int x, int y, int width=325, int height=245, const char* label=NULL);
+    DataInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y, 
+		  int width=325, int height=245, const char* label=NULL);
 };
 #endif

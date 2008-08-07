@@ -42,12 +42,13 @@ private:
 public:
     UsrpConfigStruct(); 
     void Channel(const int& chNum, const float& ddc, const float& phase);
-    void SampleRate(const float& sampleRate);
-    void NumChannels(const int& numChannels);
-    void IPP(const int& ipp, const int& units);
-    void FPGAImage(const string& fpgaImage);
+    void SampleRate(const float& sampleRate); //complete
+    void NumChannels(const int& numChannels); //complete
+    void IPP(const int& ipp, const int& units); //complete
+    void FPGAImage(const string& fpgaImage); //use default for now
     void DataWindow(const int& start, const int& size, const int& units);
-    void Header(const HeaderStruct& header);
+    void Header(const HeaderStruct header); //complete
+    void Decimation(const int& decimation); //complete
 };
 
 #endif

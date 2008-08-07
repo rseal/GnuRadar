@@ -8,9 +8,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/DataInterface.h"
 
-DataInterface::DataInterface(int x, int y, int width, int height,
-			     const char* label):
-    Fl_Group(x, y, width, height, label)
+DataInterface::DataInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y,
+			     int width, int height, const char* label):
+    Fl_Group(x, y, width, height, label), usrpConfigStruct_(usrpConfigStruct)
 {
     int x0 = x+5;
     int y0 = y+5;
@@ -34,10 +34,13 @@ DataInterface::DataInterface(int x, int y, int width, int height,
     this->add(removeButton_.get());
     
     ippInput_ = auto_ptr<Fl_Int_Input>(new Fl_Int_Input(x0+30,y0+20,50,25,"IPP"));
+    ippInput_->callback(DataInterface::Update,this);
+    ippInput_->value("10");
     this->add(ippInput_.get());
 
     unitsChoice_ = auto_ptr<Fl_Choice>(new Fl_Choice(x0+90,y0+20,70,25,NULL));
     unitsChoice_->box(FL_PLASTIC_DOWN_BOX);
+    unitsChoice_->callback(DataInterface::Update,this);
     unitsChoice_->add("msec");
     unitsChoice_->add("usec");
     unitsChoice_->add("Km");

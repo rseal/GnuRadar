@@ -14,6 +14,7 @@
 
 #include "ChannelGroup.h"
 #include "CustomTab.h"
+#include "UsrpConfigStruct.h"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/shared_ptr.hpp>
@@ -31,6 +32,7 @@ using std::endl;
 class ChannelInterface: public CustomTab 
 {
     typedef boost::shared_ptr<ChannelGroup> ChannelGroupPtr;
+    UsrpConfigStruct& usrpConfigStruct_;
     Fl_Color windowColor_;
     vector<Fl_Color> colorVector_;
 
@@ -42,7 +44,8 @@ class ChannelInterface: public CustomTab
     const bool ChannelValid(const int& chNum) { return chNum >= 0 || chNum <= 3;}
 
 public:
-    ChannelInterface(int X, int Y, int width, int height, const char* label);
+    ChannelInterface(UsrpConfigStruct& usrpConfigStruct, int X, int Y,
+		     int width, int height, const char* label);
     
     const float DDC(const int& chNum) {
 	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));

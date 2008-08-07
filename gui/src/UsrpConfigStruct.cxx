@@ -13,6 +13,8 @@ UsrpConfigStruct::UsrpConfigStruct():
     validSampleRate_(false),channels_(4),sampleRate_(0),decimation_(0),
     numChannels_(0),ipp_(0),fpgaImage_("../../fpga/std_4rx_0tx.rbf")
 {
+//    std::cout << "UsrpConfigStruct::CTOR" << std::endl;
+	
 }
 
 void UsrpConfigStruct::Channel(const int& chNum, const float& ddc, 
@@ -27,7 +29,7 @@ void UsrpConfigStruct::Channel(const int& chNum, const float& ddc,
 }
 
 void UsrpConfigStruct::SampleRate(const float& sampleRate){
-    if(sampleRate < 1 || sampleRate > 64){
+    if(sampleRate < 1e6 || sampleRate > 64e6){
 	cerr << "UsrpConfigStruct::SampleRate - invalid sample rate "
 	     << sampleRate << " requested" << endl;
 	validSampleRate_ = false;
@@ -43,6 +45,15 @@ void UsrpConfigStruct::NumChannels(const int& numChannels){
 	cerr << "UsrpConfigStruct::NumChannels - invalid number of channels " 
 	     << numChannels << " requested" << endl;
     else numChannels_ = numChannels;
+}
+
+void UsrpConfigStruct::Decimation(const int& decimation){
+    if(decimation < 8 || decimation > 256)
+	cerr << "UsrpConfigStruct::Decimation - invalid decimation request "
+	     << decimation << endl;
+    else
+	decimation_ = decimation;
+
 }
 
 //storage units are usec
@@ -104,6 +115,6 @@ void UsrpConfigStruct::DataWindow(const int& start, const int& size, const int& 
     }
 }
 
-void UsrpConfigStruct::Header(const HeaderStruct& header){
+void UsrpConfigStruct::Header(const HeaderStruct header){
     header_ = header;
 }

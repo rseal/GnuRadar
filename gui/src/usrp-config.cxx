@@ -8,6 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/UsrpInterface.h"
 
+///Main loop for program execution
 int main(){
     UsrpInterface*  ui = new UsrpInterface(0,0);
     ui->show();

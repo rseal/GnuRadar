@@ -9,15 +9,12 @@
 #ifndef DATA_INTERFACE_H
 #define DATA_INTERFACE_H
 
-//#include <FL/Fl.H>
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Choice.h>
 #include <FL/Fl_Button.h>
 #include <FL/fl_ask.H>
-
 #include "DataWindowInterface.h"
 #include "UsrpConfigStruct.h"
-
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 
@@ -26,6 +23,7 @@ using std::cout;
 using std::endl;
 using boost::lexical_cast;
 
+///Class definition
 class DataInterface : public Fl_Group
 {
     UsrpConfigStruct& usrpConfigStruct_;
@@ -35,6 +33,7 @@ class DataInterface : public Fl_Group
     auto_ptr<Fl_Int_Input> ippInput_;
     auto_ptr<Fl_Choice> unitsChoice_;
 
+    ///Callback for Add button
     static void AddClicked(Fl_Widget* flw, void* userData){
 	DataWindowInterface* dwi = reinterpret_cast<DataWindowInterface*>(userData);
 
@@ -51,6 +50,7 @@ class DataInterface : public Fl_Group
 	if(str.size() != 0) dwi->Add(str.c_str());
     }
 
+    ///Callback for Remove Button
     static void RemoveClicked(Fl_Widget* flw, void* userData){
 	DataWindowInterface* dwi = reinterpret_cast<DataWindowInterface*>(userData);
 
@@ -68,6 +68,7 @@ class DataInterface : public Fl_Group
 
     }
 
+    ///Callback to Update IPP and units
     static void Update(Fl_Widget* flw, void* userData){
 	DataInterface* dwiPtr = reinterpret_cast<DataInterface*>(userData);
 	int ipp = lexical_cast<int>(dwiPtr->ippInput_->value());
@@ -77,6 +78,7 @@ class DataInterface : public Fl_Group
 	cout << "DataInterface::Update" << endl;
     }
 public:
+    ///Constructor
     DataInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y, 
 		  int width=325, int height=245, const char* label=NULL);
 };

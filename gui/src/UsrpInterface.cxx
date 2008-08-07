@@ -8,6 +8,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/UsrpInterface.h"
 
+///Primary display interface for the USRP configuration GUI program.
+///Root class of the USRP configuration GUI program. 
 UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels_(4)
 {
     int width = 750;

@@ -8,6 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/HeaderInterface.h"
 
+///Constructor
 HeaderInterface::HeaderInterface(UsrpConfigStruct& usrpConfigStruct, int x, 
 				 int y, int width, int height, 
 				 const char* label):

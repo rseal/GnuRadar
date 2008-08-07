@@ -8,6 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/ChannelInterface.h"
 
+///Constructor
 ChannelInterface::ChannelInterface(UsrpConfigStruct& usrpConfigStruct,
 				   int x, int y, int width, int height, 
 				   const char* label): 

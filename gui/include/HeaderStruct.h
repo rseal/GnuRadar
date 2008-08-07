@@ -12,7 +12,7 @@
 #include <iostream>
 using std::string;
 
-//holds keywords necessary for simple header creation
+///Holds keywords necessary for simple header creation
 struct HeaderStruct{
 
     string institution_;

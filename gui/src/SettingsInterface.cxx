@@ -10,6 +10,7 @@
 #include "../include/SettingsInterface.h"
 #include <iostream>
 
+///Constructor 
 SettingsInterface::SettingsInterface(int x, int y, int width, int height, 
 				     const char* label, UsrpConfigStruct& usrpConfigStruct):
     Fl_Group(x,y,width,height,label), usrpConfigStruct_(usrpConfigStruct)

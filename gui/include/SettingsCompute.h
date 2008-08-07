@@ -17,6 +17,8 @@ using std::endl;
 using std::string;
 using boost::lexical_cast;
 
+
+///Validates selected parameters and formats for display as needed.
 struct SettingsCompute{
 
     float sampleRate_;
@@ -24,6 +26,7 @@ struct SettingsCompute{
     float bandwidth_;
     int   channels_;
 
+    ///Checks all parameters and returns true if valid
     const bool ValidateParameters() { 
         bool valid(true);
 	if(sampleRate_ < 1e6 || sampleRate_ > 64e6) valid = false;
@@ -32,6 +35,8 @@ struct SettingsCompute{
 	return valid;
     }
 
+    ///Update system's bandwidth bassed on channel, sample rate, and decimation 
+    ///settings.
     void Update(){
 	if(ValidateParameters())
 	    bandwidth_ = sampleRate_ / (channels_ * decimation_);
@@ -40,23 +45,30 @@ struct SettingsCompute{
     }
 
 public:
+    ///Constructor
     SettingsCompute(): sampleRate_(64e6), decimation_(8), bandwidth_(8e6), channels_(1){}
 
+    ///Returns sample rate
     const float& SampleRate()       { return sampleRate_;}
+    ///Returns string representation of sample rate
     const char*  SampleRateString() { 
 	string str = lexical_cast<string>(sampleRate_/1e6);
 	return str.c_str();
     }
+    ///Returns decimation
     const int&   Decimation()       { return decimation_;}
+    ///Returns bandwidth
     const float& Bandwidth()        { return bandwidth_;}
+    ///Returns channels
     const int&   Channels()         { return channels_;}
-
+    ///Returns string representation of bandwidth
     const char* BandwidthString()   {
 	string str = lexical_cast<string>(bandwidth_/1000000.0f).c_str();
 	const char* hack = str.c_str();
 	return hack;
     }
 
+    ///Not currently used??
     const char* BandwidthStringFancy() {
 	string bw,units;
 	if(bandwidth_ >= 1e6){
@@ -76,6 +88,7 @@ public:
 	return temp.c_str();
     }
 
+    ///Validates and sets decimation settings
     void Decimation(const int& decimation) { 
 	if((decimation%2 != 0) || (decimation < 8) || (decimation > 256)) 
 	    cout << "ERROR: invalid decimation value" << endl;
@@ -85,6 +98,7 @@ public:
 	Update();
     }
 	
+    ///Validates and sets sample rate settings
     void SampleRate(const float& sampleRate) { 
 	if((sampleRate < 1e6) || (sampleRate > 64e6)) 
 	    cout << "ERROR: invalid sample rate" << endl;
@@ -94,6 +108,7 @@ public:
 	Update();
     }
 
+    ///Validates and sets channel settings
     void Channels(const int& channels){
 	if((channels != 1) && (channels != 2) && (channels != 4)) 
 	    cout << "ERROR: invalid number of channels selected" << endl;

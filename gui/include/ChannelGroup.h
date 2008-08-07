@@ -19,6 +19,7 @@
 using std::auto_ptr;
 using boost::lexical_cast;
 
+///Class definition
 class ChannelGroup: public Fl_Group 
 {
     auto_ptr<Fl_Float_Input>  ddc_;
@@ -27,6 +28,7 @@ class ChannelGroup: public Fl_Group
     auto_ptr<Fl_Choice>       phaseUnits_;
 
 public:
+    ///Constructor
     ChannelGroup(int X, int Y, int width, int height, 
 		     const char* label);
 

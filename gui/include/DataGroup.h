@@ -18,6 +18,7 @@
 using boost::lexical_cast;
 using std::auto_ptr;
 
+///Class definition
 class DataGroup: public Fl_Group{
     int start_;
     int size_;
@@ -28,6 +29,7 @@ class DataGroup: public Fl_Group{
     auto_ptr<Fl_Choice> unitChoice_;
 
 public:
+    ///Constructor
     DataGroup(int x, int y, int width, int height, const char* label);
    
     void Start(const int& start);

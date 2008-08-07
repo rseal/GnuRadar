@@ -34,6 +34,7 @@ using std::auto_ptr;
 using std::string;
 using std::vector;
 
+///Class definition
 class SettingsInterface : public Fl_Group
 {
     Fl_Color color1_;
@@ -47,19 +48,24 @@ class SettingsInterface : public Fl_Group
     auto_ptr<Fl_Output>       bandwidth_;
     auto_ptr<Fl_Choice>       channels_;
 
+    ///Callback to update decimation value
     static void UpdateDecimation(Fl_Widget* flw, void* userData){
 	SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*>(userData);
 	settingsInterface->UpdateParameters();
     }
 
+    //Callback to update sample rate
     static void UpdateSampleRate(Fl_Widget* flw, void* userData){
 	SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*>(userData);
 	settingsInterface->UpdateParameters();
     }
 
+    ///Returns current sample rate
     const float SampleRate() { return settingsCompute_->SampleRate();}
+    ///Returns current decimation rate
     const int   Decimation() { return settingsCompute_->Decimation();}
 
+    ///Updates all parameters defined in SettingsInterface class
     void UpdateParameters(){
 	float sampleRate = lexical_cast<float>(sampleRate_->value())*1000000.0f;
 	int decimation   = decimation_->value();
@@ -103,6 +109,7 @@ class SettingsInterface : public Fl_Group
 	this->do_callback();
     }
 
+    ///Callback to update channels
     static void UpdateChannel(Fl_Widget* flw, void* userData){
 	SettingsInterface* settingsInterface = 
 	    reinterpret_cast<SettingsInterface*>(userData);
@@ -110,9 +117,12 @@ class SettingsInterface : public Fl_Group
     }
 
 public:
+    ///Constructor
     SettingsInterface(int x, int y, int width, int height, const char* label,
 	UsrpConfigStruct& usrpConfigStruct);
+    ///Returns number of defined channels
     const int NumChannels(){ return lexical_cast<int>(channels_->text());}
+    ///Returns pointer to channel container
     Fl_Choice* ChannelRef() { return channels_.get();}
 };
 #endif

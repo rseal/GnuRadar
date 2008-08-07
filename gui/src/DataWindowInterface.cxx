@@ -8,6 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/DataWindowInterface.h"
 
+///Constructor
 DataWindowInterface::DataWindowInterface(int x, int y, int width, int height, const char* label):
     CustomTab(x,y,width,height,label), defaultWindow_(true)
 {
@@ -23,6 +24,7 @@ DataWindowInterface::DataWindowInterface(int x, int y, int width, int height, co
 
 }
 
+///Adds a new window to the interface.
 void DataWindowInterface::Add(const string& label){
 
     //one window if created with class instance
@@ -41,6 +43,9 @@ void DataWindowInterface::Add(const string& label){
     }
 }
 
+///Removes a window from the existing list.
+///If a single window exists, it is removed and replaced 
+///by the default window, which is created in the constructor
 void DataWindowInterface::Remove(const string label){
     
     //search array for label and remove if found
@@ -63,6 +68,7 @@ void DataWindowInterface::Remove(const string label){
     }
 }
 
+///Not currently used
 void DataWindowInterface::Modify(const string oldLabel, const string newLabel){
     
     //search for oldLabel and replace with newLabel
@@ -73,6 +79,7 @@ void DataWindowInterface::Modify(const string oldLabel, const string newLabel){
 	
 }
 
+///Not currently used
 void DataWindowInterface::Units(const int& units){}
 
 

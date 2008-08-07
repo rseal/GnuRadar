@@ -29,6 +29,7 @@ using std::cerr;
 using std::cout;
 using std::endl;
 
+///Class definition
 class ChannelInterface: public CustomTab 
 {
     typedef boost::shared_ptr<ChannelGroup> ChannelGroupPtr;
@@ -36,17 +37,15 @@ class ChannelInterface: public CustomTab
     Fl_Color windowColor_;
     vector<Fl_Color> colorVector_;
 
-//     static void UpdateDDC(Fl_Widget* flw, void* userData){
-// 	//UserInterface* userInterface = reinterpret_cast<UserInterface*>(userData);
-// 	//userInterface->UpdateParameters();
-//     }
     vector<ChannelGroupPtr> channelArray_;
     const bool ChannelValid(const int& chNum) { return chNum >= 0 || chNum <= 3;}
 
 public:
+    ///Constructor
     ChannelInterface(UsrpConfigStruct& usrpConfigStruct, int X, int Y,
 		     int width, int height, const char* label);
     
+    ///Returns DDC frequency for selected channel
     const float DDC(const int& chNum) {
 	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
 	if(ChannelValid(chNum)) return cg->DDC();
@@ -55,6 +54,7 @@ public:
 	return 0.0f;
     };
 
+    ///Returns DDC units for selected channel
     const int DDCUnits(const int& chNum) {
 	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
 	if(ChannelValid(chNum)) return cg->DDCUnits();
@@ -63,6 +63,7 @@ public:
 	return 0;
     };
 
+    ///Returns Phase for selected channel
     const float Phase(const int& chNum) {
 	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
 	if(ChannelValid(chNum)) return cg->Phase();
@@ -71,6 +72,7 @@ public:
 	return 0.0f;
     };
 
+    ///Returns phase units for selected channel
     const float PhaseUnits(const int& chNum) {
 	ChannelGroup* cg = reinterpret_cast<ChannelGroup*>(this->child(chNum));
 	if(ChannelValid(chNum)) return cg->DDC();

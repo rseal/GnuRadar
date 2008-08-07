@@ -8,6 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/ChannelGroup.h"
 
+///Constructor
 ChannelGroup::ChannelGroup(int x, int y, int width, int height, 
 			   const char* label):
     Fl_Group( x, y, width, height, label)

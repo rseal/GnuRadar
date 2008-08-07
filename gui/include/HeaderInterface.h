@@ -35,6 +35,7 @@ using std::auto_ptr;
 // observing instrument  - fl_input
 // collection instrument - fl_input
 
+///Class Definition
 class HeaderInterface : public Fl_Group
 {
     UsrpConfigStruct& usrpConfigStruct_;

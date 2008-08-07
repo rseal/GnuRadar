@@ -8,6 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/DataInterface.h"
 
+///Constructor
 DataInterface::DataInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y,
 			     int width, int height, const char* label):
     Fl_Group(x, y, width, height, label), usrpConfigStruct_(usrpConfigStruct)

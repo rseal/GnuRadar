@@ -18,13 +18,16 @@
 #define BORDER 2
 #define EXTRASPACE 10
 
-
+///Constructor
 CustomTab::CustomTab(int X,int Y,int W, int H, const char *l) :
     Fl_Group(X,Y,W,H,l), enColor_(FL_BLACK), disColor_(FL_WHITE),
     topTab_(true),activeChild_(0){
     box(FL_THIN_UP_BOX);
 }
 
+///Determines the number of defined tabs and updates
+///each tab's label dimensions and stores in a vector
+///container.
 void CustomTab::UpdateTabs(){
     
     int labelWidth,labelHeight,xOffset;
@@ -66,16 +69,15 @@ void CustomTab::UpdateTabs(){
     }
 }
 
-
 //Private member
-//ensure that requested tab exists
+///Ensures that the requested tab is valide
 const bool CustomTab::ValidateTabIndex(const int& tab){
     const int numTabs = this->children();
     return ((tab < numTabs) && (tab >= 0)) ? true : false;
 }
 
 //Public member
-//disable requested tab - prevents user from focusing and changes color
+///Disable requested tab - prevents user from focusing and changes color
 void CustomTab::Disable(const int& tab){
     if(!ValidateTabIndex(tab)) return;
     Fl_Widget* w = this->child(tab);
@@ -85,7 +87,7 @@ void CustomTab::Disable(const int& tab){
 }
 
 //Public member
-//enables user to select tab and changes label color
+///Enables user to select tab and changes label color
 void CustomTab::Enable(const int& tab){
     if(!ValidateTabIndex(tab)) return;
     Fl_Widget* w = this->child(tab);
@@ -95,21 +97,21 @@ void CustomTab::Enable(const int& tab){
 }
 
 //Public member
-//returns whether tab is currently enabled or not
+///Returns whether tab is currently enabled or not
 const bool CustomTab::Enabled(const int& tab){
     if(!ValidateTabIndex(tab)) return false;
     return this->child(tab)->visible_focus() != 0 ? true : false; 
 }
 
 //Public member
-//accepts tab location index and returns pointer to child widget
+//Accepts tab location index and returns pointer to child widget
 Fl_Widget* CustomTab::GetPtr(const int& tab){
     if(!ValidateTabIndex(tab)) return 0;
     return this->child(tab);
 }
 
 //Public member
-//accepts pointer to child widget and returns tab location index
+//Accepts pointer to child widget and returns tab location index
 const int CustomTab::Index(const Fl_Widget* w){
     int ret = -1;
     for (int i=0; i<this->children(); ++i)
@@ -118,13 +120,13 @@ const int CustomTab::Index(const Fl_Widget* w){
 }
 
 //Public member
-//looks at requested tab and returns true if the tab is active (focused)
+//Looks at requested tab and returns true if the tab is active (focused)
 const bool CustomTab::CurrentVisible(const int& tab){
     if(!ValidateTabIndex(tab)) return false;
     return this->current() == GetPtr(tab);
 }
 
-//return tab height - negative for bottom tabs
+///Return tab height - negative for bottom tabs
 int CustomTab::tab_height() {
 
     //if no children, don't bother
@@ -147,7 +149,7 @@ int CustomTab::tab_height() {
     return ret;
 }
 
-// find the tab responsible for the event
+///Finds the tab responsible for the event
 Fl_Widget *CustomTab::which(int event_x, int event_y) {
     UpdateTabs();
     for(int i=0; i<tabDimArray_.size(); ++i)
@@ -155,6 +157,7 @@ Fl_Widget *CustomTab::which(int event_x, int event_y) {
     return 0;
 };
 
+///Redraws damaged tabs
 void CustomTab::redraw_tabs()
 {
     int H = tab_height();
@@ -167,6 +170,7 @@ void CustomTab::redraw_tabs()
     }
 }
 
+///Event handler
 int CustomTab::handle(int event) {
  
     switch (event) {
@@ -310,7 +314,7 @@ int CustomTab::handle(int event) {
     }
 }
 
-// Locate and return first visible child - hide others 
+///Locates and returns first visible child - hide others 
 Fl_Widget* CustomTab::value() {
     
     Fl_Widget *visible,*current;
@@ -336,7 +340,7 @@ Fl_Widget* CustomTab::value() {
 }
 
 // Public Member
-// Sets requested tab visible - hides others
+///Sets requested tab visible - hides others
 const int CustomTab::value(const int& newvalue){
     Fl_Widget* w;
 
@@ -368,6 +372,7 @@ const int CustomTab::value(const int& newvalue){
 
 enum {LEFT, RIGHT, SELECTED};
 
+///Redraws tabs based on damage.
 void CustomTab::draw() {
     Fl_Widget *v = value();
     int H = tab_height();
@@ -442,6 +447,7 @@ void CustomTab::draw() {
     }
 }
 
+///Draws tab's label box. 
 void CustomTab::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 
     int sel = (what == SELECTED);

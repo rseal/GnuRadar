@@ -8,6 +8,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/DataGroup.h"
 
+///Constructor
 DataGroup::DataGroup(int x, int y, int width, int height, const char* label):
     Fl_Group(x, y, width, height, label){
  
@@ -38,17 +39,20 @@ DataGroup::DataGroup(int x, int y, int width, int height, const char* label):
     this->end();
    
 }
-   
+
+///Defines window start    
 void DataGroup::Start(const int& start){
     start_ = start;
     startInput_->label(lexical_cast<char*>(start_));
 }
     
+///Defines window size
 void DataGroup::Size(const int& size){
     size_ = size;
     sizeInput_->label(lexical_cast<char*>(size_));
 }
     
+///Defines window units
 void DataGroup::Units(const int& units){
     units_ = units;
 

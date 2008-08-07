@@ -8,8 +8,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef DATA_WINDOW_STRUCT_H
 #define DATA_WINDOW_STRUCT_H
-//describes an arbitrary number of windows that determine 
-//which portions of data to collect.
+///Describes an arbitrary number of windows that determine 
+///which portions of data to collect.
 struct DataWindowStruct{
     int start_;
     int size_;

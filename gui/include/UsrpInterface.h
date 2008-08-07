@@ -35,6 +35,8 @@ using std::auto_ptr;
 using boost::shared_ptr;
 using std::vector;
 
+///Provides a container and display interface for the 
+///USRP data collection system.
 class UsrpInterface : public Fl_Window 
 {
     const int maxChannels_;
@@ -57,12 +59,14 @@ class UsrpInterface : public Fl_Window
     auto_ptr<Fl_File_Browser> fileBrowserFPGA_;
     auto_ptr<Fl_Group> fpgaGroup_;
 
+    ///Callback for Quit button
     static void QuitClicked(Fl_Widget* flw, void* userData){
 	UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
 	std::cout << "Goodbye" << std::endl;
 	exit(0);
     }
 
+    ///Callback for Load button
     static void LoadClicked(Fl_Widget* flw, void* userData){
 	UsrpInterface* usrpInterface = reinterpret_cast<UsrpInterface*>(userData);
 	//really screwed up way to catch exception - until I find the proper method
@@ -78,6 +82,7 @@ class UsrpInterface : public Fl_Window
 	if(str.size() != 0) Parser parser(str);
     };
     
+    ///Callback for Save button
     static void SaveClicked(Fl_Widget* flw, void* userData){
 	UsrpInterface* usrpInterface = reinterpret_cast<UsrpInterface*>(userData);
 	string str;
@@ -94,6 +99,7 @@ class UsrpInterface : public Fl_Window
 	usrpInterface->GetParameters();
     };
 
+    ///Callback used to update channel settings
     static void UpdateChannels(Fl_Widget* flw, void* userData){
  	SettingsInterface* w = reinterpret_cast<SettingsInterface*>(flw);
 	CustomTab* channelTab = reinterpret_cast<CustomTab*>(userData);
@@ -103,9 +109,11 @@ class UsrpInterface : public Fl_Window
 	for(index=0; index<numChannels; ++index) channelTab->Enable(index);
     }
 
+    ///Not currently implemented
     void GetParameters();
 
 public:
+    ///Contstructor
     UsrpInterface(int X, int Y);
     ~UsrpInterface(){exit(0);};
 };

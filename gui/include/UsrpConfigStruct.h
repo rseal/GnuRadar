@@ -25,7 +25,7 @@ using std::cerr;
 using std::endl;
 
 
-//primary configuration structure 
+///Global configuration structure 
 struct UsrpConfigStruct{
 private:
     bool validSampleRate_;

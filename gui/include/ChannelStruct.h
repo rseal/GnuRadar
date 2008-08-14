@@ -8,6 +8,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef CHANNEL_STRUCT_H
 #define CHANNEL_STRUCT_H
+#include <iostream>
+using std::cout;
+using std::endl;
 ///Each USRP channel defines the down-conversion frequency
 ///and phase.
 struct ChannelStruct{
@@ -16,6 +19,12 @@ public:
     int ddcUnits;
     float phase;
     int phaseUnits;
+    void Print(){
+	cout << "ddc        = " << ddc        << "\n"
+	     << "ddcUnits   = " << ddcUnits   << "\n" 
+	     << "phase      = " << phase      << "\n"
+	     << "phaseUnits = " << phaseUnits << endl;
+    } 
 };
 
 #endif

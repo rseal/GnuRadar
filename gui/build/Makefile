@@ -6,7 +6,7 @@ DEBUG_EXT = #-debug
 CXX_FLAGS=`fltk-config --cxxflags`
 OBJS = CustomTab ChannelGroup ChannelInterface SettingsInterface \
        HeaderInterface DataGroup DataWindowInterface DataInterface \
-       UsrpConfigStruct UsrpInterface
+       UsrpInterface
 
 all:  usrp-config $(OBJS)
 
@@ -43,10 +43,6 @@ DataInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
 UsrpInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
-	@echo "BUILDING ---> "$@.o
-	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
-
-UsrpConfigStruct: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
 	@echo "BUILDING ---> "$@.o
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 

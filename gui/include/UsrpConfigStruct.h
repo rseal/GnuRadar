@@ -24,32 +24,35 @@ using boost::lexical_cast;
 using std::cerr;
 using std::endl;
 
+namespace USRP{
+    typedef vector<DataWindowStruct> WindowVector;
+    typedef vector<ChannelStruct> ChannelVector;
+};
 
 ///Global configuration structure 
 struct UsrpConfigStruct{
 private:
     bool validSampleRate_;
-    vector<ChannelStruct> channels_;
-    vector<DataWindowStruct> windows_;
+    USRP::WindowVector  windows_;
+    USRP::ChannelVector channels_;
     HeaderStruct header_;
-    float sampleRate_;
-    int decimation_;
-    int numChannels_;
-    int ipp_;
-    int ippUnits_;
-    string fpgaImage_;
 
 public:
-    UsrpConfigStruct(); 
-    void Channel(const int& chNum, const float& ddc, const int& ddcUnits,
-		 const float& phase, const int& phaseUnits);
-    void SampleRate(const float& sampleRate); //complete
-    void NumChannels(const int& numChannels); //complete
-    void IPP(const int& ipp, const int& units); //complete
-    void FPGAImage(const string& fpgaImage); //use default for now
-    void DataWindow(const int& start, const int& size, const int& units);
-    void Header(const HeaderStruct header); //complete
-    void Decimation(const int& decimation); //complete
+
+    UsrpConfigStruct(): validSampleRate_(false),channels_(4),
+			sampleRate(0),decimation(0),numChannels(0),
+			ipp(0),fpgaImage("../../fpga/std_4rx_0tx.rbf"){}
+
+    USRP::ChannelVector& ChannelRef() { return channels_;}
+    USRP::WindowVector& WindowRef() { return windows_;}
+    HeaderStruct& HeaderRef() { return header_;}
+    
+    float sampleRate;
+    int decimation;
+    int numChannels;
+    int ipp;
+    int ippUnits;
+    string fpgaImage;
 };
 
 #endif

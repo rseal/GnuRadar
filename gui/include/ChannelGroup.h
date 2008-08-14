@@ -19,6 +19,8 @@
 using std::auto_ptr;
 using boost::lexical_cast;
 
+///\todo Add rule checking to ChannelGroup 
+
 ///Class definition
 class ChannelGroup: public Fl_Group 
 {

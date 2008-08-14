@@ -71,10 +71,15 @@ class DataInterface : public Fl_Group
     ///Callback to Update IPP and units
     static void Update(Fl_Widget* flw, void* userData){
 	DataInterface* dwiPtr = reinterpret_cast<DataInterface*>(userData);
+
 	int ipp = lexical_cast<int>(dwiPtr->ippInput_->value());
 	int units = dwiPtr->unitsChoice_->value();
+
 	//update global structure
-	dwiPtr->usrpConfigStruct_.IPP(ipp,units);
+	dwiPtr->usrpConfigStruct_.ipp = ipp;
+	dwiPtr->usrpConfigStruct_.ippUnits = units;
+
+	//debug only
 	cout << "DataInterface::Update" << endl;
     }
 public:

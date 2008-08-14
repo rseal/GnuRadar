@@ -18,7 +18,10 @@ DataInterface::DataInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y,
     int w0 = 230;
     int h0 = 100;
 
-    dataWindowInterface_ = auto_ptr<DataWindowInterface>(new DataWindowInterface(x0+170,y0+5,w0,h0,NULL));
+    dataWindowInterface_ = 
+	auto_ptr<DataWindowInterface>(new DataWindowInterface(usrpConfigStruct_, 
+							      x0+170, y0+5,
+							      w0, h0, NULL));
     dataWindowInterface_->box(FL_ENGRAVED_BOX);
     this->add(dataWindowInterface_.get());
 

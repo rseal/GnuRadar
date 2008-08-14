@@ -51,14 +51,15 @@ public:
     static void Update(Fl_Widget* flw, void* userData){
 	HeaderInterface* hiPtr = reinterpret_cast<HeaderInterface*>(userData);
 	
-	HeaderStruct hs(hiPtr->inputArray_[0]->value(),
-			hiPtr->inputArray_[1]->value(),
-			hiPtr->inputArray_[2]->value(),
-			hiPtr->inputArray_[3]->value(),
-			hiPtr->inputArray_[4]->value());
+	HeaderStruct& header = hiPtr->usrpConfigStruct_.HeaderRef();
 
-	//update global structure 
-	hiPtr->usrpConfigStruct_.Header(hs);
+	header.institution = hiPtr->inputArray_[0]->value();
+	header.observer    = hiPtr->inputArray_[1]->value();
+	header.object      = hiPtr->inputArray_[2]->value();
+	header.radar       = hiPtr->inputArray_[3]->value();
+	header.receiver    = hiPtr->inputArray_[4]->value();
+	//debug only
+	header.Print();
     }
 };
 #endif

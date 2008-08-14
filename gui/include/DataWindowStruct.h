@@ -8,14 +8,21 @@
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef DATA_WINDOW_STRUCT_H
 #define DATA_WINDOW_STRUCT_H
+#include <iostream>
+using std::cout;
+using std::endl;
+
 ///Describes an arbitrary number of windows that determine 
 ///which portions of data to collect.
 struct DataWindowStruct{
-    int start_;
-    int size_;
-    int units_;
-public:
-    DataWindowStruct(const int& start, const int& size, const int& units):
-	start_(start), size_(size), units_(units){}
+    int start;
+    int size;
+    int units;
+    DataWindowStruct(): start(0), size(0), units(0) {}
+    void Print(){
+	cout << "start  = " << start << "\n"
+	     << "size   = " << size << "\n"
+	     << "units  = " << units << endl;
+    }
 };
 #endif

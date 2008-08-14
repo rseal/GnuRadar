@@ -29,11 +29,11 @@ HeaderInterface::HeaderInterface(UsrpConfigStruct& usrpConfigStruct, int x,
 	inputArray_.push_back(ip);
     }
 
-    inputArray_[0]->label("Institution Name");
+    inputArray_[0]->label("Institution");
     inputArray_[1]->label("Observer");
-    inputArray_[2]->label("Object of Observation");
-    inputArray_[3]->label("Observing Instrument");
-    inputArray_[4]->label("Collection Instrument");
+    inputArray_[2]->label("Object");
+    inputArray_[3]->label("Radar");
+    inputArray_[4]->label("Receiver");
         
     for(int i=0; i<numInputs; ++i)
 	inputArray_[i]->callback(HeaderInterface::Update,this);

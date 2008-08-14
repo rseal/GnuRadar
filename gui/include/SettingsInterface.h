@@ -60,16 +60,14 @@ class SettingsInterface : public Fl_Group
 	settingsInterface->UpdateParameters();
     }
 
-    ///Returns current sample rate
-    //    const float SampleRate() { return settingsCompute_->SampleRate();}
-    ///Returns current decimation rate
-    //const int   Decimation() { return settingsCompute_->Decimation();}
-
     ///Updates all parameters defined in SettingsInterface class
     void UpdateParameters(){
 	float sampleRate = lexical_cast<float>(sampleRate_->value())*1000000.0f;
 	int decimation   = decimation_->value();
 	int channels     = lexical_cast<int>(channels_->text());
+	
+	//this should perform bounds checking and validation
+	//so anywhere else is redundant
 	settingsCompute_->SampleRate(sampleRate);
 	settingsCompute_->Decimation(decimation);
 	settingsCompute_->Channels(channels);
@@ -77,9 +75,9 @@ class SettingsInterface : public Fl_Group
 	string unitsStr;
 
 	//update global structure
-	usrpConfigStruct_.SampleRate(sampleRate);
-	usrpConfigStruct_.Decimation(decimation);
-	usrpConfigStruct_.NumChannels(channels);
+	usrpConfigStruct_.sampleRate  = sampleRate;
+	usrpConfigStruct_.decimation  = decimation;
+	usrpConfigStruct_.numChannels = channels;
 	
 	if(bw >= 1e6){
 	    bw = bw/1000000.0f;

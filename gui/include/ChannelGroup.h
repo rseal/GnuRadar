@@ -15,7 +15,11 @@
 #include <FL/Fl_Choice.h>
 #include <boost/lexical_cast.hpp>
 #include <memory>
+#include <iostream>
 
+using std::cerr;
+using std::endl;
+using std::string;
 using std::auto_ptr;
 using boost::lexical_cast;
 
@@ -24,6 +28,7 @@ using boost::lexical_cast;
 ///Class definition
 class ChannelGroup: public Fl_Group 
 {
+    const float pi_;
     const int id_;
     auto_ptr<Fl_Float_Input>  ddc_;
     auto_ptr<Fl_Choice>       ddcUnits_;
@@ -44,6 +49,7 @@ public:
     const int   DDCUnits()   { return ddcUnits_->value();}
     const float Phase()      { return lexical_cast<float>(phase_->value());}
     const int   PhaseUnits() { return phaseUnits_->value();}
+    const bool  ChannelValid(const float& sampleRate);
 };
 
 #endif

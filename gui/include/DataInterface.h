@@ -75,9 +75,16 @@ class DataInterface : public Fl_Group
 	int ipp = lexical_cast<int>(dwiPtr->ippInput_->value());
 	int units = dwiPtr->unitsChoice_->value();
 
-	//update global structure
-	dwiPtr->usrpConfigStruct_.ipp = ipp;
-	dwiPtr->usrpConfigStruct_.ippUnits = units;
+	//validate ipp choice
+	if(ipp > 0){
+	    //update global structure
+	    dwiPtr->usrpConfigStruct_.ipp = ipp;
+	    dwiPtr->usrpConfigStruct_.ippUnits = units;
+	}
+	else{
+	    cerr << "DataInterface::Update - invalid ipp chosen "
+		 << "- global structure not updated." << endl;
+	}
 
 	//debug only
 	cout << "DataInterface::Update" << endl;

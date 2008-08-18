@@ -74,11 +74,18 @@ class SettingsInterface : public Fl_Group
 	float bw = settingsCompute_->Bandwidth();
 	string unitsStr;
 
-	//update global structure
-	usrpConfigStruct_.sampleRate  = sampleRate;
-	usrpConfigStruct_.decimation  = decimation;
-	usrpConfigStruct_.numChannels = channels;
-	
+	if(settingsCompute_->ValidateParameters()){
+	    //update global structure
+	    usrpConfigStruct_.sampleRate  = settingsCompute_->SampleRate();
+	    usrpConfigStruct_.decimation  = settingsCompute_->Decimation();
+	    usrpConfigStruct_.numChannels = settingsCompute_->Channels();
+	}
+	else{
+	    cerr << "SettingsInterface::UpdateParameters - invalide parameter(s) detected" 
+		 << " - global structure not updated" << endl;
+
+	}
+
 	if(bw >= 1e6){
 	    bw = bw/1000000.0f;
 	    unitsStr = "MHz";

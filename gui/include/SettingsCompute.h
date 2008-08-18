@@ -26,15 +26,6 @@ struct SettingsCompute{
     float bandwidth_;
     int   channels_;
 
-    ///Checks all parameters and returns true if valid
-    const bool ValidateParameters() { 
-        bool valid(true);
-	if(sampleRate_ < 1e6 || sampleRate_ > 64e6) valid = false;
-	if(decimation_%2 != 0) valid = false;
-	if(decimation_ < 8 || decimation_ > 256) valid = false;
-	return valid;
-    }
-
     ///Update system's bandwidth bassed on channel, sample rate, and decimation 
     ///settings.
     void Update(){
@@ -68,26 +59,6 @@ public:
 	return hack;
     }
 
-    ///Not currently used??
-    const char* BandwidthStringFancy() {
-	string bw,units;
-	if(bandwidth_ >= 1e6){
-	    units = " MHz";
-	    bw = lexical_cast<string>(bandwidth_/1000000.0f);
-	}
-	else
-	    if(bandwidth_ >= 1e3){
-		units = " KHz";
-		bw = lexical_cast<string>(bandwidth_/1000.0f);
-	    }
-	    else{
-		units = " Hz";
-		bw = lexical_cast<string>(bandwidth_);
-	    }
-	string temp = bw + units;
-	return temp.c_str();
-    }
-
     ///Validates and sets decimation settings
     void Decimation(const int& decimation) { 
 	if((decimation%2 != 0) || (decimation < 8) || (decimation > 256)) 
@@ -117,6 +88,20 @@ public:
 	
 	Update();
     }
+
+    ///Checks all parameters and returns true if valid
+    //Validation Rules: 
+    //sampleRate >= 1MHz && <= 64MHz
+    //decimation must be even
+    //decimation >= 8 && <= 256
+    const bool ValidateParameters() { 
+        bool valid(true);
+	if(sampleRate_ < 1e6 || sampleRate_ > 64e6) valid = false;
+	if(decimation_%2 != 0) valid = false;
+	if(decimation_ < 8 || decimation_ > 256) valid = false;
+	return valid;
+    }
+
 };
 	
 #endif

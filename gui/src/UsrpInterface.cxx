@@ -121,8 +121,54 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     this->end();
 }
 
-//this is garbage - need to simply pass UsrpConfigStruct
-//reference to these structures and let them fill required
-//information.
-void UsrpInterface::GetParameters(){
+///\todo Limit precision on floats and provide number of windows in file to ease parsing
+void UsrpInterface::WriteFile(Parser& parser){
+
+    parser.AddComment("USRP Configuration Interface File");
+    parser.AddComment("Version 0.99");
+    parser.AddSpace();
+    parser.Put<float>("SampleRate",usrpConfigStruct_.sampleRate);
+    parser.Put<int>("NumChannels",usrpConfigStruct_.numChannels);
+    parser.Put<int>("Decimation",usrpConfigStruct_.decimation);
+    parser.Put<int>("IPP",usrpConfigStruct_.ipp);
+    parser.Put<int>("IPPUnits",usrpConfigStruct_.ippUnits);
+    parser.Put<string>("FPGAImage",usrpConfigStruct_.fpgaImage);
+    
+    string str;
+    string num;
+    const USRP::ChannelVector& channels = usrpConfigStruct_.ChannelRef();
+    for(int i=0; i<channels.size(); ++i){
+	parser.AddSpace();
+	str = "Channel ";
+	num = lexical_cast<string>(i);
+	parser.AddComment(str+num);
+	parser.Put<float>(     "DDC" + num , channels[i].ddc);
+	parser.Put<int>(  "DDCUnits" + num , channels[i].ddcUnits);
+	parser.Put<float>(   "Phase" + num , channels[i].phase);
+	parser.Put<int>("PhaseUnits" + num , channels[i].phaseUnits);
+    }
+
+    const USRP::WindowVector& windows = usrpConfigStruct_.WindowRef();
+    for(int i=0; i<windows.size(); ++i){
+	parser.AddSpace();
+	str = "Window ";
+	num = lexical_cast<string>(i);
+	parser.AddComment(str+num);
+	parser.Put<string>("Name"  + num , windows[i].name);
+	parser.Put<int>(   "Start" + num , windows[i].start);
+	parser.Put<int>(   "Size"  + num , windows[i].size);
+	parser.Put<int>(   "Units" + num , windows[i].units);
+    }
+
+    const HeaderStruct& header = usrpConfigStruct_.HeaderRef();
+
+    parser.AddSpace();
+    parser.AddComment("Header Settings");
+    parser.Put<string>("Institution", header.institution);
+    parser.Put<string>("Observer"   , header.observer);
+    parser.Put<string>("Object"     , header.object);
+    parser.Put<string>("Radar"      , header.radar);
+    parser.Put<string>("Receiver"   , header.receiver);
+
+    parser.Write();
 }

@@ -94,9 +94,10 @@ class UsrpInterface : public Fl_Window
 	    cerr << "UsrpInterface::SaveClicked - Empty string" << endl;
 	}
 	
-	if(str.size() != 0) Parser parser(str);
-
-	usrpInterface->GetParameters();
+	if(str.size() != 0){
+	    Parser parser(str);
+	    usrpInterface->WriteFile(parser);
+	}
     };
 
     ///Callback used to update channel settings
@@ -110,7 +111,7 @@ class UsrpInterface : public Fl_Window
     }
 
     ///Not currently implemented
-    void GetParameters();
+    void WriteFile(Parser& parser);
 
 public:
     ///Contstructor

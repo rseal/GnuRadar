@@ -7,46 +7,48 @@ CXX_FLAGS=`fltk-config --cxxflags`
 OBJS = CustomTab ChannelGroup ChannelInterface SettingsInterface \
        HeaderInterface DataGroup DataWindowInterface DataInterface \
        UsrpInterface
+OBJS_O = $(OBJS:=.o)
 
 all:  usrp-config $(OBJS)
 
+
 CustomTab: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
-	@echo "BUILDING ---> "$@.o
-	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx
+	@echo "BUILDING ---> "$@
+	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$(@:=.cxx)
 
 ChannelGroup: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
-	@echo "BUILDING ---> "$@.o
+	@echo "BUILDING ---> "$@
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx
 
 ChannelInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h) 
-	@echo "BUILDING ---> "$@.o
+	@echo "BUILDING ---> "$@
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
 SettingsInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h) 
-	@echo "BUILDING ---> "$@.o
+	@echo "BUILDING ---> "$@
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx
 
 HeaderInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
-	@echo "BUILDING ---> "$@.o
+	@echo "BUILDING ---> "$@
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
 DataGroup: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
-	@echo "BUILDING ---> "$@.o
+	@echo "BUILDING ---> "$@
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
 DataWindowInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
-	@echo "BUILDING ---> "$@.o
+	@echo "BUILDING ---> "$@
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
-DataInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
-	@echo "BUILDING ---> "$@.o
+DataInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h) $(@:=.o)
+	@echo "BUILDING ---> "$@
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
-UsrpInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
-	@echo "BUILDING ---> "$@.o
+UsrpInterface: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h) $(@:=.o)
+	@echo "BUILDING ---> "$@
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$@.cxx 
 
-usrp-config: $(SRC_DIR)/usrp-config.cxx $(OBJS)
+usrp-config: $(OBJS) $(SRC_DIR)/usrp-config.cxx 
 	@echo "BUILDING ---> usrp-config"
 	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -o ../bin/usrp-config$(DEBUG_EXT) \
 	$(OBJS:=.o) `fltk-config --ldflags` $(SRC_DIR)/usrp-config.cxx

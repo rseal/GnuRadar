@@ -135,7 +135,7 @@ class Parser{
 
     for(int i=0; i<count; ++i){
     string pad(3,'#');
-    printList_.push_back(pad + " " + comment.substr(i*size,size)); 
+    printList_.push_back(pad + " " + comment.substr(i*size,size) + " " + pad); 
     }
   }
 

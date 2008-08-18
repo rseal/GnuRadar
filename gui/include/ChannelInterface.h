@@ -45,18 +45,26 @@ class ChannelInterface: public CustomTab
 	ChannelGroup*     cgPtr = reinterpret_cast<ChannelGroup*>(flw);
 	UsrpConfigStruct* ucPtr = reinterpret_cast<UsrpConfigStruct*>(userData);
 	//which channel is calling?
-	int id = cgPtr->ID();
-	
+	const int& id = cgPtr->ID();
+
+	const float& sampleRate = ucPtr->sampleRate;
 	USRP::ChannelVector& channels = ucPtr->ChannelRef();
-	channels[id].ddc        = cgPtr->DDC();
-	channels[id].ddcUnits   = cgPtr->DDCUnits();
-	channels[id].phase      = cgPtr->Phase();
-	channels[id].phaseUnits = cgPtr->PhaseUnits();
+
+	if(cgPtr->ChannelValid(sampleRate)){
+	    channels[id].ddc        = cgPtr->DDC();
+	    channels[id].ddcUnits   = cgPtr->DDCUnits();
+	    channels[id].phase      = cgPtr->Phase();
+	    channels[id].phaseUnits = cgPtr->PhaseUnits();
+	}
+	else{
+	    cerr << "ChannelInterface::Update - invalid channel setting detected"
+		 << " - global structure not updated." << endl;
+	}
 
 	//debug only
-	for(int i=0; i<4; ++i)
-	    channels[i].Print();
-	cout << "ChannelInterface::Update - channel " << id << endl;
+	//for(int i=0; i<4; ++i)
+	//    channels[i].Print();
+	//cout << "ChannelInterface::Update - channel " << id << endl;
     }
 
 public:

@@ -40,19 +40,19 @@ private:
 public:
 
     UsrpConfigStruct(): validSampleRate_(false),channels_(4),
-			sampleRate(0),decimation(0),numChannels(0),
+			sampleRate(64e6),decimation(8),numChannels(1),
 			ipp(0),fpgaImage("../../fpga/std_4rx_0tx.rbf"){}
 
-    USRP::ChannelVector& ChannelRef() { return channels_;}
+    USRP::ChannelVector& ChannelRef() { return channels_;} //validation complete - mostly
     USRP::WindowVector& WindowRef() { return windows_;}
-    HeaderStruct& HeaderRef() { return header_;}
+    HeaderStruct& HeaderRef() { return header_;} //no need - for now
     
-    float sampleRate;
-    int decimation;
-    int numChannels;
-    int ipp;
-    int ippUnits;
-    string fpgaImage;
+    float sampleRate;   //validation complete
+    int decimation;     //validation complete
+    int numChannels;    //validation complete
+    int ipp;            //validation complete
+    int ippUnits;       //validation complete
+    string fpgaImage;   //no need - for now
 };
 
 #endif

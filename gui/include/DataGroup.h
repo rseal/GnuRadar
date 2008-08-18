@@ -18,6 +18,7 @@
 
 using boost::lexical_cast;
 using std::auto_ptr;
+using std::string;
 
 ///Class definition
 class DataGroup: public Fl_Group{
@@ -40,6 +41,8 @@ public:
     ///Constructor
     DataGroup(const int& id, int x, int y, int width, int height, const char* label);
    
+    const string Label() { return lexical_cast<string>(this->label());}
+
     void Start(const int& start);
     const int Start() {return lexical_cast<int>(startInput_->value());}
     
@@ -50,6 +53,8 @@ public:
     const int Units() { return unitChoice_->value();}
 
     const int& ID() { return id_;}
+
+    const bool WindowValid() {return Start() >= 0 && Size() >= 0;}
 
     enum{SAMPLES, USEC, KILOMETERS};
 };

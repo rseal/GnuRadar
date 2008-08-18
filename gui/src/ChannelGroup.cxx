@@ -11,7 +11,7 @@
 ///Constructor
 ChannelGroup::ChannelGroup(const int& id, int x, int y, int width, int height, 
 			   const char* label):
-    Fl_Group( x, y, width, height, label), id_(id)
+    Fl_Group( x, y, width, height, label), id_(id), pi_(22.0f/7.0f)
 {
     int x0=x+80;
     int y0=y+20;
@@ -46,4 +46,70 @@ ChannelGroup::ChannelGroup(const int& id, int x, int y, int width, int height,
     this->add(phaseUnits_.get());
 
     this->end();
+}
+
+///\todo Determine precision of frequency and phase settings for USRP and 
+/// create limits.
+const bool ChannelGroup::ChannelValid(const float& sampleRate){
+    bool valid = true;
+    float ddc;
+    const float fs = sampleRate/2.0f;
+    float phase = Phase();
+    float maxDeg = 360.0f;
+    float maxRad = 2*pi_;
+
+    //get multiplier for ddc frequency
+    switch(PhaseUnits()){
+    case 0: ddc = DDC()*1e6;
+	break;
+    case 1: ddc = DDC()*1e3;
+	break;
+    case 2: ddc = DDC();
+    }
+
+    if(ddc > fs || ddc < -fs){
+	cerr << "ChannelGroup::ValidateChannel - ddc setting is greater than nyquist rate" 
+	     << endl;
+	valid = false;
+	goto exit;
+    }
+
+
+    if(!phaseUnits_->value()){
+	if(phase > maxDeg){
+	    cerr << "ChannelGroup::ValidateChannel - phase is greater "
+		 << "than 360 deg - wrapping" << endl;
+	    //adjust phase
+	    while(phase > maxDeg && phase >= 0)	phase -= maxDeg;
+	    phase_->value(lexical_cast<string>(phase).c_str());
+	}
+
+	if(phase < 0){
+	    cerr << "ChannelGroup::ValidateChannel - negative phase"
+		 << " entered - adjusting" << endl;
+	    while(phase < 0) phase += maxDeg;
+	    phase_->value(lexical_cast<string>(phase).c_str());
+	}
+    }
+    else{
+	if(phase > maxRad){
+	    cerr << "ChannelGroup::ValidateChannel - phase is greater than 2 pi - wrapping"
+		 << endl;
+
+	    //adjust phase
+	    while(phase > maxRad && phase >= 0) phase -= maxRad;
+	    phase_->value(lexical_cast<string>(phase).c_str());
+	}
+
+	if(phase < 0){
+	    cerr << "ChannelGroup::ValidateChannel - negative phase entered - adjusting"
+		 << endl;
+	    //adjust phase
+	    while(phase < 0) phase += maxRad;
+	    phase_->value(lexical_cast<string>(phase).c_str());
+	}
+    }
+
+exit:
+    return valid;
 }

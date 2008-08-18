@@ -46,16 +46,24 @@ class DataWindowInterface : public CustomTab
     static void Update(Fl_Widget* flw, void* userData){
 	DataGroup* dgPtr = reinterpret_cast<DataGroup*>(flw);
 
-	int id = dgPtr->ID();
+	const int& id = dgPtr->ID();
 	cout << "DataWindowInterface::Update - state change from ID " << id << endl;
 
 	UsrpConfigStruct* ucsPtr = reinterpret_cast<UsrpConfigStruct*>(userData);
 	USRP::WindowVector& dws = ucsPtr->WindowRef();
 
-	dws[id].start = dgPtr->Start();
-	dws[id].size  = dgPtr->Size();
-	dws[id].units = dgPtr->Units();
-	
+	//make sure positive values exist for window parameters
+	if(dgPtr->WindowValid()){
+	    dws[id].name  = dgPtr->Label();
+	    dws[id].start = dgPtr->Start();
+	    dws[id].size  = dgPtr->Size();
+	    dws[id].units = dgPtr->Units();
+	}
+	else{
+	    cerr << "DataWindowInterface::Update - invalid window settings detected "
+		 << "in window " << id << " - global structure not updated." << endl;
+	}
+
     }
 public:
     ///Constructor

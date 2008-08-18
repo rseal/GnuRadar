@@ -4,7 +4,7 @@
 ///Used to add/remove data window used in data acquisition
 ///
 ///Author: Ryan Seal
-///Modified: 08/06/08
+///Modified: 08/18/08
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/DataWindowInterface.h"
 
@@ -22,15 +22,20 @@ DataWindowInterface::DataWindowInterface(
     h0_ = 70;
 
     DataGroupPtr dgp = DataGroupPtr(new DataGroup(0,x0_,y0_, w0_, h0_, "SampleWindow"));
+    dgp->callback(DataWindowInterface::Update, &usrpConfigStruct_);
     dataGroupArray_.push_back(dgp);
     this->add(dataGroupArray_[0].get());
     this->end();
+
+    USRP::WindowVector& window = usrpConfigStruct_.WindowRef();
+    window.push_back(DataWindowStruct());
 }
 
 ///Adds a new window to the interface.
 void DataWindowInterface::Add(const string& label){
 
     numWindows_ = dataGroupArray_.size();
+    USRP::WindowVector& window = usrpConfigStruct_.WindowRef();
 
     if(numWindows_ == 1 && defaultWindow_){
 	dataGroupArray_[0]->copy_label(label.c_str());
@@ -44,12 +49,10 @@ void DataWindowInterface::Add(const string& label){
 	dgp->callback(DataWindowInterface::Update,&usrpConfigStruct_);
 	dataGroupArray_.push_back(dgp);
 	this->add(dataGroupArray_[dataGroupArray_.size()-1].get());
-	this->redraw();
+	//insert new, blank window into vector
+	window.push_back(DataWindowStruct());
     }
-    cout << "numWindows = " << numWindows_ << endl;    
-    USRP::WindowVector& window = usrpConfigStruct_.WindowRef();
-    //insert new, blank window into vector
-    window.push_back(DataWindowStruct());
+    this->redraw();
 }
 
 ///Removes a window from the existing list.
@@ -80,9 +83,11 @@ void DataWindowInterface::Remove(const string label){
 	++it;
     }
     //debug only 
-    for(int i=0; i<window.size(); ++i)
-	window[i].Print();
-    
+    //for(int i=0; i<window.size(); ++i)
+    //window[i].Print();
+    this->redraw();
+	
+    cout << "DataWindowInterface::Remove - " << window.size() << " windows remain" << endl;
 }
 
 ///Not currently used

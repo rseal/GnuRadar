@@ -4,13 +4,16 @@ SRC_DIR=../src
 DEBUG_FLAGS = #-g -O0
 DEBUG_EXT = #-debug
 CXX_FLAGS=`fltk-config --cxxflags`
-OBJS = CustomTab ChannelGroup ChannelInterface SettingsInterface \
+OBJS = StringFormat CustomTab ChannelGroup ChannelInterface SettingsInterface \
        HeaderInterface DataGroup DataWindowInterface DataInterface \
        UsrpInterface
 OBJS_O = $(OBJS:=.o)
 
 all:  usrp-config $(OBJS)
 
+StringFormat: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
+	@echo "BUILDING ---> "$@
+	@g++ $(CXX_FLAGS) $(DEBUG_FLAGS) -c $(SRC_DIR)/$(@:=.cxx)
 
 CustomTab: $(SRC_DIR)/$(@:=.cxx) $(INC_DIR)/$(@:=.h)
 	@echo "BUILDING ---> "$@

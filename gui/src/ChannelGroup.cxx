@@ -113,3 +113,23 @@ const bool ChannelGroup::ChannelValid(const float& sampleRate){
 exit:
     return valid;
 }
+
+void ChannelGroup::DDC(const float& ddc){
+    string str = lexical_cast<string>(ddc);
+    str = StringFormat::SetPrecision(str,3);
+    ddc_->value(str.c_str());
+}
+
+void ChannelGroup::DDCUnits(const int& ddcUnits){
+    ddcUnits_->value(ddcUnits);
+}
+
+void ChannelGroup::Phase(const float& phase){
+    string str = lexical_cast<string>(phase);
+    str = StringFormat::SetPrecision(str,3);
+    phase_->value(str.c_str());
+}
+
+void ChannelGroup::PhaseUnits(const int& phaseUnits){
+    phaseUnits_->value(phaseUnits);
+}

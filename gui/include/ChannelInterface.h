@@ -71,6 +71,9 @@ public:
     ///Constructor
     ChannelInterface(UsrpConfigStruct& usrpConfigStruct, int X, int Y,
 		     int width, int height, const char* label);
+
+    void Load(const USRP::ChannelVector& channels);
+    
 };
 
 #endif

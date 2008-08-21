@@ -29,7 +29,8 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     color1_ = fl_rgb_color(180,180,180);									
 
     sampleRate_ = auto_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0, w0, h1, "Sample Rate"));
-    sampleRate_->value(settingsCompute_->SampleRateString());
+    string str = lexical_cast<string>(settingsCompute_->SampleRate()/1e6);
+    sampleRate_->value(str.c_str());
     sampleRate_->callback(SettingsInterface::UpdateSampleRate,this);
     sampleRate_->color(FL_WHITE);
     this->add(sampleRate_.get());
@@ -84,3 +85,81 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
 
     this->end();
 };
+
+///Updates all parameters defined in SettingsInterface class
+void SettingsInterface::UpdateParameters(){
+    float sampleRate = lexical_cast<float>(sampleRate_->value())*1000000.0f;
+    int decimation   = decimation_->value();
+    int channels     = lexical_cast<int>(channels_->text());
+	
+    //this should perform bounds checking and validation
+    //so anywhere else is redundant
+    settingsCompute_->SampleRate(sampleRate);
+    settingsCompute_->Decimation(decimation);
+    settingsCompute_->Channels(channels);
+    float bw = settingsCompute_->Bandwidth();
+    string unitsStr;
+
+    if(settingsCompute_->ValidateParameters()){
+	//update global structure
+	usrpConfigStruct_.sampleRate  = settingsCompute_->SampleRate();
+	usrpConfigStruct_.decimation  = settingsCompute_->Decimation();
+	usrpConfigStruct_.numChannels = settingsCompute_->Channels();
+    }
+    else{
+	cerr << "SettingsInterface::UpdateParameters - invalide parameter(s) detected" 
+	     << " - global structure not updated" << endl;
+
+    }
+
+    if(bw >= 1e6){
+	bw = bw/1000000.0f;
+	unitsStr = "MHz";
+    }
+    else if(bw >= 1e3){
+	bw = bw/1000.0f;
+	unitsStr = "KHz";
+    }
+    else unitsStr = "Hz";
+	
+    units2_->value("");
+    units2_->value(unitsStr.c_str());
+    string str = lexical_cast<string>(bw);
+	
+    //limit float precision to 2 decimal places
+    int index = str.find(".");
+
+    //correct indexing bug when only tenths exist
+    if(str.length() < index+3 && index != string::npos)
+	str += "0";
+	
+    if(index != string::npos) str.erase(index+3);
+    bandwidth_->value(str.c_str());
+
+    //parameters changed - activate SettingsInterface::callback()
+    this->do_callback();
+}
+
+void SettingsInterface::SampleRate(const float& sampleRate){
+    settingsCompute_->SampleRate(sampleRate);
+    string str = lexical_cast<string>(settingsCompute_->SampleRate()/1e6);
+    str = StringFormat::SetPrecision(str,3);
+    sampleRate_->value(str.c_str());
+}
+
+void SettingsInterface::Decimation(const int& decimation){
+    settingsCompute_->Decimation(decimation);
+    decimation_->value(settingsCompute_->Decimation());
+}
+
+void SettingsInterface::NumChannels(const int& numChannels){
+    int index=1;
+    switch(numChannels){
+    case 1: index =0; break;
+    case 2: index =1; break;
+    case 4: index =2; break;
+    }
+    settingsCompute_->Channels(index);
+    channels_->value(settingsCompute_->Channels());
+}
+

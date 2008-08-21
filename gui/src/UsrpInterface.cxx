@@ -28,7 +28,7 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     tabColor_        = fl_rgb_color(200,200,255);
     Fl_Color wColor_ = fl_rgb_color(220,220,220);
 
-    this->label("Universal Software Radio Peripheral Configuration Interface (v-0.99)");
+    this->label("Universal Software Radio Peripheral Configuration Interface (v-1.00)");
     this->color(windowColor_);
     this->box(FL_PLASTIC_UP_BOX);
     
@@ -171,4 +171,81 @@ void UsrpInterface::WriteFile(Parser& parser){
     parser.Put<string>("Receiver"   , header.receiver);
 
     parser.Write();
+}
+
+void UsrpInterface::LoadFile(Parser& parser){
+
+    string str;
+    string num;
+    USRP::ChannelVector& channels = usrpConfigStruct_.ChannelRef();
+    USRP::WindowVector& windows = usrpConfigStruct_.WindowRef();
+    HeaderStruct& header = usrpConfigStruct_.HeaderRef();
+
+    parser.Load();
+
+    usrpConfigStruct_.sampleRate  = parser.Get<float>("SampleRate");
+    usrpConfigStruct_.numChannels = parser.Get<int>("NumChannels");
+    usrpConfigStruct_.decimation  = parser.Get<int>("Decimation");
+    usrpConfigStruct_.ipp         = parser.Get<int>("IPP");
+    usrpConfigStruct_.ippUnits    = parser.Get<int>("IPPUnits");
+    usrpConfigStruct_.fpgaImage   = parser.Get<string>("FPGAImage");
+
+    for(int i=0; i<channels.size(); ++i){
+	num = lexical_cast<string>(i);
+	str = "DDC" + num;
+	channels[i].ddc        = parser.Get<float>(str);
+	str = "DDCUnits" + num;
+	channels[i].ddcUnits   = parser.Get<int>(str);
+	str = "Phase" + num;
+	channels[i].phase      = parser.Get<float>(str);
+	str = "PhaseUnits" + num;
+	channels[i].phaseUnits = parser.Get<int>(str);
+    }
+    
+    //reset windows to load new file
+    windows.resize(0);
+
+    try{
+	//kludge for now - find a better way later
+	//proper way is to store numWindows variable in file
+	for(int i=0; i<10; ++i){
+	    DataWindowStruct dws;
+	    num = lexical_cast<string>(i);	    
+	    dws.name =  parser.Get<string>("Name"+num);
+	    dws.start = parser.Get<int>("Start"+num);
+	    dws.size  = parser.Get<int>("Size"+num);
+	    dws.units = parser.Get<int>("Units"+num);
+	    windows.push_back(dws);
+	    //dws.Print();
+	}
+    }catch(ParserException& pe){
+// do nothing
+//	pe.PrintError();
+    }
+    
+    header.institution = parser.Get<string>("Institution");
+    header.observer    = parser.Get<string>("Observer");
+    header.object      = parser.Get<string>("Object");
+    header.radar       = parser.Get<string>("Radar");
+    header.receiver    = parser.Get<string>("Receiver");
+
+    UpdateGUI();
+}
+
+void UsrpInterface::UpdateGUI(){
+
+    const USRP::ChannelVector& channels   = usrpConfigStruct_.ChannelRef();
+    const USRP::WindowVector& windows     = usrpConfigStruct_.WindowRef();
+    DataWindowInterface& dataWindow       = dataInterface_->DataWindowRef();
+    const HeaderStruct& header            = usrpConfigStruct_.HeaderRef();
+    
+    settingsInterface_->SampleRate(usrpConfigStruct_.sampleRate);
+    settingsInterface_->Decimation(usrpConfigStruct_.decimation);
+    settingsInterface_->NumChannels(usrpConfigStruct_.numChannels);
+    settingsInterface_->UpdateParameters();
+    dataInterface_->IPP(usrpConfigStruct_.ipp);
+    dataInterface_->IPPUnits(usrpConfigStruct_.ippUnits);
+    dataWindow.Load();
+    channelTab_->Load(channels);
+    headerInterface_->Load(header);
 }

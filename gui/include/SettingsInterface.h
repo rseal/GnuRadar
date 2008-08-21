@@ -24,6 +24,7 @@
 
 #include "UsrpConfigStruct.h"
 #include "SettingsCompute.h"
+#include "StringFormat.h"
 
 #include <iostream>
 #include <vector>
@@ -60,60 +61,6 @@ class SettingsInterface : public Fl_Group
 	settingsInterface->UpdateParameters();
     }
 
-    ///Updates all parameters defined in SettingsInterface class
-    void UpdateParameters(){
-	float sampleRate = lexical_cast<float>(sampleRate_->value())*1000000.0f;
-	int decimation   = decimation_->value();
-	int channels     = lexical_cast<int>(channels_->text());
-	
-	//this should perform bounds checking and validation
-	//so anywhere else is redundant
-	settingsCompute_->SampleRate(sampleRate);
-	settingsCompute_->Decimation(decimation);
-	settingsCompute_->Channels(channels);
-	float bw = settingsCompute_->Bandwidth();
-	string unitsStr;
-
-	if(settingsCompute_->ValidateParameters()){
-	    //update global structure
-	    usrpConfigStruct_.sampleRate  = settingsCompute_->SampleRate();
-	    usrpConfigStruct_.decimation  = settingsCompute_->Decimation();
-	    usrpConfigStruct_.numChannels = settingsCompute_->Channels();
-	}
-	else{
-	    cerr << "SettingsInterface::UpdateParameters - invalide parameter(s) detected" 
-		 << " - global structure not updated" << endl;
-
-	}
-
-	if(bw >= 1e6){
-	    bw = bw/1000000.0f;
-	    unitsStr = "MHz";
-	}
-	else if(bw >= 1e3){
-	    bw = bw/1000.0f;
-	    unitsStr = "KHz";
-	}
-	else unitsStr = "Hz";
-	
-	units2_->value("");
-	units2_->value(unitsStr.c_str());
-	string str = lexical_cast<string>(bw);
-	
-	//limit float precision to 2 decimal places
-	int index = str.find(".");
-
-	//correct indexing bug when only tenths exist
-	if(str.length() < index+3 && index != string::npos)
-	    str += "0";
-	
-	if(index != string::npos) str.erase(index+3);
-	bandwidth_->value(str.c_str());
-
-	//parameters changed - activate SettingsInterface::callback()
-	this->do_callback();
-    }
-
     ///Callback to update channels
     static void UpdateChannel(Fl_Widget* flw, void* userData){
 	SettingsInterface* settingsInterface = 
@@ -127,5 +74,12 @@ public:
 	UsrpConfigStruct& usrpConfigStruct);
     ///Returns number of defined channels
     const int NumChannels(){ return lexical_cast<int>(channels_->text());}
+
+
+    void SampleRate(const float& sampleRate);
+    void Decimation(const int& decimation);
+    void NumChannels(const int& numChannels);
+    void UpdateParameters();
+
 };
 #endif

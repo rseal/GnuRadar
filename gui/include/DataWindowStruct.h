@@ -20,12 +20,14 @@ struct DataWindowStruct{
     int start;
     int size;
     int units;
-    DataWindowStruct(): start(0), size(0), units(0) {}
+    int id;
+    DataWindowStruct(): start(0), size(0), units(0), id(0) {}
     void Print(){
-	cout << "name = " << name << "\n" 
+	cout << "name   = " << name  << "\n" 
 	     << "start  = " << start << "\n"
-	     << "size   = " << size << "\n"
-	     << "units  = " << units << endl;
+	     << "size   = " << size  << "\n"
+	     << "units  = " << units << "\n"
+	     << "id     = " << id    << endl;
     }
 };
 #endif

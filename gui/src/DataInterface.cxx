@@ -53,3 +53,18 @@ DataInterface::DataInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y,
 
     this->end();
 }
+
+void DataInterface::IPP(const int& ipp){
+    if(ipp > 0){
+	ippInput_->value(lexical_cast<string>(ipp).c_str());
+    }
+    else cerr << "DataInterface::IPP - invalid ipp choice -"
+	      << " no changes made" << endl;
+}
+
+void DataInterface::IPPUnits(const int& ippUnits){
+    if(ippUnits >=0 && ippUnits <= 2)
+	unitsChoice_->value(ippUnits);
+    else cerr << "DataInterface::IPPUnits - invalid ipp units choice -"
+	      << " no changes made" << endl;
+}

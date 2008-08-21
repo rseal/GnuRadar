@@ -79,7 +79,11 @@ class UsrpInterface : public Fl_Window
 	    cerr << "UsrpInterface::LoadClicked - Empty string" << endl;
 	}
 	
-	if(str.size() != 0) Parser parser(str);
+	if(str.size() != 0){
+	    Parser parser(str);
+	    usrpInterface->LoadFile(parser);
+	}
+	//fill GUI forms with global structure here
     };
     
     ///Callback for Save button
@@ -110,9 +114,9 @@ class UsrpInterface : public Fl_Window
 	for(index=0; index<numChannels; ++index) ctPtr->Enable(index);
     }
 
-    ///Not currently implemented
     void WriteFile(Parser& parser);
-
+    void LoadFile(Parser& parser);
+    void UpdateGUI();
 public:
     ///Contstructor
     UsrpInterface(int X, int Y);

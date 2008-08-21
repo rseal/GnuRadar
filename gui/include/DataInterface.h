@@ -87,11 +87,16 @@ class DataInterface : public Fl_Group
 	}
 
 	//debug only
-	cout << "DataInterface::Update" << endl;
+//	cout << "DataInterface::Update" << endl;
     }
 public:
     ///Constructor
     DataInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y, 
 		  int width=325, int height=245, const char* label=NULL);
+
+    DataWindowInterface& DataWindowRef() { return *dataWindowInterface_.get();}
+    void IPP(const int& ipp);
+    void IPPUnits(const int& ippUnits);
+
 };
 #endif

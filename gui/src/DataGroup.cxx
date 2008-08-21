@@ -10,8 +10,10 @@
 
 ///Constructor
 DataGroup::DataGroup(const int& id, int x, int y, int width, int height, const char* label):
-    Fl_Group(x, y, width, height, label), id_(id) {
+    Fl_Group(x, y, width, height, label){
  
+    dataWindow_.id = id;
+
     int x0=x+50;
     int y0=y+15;
     int w0=80;
@@ -22,12 +24,12 @@ DataGroup::DataGroup(const int& id, int x, int y, int width, int height, const c
 
     startInput_ = auto_ptr<Fl_Int_Input>(new Fl_Int_Input(x0, y0, w0, h0, "Start"));
     startInput_->align(FL_ALIGN_LEFT);
-    startInput_->callback(DataGroup::Update, this);
+    startInput_->callback(DataGroup::UpdateStart, this);
     this->add(startInput_.get());
 
     sizeInput_ = auto_ptr<Fl_Int_Input>(new Fl_Int_Input(x0, y0+sp, w0, h0, "Size"));
     sizeInput_->align(FL_ALIGN_LEFT);
-    sizeInput_->callback(DataGroup::Update, this);
+    sizeInput_->callback(DataGroup::UpdateSize, this);
     this->add(sizeInput_.get());
 
     unitChoice_ = auto_ptr<Fl_Choice>(new Fl_Choice(x0+85, y0, 80, h0, "Units"));
@@ -35,7 +37,7 @@ DataGroup::DataGroup(const int& id, int x, int y, int width, int height, const c
     unitChoice_->add("usec");
     unitChoice_->add("Km");
     unitChoice_->align(FL_ALIGN_BOTTOM);
-    unitChoice_->callback(DataGroup::Update, this);
+    unitChoice_->callback(DataGroup::UpdateChoice, this);
     unitChoice_->value(0);
     this->add(unitChoice_.get());
    
@@ -47,25 +49,31 @@ DataGroup::DataGroup(const int& id, int x, int y, int width, int height, const c
     this->Units(USEC);
 }
 
+void DataGroup::Label(const string& label){
+    dataWindow_.name = label;
+    this->copy_label(label.c_str());
+}
+
 ///Defines window start    
 void DataGroup::Start(const int& start){
-    start_ = start;
-    std::string str = lexical_cast<std::string>(start_);
+    dataWindow_.start = start;
+    //start_ = start;
+    std::string str = lexical_cast<std::string>(start);
     startInput_->value(str.c_str());
 }
     
 ///Defines window size
 void DataGroup::Size(const int& size){
-    size_ = size;
-    std::string str = lexical_cast<std::string>(size_); 
+    dataWindow_.size = size;
+    std::string str = lexical_cast<std::string>(size); 
     sizeInput_->value(str.c_str());
 }
     
 ///Defines window units
 void DataGroup::Units(const int& units){
-    units_ = units;
+    dataWindow_.units = units;
     
-    switch(units_){
+    switch(units){
     case SAMPLES:
 	unitChoice_->value(0);
 	break;

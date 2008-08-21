@@ -16,6 +16,7 @@
 #include <boost/lexical_cast.hpp>
 #include <memory>
 #include <iostream>
+#include "StringFormat.h"
 
 using std::cerr;
 using std::endl;
@@ -50,6 +51,12 @@ public:
     const float Phase()      { return lexical_cast<float>(phase_->value());}
     const int   PhaseUnits() { return phaseUnits_->value();}
     const bool  ChannelValid(const float& sampleRate);
+
+    void DDC(const float& ddc);
+    void DDCUnits(const int& ddcUnits);
+    void Phase(const float& phase);
+    void PhaseUnits(const int& phaseUnits);
+
 };
 
 #endif

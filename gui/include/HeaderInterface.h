@@ -61,6 +61,14 @@ public:
 	//debug only
 	header.Print();
     }
+
+    void Load(const HeaderStruct& header){
+        inputArray_[0]->value(header.institution.c_str());
+        inputArray_[1]->value(header.observer.c_str());
+        inputArray_[2]->value(header.object.c_str());
+        inputArray_[3]->value(header.radar.c_str());
+        inputArray_[4]->value(header.receiver.c_str());
+    }
 };
 #endif
 

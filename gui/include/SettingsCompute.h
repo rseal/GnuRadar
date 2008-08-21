@@ -38,27 +38,14 @@ struct SettingsCompute{
 public:
     ///Constructor
     SettingsCompute(): sampleRate_(64e6), decimation_(8), bandwidth_(8e6), channels_(1){}
-
     ///Returns sample rate
     const float& SampleRate()       { return sampleRate_;}
-    ///Returns string representation of sample rate
-    const char*  SampleRateString() { 
-	string str = lexical_cast<string>(sampleRate_/1e6);
-	return str.c_str();
-    }
     ///Returns decimation
     const int&   Decimation()       { return decimation_;}
     ///Returns bandwidth
     const float& Bandwidth()        { return bandwidth_;}
     ///Returns channels
     const int&   Channels()         { return channels_;}
-    ///Returns string representation of bandwidth
-    const char* BandwidthString()   {
-	string str = lexical_cast<string>(bandwidth_/1000000.0f).c_str();
-	const char* hack = str.c_str();
-	return hack;
-    }
-
     ///Validates and sets decimation settings
     void Decimation(const int& decimation) { 
 	if((decimation%2 != 0) || (decimation < 8) || (decimation > 256)) 
@@ -68,7 +55,6 @@ public:
 
 	Update();
     }
-	
     ///Validates and sets sample rate settings
     void SampleRate(const float& sampleRate) { 
 	if((sampleRate < 1e6) || (sampleRate > 64e6)) 

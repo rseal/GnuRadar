@@ -16,6 +16,7 @@
 #include "DataGroup.h"
 #include "UsrpConfigStruct.h"
 #include "DataWindowStruct.h"
+#include "DataWindowPredicate.h"
 
 #include <boost/shared_ptr.hpp>
 #include <iostream>
@@ -27,13 +28,16 @@ using std::string;
 using std::vector;
 using boost::shared_ptr;
 
+namespace USRP{
+    typedef shared_ptr<DataGroup> DataGroupPtr;
+};
+
 ///\todo Add rule checking to DataWindowInterface
 
 ///Class definition
 class DataWindowInterface : public CustomTab
 {
-    typedef shared_ptr<DataGroup> DataGroupPtr;
-    vector<DataGroupPtr> dataGroupArray_;
+    vector<USRP::DataGroupPtr> dataGroupArray_;
     UsrpConfigStruct& usrpConfigStruct_;
     bool defaultWindow_;
     bool arrayTouched_;
@@ -65,6 +69,9 @@ class DataWindowInterface : public CustomTab
 	}
 
     }
+    
+    void RemoveAll();
+
 public:
     ///Constructor
     DataWindowInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y,
@@ -73,5 +80,9 @@ public:
     void Remove(const string label);
     void Modify(const string oldLabel, const string newLabel);
     void Units(const int& units);
+
+    void Load();
 };
+
+
 #endif

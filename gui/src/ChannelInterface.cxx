@@ -29,3 +29,12 @@ ChannelInterface::ChannelInterface(UsrpConfigStruct& usrpConfigStruct,
     this->end();
 };
 
+void ChannelInterface::Load(const USRP::ChannelVector& channels){
+ 
+   for(int i=0; i<4; ++i){
+	channelArray_[i]->DDC(channels[i].ddc);
+	channelArray_[i]->DDCUnits(channels[i].ddcUnits);
+	channelArray_[i]->Phase(channels[i].phase);
+	channelArray_[i]->PhaseUnits(channels[i].phaseUnits);
+    }
+}

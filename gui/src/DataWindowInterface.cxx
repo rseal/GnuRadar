@@ -25,13 +25,12 @@ DataWindowInterface::DataWindowInterface(
 
 ///Adds a new window to the interface.
 void DataWindowInterface::Add(const string& label){
-//    cout << "DataWindowInterface::Add" << endl;
+    cout << "DataWindowInterface::Add" << endl;
     numWindows_ = dataGroupArray_.size();
     USRP::WindowVector& window = usrpConfigStruct_.WindowRef();
 
     //overwrite default window
     if(numWindows_ == 1 && defaultWindow_){
-	//cout << "found default window" << endl;
 	this->remove(dataGroupArray_[0].get());
   	dataGroupArray_.resize(0);
   	window.resize(0);
@@ -44,6 +43,7 @@ void DataWindowInterface::Add(const string& label){
 	USRP::DataGroupPtr(new DataGroup(numWindows_, x0_,y0_, w0_, h0_, ""));
     DataWindowStruct dws;
     dws.name = label;
+    dws.id   = numWindows_;
     dgp->DataWindow(dws);
     dgp->callback(DataWindowInterface::Update,&usrpConfigStruct_);
     dataGroupArray_.push_back(dgp);
@@ -51,6 +51,10 @@ void DataWindowInterface::Add(const string& label){
     //insert new, blank window into vector
     window.push_back(dws);
     this->redraw();
+    this->redraw_tabs();
+
+    for(int i=0; i<window.size(); ++i)
+	window[i].Print();
 }
 
 ///Removes a window from the existing list.
@@ -74,11 +78,12 @@ void DataWindowInterface::Remove(const string label){
 	    this->Add("SampleWindow");
 	    defaultWindow_ = true;
 	}
-	this->redraw();
     }
+
 //debug only 
 //     for(int i=0; i<window.size(); ++i)
 // 	window[i].Print();
+    this->redraw();
 }
 
 ///Removes all stored windows from GUI.
@@ -105,11 +110,10 @@ void DataWindowInterface::Load(){
 	return;
     }
 
-
     //load windows
     for(int i=0; i<window.size(); ++i){
 	USRP::DataGroupPtr dgp = 
-	    USRP::DataGroupPtr(new DataGroup(++numWindows_-1, x0_,y0_, w0_, h0_, ""));
+	    USRP::DataGroupPtr(new DataGroup(i, x0_,y0_, w0_, h0_, ""));
 	dgp->DataWindow(window[i]);
 	dgp->callback(DataWindowInterface::Update,&usrpConfigStruct_);
 	dataGroupArray_.push_back(dgp);

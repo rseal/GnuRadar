@@ -23,10 +23,10 @@ struct DataWindowStruct{
     int id;
     DataWindowStruct(): start(0), size(0), units(0), id(0) {}
     void Print(){
-	cout << "name   = " << name  << "\n" 
-	     << "start  = " << start << "\n"
-	     << "size   = " << size  << "\n"
-	     << "units  = " << units << "\n"
+	cout << "name   = " << name  << "\n"
+	     << "start  = " << start 
+	     << " size   = " << size  
+	     << " units  = " << units << "\n"
 	     << "id     = " << id    << endl;
     }
 };

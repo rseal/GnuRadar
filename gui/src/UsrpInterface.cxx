@@ -149,6 +149,10 @@ void UsrpInterface::WriteFile(Parser& parser){
     }
 
     const USRP::WindowVector& windows = usrpConfigStruct_.WindowRef();
+    parser.AddSpace();
+    parser.AddComment("Number of Windows");
+    parser.Put<int>("NumWindows",windows.size());
+
     for(int i=0; i<windows.size(); ++i){
 	parser.AddSpace();
 	str = "Window ";
@@ -175,6 +179,7 @@ void UsrpInterface::WriteFile(Parser& parser){
 
 void UsrpInterface::LoadFile(Parser& parser){
 
+    int numWindows;
     string str;
     string num;
     USRP::ChannelVector& channels = usrpConfigStruct_.ChannelRef();
@@ -205,10 +210,12 @@ void UsrpInterface::LoadFile(Parser& parser){
     //reset windows to load new file
     windows.resize(0);
 
-    try{
+    numWindows = parser.Get<int>("NumWindows");
+
+//    try{
 	//kludge for now - find a better way later
 	//proper way is to store numWindows variable in file
-	for(int i=0; i<10; ++i){
+	for(int i=0; i<numWindows; ++i){
 	    DataWindowStruct dws;
 	    num = lexical_cast<string>(i);	    
 	    dws.name =  parser.Get<string>("Name"+num);
@@ -218,10 +225,9 @@ void UsrpInterface::LoadFile(Parser& parser){
 	    windows.push_back(dws);
 	    //dws.Print();
 	}
-    }catch(ParserException& pe){
-// do nothing
-//	pe.PrintError();
-    }
+//     }catch(ParserException& pe){
+//         // do nothing here - just catch and continue
+//     }
     
     header.institution = parser.Get<string>("Institution");
     header.observer    = parser.Get<string>("Observer");
@@ -243,9 +249,13 @@ void UsrpInterface::UpdateGUI(){
     settingsInterface_->Decimation(usrpConfigStruct_.decimation);
     settingsInterface_->NumChannels(usrpConfigStruct_.numChannels);
     settingsInterface_->UpdateParameters();
+
     dataInterface_->IPP(usrpConfigStruct_.ipp);
     dataInterface_->IPPUnits(usrpConfigStruct_.ippUnits);
+
     dataWindow.Load();
+
     channelTab_->Load(channels);
+
     headerInterface_->Load(header);
 }

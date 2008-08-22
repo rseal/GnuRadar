@@ -59,7 +59,7 @@ public:
 	header.radar       = hiPtr->inputArray_[3]->value();
 	header.receiver    = hiPtr->inputArray_[4]->value();
 	//debug only
-	header.Print();
+//	header.Print();
     }
 
     void Load(const HeaderStruct& header){

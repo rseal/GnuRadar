@@ -61,8 +61,7 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     channelTab_->value(0);
 
     //disable channels 2-4
-    for(int i=1; i<4; ++i)
-	channelTab_->Disable(i);
+    for(int i=1; i<4; ++i) channelTab_->Disable(i);
 
     //general settings interface
     settingsInterface_ = auto_ptr<SettingsInterface>
@@ -89,7 +88,7 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     fileBrowserFPGA_ = auto_ptr<Fl_File_Browser>(
 	new Fl_File_Browser(545, 320, 190, 25, "FPGA Bit Image"));
     fileBrowserFPGA_->align(FL_ALIGN_LEFT);
-    fileBrowserFPGA_->load("../../fpga");
+    fileBrowserFPGA_->load("../../../fpga");
     fpgaGroup_->add(fileBrowserFPGA_.get());
     fpgaGroup_->end();
 
@@ -212,22 +211,15 @@ void UsrpInterface::LoadFile(Parser& parser){
 
     numWindows = parser.Get<int>("NumWindows");
 
-//    try{
-	//kludge for now - find a better way later
-	//proper way is to store numWindows variable in file
-	for(int i=0; i<numWindows; ++i){
-	    DataWindowStruct dws;
-	    num = lexical_cast<string>(i);	    
-	    dws.name =  parser.Get<string>("Name"+num);
-	    dws.start = parser.Get<int>("Start"+num);
-	    dws.size  = parser.Get<int>("Size"+num);
-	    dws.units = parser.Get<int>("Units"+num);
-	    windows.push_back(dws);
-	    //dws.Print();
+    for(int i=0; i<numWindows; ++i){
+	DataWindowStruct dws;
+	num = lexical_cast<string>(i);	    
+	dws.name =  parser.Get<string>("Name"+num);
+	dws.start = parser.Get<int>("Start"+num);
+	dws.size  = parser.Get<int>("Size"+num);
+	dws.units = parser.Get<int>("Units"+num);
+	windows.push_back(dws);
 	}
-//     }catch(ParserException& pe){
-//         // do nothing here - just catch and continue
-//     }
     
     header.institution = parser.Get<string>("Institution");
     header.observer    = parser.Get<string>("Observer");
@@ -249,13 +241,9 @@ void UsrpInterface::UpdateGUI(){
     settingsInterface_->Decimation(usrpConfigStruct_.decimation);
     settingsInterface_->NumChannels(usrpConfigStruct_.numChannels);
     settingsInterface_->UpdateParameters();
-
     dataInterface_->IPP(usrpConfigStruct_.ipp);
     dataInterface_->IPPUnits(usrpConfigStruct_.ippUnits);
-
     dataWindow.Load();
-
     channelTab_->Load(channels);
-
     headerInterface_->Load(header);
 }

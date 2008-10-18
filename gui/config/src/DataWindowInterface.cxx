@@ -51,7 +51,6 @@ void DataWindowInterface::Add(const string& label){
     //insert new, blank window into vector
     window.push_back(dws);
     this->redraw();
-    this->redraw_tabs();
 
     for(int i=0; i<window.size(); ++i)
 	window[i].Print();

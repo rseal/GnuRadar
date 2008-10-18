@@ -64,7 +64,6 @@ void CustomTab::UpdateTabs(){
 				   this->child(i)->y(),
 				   tabWidth,
 				   tabHeight);
-
 	}
     }
 }
@@ -160,14 +159,10 @@ Fl_Widget *CustomTab::which(int event_x, int event_y) {
 ///Redraws damaged tabs
 void CustomTab::redraw_tabs()
 {
+    cout << "redraw tabs" << endl;
     int H = tab_height();
-    if (topTab_) {
-	H += Fl::box_dy(box());
-	damage(FL_DAMAGE_SCROLL, x(), y(), w(), H);
-    } else {
-	H = Fl::box_dy(box()) - H;
-	damage(FL_DAMAGE_SCROLL, x(), y() + h() - H, w(), H);
-    }
+    H += Fl::box_dy(box()) - topTab_ ? 0 : H;
+    damage(FL_DAMAGE_SCROLL, x(), y() + topTab_ ? 0 : h()-H, w(), H);
 }
 
 ///Event handler
@@ -214,7 +209,7 @@ int CustomTab::handle(int event) {
     }
 
     case FL_FOCUS:
-
+	cout << "FL_FOCUS" << endl;
 	//activate first tab when user TABs into tab widget
 	if(Fl::event_key(FL_Tab)){
 	    value(0);
@@ -224,8 +219,7 @@ int CustomTab::handle(int event) {
 	return Fl_Group::handle(event);
 
     case FL_UNFOCUS:
-
-	//cout << "FL_UNFOCUS" << endl;
+	cout << "FL_UNFOCUS" << endl;
 	if (!this->visible_focus())
 	    return Fl_Group::handle(event);
 	
@@ -317,25 +311,18 @@ int CustomTab::handle(int event) {
 ///Locates and returns first visible child - hide others 
 Fl_Widget* CustomTab::value() {
     
-    Fl_Widget *visible,*current;
+    Fl_Widget *visible = const_cast<Fl_Widget*>(ActiveChild());
     int numChildren = this->children();
-    bool childrenVisible=false;
+    int activeIndex = ActiveChildIndex();
 
-    for (int i=0; i<numChildren; ++i) {
-	current = this->child(i);
-	if(ActiveChildIndex() == i){
-	    visible=current;
-	    childrenVisible = true;
-	}
-	else current->hide();
+    for(int i=0; i<numChildren; ++i)
+	if(activeIndex != i) this->child(i)->hide();
+
+    if(!visible){
+	visible = this->child(0);
+	visible->show();
     }
 
-    //if no children are visible - default to first tab
-    if(!childrenVisible){
-	current = this->child(0);
-	current->show();
-	visible = current;
-    }
     return visible;
 }
 
@@ -349,20 +336,10 @@ const int CustomTab::value(const int& newvalue){
 
     //can child accept focus?
     if(!this->child(newvalue)->visible_focus()) return -2;
-    
-    //show active - hide others
-    for(int i=0; i<this->children(); ++i){
-	w = this->child(i);
-	//hide all windows != newvalue
-	if( GetPtr(newvalue) != w) w->hide();
-	else{
-	    //redraw the active child
-	    w->show();
-            //set the child active
-	    ActiveChild(w);
-	}
-    }
-    //lets others know that the tab group has changed
+
+    ActiveChild(this->child(newvalue));
+    value();
+//     //lets others know that the tab group has changed
     set_changed();
     do_callback();
     redraw_tabs();
@@ -377,13 +354,28 @@ void CustomTab::draw() {
     Fl_Widget *v = value();
     int H = tab_height();
     
+    int xParent = parent()->x();
+    int yParent = parent()->y();
+    int wParent = parent()->w();
+    int hParent = parent()->h();
     //initialize if necessary 
     UpdateTabs();
     
     if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
-		
+// 	cout << "damage & FL_DAMAGE_ALL" << endl;
 	Fl_Color c = v ? v->color() : color();
 	bool colorMatch = selection_color() == c;
+
+	
+// 	cout << "x = " << x() << endl;
+// 	cout << "y = " << y() << endl;
+// 	cout << "w = " << w() << endl;
+// 	cout << "H = " << H   << endl;
+// 	cout << "xParent = " << xParent << endl;
+// 	cout << "yParent = " << yParent << endl;
+// 	cout << "wParent = " << wParent << endl;
+// 	cout << "hParent = " << hParent << endl;
+
 
 	draw_box(box(), 
 		 x(), 
@@ -411,10 +403,13 @@ void CustomTab::draw() {
 	
     }
     else if(damage() & FL_DAMAGE_CHILD){
+// 	cout << "damage & FL_DAMAGE_CHILD" << endl;
 	update_child(*v);
     }
 
     if (damage() & (FL_DAMAGE_SCROLL | FL_DAMAGE_ALL)) {
+// 	cout << "damage & (FL_DAMAGE_SCROLL | FL_DAMAGE_ALL)" << endl;
+
 	int selected = Index(value());
 
 	for (int i=0; i<selected; i++)

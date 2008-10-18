@@ -14,8 +14,8 @@ int main(){
     buffer = new int[bufferSize/sizeof(int)];
 
     //50MHz RF with 64MHz sampling - positive image at -14MHz (reversed at +14MHz)
-    tuningFreq.push_back(-14.2e6);
-    tuningFreq.push_back(-14.2e6);
+    tuningFreq.push_back(19.9e6);
+    tuningFreq.push_back(19.8e6);
 
     cout << "--------------------Settings----------------------" << endl;
     cout << "Sample Rate                 = " << sampleRate << endl;
@@ -33,9 +33,9 @@ int main(){
     header = new SimpleHeaderSystem(dataSet, File::WRITE, File::BINARY);
 
     //build the primary header
-    header->primary.Title("UIUC-GnuRadio-Test");
-    header->primary.Description("March 14 2008 Test data");
-    header->primary.Add("Instrument", "GNURadio Rev 4", "Receiving Instrument");
+    header->primary.Title("USRP Test");
+    header->primary.Description("Test Data 09/05/2008");
+    header->primary.Add("Instrument", "GNURadio Rev4.5", "Receiving Instrument");
     header->primary.Add("Time", currentTime.GetTime(), "Experiment Starting Time (CDT)");
     header->primary.Add("Sample Rate", sampleRate, "Sample Clock Rate");
     header->primary.Add("Bandwidth", bandWidth, "System Bandwidth");
@@ -59,7 +59,11 @@ int main(){
     settings.fUsbBlockSize = 0;
     settings.fUsbNblocks = 0;
     settings.mux =  0xf0f0f1f0;
-    settings.fpgaFileName = "std_4rx_0tx.rbf";
+    //testing new gate mode 09/05/2008
+    //settings.fpgaFileName = "std_4rx_0tx.rbf";
+//    settings.fpgaFileName = "usrp_ext_gate_en.rbf";
+  settings.fpgaFileName = "usrp_ext.rbf";
+    GnuRadarDevice grDevice(settings);
 
     //Initialize Producer/Consumer Model
     ProducerConsumerModel pcmodel(

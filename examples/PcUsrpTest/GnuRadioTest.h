@@ -21,24 +21,22 @@ const double ms            = 1e-3;
 const double MHz           = 1e6;
 
 //user settings
-const string dataSet = "/home/rseal/data/UIUC-15mar08";
+const string dataSet = "/home/rseal/UsrpGateTest";
 const double sampleRate    = 64*MHz;
-const double bandWidth     = 1*MHz;
-const int    numChannels   = 2;
+const double bandWidth     = 4*MHz;
+const int    numChannels   = 1;
 const double IPP           = 4*ms;
 
 const int    decimation    = sampleRate / bandWidth;
 const double outputRate    = sampleRate / decimation;
 const int    BPS           = outputRate*4*numChannels;
 const int    bufferSize    = BPS;
-const int    numBuffers    = 10;
-
+const int    numBuffers    = 20;
 
 vector<int> dimVector;
 vector<double> tuningFreq;
 Time currentTime;
 GnuRadarSettings settings;
-GnuRadarDevice grDevice(settings);
 int* buffer;
 
 #endif 

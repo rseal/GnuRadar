@@ -12,7 +12,7 @@
 
    Timer timer;
 
-   SHeader shs("/home/rseal/data/UIUC-15mar08", File::READ, File::BINARY);
+   SHeader shs("/home/rseal/UsrpGateTest", File::READ, File::BINARY);
 
    shs.ReadPrimary();
    shs.ReadData(0);

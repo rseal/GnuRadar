@@ -28,23 +28,19 @@ public:
 			grSettings_.fpgaFileName,
 			grSettings_.firmwareFileName
 			));
-	
+
+	cout << "Requested bit image " << grSettings_.fpgaFileName << endl;
 	//check to see if device is connected
 	if(usrp_.get()==0){ 
 	    cout << "no USRP found - check your connections" << endl;
 	    exit(0);
 	}
 
-	//	usrp_->set_decim_rate(grSettings_.decimationRate);
-	//	usrp_->set_nchannels(grSettings_.numChannels);
-	//	usrp_->set_mux(grSettings_.mux);
 	for(int i=0; i<grSettings_.numChannels; ++i){
 	  usrp_->set_rx_freq(i,grSettings_.Tune(i));
 	  usrp_->set_ddc_phase(i,0);
 	}
-
-
-	usrp_->start();
+//	usrp_->start();
     }
 
     virtual void Start(void* address, const int bytes){

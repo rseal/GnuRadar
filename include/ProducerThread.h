@@ -30,9 +30,7 @@ public:
     //run now calls device class start() member to 
     //modularize system - i.e. define device class
     //start() for functionality
-    virtual void Run(){
-       	device_.Start(address_,bytes_);
-    }
+    virtual void Run();
 
 };    
 

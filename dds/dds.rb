@@ -11,7 +11,7 @@ sp.write "C I\n"
 sp.puts "Kp 0f\n"
 sp.gets
 print sp.gets
-sp.puts "V0 1024\n"
+sp.puts "V0 512\n"
 sp.gets
 print sp.gets
 sp.puts "F0 64.0000000\n"
@@ -21,6 +21,12 @@ sp.puts "V1 1023\n"
 sp.gets
 print sp.gets
 sp.puts "F1 20.0000000\n"
+#sp.puts "I a\n"
+sp.puts "S\n"
+sp.puts "V2 1023\n"
+sp.gets
+print sp.gets
+sp.puts "F2 20.0000000\n"
 #sp.puts "I a\n"
 sp.puts "S\n"
 sp.close

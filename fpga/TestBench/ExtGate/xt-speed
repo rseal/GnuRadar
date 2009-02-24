@@ -1,0 +1,2 @@
+$readmemb(data/input.vec): Not enough words in the read file for requested range.
+VCD info: dumpfile ext_gate_tb.gtk opened for output.

@@ -12,7 +12,7 @@
 
    Timer timer;
 
-   SHeader shs("/home/rseal/UsrpGateTest", File::READ, File::BINARY);
+   SHeader shs("/home/rseal/UsrpGateSiteTest", File::READ, File::BINARY);
 
    shs.ReadPrimary();
    shs.ReadData(0);
@@ -22,7 +22,10 @@
 
    int tableSize = shs.data.DataSize()/sizeof(short);
 
-   short* buffer = shs.ReadData(15);
+   short* buffer = shs.ReadData(0);
+
+ //   for(int i=0; i<dim1; ++i)
+//        cout << buffer[2*i] << endl;
 
    ofstream outFile("binary.dat", ios::binary);
 

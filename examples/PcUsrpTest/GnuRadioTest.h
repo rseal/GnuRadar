@@ -21,11 +21,11 @@ const double ms            = 1e-3;
 const double MHz           = 1e6;
 
 //user settings
-const string dataSet = "/home/rseal/UsrpGateTest";
+const string dataSet = "/home/rseal/UsrpGateSiteTest";
 const double sampleRate    = 64*MHz;
 const double bandWidth     = 4*MHz;
 const int    numChannels   = 1;
-const double IPP           = 4*ms;
+const double IPP           = 10*ms;
 
 const int    decimation    = sampleRate / bandWidth;
 const double outputRate    = sampleRate / decimation;

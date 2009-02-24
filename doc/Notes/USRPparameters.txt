@@ -1,0 +1,25 @@
+Information gathered from 
+file:///usr/local/gnuradio/usrp/doc/html/classusrp_standard_rx.html
+
+Class: usrp_standard_rx
+
+decimation rate = (8-256) even numbers only
+
+number of channels = 1,2,4
+
+rx frequency = channel number, double frequency (only up to fs/2)
+
+mux value = from the documentation:
+
+ Mux value:
+
+    3                   2                   1                       
+  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
+ +-------+-------+-------+-------+-------+-------+-------+-------+
+ |   Q3  |   I3  |   Q2  |   I2  |   Q1  |   I1  |   Q0  |   I0  |
+ +-------+-------+-------+-------+-------+-------+-------+-------+
+
+ Each 4-bit I field is either 0,1,2,3
+ Each 4-bit Q field is either 0,1,2,3 or 0xf (input is const zero)
+ All Q's must be 0xf or none of them may be 0xf
+ 

@@ -14,8 +14,8 @@ int main(){
     buffer = new int[bufferSize/sizeof(int)];
 
     //50MHz RF with 64MHz sampling - positive image at -14MHz (reversed at +14MHz)
-    tuningFreq.push_back(19.9e6);
-    tuningFreq.push_back(19.8e6);
+    tuningFreq.push_back(-14.2e6);
+    tuningFreq.push_back(-14.2e6);
 
     cout << "--------------------Settings----------------------" << endl;
     cout << "Sample Rate                 = " << sampleRate << endl;
@@ -62,7 +62,11 @@ int main(){
     //testing new gate mode 09/05/2008
     //settings.fpgaFileName = "std_4rx_0tx.rbf";
 //    settings.fpgaFileName = "usrp_ext_gate_en.rbf";
+
+//bit image is located at /usr/local/share/usrp/rev4/usrp_ext.rbf
   settings.fpgaFileName = "usrp_ext.rbf";
+
+//moved device ctor here since settings is passed as const - might change this behaviour at some point.
     GnuRadarDevice grDevice(settings);
 
     //Initialize Producer/Consumer Model

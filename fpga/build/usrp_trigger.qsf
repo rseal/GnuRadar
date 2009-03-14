@@ -27,7 +27,7 @@
 # ========================
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 3.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "00:14:04  JULY 13, 2003"
-set_global_assignment -name LAST_QUARTUS_VERSION "8.0 SP1"
+set_global_assignment -name LAST_QUARTUS_VERSION 9.0
 
 # Pin & Location Assignments
 # ==========================
@@ -332,6 +332,18 @@ set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF
 # end CLOCK(SCLK)
 # ---------------
 
+# -----------------
+# start CLOCK(io_rx_a[15])
+
+	# Timing Assignments
+	# ==================
+set_global_assignment -name DUTY_CYCLE 50 -section_id io_rx_a[15]
+set_global_assignment -name FMAX_REQUIREMENT "1 MHz" -section_id io_rx_a[15]
+set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF -section_id io_rx_a[15]
+
+# end CLOCK(io_rx_a[15])
+# ---------------
+
 # -----------------------
 # start CLOCK(master_clk)
 
@@ -364,18 +376,18 @@ set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF
 set_instance_assignment -name CLOCK_SETTINGS SCLK -to SCLK
 set_instance_assignment -name CLOCK_SETTINGS usbclk -to usbclk
 set_instance_assignment -name CLOCK_SETTINGS master_clk -to master_clk
-
+set_instance_assignment -name CLOCK_SETTINGS rx_io_a[15] -to rx_io_a[15]
 # end ENTITY(usrp_trigger)
 # --------------------
 
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name VERILOG_FILE ../src/megacells/fifo_4k_18.v
+#set_global_assignment -name VERILOG_FILE ../src/megacells/fifo_4k_18.v
 set_global_assignment -name VERILOG_FILE ../src/atr_delay.v
 set_global_assignment -name VERILOG_FILE ../src/cic_dec_shifter.v
 set_global_assignment -name VERILOG_FILE ../src/rssi.v
 set_global_assignment -name VERILOG_FILE ../src/ram16.v
-set_global_assignment -name VERILOG_FILE ../src/megacells/fifo_4k.v
+#set_global_assignment -name VERILOG_FILE ../src/megacells/fifo_4k.v
 set_global_assignment -name VERILOG_FILE ../src/acc.v
 set_global_assignment -name VERILOG_FILE ../src/mult.v
 set_global_assignment -name VERILOG_FILE ../src/ram16_2sum.v
@@ -393,7 +405,7 @@ set_global_assignment -name VERILOG_FILE ../src/rx_chain.v
 set_global_assignment -name VERILOG_FILE ../src/gen_sync.v
 set_global_assignment -name VERILOG_FILE ../src/master_control.v
 set_global_assignment -name VERILOG_FILE ../src/megacells/bustri.v
-set_global_assignment -name VERILOG_FILE ../src/rx_buffer_ge.v
+set_global_assignment -name VERILOG_FILE ../src/rx_fifo.v
 set_global_assignment -name VERILOG_FILE ../src/phase_acc.v
 set_global_assignment -name VERILOG_FILE ../src/cic_decim.v
 set_global_assignment -name VERILOG_FILE ../src/cordic_stage.v

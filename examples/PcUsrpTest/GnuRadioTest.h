@@ -13,26 +13,26 @@
 typedef SimpleHeader<short,2> SimpleHeaderSystem;
 SimpleHeaderSystem* header;
 
-
-
 const int    Kb            = 1024;
 const int    Mb            = Kb*Kb;
 const double ms            = 1e-3;
 const double MHz           = 1e6;
 
 //user settings
-const string dataSet = "/home/rseal/UsrpGateSiteTest";
+const string dataSet = "/home/rseal/usrpLabTest";
 const double sampleRate    = 64*MHz;
-const double bandWidth     = 4*MHz;
-const int    numChannels   = 1;
+const double bandWidth     = 1*MHz;
+const int    numChannels   = 2;
 const double IPP           = 10*ms;
-
+const double dataWindow    = 4*ms;
+const double dutyCycle     = IPP/dataWindow;
 const int    decimation    = sampleRate / bandWidth;
 const double outputRate    = sampleRate / decimation;
 const int    BPS           = outputRate*4*numChannels;
 const int    bufferSize    = BPS;
 const int    numBuffers    = 20;
 
+vector<int> windowVector;
 vector<int> dimVector;
 vector<double> tuningFreq;
 Time currentTime;

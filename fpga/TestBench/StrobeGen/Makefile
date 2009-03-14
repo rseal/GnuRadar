@@ -1,10 +1,12 @@
-NAME=strobe_gen_tb
+NAME=strobe_gen
+INCLUDE=../../src
 
 all: $(NAME)
 
-strobe_gen_tb: $(NAME).v
-	cver $(NAME).v
-	gtkwave $(NAME).gtk
+$(NAME): $(NAME)_tb.v $(INCLUDE)/$(NAME).v
+	iverilog -o $(NAME)_tb.gtk -t vvp $(NAME)_tb.v
+	vvp -lxt-speed $(NAME)_tb.gtk
+	gtkwave $(NAME)_tb.gtk
 
 clean:
-	rm -f *~ run $(NAME).gtk verilog.log
+	rm -f *~ run $(NAME)_tb.gtk verilog.log

@@ -58,6 +58,7 @@ public:
 	bytesRead = usrp_->read(reinterpret_cast<void*>(address), bytes, &overrun_);	
 	
 	if(bytesRead != bytes){
+	    cout << "USRP::READ mismatch " << bytes << ":" << bytesRead << endl;
 	    //error here
 	}
 

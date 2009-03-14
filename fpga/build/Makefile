@@ -34,7 +34,9 @@ asm: $(TOP_LEVEL)
 tan: $(TOP_LEVEL)
 	quartus_tan --read_settings_files=on $(PROJECT)
 
+install:
+	cp ../bin/usrp_trigger.rbf /usr/local/share/usrp/rev4/
 clean:
-	rm -rf *.rpt *.chg smart.log *.htm *.eqn *.pin *.sof *.pof db *.smsg *.summary *~ ../src/*~
+	rm -rf *.rpt *.chg smart.log *.htm *.eqn *.pin *.sof *.pof db *.smsg *.summary *~ ../src/*~ incremental_db
 
 

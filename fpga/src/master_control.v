@@ -63,6 +63,7 @@ module master_control
        .rate(interp_rate),.strobe_in(tx_sample_strobe),.strobe(strobe_interp) );
 
    assign  rx_sample_strobe = 1'b1;
+
    
    strobe_gen decim_strobe_gen
      ( .clock(master_clk),.reset(rx_dsp_reset),.enable(enable_rx),

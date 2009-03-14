@@ -27,23 +27,23 @@ module strobe_gen
     input enable,
     input [7:0] rate, // Rate should be 1 LESS THAN your desired divide ratio
     input strobe_in,
-    output wire strobe );
+    output reg strobe );
    
 //   parameter width = 8;
    
    reg [7:0] counter;
-   
+
+   //bug --- causes glitch that may or may not be harmful -- 03/12/09
    // ~|counter = nor all bits of counter => all bits 0 produces 1
    // strobe = 1 when counter==0 and enable==1 and strobe_in==1 for one clock cycle
-   assign strobe = ~|counter && enable && strobe_in;
+   //assign strobe = ~|counter && enable && strobe_in;
    
    always @(posedge clock)
-     if(reset | ~enable)
+     if(reset || ~enable)
        counter <=  8'd0;
      else if(strobe_in)
-       if(counter == 0)
-	 counter <=  rate;
-       else 
-	 counter <=  counter - 8'd1;
-   
+       begin
+	  counter <= (counter==8'b0) ? rate : counter - 8'd1;
+	  strobe <=  (counter==8'b0) ? 1'b1 : 1'b0;
+       end
 endmodule // strobe_gen

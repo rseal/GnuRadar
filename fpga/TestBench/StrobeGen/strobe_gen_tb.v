@@ -1,10 +1,10 @@
-`include "../../sdr_lib/strobe_gen_new.v"
+`include "../../src/strobe_gen.v"
 
 `timescale 1ns/100ps
 
 module strobe_gen_tb;
    
-   parameter PERIOD=30;
+   parameter PERIOD=15;
    
    reg 	     clk;
    reg 	     rst;
@@ -19,7 +19,7 @@ module strobe_gen_tb;
    initial
      begin
 	//divide by 10 
-	strobe_rate <= 8'd9;
+	strobe_rate <= 63'd9;
 
 	//enable signal 
 	en  <= 1'b0;
@@ -52,10 +52,10 @@ module strobe_gen_tb;
    //run length
    initial
      begin	
-	#1500 $finish;
+	#150000 $finish;
      end
 
-   strobe_gen_new dut(
+   strobe_gen dut(
 		  .clock(clk),
 		  .reset(rst),
 		  .enable(en),

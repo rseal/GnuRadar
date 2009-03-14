@@ -163,6 +163,7 @@ module halfband_decim
      else if(latch_result)
        data_out <= #1 dout[30:15] + (dout[33]& |dout[14:0]);
 
+   // phase = 0:3, strobe_out = 4, strobe_in = 5, 
    assign  debugctrl = { clock,reset,acc_en,mult_en,clear,latch_result,store_odd,strobe_in,strobe_out,phase};
    
 endmodule // halfband_decim

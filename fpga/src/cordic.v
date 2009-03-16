@@ -64,7 +64,9 @@ module cordic(clock, reset, enable, xi, yi, zi, xo, yo, zo );
    always @(posedge clock)
      if(reset)
        begin
-	  x0   <= #1 0; y0   <= #1 0;  z0   <= #1 0;
+	  x0   <= #1 0;
+	  y0   <= #1 0;
+	  z0   <= #1 0;
        end
      else if(enable)
        begin

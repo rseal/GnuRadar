@@ -44,6 +44,6 @@ module strobe_gen
      else if(strobe_in)
        begin
 	  counter <= (counter==8'b0) ? rate : counter - 8'd1;
-	  strobe <=  (counter==8'b0) ? 1'b1 : 1'b0;
+	  strobe  <= (counter==8'b0) ? 1'b1 : 1'b0;
        end
 endmodule // strobe_gen

@@ -1,5 +1,5 @@
-NAME=rx_fifo
-INC1=../../src/
+NAME=fifo_mc
+INC1=../../src/megacells
 INC2=../../models
 
 all: iverilog vvp

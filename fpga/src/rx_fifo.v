@@ -115,7 +115,10 @@ module rx_fifo
    assign wr_req = wr_enable ? 8'b11111111 & wr_req_mask : 8'b00000000 & wr_req_mask;
 
    always @ (negedge wr_clk)
-     packet_rdy <= wr_count[7] ? 1'b1 : rd_count[7] ? 1'b0 : packet_rdy;
+     if(reset)
+       packet_rdy <= 1'b0;
+     else
+       packet_rdy <= wr_count[7] ? 1'b1 : rd_count[7] ? 1'b0 : packet_rdy;
    
    // 257 Bug Fix
    always @(negedge rd_clk)

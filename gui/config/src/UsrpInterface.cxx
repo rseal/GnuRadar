@@ -36,8 +36,8 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     Fl_Menu_Item menuItems[] = {
 
 	{ "&File",              0, 0, 0, FL_SUBMENU },
-	{ "&Load File...",    FL_CTRL + 'o'},
-	{ "&Save File",       FL_CTRL + 's'},
+	{ "&Load File...",    FL_CTRL + 'o', UsrpInterface::LoadClicked, this},
+	{ "&Save File",       FL_CTRL + 's', UsrpInterface::SaveClicked, this},
 	{ "E&xit", FL_CTRL + 'q', UsrpInterface::QuitClicked, this },
 	{ 0 },
 	
@@ -59,7 +59,7 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     channelTab_->box(FL_ENGRAVED_BOX);
     channelTab_->Enable(0);
     channelTab_->value(0);
-
+    
     //disable channels 2-4
     for(int i=1; i<4; ++i) channelTab_->Disable(i);
 

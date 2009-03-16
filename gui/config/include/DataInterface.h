@@ -65,7 +65,7 @@ class DataInterface : public Fl_Group
 	}
 	
 	if(str.size() != 0) dwi->Remove(str.c_str());
-
+	//cout << "finished remove" << endl;
     }
 
     ///Callback to Update IPP and units

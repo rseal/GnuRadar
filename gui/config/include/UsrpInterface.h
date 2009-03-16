@@ -68,6 +68,8 @@ class UsrpInterface : public Fl_Window
 
     ///Callback for Load button
     static void LoadClicked(Fl_Widget* flw, void* userData){
+//	cout << "load clicked" << endl;
+
 	UsrpInterface* usrpInterface = reinterpret_cast<UsrpInterface*>(userData);
 	//really screwed up way to catch exception - until I find the proper method
 	string str;
@@ -118,7 +120,7 @@ class UsrpInterface : public Fl_Window
     void LoadFile(Parser& parser);
     void UpdateGUI();
 public:
-    ///Contstructor
+    ///Constructor
     UsrpInterface(int X, int Y);
     ~UsrpInterface(){exit(0);};
 };

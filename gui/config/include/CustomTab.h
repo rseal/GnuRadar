@@ -84,7 +84,7 @@ public:
     int handle(int);
     Fl_Widget *value();
     const int value(const int& tab);
-    int push(Fl_Widget *);
+//    int push(Fl_Widget *);
     Fl_Widget* GetPtr(const int& tab);
     CustomTab(int,int,int,int,const char * = 0);
     Fl_Widget *which(int event_x, int event_y);

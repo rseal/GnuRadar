@@ -52,8 +52,8 @@ void DataWindowInterface::Add(const string& label){
     window.push_back(dws);
     this->redraw();
 
-    for(int i=0; i<window.size(); ++i)
-	window[i].Print();
+//     for(int i=0; i<window.size(); ++i)
+// 	window[i].Print();
 }
 
 ///Removes a window from the existing list.
@@ -62,11 +62,13 @@ void DataWindowInterface::Add(const string& label){
 void DataWindowInterface::Remove(const string label){
 
     USRP::WindowVector& window = usrpConfigStruct_.WindowRef();
-
+    
     //find widget matching requested label
     vector<USRP::DataGroupPtr>::iterator iter = 
 	find_if(dataGroupArray_.begin(), dataGroupArray_.end(), FindDataWindow(label));
-
+    
+//    cout << "Found " << (*iter)->Label() << endl;
+ 
     //if iter exists, remove widget
     if(iter != dataGroupArray_.end()){
 	window.erase(window.begin() + (*iter)->ID());
@@ -77,12 +79,17 @@ void DataWindowInterface::Remove(const string label){
 	    this->Add("SampleWindow");
 	    defaultWindow_ = true;
 	}
+
+	//kludge to keep tab removal from crashing CustomTab
+	//FIXME
+	this->value(0);
     }
 
-//debug only 
+//debug only
+    cout << "DataWindowInterface::Remove" << endl; 
 //     for(int i=0; i<window.size(); ++i)
 // 	window[i].Print();
-    this->redraw();
+//    this->redraw();
 }
 
 ///Removes all stored windows from GUI.

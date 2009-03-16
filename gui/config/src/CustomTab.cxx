@@ -159,7 +159,7 @@ Fl_Widget *CustomTab::which(int event_x, int event_y) {
 ///Redraws damaged tabs
 void CustomTab::redraw_tabs()
 {
-    cout << "redraw tabs" << endl;
+    //cout << "redraw tabs" << endl;
     int H = tab_height();
     H += Fl::box_dy(box()) - topTab_ ? 0 : H;
     damage(FL_DAMAGE_SCROLL, x(), y() + topTab_ ? 0 : h()-H, w(), H);
@@ -209,7 +209,7 @@ int CustomTab::handle(int event) {
     }
 
     case FL_FOCUS:
-	cout << "FL_FOCUS" << endl;
+	//cout << "FL_FOCUS" << endl;
 	//activate first tab when user TABs into tab widget
 	if(Fl::event_key(FL_Tab)){
 	    value(0);
@@ -219,7 +219,7 @@ int CustomTab::handle(int event) {
 	return Fl_Group::handle(event);
 
     case FL_UNFOCUS:
-	cout << "FL_UNFOCUS" << endl;
+	//cout << "FL_UNFOCUS" << endl;
 	if (!this->visible_focus())
 	    return Fl_Group::handle(event);
 	
@@ -310,19 +310,24 @@ int CustomTab::handle(int event) {
 
 ///Locates and returns first visible child - hide others 
 Fl_Widget* CustomTab::value() {
-    
+//if a child is in focus and is removed, ActiveChild() must be updated - or segfault
     Fl_Widget *visible = const_cast<Fl_Widget*>(ActiveChild());
     int numChildren = this->children();
     int activeIndex = ActiveChildIndex();
 
+//hide all inactive tabs
     for(int i=0; i<numChildren; ++i)
 	if(activeIndex != i) this->child(i)->hide();
 
+//if no tabs visible - make tab 0 visible by default
     if(!visible){
 	visible = this->child(0);
 	visible->show();
     }
 
+//show visible tab
+    visible->show();
+    //cout << visible << " is visible" << endl;
     return visible;
 }
 
@@ -352,12 +357,14 @@ enum {LEFT, RIGHT, SELECTED};
 ///Redraws tabs based on damage.
 void CustomTab::draw() {
     Fl_Widget *v = value();
+    
     int H = tab_height();
     
     int xParent = parent()->x();
     int yParent = parent()->y();
     int wParent = parent()->w();
     int hParent = parent()->h();
+    
     //initialize if necessary 
     UpdateTabs();
     
@@ -375,8 +382,6 @@ void CustomTab::draw() {
 // 	cout << "yParent = " << yParent << endl;
 // 	cout << "wParent = " << wParent << endl;
 // 	cout << "hParent = " << hParent << endl;
-
-
 	draw_box(box(), 
 		 x(), 
 		 y()+(topTab_ ? H:0), 
@@ -400,7 +405,6 @@ void CustomTab::draw() {
 	    fl_pop_clip();
 	}
 	if (v) draw_child(*v);
-	
     }
     else if(damage() & FL_DAMAGE_CHILD){
 // 	cout << "damage & FL_DAMAGE_CHILD" << endl;
@@ -409,7 +413,6 @@ void CustomTab::draw() {
 
     if (damage() & (FL_DAMAGE_SCROLL | FL_DAMAGE_ALL)) {
 // 	cout << "damage & (FL_DAMAGE_SCROLL | FL_DAMAGE_ALL)" << endl;
-
 	int selected = Index(value());
 
 	for (int i=0; i<selected; i++)

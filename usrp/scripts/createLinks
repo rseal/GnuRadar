@@ -1,0 +1,35 @@
+#!/usr/bin/python
+
+import os
+import sys
+
+#check for super-user
+isRoot = False
+if os.path.expandvars('$HOME') == '/root':
+   isRoot = True
+
+#1. verify super-user
+#2. get include_path from user or use default
+#3. if directory doesn't exist - create it.
+#4. create links
+
+
+if isRoot == False:
+   print "Must be super user to install include links"
+else:
+   include_path = raw_input("Where would you like to create header links </usr/local/include/gnuradar>?\n")
+   
+   if include_path == '':
+      include_path = "/usr/local/include/gnuradar"
+
+   if os.path.isdir(include_path) == False:
+      os.mkdir(include_path)
+            
+   os.chdir('../');
+   root = os.getcwd();
+   
+   os.chdir(include_path);
+   os.system('ln -fs ' + root + '/include/* .');
+
+   os.chdir(root);
+   

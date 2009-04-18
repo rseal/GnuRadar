@@ -4,11 +4,11 @@ module fifo_monitor
    input rd_clk,
    input reset,
    input wr_full,
-   input rd_full,
+   input rd_empty,
    input wr_clear,
    input rd_clear,
    output reg wr_overflow,
-   output reg rd_overflow
+   output reg rd_underflow
    );
 
    always @ (posedge wr_clk)
@@ -19,9 +19,9 @@ module fifo_monitor
 
    always @ (posedge rd_clk)
      if(reset || rd_clear)
-       rd_overflow <= 1'b0;
-     else if(rd_full)
-       rd_overflow <= 1'b1;
+       rd_underflow <= 1'b0;
+     else if(rd_empty)
+       rd_underflow <= 1'b1;
    
 
 endmodule // fifo_monitor

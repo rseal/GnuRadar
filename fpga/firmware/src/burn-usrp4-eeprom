@@ -1,0 +1,31 @@
+#!/bin/sh
+usrper -x load_firmware /usr/local/share/usrp/rev4/std.ihx
+sleep 1
+usrper i2c_write 0x50 00c2feff020004000000c300000200b312
+sleep 1
+usrper i2c_write 0x50 10002d80feaa825380cf8a8212001c8508
+sleep 1
+usrper i2c_write 0x50 208212001c43803022aa827b08ea23fa13
+sleep 1
+usrper i2c_write 0x50 309281d280c280dbf42275803875b23b75
+sleep 1
+usrper i2c_write 0x50 40a0c075b4cf75b1f075b6f890e68ae4f0
+sleep 1
+usrper i2c_write 0x50 500090e680e4f053a0fe43a001c2817508
+sleep 1
+usrper i2c_write 0x50 600175820112000875080f758208120008
+sleep 1
+usrper i2c_write 0x50 707508007582141200087a00ea24e0f582
+sleep 1
+usrper i2c_write 0x50 80e434e1f583e4f00aba10f07a007b000a
+sleep 1
+usrper i2c_write 0x50 90ba00010beb30e7f763a04080f27800e8
+sleep 1
+usrper i2c_write 0x50 a04400600c7900901800e4f0a3d8fcd9fa
+sleep 1
+usrper i2c_write 0x50 b0d083d082f6d8fdc082c0837582002275
+sleep 1
+usrper i2c_write 0x50 c08108120091e582600302000302000380
+sleep 1
+usrper i2c_write 0x50 d001e60000
+sleep 1

@@ -1,0 +1,143 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/8573/gnuradio/trunk/usrp/firmware/include
+END
+syncdelay.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/syncdelay.h
+END
+fpga_regs_standard.v
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/8086/gnuradio/trunk/usrp/firmware/include/fpga_regs_standard.v
+END
+usrp_interfaces.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/usrp_interfaces.h
+END
+isr.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/7060/gnuradio/trunk/usrp/firmware/include/isr.h
+END
+delay.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/delay.h
+END
+usb_common.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/usb_common.h
+END
+fpga_regs_common.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/fpga_regs_common.h
+END
+usrp_spi_defs.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/usrp_spi_defs.h
+END
+usb_descriptors.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/usb_descriptors.h
+END
+usrp_commands.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/usrp_commands.h
+END
+generate_regs.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/3122/gnuradio/trunk/usrp/firmware/include/generate_regs.py
+END
+i2c.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/i2c.h
+END
+fpga_regs_standard.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/fpga_regs_standard.h
+END
+fpga_regs0.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/fpga_regs0.h
+END
+usrp_config.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/usrp_config.h
+END
+timer.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/timer.h
+END
+fx2utils.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/fx2utils.h
+END
+fx2regs.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/fx2regs.h
+END
+usrp_i2c_addr.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/usrp_i2c_addr.h
+END
+fpga_regs_common.v
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/8086/gnuradio/trunk/usrp/firmware/include/fpga_regs_common.v
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/8573/gnuradio/trunk/usrp/firmware/include/Makefile.am
+END
+usb_requests.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/usb_requests.h
+END
+usrp_ids.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/6044/gnuradio/trunk/usrp/firmware/include/usrp_ids.h
+END

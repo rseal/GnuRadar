@@ -1,12 +1,16 @@
 NAME=strobe_gen
-INCLUDE=../../src
+INC1=../../src/
 
-all: $(NAME)
+all: iverilog vvp
 
-$(NAME): $(NAME)_tb.v $(INCLUDE)/$(NAME).v
-	iverilog -o $(NAME)_tb.gtk -t vvp $(NAME)_tb.v
-	vvp -lxt-speed $(NAME)_tb.gtk
-	gtkwave $(NAME)_tb.gtk
+iverilog: $(NAME)_tb.v $(INC1)/$(NAME).v 
+	iverilog -o $(NAME)_tb.o -t vvp -s$(NAME)_tb -I$(INC1) $(NAME)_tb.v
+
+vvp:
+	vvp $(NAME)_tb.o -lxt2	&
+
+gtkwave: 
+	gtkwave $(NAME)_tb.lxt
 
 clean:
-	rm -f *~ run $(NAME)_tb.gtk verilog.log
+	rm -f *~ *.o *.lxt

@@ -19,8 +19,8 @@
 //  Foundation, Inc., 51 Franklin Street, Boston, MA  02110-1301  USA
 //
 
-`include "sign_extend.v"
-`include "cic_dec_shifter.v"
+//`include "sign_extend.v"
+//`include "cic_dec_shifter.v"
 
 module cic_decim
   ( clock,reset,enable,rate,strobe_in,strobe_out,signal_in,signal_out);

@@ -1,49 +1,68 @@
-// -*- verilog -*-
-//
-//  USRP - Universal Software Radio Peripheral
-//
-//  Copyright (C) 2003 Matt Ettus
-//
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation; either version 2 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 51 Franklin Street, Boston, MA  02110-1301  USA
-//
+//state machine based strobe implementation
 
-
-
-module strobe_gen 
+module strobe_gen
   ( input clock,
     input reset,
     input enable,
     input [7:0] rate, // Rate should be 1 LESS THAN your desired divide ratio
     input strobe_in,
-    output reg strobe );
-   
-//   parameter width = 8;
+    output reg strobe,
+    output [15:0] dbus
+    );
    
    reg [7:0] counter;
 
-   //bug --- causes glitch that may or may not be harmful -- 03/12/09
-   // ~|counter = nor all bits of counter => all bits 0 produces 1
-   // strobe = 1 when counter==0 and enable==1 and strobe_in==1 for one clock cycle
-   //assign strobe = ~|counter && enable && strobe_in;
-   
+   parameter LOAD  = 2'b01,
+	     COUNT = 2'b10;
+
+   reg [2:0] state;
+
+
+/* -----\/----- EXCLUDED -----\/-----
+    reg 	     sync;
+   always @(posedge clock)
+     sync <= enable ? 1'b1 : 1'b0;
+ -----/\----- EXCLUDED -----/\----- */
+
    always @(posedge clock)
      if(reset || ~enable)
-       counter <=  8'd0;
-     else if(strobe_in)
        begin
-	  counter <= (counter==8'b0) ? rate : counter - 8'd1;
-	  strobe  <= (counter==8'b0) ? 1'b1 : 1'b0;
+	  state <= #1 LOAD;
+	  strobe <= 1'b0;
+	  counter <= 8'd0;
        end
+     else
+       begin
+	  case (state)
+	    LOAD:
+	      if(enable)
+		begin
+		   counter <= rate-8'd1;
+		   strobe <= 1'b1;
+		   state <= COUNT;
+		end
+	    COUNT:
+	      begin
+		 strobe <= 1'b0;
+		 if(counter==8'd0)
+		   state <= LOAD;
+		 else
+		   counter <= counter - 8'd1;
+	      end
+	    default:
+	      state <= LOAD;
+	  endcase // casestate
+       end // else: !if(reset || ~enable)
+      
+   assign dbus = {
+		  2'b0,
+		  clock,
+		  reset,
+		  enable,
+		  strobe_in,
+		  strobe,
+		  counter
+		  };
+   
 endmodule // strobe_gen
+

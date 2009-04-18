@@ -1,0 +1,54 @@
+XCC=sdcc -mmcs51 --no-xinit-opt
+XAS=asx8051 -plosgff
+
+# with EA = 0, the FX2 implements a portion of the 8051 "external memory"
+# on chip.  This memory is mapped like this:
+#
+# The bottom 8K of memory (0x0000 - 0x1fff) is used for both data and
+# code accesses.  There's also 512 bytes for data only from 0xe000 - 0xe1ff.
+#
+# We tell the linker to start the xdata segment at 0x1800, 6K up from
+# the bottom.
+
+MEMOPTS = --code-loc 0x0000 --code-size 0x1800 --xram-loc 0x1800 --xram-size 0x0800 \
+ -Wl '-b USBDESCSEG = 0xE000'
+
+LINKOPTS = $(MEMOPTS) $(LIBOPTS)
+
+STARTUP = _startup.rel
+
+# these files are in lib in real usrp build
+LIB_OBJS = \
+	fx2utils.rel i2c.rel delay.rel usb_common.rel timer.rel isr.rel
+
+# jtag_util.rel jtag_bit_avnet.rel
+USRP_OBJS = \
+        vectors.rel \
+        usrp_main.rel usrp_common.rel board_specific.rel        \
+        fpga_load.rel fpga_avnet.rel jtag_8051.rel init_gpif.rel usrp_gpif.rel \
+        usb_descriptors.rel spi.rel $(STARTUP)
+
+
+all: usrp_main.ihx
+
+# usrp_main.ihx: usrp_main.rel _startup.rel board_specific.rel fpga_load.rel jtag_util.rel jtag_bit_avnet.rel spi.rel fx2utils.rel i2c.rel fpga_avnet.rel init_gpif.rel usrp_gpif.rel delay.rel usb_common.rel usrp_common.rel timer.rel isr.rel usb_descriptors.rel vectors.rel
+
+usrp_main.ihx: $(USRP_OBJS) $(LIB_OBJS)
+	$(XCC) $(LINKOPTS) -o $@ $^
+
+USB_STUFF = usb_common.rel usb_descriptors.rel fx2utils.rel delay.rel
+blink_e.ihx: vectors.rel blink_e.rel usrp_common.rel board_specific.rel $(USB_STUFF) isr.rel $(STARTUP)
+	$(XCC) $(LINKOPTS) -o $@ $^
+
+%.rel: %.c
+	$(XCC) -I../avnet -I../../include -c -o $@ $<
+
+%.rel: %.a51
+	test -f `basename '$<'` || ln -s '$<' .
+	$(XAS) `basename '$<'`
+
+# fpga_load_jtag.rel jtag_util.rel jtag_bit_avnet.rel: jtag_util.h
+i2c.rel jtag_8051.rel fpga_load.rel: jtag_util.h
+
+clean:
+	rm -f *.asm *.ihx *.lnk *.lst *.map *.mem *.rel *.rst *.sym

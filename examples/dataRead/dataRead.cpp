@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 
     int tableSize = shs.data.DataSize()/sizeof(short);
 
-    short* buffer = shs.ReadData(10);
+    short* buffer = shs.ReadData(1);
 
     //   for(int i=0; i<dim1; ++i)
 //        cout << buffer[2*i] << endl;

@@ -1,19 +1,19 @@
-all: producer consumer test
+all: ProducerThread ConsumerThread GnuRadioTest
 
-producer: ProducerThread.cpp
+ProducerThread: $(@:=.cpp)
 	@echo "Building ----> Producer"
-	@g++ -c ProducerThread.cpp
+	@g++ -g -c $(@:=.cpp)
 
-consumer: ConsumerThread.cpp
+ConsumerThread: $(@:=.cpp)
 	@echo "Building ----> Consumer"
-	@g++ -c ConsumerThread.cpp
+	@g++ -g -c $(@:=.cpp)
 
-test: GnuRadioTest.cpp ConsumerThread.o ProducerThread.o
+GnuRadioTest: $(@:=.cpp) ConsumerThread.o ProducerThread.o
 	@echo "Building ----> GnuRadioTest"
-	@g++ -o test GnuRadioTest.cpp ConsumerThread.o ProducerThread.o -lrt -lusrp -lusb 
+	@g++ -g -o grTest $(@:=.cpp) $? -lrt -lusrp -lusb 
 
 clean:
-	@rm -rf *~ test ConsumerThread.o ProducerThread.o
+	@rm -rf *~ grTest ConsumerThread.o ProducerThread.o
 
 
 

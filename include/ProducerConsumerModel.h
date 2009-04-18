@@ -142,7 +142,7 @@ public:
 	}
 	pThread_->Stop();
 	cout << "ProducerConsumerModel: Producer Stopped" << endl;
-	stopConsumer_=true;
+
     }
 
     void RequestData(void* memory){
@@ -163,6 +163,8 @@ public:
     const bool& OverFlow() { return overFlow_;}
 
     void Stop(void){ 
+	stopConsumer_=true;
+	cThread_->Wait();
 	stopProducer_ = true;
 	cout << "ProducerConsumerModel: System Stop activated" << endl;
     } 

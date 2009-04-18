@@ -2,8 +2,8 @@
 
 `include "../include/fpga_regs_common.v"
 `include "../include/fpga_regs_standard.v"
-`include "rx_dcoffset.v"
-`include "rssi.v"
+//`include "rx_dcoffset.v"
+//`include "rssi.v"
 
 module adc_interface
   (input clock, input reset, input enable,

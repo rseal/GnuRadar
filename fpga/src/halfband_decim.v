@@ -52,11 +52,11 @@
  * two samples from different addresses at the same time, while writing the incoming
  * even samples. Thus it's "triple-ported".
  */
-`include "coeff_rom.v"
-`include "ram16_2sum.v"
-`include "mult.v"
-`include "acc.v"
-`include "ram16.v"
+//`include "coeff_rom.v"
+//`include "ram16_2sum.v"
+//`include "mult.v"
+//`include "acc.v"
+//`include "ram16.v"
 
 module halfband_decim
   (input clock, input reset, input enable, input strobe_in, output wire strobe_out,
@@ -71,22 +71,33 @@ module halfband_decim
    wire      signed [30:0] product;
    wire      signed [33:0] sum_even;
    wire      clear;
-   reg 	     store_odd;
-   
+
+   reg 	     clk_odd;
+   wire      clk_even;
+   reg 	     start_d1, start_d2, start_d3,
+	     start_d4, start_d5, start_d6,
+	     start_d7, start_d8, start_d9,
+	     start_dA, start_dB, start_dC,
+	     start_dD;
+
    always @(posedge clock)
      if(reset)
-       store_odd <= #1 1'b0;
-     else
-       if(strobe_in)
-	 store_odd <= #1 ~store_odd;
-
-   wire      start = strobe_in & store_odd;
+       clk_odd <= 1'b0;
+     else if(strobe_in)
+       clk_odd <= ~clk_odd;
+   
+   assign    clk_even = ~clk_odd;
+	
+   //asserted on first strobe_in
+   wire      start = strobe_in & clk_odd;
+  
    always @(posedge clock)
      if(reset)
        base_addr <= #1 4'd0;
      else if(start)
        base_addr <= #1 base_addr + 4'd1;
 
+   //initializes with start and increments every clock for 8 cycles
    always @(posedge clock)
      if(reset)
        phase <= #1 4'd8;
@@ -94,25 +105,25 @@ module halfband_decim
        phase <= #1 4'd0;
      else if(phase != 4'd8)
        phase <= #1 phase + 4'd1;
-
-   reg 	     start_d1,start_d2,start_d3,start_d4,start_d5,start_d6,start_d7,start_d8,start_d9,start_dA,start_dB,start_dC,start_dD;
-   always @(posedge clock)
-     begin
-	start_d1 <= #1 start;
-	start_d2 <= #1 start_d1;
-	start_d3 <= #1 start_d2;
-	start_d4 <= #1 start_d3;
-	start_d5 <= #1 start_d4;
-	start_d6 <= #1 start_d5;
-	start_d7 <= #1 start_d6;
-	start_d8 <= #1 start_d7;
-	start_d9 <= #1 start_d8;
-	start_dA <= #1 start_d9;
-	start_dB <= #1 start_dA;
-	start_dC <= #1 start_dB;
-	start_dD <= #1 start_dC;
-     end // always @ (posedge clock)
    
+   always @(posedge clock)
+       begin
+	  start_d1 <= #1 start;
+	  start_d2 <= #1 start_d1;
+	  start_d3 <= #1 start_d2;
+	  start_d4 <= #1 start_d3;
+	  start_d5 <= #1 start_d4;
+	  start_d6 <= #1 start_d5;
+	  start_d7 <= #1 start_d6;
+	  start_d8 <= #1 start_d7;
+	  start_d9 <= #1 start_d8;
+	  start_dA <= #1 start_d9;
+	  start_dB <= #1 start_dA;
+	  start_dC <= #1 start_dB;
+	  start_dD <= #1 start_dC;
+       end // always @ (posedge clock)
+
+   //multiplier is enabled for 8 samples
    reg 	  mult_en, mult_en_pre;
    always @(posedge clock)
      begin
@@ -124,8 +135,9 @@ module halfband_decim
    wire   latch_result = start_d4; // was dC
    assign strobe_out = start_d5; // was dD
    wire   acc_en;
-   
-   always @*
+
+   //begins with start pulse and increments every clock for 8 clocks
+   always @(*)
      case(phase[2:0])
        3'd0 : begin rd_addr1 = base_addr + 4'd0; rd_addr2 = base_addr + 4'd15; end
        3'd1 : begin rd_addr1 = base_addr + 4'd1; rd_addr2 = base_addr + 4'd14; end
@@ -137,24 +149,33 @@ module halfband_decim
        3'd7 : begin rd_addr1 = base_addr + 4'd7; rd_addr2 = base_addr + 4'd8; end
        default: begin rd_addr1 = base_addr + 4'd0; rd_addr2 = base_addr + 4'd15; end
      endcase // case(phase)
-   
+
+   //holds coefficients - increments with phase-1
    coeff_rom coeff_rom (.clock(clock),.addr(phase[2:0]-3'd1),.data(coeff));
-   
-   ram16_2sum ram16_even (.clock(clock),.write(strobe_in & ~store_odd),
+
+   //samples 0,2,4,6,8,10,12,14,16,18,20,22,24,26,28
+   //wr_addr changes once every start pulse
+   //rd_addr increments every clock cylce after start pulse for 8 clocks
+   ram16_2sum ram16_even (.clock(clock),.write(strobe_in & clk_even),
 			  .wr_addr(base_addr),.wr_data(data_in),
 			  .rd_addr1(rd_addr1),.rd_addr2(rd_addr2),
 			  .sum(sum));
 
-   ram16 ram16_odd (.clock(clock),.write(strobe_in & store_odd),  // Holds middle items
+   //stores odd samples - increments 6 with every phase transition
+   //1,3,5,7,9,11,13,15,17,18,19,21,23,25,27,29
+   //wr_addr changes once every start pulse
+   //rd_addr increments 6 every start pulse clock cycle
+   ram16 ram16_odd (.clock(clock), .write(strobe_in & clk_odd),  // Holds middle items
 		    .wr_addr(base_addr),.wr_data(data_in),
 		    //.rd_addr(base_addr+4'd7),.rd_data(middle_data));
 		    .rd_addr(base_addr+4'd6),.rd_data(middle_data));
-
+   
    mult mult(.clock(clock),.x(coeff),.y(sum),.product(product),.enable_in(mult_en),.enable_out(acc_en));
 
    acc acc(.clock(clock),.reset(reset),.enable_in(acc_en),.enable_out(),
 	   .clear(clear),.addend(product),.sum(sum_even));
 
+   //
    wire signed [33:0] dout = sum_even + {{4{middle_data[15]}},middle_data,14'b0}; // We already divided product by 2!!!!
 
    always @(posedge clock)
@@ -164,6 +185,16 @@ module halfband_decim
        data_out <= #1 dout[30:15] + (dout[33]& |dout[14:0]);
 
    // phase = 0:3, strobe_out = 4, strobe_in = 5, 
-   assign  debugctrl = { clock,reset,acc_en,mult_en,clear,latch_result,store_odd,strobe_in,strobe_out,phase};
+   assign debugctrl = { clock,
+			reset,
+			acc_en,
+			mult_en,
+			clear,
+			latch_result,
+			clk_odd,
+			strobe_in,
+			strobe_out,
+			phase
+			};
    
 endmodule // halfband_decim

@@ -17,20 +17,22 @@ const int    Kb            = 1024;
 const int    Mb            = Kb*Kb;
 const double ms            = 1e-3;
 const double MHz           = 1e6;
+const double us            = 1e-6;
 
 //user settings
 const string dataSet = "/home/rseal/usrpLabTest";
 const double sampleRate    = 64*MHz;
 const double bandWidth     = 1*MHz;
 const int    numChannels   = 2;
-const double IPP           = 10*ms;
-const double dataWindow    = 4*ms;
-const double dutyCycle     = IPP/dataWindow;
+const double IPP           = 1.024*ms;
+const double dataWindow    = 512.0*us;
 const int    decimation    = sampleRate / bandWidth;
 const double outputRate    = sampleRate / decimation;
-const int    BPS           = outputRate*4*numChannels;
-const int    bufferSize    = BPS;
+const int    BPS           = outputRate*numChannels*4;
+const int    bufferSize    = 4096000;//BPS*dataWindow/IPP;
 const int    numBuffers    = 20;
+const double dim0          = 1.0/IPP;
+const double dim1          = dataWindow*outputRate*numChannels*2;
 
 vector<int> windowVector;
 vector<int> dimVector;

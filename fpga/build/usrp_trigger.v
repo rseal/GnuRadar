@@ -30,17 +30,10 @@
 `include "config.vh"
 `include "../include/fpga_regs_common.v"
 `include "../include/fpga_regs_standard.v"
-`include "../src/megacells/bustri.v"
-`include "../src/megacells/pll.v"
-`include "../src/adc_interface.v"
-`include "../src/rx_buffer.v"
-`include "../src/rx_chain.v"
-`include "../src/serial_io.v"
-`include "../src/master_control_min.v"
-`include "../src/setting_reg.v"
-`include "../src/cordic_stage.v"
 
-/////////////////////////////////// MODULE: usrp_trigger ///////////////////////////////////   
+/*
+ * MODULE: usrp_trigger
+ */
 module usrp_trigger
   (
    output MYSTERY_SIGNAL,
@@ -73,8 +66,8 @@ module usrp_trigger
 
    //GPIO
    output wire [15:0] io_tx_a,
-   input wire [15:0] io_tx_b,
-   input wire [15:0] io_rx_a,
+   output wire [15:0] io_tx_b,
+   input  wire [15:0] io_rx_a,
    output wire [15:0] io_rx_b
    );	
 
@@ -95,36 +88,56 @@ module usrp_trigger
    wire   rx_overrun;
    wire   clear_status = FX2_1;
    assign FX2_2 = rx_overrun;
-      
+   
    wire [15:0] usbdata_out;
-        
+   
    wire [3:0]  rx_numchan;
    wire [7:0]  decim_rate;
    wire        enable_rx;
    wire        rx_dsp_reset, rx_bus_reset;
    wire [7:0]  settings;
-   
-   // Tri-state bus macro
-   bustri bustri( 
-		  .data(usbdata_out),
-		  .enabledt(OE),
-		  .tridata(usbdata)
-		  );
-   
-   //now using PLL to regenerate clock signal
-   pll pll(
-	   .areset(1'b0),
-	   .inclk0(master_clk),
-	   .c0(clk64),
-	   .c1(),
-	   .locked()
-	   );
-   //assign      clk64 = master_clk;
-   
+   wire        clk48;
    wire        serial_strobe;
    wire [6:0]  serial_addr;
    wire [31:0] serial_data;
+   reg 	       latch,rst;
+   reg [2:0]   cnt;
       
+   /*
+    * MODULE: bustri
+    */
+   bustri bustri
+     ( 
+       .data(usbdata_out),
+       .enabledt(OE),
+       .tridata(usbdata)
+       );
+   
+   /*
+    * MODULE: pll64
+    */
+   pll64 pll
+     (
+      .areset(1'b0),
+      .inclk0(master_clk),
+      .c0(clk64),
+      .c1(),
+      .locked()
+      );
+
+   /*
+    * MODULE: pll48
+    */
+   pll48 pll2
+     (
+      .areset(1'b0),
+      .inclk0(usbclk),
+      .c0(clk48),
+      .c1(),
+      .locked()
+      );
+   
+   
 `ifdef RX_ON
    
    wire        rx_sample_strobe,strobe_decim,hb_strobe;
@@ -141,62 +154,68 @@ module usrp_trigger
 	       rssi_2,rssi_3;
 
    /*
-    MODULE: adc_interface
+    * MODULE: adc_interface
     */
-   adc_interface adci(
-		      .clock(clk64),
-		      .reset(rx_dsp_reset),
-		      .enable(1'b1),
-		      .serial_addr(serial_addr),
-		      .serial_data(serial_data),
-		      .serial_strobe(serial_strobe),
-		      .rx_a_a(rx_a_a),
-		      .rx_b_a(rx_b_a),
-		      .rx_a_b(rx_a_b),
-		      .rx_b_b(rx_b_b),
-		      .rssi_0(rssi_0),
-		      .rssi_1(rssi_1),
-		      .rssi_2(rssi_2),
-		      .rssi_3(rssi_3),
-		      .ddc0_in_i(ddc0_in_i),
-		      .ddc0_in_q(ddc0_in_q),
-		      .ddc1_in_i(ddc1_in_i),
-		      .ddc1_in_q(ddc1_in_q),
-		      .ddc2_in_i(ddc2_in_i),
-		      .ddc2_in_q(ddc2_in_q),
-		      .ddc3_in_i(ddc3_in_i),
-		      .ddc3_in_q(ddc3_in_q),
-		      .rx_numchan(rx_numchan)
-		      );
+   adc_interface adci
+     (
+      .clock(clk64),
+      .reset(rx_dsp_reset),
+      .enable(1'b1),
+      .serial_addr(serial_addr),
+      .serial_data(serial_data),
+      .serial_strobe(serial_strobe),
+      .rx_a_a(rx_a_a),
+      .rx_b_a(rx_b_a),
+      .rx_a_b(rx_a_b),
+      .rx_b_b(rx_b_b),
+      .rssi_0(rssi_0),
+      .rssi_1(rssi_1),
+      .rssi_2(rssi_2),
+      .rssi_3(rssi_3),
+      .ddc0_in_i(ddc0_in_i),
+      .ddc0_in_q(ddc0_in_q),
+      .ddc1_in_i(ddc1_in_i),
+      .ddc1_in_q(ddc1_in_q),
+      .ddc2_in_i(ddc2_in_i),
+      .ddc2_in_q(ddc2_in_q),
+      .ddc3_in_i(ddc3_in_i),
+      .ddc3_in_q(ddc3_in_q),
+      .rx_numchan(rx_numchan)
+      );
+   
    /*
-    MODULE: rx_buffer
+    * MODULE: rx_buffer
     */
-   rx_buffer old(
-		 .rd_clk(usbclk),
-		 .wr_clk(clk64),
-		 .bus_reset(rx_bus_reset),
-		 .reset(rx_dsp_reset),
-		 .strobe(hb_strobe),
-		 .d_out(usbdata_out),
-		 .rd_req(RD),
-		 .packet_rdy(packet_rdy),
-		 .overflow(rx_overrun),
-		 .channels(rx_numchan),
-		 .ch_0(bb_rx_i0),.ch_1(bb_rx_q0),.ch_2(bb_rx_i1),.ch_3(bb_rx_q1),
-		 .ch_4(bb_rx_i2),.ch_5(bb_rx_q2),.ch_6(bb_rx_i3),.ch_7(bb_rx_q3),
-		 .clear_status(clear_status),
-		 .debugbus(io_rx_b)
-		 );
-
+   fifo fnew
+     (
+      .rd_clk(clk48),
+      .wr_clk(clk64),
+      .reset(rx_dsp_reset),
+      .bus_reset(rx_bus_reset),
+      .rd_req(RD),
+      .packet_rdy(packet_rdy),
+      .overflow(rx_overrun),
+      .clear_status(clear_status),
+      .strobe(hb_strobe),
+      .gate_enable(gate_enable),
+      .channels(rx_numchan),
+      .din0(bb_rx_i0), .din1(bb_rx_q0),
+      .din2(bb_rx_i1), .din3(bb_rx_q1),
+      .din4(bb_rx_i2), .din5(bb_rx_q2),
+      .din6(bb_rx_q3), .din7(bb_rx_i3),
+      .dout(usbdata_out),
+      .debugbus(io_rx_b)
+      );
+   
  `ifdef RX_EN_0
    /*
-    MODULE: rx_chain (channel 0)
+    * MODULE: rx_chain (channel 0)
     */
    rx_chain #(`FR_RX_FREQ_0,`FR_RX_PHASE_0) 
      rxc_0
        (
 	.clock(clk64),
-	.reset(1'b0),
+	.reset(~gate_enable),
 	.enable(enable_rx),
 	.decim_rate(decim_rate),
 	.sample_strobe(rx_sample_strobe),
@@ -219,13 +238,13 @@ module usrp_trigger
    
  `ifdef RX_EN_1
    /*
-    MODULE: rx_chain (channel 0)
+    * MODULE: rx_chain (channel 1)
     */
    rx_chain #(`FR_RX_FREQ_1,`FR_RX_PHASE_1) 
      rxc_1
        (
 	.clock(clk64),
-	.reset(1'b0),
+	.reset(~gate_enable),
 	.enable(enable_rx),
 	.decim_rate(decim_rate),
 	.sample_strobe(rx_sample_strobe),
@@ -238,7 +257,7 @@ module usrp_trigger
 	.q_in(ddc1_in_q),
 	.i_out(bb_rx_i1),
 	.q_out(bb_rx_q1)
-      );
+	);
  `else
    assign      bb_rx_i1=16'd0;
    assign      bb_rx_q1=16'd0;
@@ -246,13 +265,13 @@ module usrp_trigger
    
  `ifdef RX_EN_2
    /*
-    MODULE: rx_chain (channel 0)
+    * MODULE: rx_chain (channel 2)
     */
    rx_chain #(`FR_RX_FREQ_2,`FR_RX_PHASE_2) 
      rxc_2
        ( 
 	 .clock(clk64),
-	 .reset(1'b0),
+	 .reset(~gate_enable),
 	 .enable(enable_rx),
 	 .decim_rate(decim_rate),
 	 .sample_strobe(rx_sample_strobe),
@@ -273,13 +292,13 @@ module usrp_trigger
    
  `ifdef RX_EN_3
    /*
-    MODULE: rx_chain (channel 0)
+    * MODULE: rx_chain (channel 3)
     */
    rx_chain #(`FR_RX_FREQ_3,`FR_RX_PHASE_3) 
      rxc_3
        ( 
 	 .clock(clk64),
-	 .reset(1'b0),
+	 .reset(~gate_enable),
 	 .enable(enable_rx),
 	 .decim_rate(decim_rate),
 	 .sample_strobe(rx_sample_strobe),
@@ -308,56 +327,57 @@ module usrp_trigger
    assign      capabilities[2:0] = `RX_CAP_NCHAN;
 
    /*
-    MODULE: serial_io
+    * MODULE: serial_io
     */
-   serial_io sio(
-		 .master_clk(clk64),
-		 .serial_clock(SCLK),
-		 .serial_data_in(SDI),
-		 .enable(SEN_FPGA),
-		 .reset(1'b0),
-		 .serial_data_out(SDO),
-		 .serial_addr(serial_addr),
-		 .serial_data(serial_data),
-		 .serial_strobe(serial_strobe),
-		 .readback_2(capabilities),
-		 .readback_3(32'hf0f0931a),
-		 .readback_4(rssi_0),
-		 .readback_5(rssi_1),
-		 .readback_6(rssi_2),
-		 .readback_7(rssi_3)
-		 );
+   serial_io sio
+     (
+      .master_clk(clk64),
+      .serial_clock(SCLK),
+      .serial_data_in(SDI),
+      .enable(SEN_FPGA),
+      .reset(1'b0),
+      .serial_data_out(SDO),
+      .serial_addr(serial_addr),
+      .serial_data(serial_data),
+      .serial_strobe(serial_strobe),
+      .readback_2(capabilities),
+      .readback_3(32'hf0f0931a),
+      .readback_4(rssi_0),
+      .readback_5(rssi_1),
+      .readback_6(rssi_2),
+      .readback_7(rssi_3)
+      );
    /*
-    MODULE: master_control
+    * MODULE: master_control
     */
-   master_control_min mcm
-		   (
-		    .master_clk(clk64),
-		    .usbclk(usbclk),
-		    .serial_addr(serial_addr),
-		    .serial_data(serial_data),
-		    .serial_strobe(serial_strobe),
-		    .rx_bus_reset(rx_bus_reset),
-		    .rx_dsp_reset(rx_dsp_reset),
-		    .enable_rx(enable_rx),
-		    .decim_rate(decim_rate),
-		    .rx_sample_strobe(rx_sample_strobe),
-		    .strobe_decim(strobe_decim),
-		    .gate_enable(gate_enable)
-		    );
+   master_cntrl mcm
+     (
+      .master_clk(clk64),
+      .usbclk(clk48),
+      .serial_addr(serial_addr),
+      .serial_data(serial_data),
+      .serial_strobe(serial_strobe),
+      .rx_bus_reset(rx_bus_reset),
+      .rx_dsp_reset(rx_dsp_reset),
+      .enable_rx(enable_rx),
+      .decim_rate(decim_rate),
+      .rx_sample_strobe(rx_sample_strobe),
+      .strobe_decim(strobe_decim),
+      .gate_enable(gate_enable),
+      .debug_bus(io_tx_b)
+      );
 
-   //assign gated_strobe = gate_enable && 
    /* 
-    MODULE: setting_reg (misc settings)
+    * MODULE: setting_reg (misc settings)
     */
    setting_reg #(`FR_MODE) 
-		   sr_misc(
-			   .clock(clk64),
-			   .reset(rx_dsp_reset),
-			   .strobe(serial_strobe),
-			   .addr(serial_addr),
-			   .in(serial_data),
-			   .out(settings)
-			   );
+     sr_misc(
+	     .clock(clk64),
+	     .reset(rx_dsp_reset),
+	     .strobe(serial_strobe),
+	     .addr(serial_addr),
+	     .in(serial_data),
+	     .out(settings)
+	     );
 
-    endmodule // usrp_trigger
+endmodule // usrp_trigger

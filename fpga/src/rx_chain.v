@@ -22,10 +22,10 @@
 // Following defines conditionally include RX path circuitry
 
 `include "config.vh"	// resolved relative to project root
-`include "phase_acc.v"
-`include "cordic.v"
-`include "cic_decim.v"
-`include "halfband_decim.v"
+//`include "phase_acc.v"
+//`include "cordic.v"
+//`include "cic_decim.v"
+//`include "halfband_decim.v"
 
 module rx_chain
   (input clock,
@@ -40,7 +40,8 @@ module rx_chain
    input wire [15:0] q_in,
    output wire [15:0] i_out,
    output wire [15:0] q_out,
-   output wire [15:0] debugdata,output wire [15:0] debugctrl
+   output wire [15:0] debugdata,
+   output wire [15:0] debugctrl
    );
 
    parameter FREQADDR = 0;

@@ -20,11 +20,11 @@ sp.puts "S\n"
 sp.gets
 print sp.gets
 
-sp.puts "V0 512\n"
+sp.puts "V0 1023\n"
 sp.gets
 print sp.gets
 
-sp.puts "V1 512\n"
+sp.puts "V1 1023\n"
 sp.gets
 print sp.gets
 
@@ -36,12 +36,12 @@ sp.puts "V3 1023\n"
 sp.gets
 print sp.gets
 
-sp.puts "F0 50.1000000\n"
+sp.puts "F0 50.1800000\n"
 sp.puts "S\n"
 sp.gets
 print sp.gets
 
-sp.puts "F1 50.0200000\n"
+sp.puts "F1 50.0230000\n"
 sp.puts "S\n"
 sp.gets
 print sp.gets

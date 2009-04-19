@@ -53,6 +53,11 @@ public:
 	  usrp_->set_rx_freq(i,grSettings_.Tune(i));
 	  usrp_->set_ddc_phase(i,0);
 	}
+
+	//set all gain to 0dB by default	
+	for(int i=0; i<4; ++i)
+	  usrp_->set_pga(i,0);
+	
 //	usrp_->start();
     }
 

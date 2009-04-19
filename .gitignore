@@ -3,6 +3,5 @@ usrpSVN/
 *.o
 *~
 gui/3rdParty
-fpga/opencores
-examples/dataRead/setup
+programs/Analyze/setup
 gui/run

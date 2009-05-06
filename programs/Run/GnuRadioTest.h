@@ -24,12 +24,12 @@ const string dataSet = "/home/rseal/usrpLabTest";
 const double sampleRate    = 64*MHz;
 const double bandWidth     = 1*MHz;
 const int    numChannels   = 2;
-const double IPP           = 1.024*ms;
-const double dataWindow    = 512.0*us;
+const double IPP           = 25*ms;
+const double dataWindow    = 16500.0*us;
 const int    decimation    = sampleRate / bandWidth;
 const double outputRate    = sampleRate / decimation;
-const int    BPS           = outputRate*numChannels*4;
-const int    bufferSize    = 4096000;//BPS*dataWindow/IPP;
+const double BPS           = outputRate*numChannels*4;
+const int    bufferSize    = BPS*dataWindow*(1.0/IPP);
 const int    numBuffers    = 20;
 const double dim0          = 1.0/IPP;
 const double dim1          = dataWindow*outputRate*numChannels*2;
@@ -39,6 +39,6 @@ vector<int> dimVector;
 vector<double> tuningFreq;
 Time currentTime;
 GnuRadarSettings settings;
-int* buffer;
+short* buffer;
 
 #endif 

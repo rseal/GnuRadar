@@ -69,27 +69,38 @@ public:
 	//start data collection and flush fx2 buffer
 	if(firstCall_){
  	    usrp_->start();
-	    align_.Init(bytes/sizeof(short),sequence_,8192);
+	    int byteAlign = bytes;
+ 	    if((byteAlign%512) != 0){
+		//increase bytes to align on 512-byte boundary
+ 		byteAlign = (static_cast<int>(byteAlign/512)+1)*512;
+ 		cout << "bytes = " << bytes << endl;
+ 		cout << "byteAlign = " << byteAlign << endl;
+		//subtract additional bytes from original
+ 		byteAlign -= bytes;
+		cout << "align = " << byteAlign << endl;
+ 	    }
+
+	    align_.Init(bytes/sizeof(short),byteAlign/sizeof(short),sequence_,16384);
  	    firstCall_ = false;
  	}
 	
 	//Get data from USRP
 	bytesRead = usrp_->read(align_.WritePtr(), align_.RequestSize()*sizeof(short), &overrun_);
-	cout << "PreAlign = " << *(align_.WritePtr()) << endl;
+//	cout << "PreAlign = " << *(align_.WritePtr()) << endl;
 	align_.AlignData();
-	cout << "dTest = " << *(align_.ReadPtr()) << endl;
+//	cout << "dTest = " << *(align_.ReadPtr()) << endl;
 
 	//Transfer data to shared memory buffer
 	memcpy(address,align_.ReadPtr(),bytes);
-	cout << "dTest2= " << *(reinterpret_cast<short*>(address)) << endl;
+//	cout << "dTest2= " << *(reinterpret_cast<short*>(address)) << endl;
 
 	//read n bytes from data stream and pass to address
 //	bytesRead = usrp_->read(reinterpret_cast<void*>(address), bytes, &overrun_);	
 	
-	if(bytesRead != bytes){
-	    cout << "USRP::READ mismatch " << bytes << ":" << bytesRead << endl;
-	    //error here
-	}
+// 	if(bytesRead != bytes){
+// 	    cout << "USRP::READ mismatch " << bytes << ":" << bytesRead << endl;
+// 	    //error here
+// 	}
 
 	if(overrun_){
 	    cout << "data overrun - you are losing data" << endl;

@@ -2,11 +2,11 @@ sampleRate = 64e6;
 bandwidth = 1e6;
 t = 1.0/bandwidth;
 ipp=1e-3;
-window=512;
+window=16500;
 dc=0.4;
-ipps=1000;
+ipps=40;
 heights=bandwidth*ipp*dc;
-fftSize = 256;
+fftSize = 16384;
 
 fid = fopen("binary.dat","r");
 data = fread(fid,"int16");
@@ -36,9 +36,9 @@ avgB = zeros(fftSize,1);
 
 samples=ipps;
 for i=1:samples
-  tempA = fft(chA(16:end,i),fftSize)/window;
+  tempA = fft(chA(10:end,i),fftSize);
   tempA = tempA .* conj(tempA);
-  tempB = fft(chB(16:end,i),fftSize)/window;
+  tempB = fft(chB(10:end,i),fftSize);
   tempB = tempB .* conj(tempB);
   avgA = avgA + tempA;
   avgB = avgB + tempB;
@@ -58,7 +58,7 @@ avgB = fftshift(avgB);
 log_avgB = 10*log10(avgB/max(avgB));
 
 plot(x_axis,log_avgA);
-title("Signal=50.2MHz,Sample Rate=64MSPS,DDC=-14.0MHz,Integration=1 sec");
+title("Signal=50.023 MHz,Sample Rate=64MSPS,DDC=-14.0MHz,Integration=1 sec");
 grid on;
 xlabel("Frequency (Hz)");
 ylabel("dB");
@@ -66,7 +66,7 @@ ylabel("dB");
 print -deps "snrA.eps"
 
 plot(x_axis,log_avgB);
-title("Signal=50.02MHz,Sample Rate=64MSPS,DDC=-14.0MHz,Integration=1 sec");
+title("Signal=50.18 MHz,Sample Rate=64MSPS,DDC=-14.0MHz,Integration=1 sec");
 grid on;
 xlabel("Frequency (Hz)");
 ylabel("dB");

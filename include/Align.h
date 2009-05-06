@@ -12,6 +12,7 @@ using std::auto_ptr;
 template<class T>
 struct Align{
     int reqSize_;
+    int align_;
     vector<int> sequence_;
     int extra_;
 
@@ -66,11 +67,13 @@ public:
 	reqSize_(0), extra_(0), sequence_(), firstRun_(true), 
 	nextBuf_(0), offset_(0), init_(false){}
 
-    void Init(const int& size, const vector<int>& sequence, const int& extra){
+    void Init(const int& reqSize, const int& align, const vector<int>& sequence, const int& extra){
 	sequence_ = sequence;
-	reqSize_  = size;
+	reqSize_  = reqSize;
+	align_    = align;
 	extra_    = extra;
-	bufferSize_ = reqSize_ + extra_;
+	//full allocation size
+	bufferSize_  = reqSize_ + align_ + extra_;
 	//allocate space for 2 buffers - handle addressing manually
 	buffer_.resize(2*bufferSize_);
 	bufferPtr_ = &buffer_[0];
@@ -80,11 +83,11 @@ public:
 	cpDest_ = bufferPtr_;
 	init_ = true;
 	cout << "Align::Init Variables" << "\n"
-	     << "reqSize_ = " << size << "\n"
+	     << "reqSize_    = " << reqSize_    << "\n"
 	     << "bufferSize_ = " << bufferSize_ << "\n"
-	     << "bufferPtr_ = " << bufferPtr_ << "\n"
-	     << "wrAddr_ = " << wrAddr_ << "\n"
-	     << "rdAddr_ = " << rdAddr_ << endl;
+	     << "bufferPtr_  = " << bufferPtr_  << "\n"
+	     << "wrAddr_     = " << wrAddr_     << "\n"
+	     << "rdAddr_     = " << rdAddr_     << endl;
     };
 
      T* ReadPtr()  { return rdAddr_;}
@@ -140,7 +143,7 @@ public:
     };
     
     ///Request size for data alignment
-    const int RequestSize() { return firstRun_ ? bufferSize_ : reqSize_;}
+    const int RequestSize() { return firstRun_ ? bufferSize_ : reqSize_ + align_;}
 };
 
 #endif

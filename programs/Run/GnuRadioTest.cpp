@@ -15,7 +15,7 @@ int main(){
     dimVector.push_back(static_cast<int>(dim1));
 
     //create consumer buffer - destination 
-    buffer = new int[bufferSize/sizeof(int)];
+    buffer = new short[bufferSize/sizeof(short)];
 
     //50MHz RF with 64MHz sampling - positive image at -14MHz (reversed at +14MHz)
     tuningFreq.push_back(-14.0e6);

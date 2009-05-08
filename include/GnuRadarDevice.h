@@ -18,7 +18,8 @@ using std::cout;
 using std::cerr;
 
 class GnuRadarDevice: public Device{
-    auto_ptr<usrp_standard_rx> usrp_;
+    usrp_standard_rx_sptr usrp_;
+//    auto_ptr<usrp_standard_rx> usrp_;
     GnuRadarSettings grSettings_;
     bool overrun_;
     bool firstCall_;
@@ -30,7 +31,8 @@ public:
 	grSettings_(grSettings),overrun_(false),firstCall_(true),
 	sequence_(grSettings.numChannels,16384),align_(){
 
-	usrp_.reset(usrp_standard_rx::make(
+	usrp_ = usrp_standard_rx::make(
+//	usrp_.reset(usrp_standard_rx::make(
 	    grSettings_.whichBoard,
 	    grSettings_.decimationRate,
 	    grSettings_.numChannels,
@@ -40,8 +42,8 @@ public:
 	    grSettings_.fUsbNblocks,
 	    grSettings_.fpgaFileName,
 	    grSettings_.firmwareFileName
-			));
-
+//			));
+	    );
 	cout << "Requested bit image " << grSettings_.fpgaFileName << endl;
 	//check to see if device is connected
 	if(usrp_.get()==0){ 

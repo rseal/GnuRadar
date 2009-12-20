@@ -1,4 +1,4 @@
-#require 'serialport.so'
+#!/usr/bin/ruby -rserialport
 
 port = "/dev/ttyUSB0"
 baudRate = 19200
@@ -36,18 +36,18 @@ sp.puts "V3 1023\n"
 sp.gets
 print sp.gets
 
-sp.puts "F0 50.1800000\n"
+sp.puts "F0 20.0000000\n"
 sp.puts "S\n"
 sp.gets
 print sp.gets
 
-sp.puts "F1 50.0230000\n"
+sp.puts "F1 50.0000000\n"
 sp.puts "S\n"
 sp.gets
 print sp.gets
 
 
-sp.puts "F3 10.0000000\n"
+sp.puts "F3 20.0000000\n"
 sp.puts "S\n"
 sp.gets
 print sp.gets

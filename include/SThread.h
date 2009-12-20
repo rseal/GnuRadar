@@ -2,7 +2,8 @@
 #define STHREAD_H
 
 #include <iostream>
-#include <sys/time.h>
+//#include <sys/time.h>
+#include <time.h>
 #include <errno.h>
 #include <pthread.h>
 #include <gnuradar/Lock.h>
@@ -70,33 +71,41 @@ class SThread
 
   void Wake(){ pthread_cond_signal(&condition_);}
   
-  void Sleep(int _type = ST::us, long _value = 1000){
+  void Sleep(int _type = ST::us, long _value = 1000L){
     int status=0;
-
-    gettimeofday(&time_now_, NULL);
+    
+    clock_gettime(CLOCK_REALTIME , &cTime_);
 
     switch(_type){
     case ST::us:
-      timeout_.tv_sec = time_now_.tv_sec;
-      timeout_.tv_nsec = time_now_.tv_usec + 1000*_value;
+      fTime_ = cTime_;
+      fTime_.tv_nsec += 1000L*_value;
       break;
     case ST::ms:
-      timeout_.tv_sec = time_now_.tv_sec;
-      timeout_.tv_nsec = time_now_.tv_usec + _value*1000000;
+      fTime_ = cTime_;
+      fTime_.tv_nsec += _value*1000000L;
+
+      //hack to fix overflow problem
+      if(fTime_.tv_nsec > 1000000000L){
+	fTime_.tv_nsec -= 1000000000L;
+	fTime_.tv_sec++;
+      }
       break;
     case ST::sec:
-      timeout_.tv_sec = time_now_.tv_sec + _value;
-      timeout_.tv_nsec = time_now_.tv_usec*1000;
-      break;
+      fTime_ = cTime_;
+      fTime_.tv_sec = cTime_.tv_sec + _value;
+       break;
     default:
       cerr << "STHREAD: invalid sleep value. default to 1 sec" << endl;
-      timeout_.tv_sec = time_now_.tv_sec + 1;
-      timeout_.tv_nsec = time_now_.tv_usec*1000;
+      fTime_ = cTime_;
+      fTime_.tv_sec += 1;
     }
 
     ScopedPThreadLock Lock(mutex_);
-    while(status != ETIMEDOUT)
-      status  = pthread_cond_timedwait(&condition_, &mutex_, &timeout_);
+    while(status != ETIMEDOUT){
+      status  = pthread_cond_timedwait(&condition_, &mutex_, &fTime_);
+    }
+    
   }  
 
   void Priority(int _value);
@@ -109,6 +118,9 @@ class SThread
   pthread_cond_t condition_;
   timeval time_now_;
   timespec timeout_;
+  timespec newTime_;
+  timespec cTime_;
+  timespec fTime_;
 };
 
 #endif

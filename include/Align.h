@@ -3,6 +3,7 @@
 
 #include <boost/cstdint.hpp>
 #include <vector>
+#include <memory>
 
 using std::vector;
 using std::cout;
@@ -33,7 +34,7 @@ struct Align{
 ///Searches for hardcoded sequence in data to synchronize data stream
     const bool FindSequence(){
 	bool found=false;
-	
+        cout << "bufferSize = " << bufferSize_ << endl;	
 	//search through buffer for sequence
 	for(int i=0; i<bufferSize_; ++i){
 	    //cout << "i = " << i << endl;
@@ -90,11 +91,13 @@ public:
 	     << "rdAddr_     = " << rdAddr_     << endl;
     };
 
-     T* ReadPtr()  { return rdAddr_;}
-     T* WritePtr() { return wrAddr_;}
+    T* ReadPtr()  { return rdAddr_;}
+    T* WritePtr() { return wrAddr_;}
 
     void AlignData() {
 	
+        //The first call to this function will search for a special tag sequence coded in the USRP data stream.
+        //This will synchronize tx and rx streams. An offset variable is used to align buffer reads and writes.
 	if(firstRun_){
 	    if(!init_){
 		cout << "Align: Please call Init(x,x,x) function before using Align class" << endl;
@@ -111,8 +114,14 @@ public:
 
 	//offset + requested size of current buffer
 	cpSrc_ = bufferPtr_ + reqSize_ + (firstRun_ ? offset_ : 0);
+
+        //TESTING - 12/15/2009 01:05 am
+        //Definitely a bug here. The first request for data will ask for extra bytes
+        //to compensate for the necessary offset. Every subsequent call will only request
+        //the user's requested size + the required padding bytes for alignment.
+
 	//endpoint of internal buffer - cp address
-	cpSize_ = bufferPtr_ + bufferSize_ - cpSrc_;
+	cpSize_ = align_ + (firstRun_ ? extra_-offset_ : 0);
 
 	//read address
 	rdAddr_ = firstRun_ ? bufferPtr_ + offset_ : bufferPtr_;
@@ -125,7 +134,7 @@ public:
 	cpDest_ = bufferPtr_;
 
 	//new write address
-	wrAddr_ = cpDest_ + cpSize_;
+	wrAddr_ = bufferPtr_ + cpSize_;
 
  	cout << "cpSrc_     = " << cpSrc_     << "\n"
  	     << "cpDest_    = " << cpDest_    << "\n"
@@ -143,7 +152,11 @@ public:
     };
     
     ///Request size for data alignment
-    const int RequestSize() { return firstRun_ ? bufferSize_ : reqSize_ + align_;}
+    const int RequestSize() { 
+    int bSize = firstRun_ ? bufferSize_ : reqSize_ + align_;
+    //AlignData();
+    return bSize;
+    }
 };
 
 #endif

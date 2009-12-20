@@ -97,15 +97,16 @@ struct ProducerConsumerModel: public SThread {
     }
 
 public:
-    ProducerConsumerModel(const int& bytes, void* destination, 
-			  const int& buffers, const int& dataWidth, 
-			  const std::string baseFileName, Device& device, 
-			  SimpleHeader<short,2>& shs):
-	bytes_(bytes), destination_(destination),buffers_(buffers), 
+ProducerConsumerModel( 
+    const int& bytes, void* destination, 
+    const int& buffers, const int& dataWidth, 
+    const std::string baseFileName, Device& device, 
+    SimpleHeader<short,2>& shs
+    ):  bytes_(bytes), destination_(destination),buffers_(buffers), 
 	baseFileName_(baseFileName), device_(device), head_(),
 	tail_(),depth_(),dataWidth_(dataWidth),stop_(false),
-	stopProducer_(false),stopConsumer_(false),overFlow_(false){
-
+	stopProducer_(false),stopConsumer_(false),overFlow_(false)
+    {
 	//create producer and consumer
 	pThread_.reset(new ProducerThread(bytes_,device_));
 	cThread_.reset(new ConsumerThread(bytes_,destination_, shs));

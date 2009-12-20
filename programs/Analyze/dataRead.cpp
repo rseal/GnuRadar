@@ -18,7 +18,7 @@ int main(int argc, char** argv)
     SHeader shs(fileName, File::READ, File::BINARY);
 
     shs.ReadPrimary();
-    shs.ReadData(0);
+    shs.ReadData(100);
 
     int dim1 = shs.data.Dim(0);
     int dim2 = shs.data.Dim(1);

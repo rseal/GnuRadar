@@ -39,6 +39,11 @@ using std::vector;
 ///USRP data collection system.
 class UsrpInterface : public Fl_Window 
 {
+    vector<string> phaseStr;
+    vector<string> ddcStr;
+    vector<string> windowStr;
+    vector<string> ippStr;
+    
     const int maxChannels_;
     //int numChannels_;
     UsrpConfigStruct usrpConfigStruct_;
@@ -68,7 +73,6 @@ class UsrpInterface : public Fl_Window
 
     ///Callback for Load button
     static void LoadClicked(Fl_Widget* flw, void* userData){
-//	cout << "load clicked" << endl;
 
 	UsrpInterface* usrpInterface = reinterpret_cast<UsrpInterface*>(userData);
 	//really screwed up way to catch exception - until I find the proper method
@@ -119,6 +123,18 @@ class UsrpInterface : public Fl_Window
     void WriteFile(Parser& parser);
     void LoadFile(Parser& parser);
     void UpdateGUI();
+
+    int Find(const vector<string>& vec, const string& value){
+	int ret=0;
+	for(int i=0; i<vec.size(); ++i){
+	    if(value == vec[i]){
+		ret = i;
+		break;
+	    }
+	}
+	return ret;
+    }
+	
 public:
     ///Constructor
     UsrpInterface(int X, int Y);

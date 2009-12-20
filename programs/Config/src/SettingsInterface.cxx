@@ -159,7 +159,7 @@ void SettingsInterface::NumChannels(const int& numChannels){
     case 2: index =1; break;
     case 4: index =2; break;
     }
-    settingsCompute_->Channels(index);
-    channels_->value(settingsCompute_->Channels());
+    settingsCompute_->Channels(numChannels);
+    channels_->value(index);
 }
 

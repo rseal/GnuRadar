@@ -25,8 +25,8 @@ struct DataWindowStruct{
     void Print(){
 	cout << "name   = " << name  << "\n"
 	     << "start  = " << start 
-	     << " size   = " << size  
-	     << " units  = " << units << "\n"
+	     << "size   = " << size  
+	     << "units  = " << units << "\n"
 	     << "id     = " << id    << endl;
     }
 };

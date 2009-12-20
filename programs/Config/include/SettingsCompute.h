@@ -30,7 +30,7 @@ struct SettingsCompute{
     ///settings.
     void Update(){
 	if(ValidateParameters())
-	    bandwidth_ = sampleRate_ / (channels_ * decimation_);
+	    bandwidth_ = sampleRate_ / decimation_; // (channels_ * decimation_);
 	else
 	    cout << "Invalid input parameter given - NO CHANGES MADE" << endl;
     }

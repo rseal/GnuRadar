@@ -28,6 +28,19 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     tabColor_        = fl_rgb_color(200,200,255);
     Fl_Color wColor_ = fl_rgb_color(220,220,220);
 
+    //unit conversion vectors.
+    phaseStr.push_back("Deg");
+    phaseStr.push_back("Rad");
+    ddcStr.push_back("MHz");
+    ddcStr.push_back("kHz");
+    ddcStr.push_back("Hz");
+    windowStr.push_back("Samples");
+    windowStr.push_back("usec");
+    windowStr.push_back("km");
+    ippStr.push_back("msec");
+    ippStr.push_back("usec");
+    ippStr.push_back("km");
+
     this->label("Universal Software Radio Peripheral Configuration Interface (v-1.00)");
     this->color(windowColor_);
     this->box(FL_PLASTIC_UP_BOX);
@@ -130,7 +143,8 @@ void UsrpInterface::WriteFile(Parser& parser){
     parser.Put<int>("NumChannels",usrpConfigStruct_.numChannels);
     parser.Put<int>("Decimation",usrpConfigStruct_.decimation);
     parser.Put<int>("IPP",usrpConfigStruct_.ipp);
-    parser.Put<int>("IPPUnits",usrpConfigStruct_.ippUnits);
+
+    parser.Put<string>("IPPUnits",ippStr[usrpConfigStruct_.ippUnits]);
     parser.Put<string>("FPGAImage",usrpConfigStruct_.fpgaImage);
     
     string str;
@@ -142,9 +156,9 @@ void UsrpInterface::WriteFile(Parser& parser){
 	num = lexical_cast<string>(i);
 	parser.AddComment(str+num);
 	parser.Put<float>(     "DDC" + num , channels[i].ddc);
-	parser.Put<int>(  "DDCUnits" + num , channels[i].ddcUnits);
+	parser.Put<string>(  "DDCUnits" + num , ddcStr[channels[i].ddcUnits]);
 	parser.Put<float>(   "Phase" + num , channels[i].phase);
-	parser.Put<int>("PhaseUnits" + num , channels[i].phaseUnits);
+	parser.Put<string>("PhaseUnits" + num , phaseStr[channels[i].phaseUnits]);
     }
 
     const USRP::WindowVector& windows = usrpConfigStruct_.WindowRef();
@@ -160,7 +174,7 @@ void UsrpInterface::WriteFile(Parser& parser){
 	parser.Put<string>("Name"  + num , windows[i].name);
 	parser.Put<int>(   "Start" + num , windows[i].start);
 	parser.Put<int>(   "Size"  + num , windows[i].size);
-	parser.Put<int>(   "Units" + num , windows[i].units);
+	parser.Put<string>(   "Units" + num , windowStr[windows[i].units]);
     }
 
     const HeaderStruct& header = usrpConfigStruct_.HeaderRef();
@@ -182,8 +196,8 @@ void UsrpInterface::LoadFile(Parser& parser){
     string str;
     string num;
     USRP::ChannelVector& channels = usrpConfigStruct_.ChannelRef();
-    USRP::WindowVector& windows = usrpConfigStruct_.WindowRef();
-    HeaderStruct& header = usrpConfigStruct_.HeaderRef();
+    USRP::WindowVector& windows   = usrpConfigStruct_.WindowRef();
+    HeaderStruct& header          = usrpConfigStruct_.HeaderRef();
 
     parser.Load();
 
@@ -191,19 +205,20 @@ void UsrpInterface::LoadFile(Parser& parser){
     usrpConfigStruct_.numChannels = parser.Get<int>("NumChannels");
     usrpConfigStruct_.decimation  = parser.Get<int>("Decimation");
     usrpConfigStruct_.ipp         = parser.Get<int>("IPP");
-    usrpConfigStruct_.ippUnits    = parser.Get<int>("IPPUnits");
+    usrpConfigStruct_.ippUnits    = Find(ippStr,parser.Get<string>("IPPUnits"));
     usrpConfigStruct_.fpgaImage   = parser.Get<string>("FPGAImage");
 
+    //for(int i=0; i<channels.size(); ++i){
     for(int i=0; i<channels.size(); ++i){
 	num = lexical_cast<string>(i);
 	str = "DDC" + num;
 	channels[i].ddc        = parser.Get<float>(str);
 	str = "DDCUnits" + num;
-	channels[i].ddcUnits   = parser.Get<int>(str);
+	channels[i].ddcUnits   = Find(ddcStr,parser.Get<string>(str));
 	str = "Phase" + num;
 	channels[i].phase      = parser.Get<float>(str);
 	str = "PhaseUnits" + num;
-	channels[i].phaseUnits = parser.Get<int>(str);
+	channels[i].phaseUnits = Find(phaseStr,parser.Get<string>(str));
     }
     
     //reset windows to load new file
@@ -217,7 +232,7 @@ void UsrpInterface::LoadFile(Parser& parser){
 	dws.name =  parser.Get<string>("Name"+num);
 	dws.start = parser.Get<int>("Start"+num);
 	dws.size  = parser.Get<int>("Size"+num);
-	dws.units = parser.Get<int>("Units"+num);
+	dws.units = Find(windowStr,parser.Get<string>("Units"+num));
 	windows.push_back(dws);
 	}
     

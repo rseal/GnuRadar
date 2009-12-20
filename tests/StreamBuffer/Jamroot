@@ -1,0 +1,10 @@
+project streambuffer
+        : build-dir ../bin
+        : default-build release
+        ;
+
+exe test-streamBuffer 
+        : test.cpp
+        : <variant>release
+        : <cxxflags>"-O2 -msse3 -march=athlon-xp -fomit-frame-pointer -pipe"
+        ;

@@ -47,7 +47,8 @@ module cordic_stage( clock, reset, enable, xi,yi,zi,constant,xo,yo,zo);
        end
      else if(enable)
        begin
-	  xo <= #1 z_is_pos ?   
+	  xo <= #1 z_is_pos ?
+		//handles right-shift with sign bit for 2's complement
 		xi - {{shift+1{yi[bitwidth-1]}},yi[bitwidth-2:shift]} :
 		xi + {{shift+1{yi[bitwidth-1]}},yi[bitwidth-2:shift]};
 	  yo <= #1 z_is_pos ?   

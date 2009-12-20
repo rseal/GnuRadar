@@ -22,8 +22,6 @@
 
 
 // Basic Phase accumulator for DDS
-
-
 module phase_acc (clk,reset,enable,strobe,serial_addr,serial_data,serial_strobe,phase);   
    parameter FREQADDR = 0;
    parameter PHASEADDR = 0;
@@ -39,11 +37,10 @@ module phase_acc (clk,reset,enable,strobe,serial_addr,serial_data,serial_strobe,
 
    setting_reg #(FREQADDR) sr_rxfreq0(.clock(clk),.reset(1'b0),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(freq));
 
+   //removed redundant 2:1 mux -- 11/16/2009 RS
    always @(posedge clk)
-     if(reset)
+     if(reset || (serial_strobe && (serial_addr == PHASEADDR)))
        phase <= #1 32'b0;
-     else if(serial_strobe & (serial_addr == PHASEADDR))
-       phase <= #1 serial_data;
      else if(enable & strobe)
        phase <= #1 phase + freq;
 

@@ -1,4 +1,4 @@
-`include "../../src/strobe_gen_new.v"
+//`include "../../src/strobe_gen_new.v"
 `include "../../src/strobe_gen.v"
 
 `timescale 1ns/100ps
@@ -98,7 +98,7 @@ module strobe_gen_tb;
 	$display("counter = %d<-->%d", cntr1,cntr2);
      end
    
-   strobe_gen_new 
+   strobe_gen 
      dut1(
 	  .clock(clk),
 	  .reset(rst),
@@ -108,6 +108,7 @@ module strobe_gen_tb;
 	  .strobe(str1)
 	  );
 
+/* -----\/----- EXCLUDED -----\/-----
    strobe_gen_new 
      dut2(
 	  .clock(clk),
@@ -117,5 +118,6 @@ module strobe_gen_tb;
 	  .strobe_in(str_in),
 	  .strobe(str2)
 	  );
+ -----/\----- EXCLUDED -----/\----- */
 
 endmodule // strobe_gen_tb

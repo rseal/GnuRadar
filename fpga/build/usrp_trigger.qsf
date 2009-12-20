@@ -27,7 +27,7 @@
 # ========================
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 3.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "00:14:04  JULY 13, 2003"
-set_global_assignment -name LAST_QUARTUS_VERSION 9.0
+set_global_assignment -name LAST_QUARTUS_VERSION 9.1
 
 # Pin & Location Assignments
 # ==========================
@@ -278,7 +278,6 @@ set_global_assignment -name NONSYNCHSTRUCT_RULE_ASYN_RAM OFF
 set_global_assignment -name CLK_CAT OFF
 set_global_assignment -name CLK_RULE_COMB_CLOCK OFF
 set_global_assignment -name CLK_RULE_INV_CLOCK OFF
-set_global_assignment -name CLK_RULE_GATING_SCHEME OFF
 set_global_assignment -name CLK_RULE_INPINS_CLKNET OFF
 set_global_assignment -name CLK_RULE_CLKNET_CLKSPINES OFF
 set_global_assignment -name CLK_RULE_MIX_EDGES OFF
@@ -383,7 +382,6 @@ set_instance_assignment -name CLOCK_SETTINGS rx_io_a[15] -to rx_io_a[15]
 # end ENTITY(usrp_trigger)
 # --------------------
 
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name VERILOG_FILE ../src/atr_delay.v
 set_global_assignment -name VERILOG_FILE ../src/cic_dec_shifter.v
@@ -433,3 +431,5 @@ set_global_assignment -name EXTRACT_VERILOG_STATE_MACHINES ON
 set_global_assignment -name ADV_NETLIST_OPT_SYNTH_GATE_RETIME ON
 set_global_assignment -name SOURCE_FILE usrp_trigger.v
 set_global_assignment -name FMAX_REQUIREMENT "64 MHz"
+
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

@@ -3,42 +3,70 @@
 
 using boost::lexical_cast;
 
-int main(){
+int main(int argc, char** argv){
 
-    windowVector.push_back(dataWindow);
+    //class to handle command line options/parsing
+    CommandLineParser clp(argc,argv);
+    clp.AddArg("f", "configuration file name", 1, true);
+    clp.AddArg("d", "base file name", 1, true);
+    clp.Parse();
+    fileName = clp.GetArgValue<string>("f");
+    dataSet  = clp.GetArgValue<string>("d");
+
+    //parse configuration file 
+    ConfigFile cf(fileName);
+
+    //compute bytes per second
+    BPS = cf.OutputRate()*cf.NumChannels()*4;
+    float PRF = ceil(1.0f/cf.IPP());
+    //buffersize in bytes
+    //window / IPP * numChannels * 4 = bytes per second
+    int bufferSize = cf.WindowLength()*cf.NumChannels()*4*static_cast<int>(PRF);
+    
+    cout << "PRF        = " << PRF             << endl;
+    cout << "BPS        = " << BPS             << endl;
+    cout << "BufferSize = " << bufferSize      << endl;
+    cout << "sampleRate = " << cf.SampleRate() << endl;
+    cout << "Decimation = " << cf.Decimation() << endl;
+    cout << "OutputRate = " << cf.OutputRate() << endl;
+    
+    cout << endl;
+    for (int i=0; i<cf.NumWindows(); ++i){
+	cout << "Window: " << cf.WindowName(i)  << "\n"
+	     << "Start = " << cf.WindowStart(i) << "\n"
+	     << "Size  = " << cf.WindowSize(i)  << "\n" << endl;
+    }
+    
+    cout << "WindowLength = " << cf.WindowLength() << endl;
+
+    for (int i=0; i<cf.NumChannels(); ++i)
+	cout << "ddc" + lexical_cast<string>(i) << " = " << cf.DDC(i) << endl;
+    
     //need to be careful here - definition of multiple channels can be tricky
     //normally I separate the channels : channel 1 = 0 - buffer/2 
     //channel 2: buffer/2 - end
     //These channels, as they are now, are interleaved, so Dim1 
     //should be extended to contain the IPP for both channels (double)
-    dimVector.push_back(static_cast<int>(dim0));
-    dimVector.push_back(static_cast<int>(dim1));
+    cout << "dim0 = " << PRF << endl;
+    cout << "dim1 = " << cf.WindowLength()*cf.NumChannels()*2 << endl;
+
+    dimVector.push_back(static_cast<int>(PRF));
+    dimVector.push_back(static_cast<int>(cf.WindowLength()*cf.NumChannels()*2));
 
     //create consumer buffer - destination 
     buffer = new short[bufferSize/sizeof(short)];
 
-    //50MHz RF with 64MHz sampling - positive image at -14MHz (reversed at +14MHz)
-    tuningFreq.push_back(-14.0e6);
-    tuningFreq.push_back(-14.0e6);
-    cout << "BPS = " << BPS << endl;
-    cout << "dataWindow = " << dataWindow << endl;
-    cout << "BPS*datawindow = " << BPS*dataWindow << endl;
-    cout << "BPS*dataWindow/IPP = " << BPS*dataWindow/IPP << endl;
-    cout << "trunc = " << static_cast<int>(BPS*dataWindow/IPP) << endl;
-
-//const int    bufferSize    = BPS*dataWindow/IPP;
-
     cout << "--------------------Settings----------------------" << endl;
-    cout << "Sample Rate                 = " << sampleRate << endl;
-    cout << "Bandwidth                   = " << bandWidth  << endl;
-    cout << "Decimation                  = " << decimation << endl;
-    cout << "Output Rate                 = " << outputRate << endl;
-    cout << "Number of Channels          = " << numChannels << endl;
-    cout << "Bytes Per Second (System)   = " << static_cast<double>(BPS) << endl;
+    cout << "Sample Rate                 = " << cf.SampleRate()  << endl;
+    cout << "Bandwidth                   = " << cf.Bandwidth()   << endl;
+    cout << "Decimation                  = " << cf.Decimation()  << endl;
+    cout << "Output Rate                 = " << cf.OutputRate()  << endl;
+    cout << "Number of Channels          = " << cf.NumChannels() << endl;
+    cout << "Bytes Per Second (System)   = " << BPS << endl;
     cout << "BufferSize                  = " << bufferSize << endl;
-    cout << "IPP                         = " << IPP << endl;
-    for(int i=0; i<numChannels; ++i)
-	cout << "Channel[" << i << "] Tuning Frequency = " << tuningFreq[i] << endl;
+    cout << "IPP                         = " << cf.IPP() << endl;
+    for(int i=0; i<cf.NumChannels(); ++i)
+	cout << "Channel[" << i << "] Tuning Frequency = " << cf.DDC(i) << endl;
     cout << "--------------------Settings----------------------\n\n" << endl;
 
     //write a test file for demonstration purposes
@@ -46,41 +74,37 @@ int main(){
 
     //build the primary header
     header->primary.Title("USRP Test");
-    header->primary.Description("Test Data 03/19/2009");
+    header->primary.Description("Test Data 06/28/2009");
     header->primary.Add("Instrument", "GNURadio Rev4.5", "Receiving Instrument");
     header->primary.Add("Time", currentTime.GetTime(), "Experiment Starting Time (EDT)");
-    header->primary.Add("Sample Rate", sampleRate, "Sample Clock Rate");
-    header->primary.Add("Bandwidth", bandWidth, "System Bandwidth");
-    header->primary.Add("Decimation", decimation, "System Decimation");
-    header->primary.Add("Channels", numChannels, "Number of Channels Used");
-    header->primary.Add("Output Rate", outputRate, "System Output Rate");
-    header->primary.Add("RF1", 50.20e6, "RF1 frequency");
-    header->primary.Add("RF2", 50.02e6, "RF2 frequency");
-    header->primary.Add("DDC1", tuningFreq[0], "DDC1 tuning frequency");
-    header->primary.Add("DDC2", tuningFreq[1], "DDC2 tuning frequency");
-
+    header->primary.Add("Sample Rate", cf.SampleRate(), "Sample Clock Rate");
+    header->primary.Add("Bandwidth", cf.Bandwidth(), "System Bandwidth");
+    header->primary.Add("Decimation", cf.Decimation(), "System Decimation");
+    header->primary.Add("Channels", cf.NumChannels(), "Number of Channels Used");
+    header->primary.Add("Output Rate", cf.OutputRate(), "System Output Rate");
+    header->primary.Add("RF", 49.80e6, "RF Carrier");
+    header->primary.Add("IPP", cf.IPP(), "Inter-pulse period");
+    for(int i=0; i<cf.NumChannels(); ++i)
+	header->primary.Add("DDC" + lexical_cast<string>(i), cf.DDC(i), 
+			    "DDC" + lexical_cast<string>(i) + "tuning frequency");
     header->data.SetDim(dimVector);
-    for(int i=0; i<windowVector.size(); ++i)
-	header->data.Add("Window"+lexical_cast<string>(i), windowVector[i], "Data Window" + lexical_cast<string>(i));
+
+    //define data windows in header
+    for(int i=0; i<cf.NumWindows(); ++i)
+	header->data.Add(cf.WindowName(i), cf.WindowSize(i), "Data Window (SAMPLES)");
 
     //Program GNURadio 
-    for(int i=0; i<numChannels; ++i){
-	settings.Tune(i,tuningFreq[i]);
-    }
+    for(int i=0; i<cf.NumChannels(); ++i) settings.Tune(i,cf.DDC(i));
+    
+    settings.numChannels    = cf.NumChannels();
+    settings.decimationRate = cf.Decimation();
+    settings.fpgaFileName   = cf.FPGAImage();    
 
-    settings.numChannels = 2;
-    settings.decimationRate = decimation;
-    settings.fUsbBlockSize = 0;
-    settings.fUsbNblocks = 0;
-    settings.mux =  0xf0f0f1f0;
-    //testing new gate mode 09/05/2008
-    //settings.fpgaFileName = "std_4rx_0tx.rbf";
-//    settings.fpgaFileName = "usrp_ext_gate_en.rbf";
+    //change these as needed
+    settings.fUsbBlockSize  = 0;
+    settings.fUsbNblocks    = 0;
+    settings.mux            = 0xf0f0f1f0;
 
-//bit image is located at /usr/local/share/usrp/rev4/usrp_ext.rbf
-  settings.fpgaFileName = "usrp_trigger_tags.rbf";
-//  settings.fpgaFileName = "usrp_ext.rbf";
-//moved device ctor here since settings is passed as const - might change this behaviour at some point.
     GnuRadarDevice grDevice(settings);
 
     //Initialize Producer/Consumer Model

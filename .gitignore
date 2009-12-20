@@ -4,4 +4,6 @@ usrpSVN/
 *~
 gui/3rdParty
 programs/Analyze/setup
+programs/Run/config
 gui/run
+work/

@@ -57,8 +57,8 @@ class CustomTab: public Fl_Group {
     Fl_Color enColor_;
     Fl_Color disColor_;
     Fl_Widget *value_;
-    const Fl_Widget *activeChild_;
     bool topTab_;
+    const Fl_Widget *activeChild_;
     int labelWidth_;
     int labelHeight_;
     vector<TabDim> tabDimArray_;
@@ -68,7 +68,7 @@ class CustomTab: public Fl_Group {
     const bool CurrentVisible(const int& tab);
     const int SelectedTab(const int& event_x, const int& event_y) {
 	int ret = -1;
-	for(int i=0; i<tabDimArray_.size(); ++i)
+	for(uint i=0; i<tabDimArray_.size(); ++i)
 	    if(tabDimArray_[i].Selected(event_x,event_y)) ret = i;
 	return ret;
     }

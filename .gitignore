@@ -2,8 +2,7 @@
 usrpSVN/
 *.o
 *~
-gui/3rdParty
-programs/Analyze/setup
+programs/Analyze/binary.dat
 programs/Run/config
-gui/run
+tests/bin
 work/

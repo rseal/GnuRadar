@@ -10,32 +10,35 @@
 #include "../include/SettingsInterface.h"
 #include <iostream>
 
+using namespace std;
+using namespace boost;
+
 ///Constructor 
 SettingsInterface::SettingsInterface(int x, int y, int width, int height, 
 				     const char* label, UsrpConfigStruct& usrpConfigStruct):
     Fl_Group(x,y,width,height,label), usrpConfigStruct_(usrpConfigStruct)
 {
-    settingsCompute_ = auto_ptr<SettingsCompute>(new SettingsCompute);
+    settingsCompute_ = unique_ptr<SettingsCompute>(new SettingsCompute);
     
     int x0 = x + 100;
     int y0 = y + 20;
     int w0 = 60;
     int w1 = 80;
     int h1 = 25;
-    int sp0 = w1+50;
+    //int sp0 = w1+50;
     int sp1 = 40;
     int sp2 = w1+120;
     Fl_Color wColor_ = fl_rgb_color(220,220,220);
     color1_ = fl_rgb_color(180,180,180);									
 
-    sampleRate_ = auto_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0, w0, h1, "Sample Rate"));
+    sampleRate_ = unique_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0, w0, h1, "Sample Rate"));
     string str = lexical_cast<string>(settingsCompute_->SampleRate()/1e6);
     sampleRate_->value(str.c_str());
     sampleRate_->callback(SettingsInterface::UpdateSampleRate,this);
     sampleRate_->color(FL_WHITE);
     this->add(sampleRate_.get());
 
-    units1_ = auto_ptr<Fl_Output>(new Fl_Output(x0+65,y0, 40, h1));
+    units1_ = unique_ptr<Fl_Output>(new Fl_Output(x0+65,y0, 40, h1));
     units1_->value("MHz");
     units1_->clear_visible_focus();
     units1_->color(wColor_);
@@ -48,7 +51,7 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     chNum.push_back("2");
     chNum.push_back("4");
 
-    channels_ = auto_ptr<Fl_Choice>( new Fl_Choice(x0+sp2, y0, w0, h1, "Channels"));
+    channels_ = unique_ptr<Fl_Choice>( new Fl_Choice(x0+sp2, y0, w0, h1, "Channels"));
     channels_->add(chNum[0].c_str(),0,0);
     channels_->add(chNum[1].c_str(),0,0);
     channels_->add(chNum[2].c_str(),0,0);
@@ -57,7 +60,7 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     channels_->callback(SettingsInterface::UpdateChannel,this);
     this->add(channels_.get());
 
-    decimation_ = auto_ptr<Fl_Value_Slider>(new Fl_Value_Slider(x0, y0+sp1, w1+25, h1, "Decimation"));
+    decimation_ = unique_ptr<Fl_Value_Slider>(new Fl_Value_Slider(x0, y0+sp1, w1+25, h1, "Decimation"));
     decimation_->align(FL_ALIGN_LEFT);
     decimation_->type(FL_HOR_NICE_SLIDER);
     decimation_->textsize(14);
@@ -69,7 +72,7 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     decimation_->callback(SettingsInterface::UpdateDecimation,this);
     this->add(decimation_.get());
 
-    bandwidth_ = auto_ptr<Fl_Output>(new Fl_Output(x0+sp2, y0+sp1, w0, h1, "Bandwidth"));
+    bandwidth_ = unique_ptr<Fl_Output>(new Fl_Output(x0+sp2, y0+sp1, w0, h1, "Bandwidth"));
     bandwidth_->value("8");
     bandwidth_->clear_visible_focus();
     bandwidth_->box(FL_PLASTIC_UP_BOX);
@@ -77,7 +80,7 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     bandwidth_->align(FL_ALIGN_LEFT);
     this->add(bandwidth_.get());
 
-    units2_ = auto_ptr<Fl_Output>(new Fl_Output(x0+sp2+65,y0+sp1, 40, h1));
+    units2_ = unique_ptr<Fl_Output>(new Fl_Output(x0+sp2+65,y0+sp1, 40, h1));
     units2_->value("MHz");
     units2_->clear_visible_focus();
     units2_->box(FL_PLASTIC_UP_BOX);
@@ -127,7 +130,7 @@ void SettingsInterface::UpdateParameters(){
     string str = lexical_cast<string>(bw);
 	
     //limit float precision to 2 decimal places
-    int index = str.find(".");
+    uint index = str.find(".");
 
     //correct indexing bug when only tenths exist
     if(str.length() < index+3 && index != string::npos)

@@ -1,4 +1,4 @@
-#include "GnuRadioTest.h"
+#include "GnuRadarRun.hpp"
 #include <boost/lexical_cast.hpp>
 
 using boost::lexical_cast;
@@ -7,9 +7,21 @@ int main(int argc, char** argv){
 
     //class to handle command line options/parsing
     CommandLineParser clp(argc,argv);
-    clp.AddArg("f", "configuration file name", 1, true);
-    clp.AddArg("d", "base file name", 1, true);
+    Arg arg1("f", "configuration file name", 1, false, "test.ucf");
+    Arg arg2("d", "base file name", 1, true);
+    Switch sw1("h", "print this message", false);
+    Switch sw2("help", "print this message", false);
+    clp.AddSwitch(sw1);
+    clp.AddSwitch(sw2);
+    clp.AddArg(arg1);
+    clp.AddArg(arg2);
     clp.Parse();
+
+    if(clp.SwitchSet("h") || clp.SwitchSet("help")){
+	    clp.PrintHelp();
+	    exit(0);
+    }
+
     fileName = clp.GetArgValue<string>("f");
     dataSet  = clp.GetArgValue<string>("d");
 

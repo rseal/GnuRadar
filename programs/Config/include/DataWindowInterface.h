@@ -39,9 +39,9 @@ class DataWindowInterface : public CustomTab
 {
     vector<USRP::DataGroupPtr> dataGroupArray_;
     UsrpConfigStruct& usrpConfigStruct_;
+    int numWindows_;
     bool defaultWindow_;
     bool arrayTouched_;
-    int numWindows_;
     int x0_;
     int y0_;
     int w0_;

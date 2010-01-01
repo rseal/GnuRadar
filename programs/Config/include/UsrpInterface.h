@@ -31,7 +31,6 @@
 #include "UsrpConfigStruct.h"
 #include "Parser.h"
 
-using std::auto_ptr;
 using boost::shared_ptr;
 using std::vector;
 
@@ -48,25 +47,25 @@ class UsrpInterface : public Fl_Window
     //int numChannels_;
     UsrpConfigStruct usrpConfigStruct_;
 
-    auto_ptr<Fl_Menu_Bar> menuBar_;
-    auto_ptr<SettingsInterface> settingsInterface_;
-    auto_ptr<ChannelInterface> channelTab_;
-    auto_ptr<HeaderInterface> headerInterface_;
-    auto_ptr<DataInterface> dataInterface_;
+    std::unique_ptr<Fl_Menu_Bar> menuBar_;
+    std::unique_ptr<SettingsInterface> settingsInterface_;
+    std::unique_ptr<ChannelInterface> channelTab_;
+    std::unique_ptr<HeaderInterface> headerInterface_;
+    std::unique_ptr<DataInterface> dataInterface_;
 
     Fl_Color windowColor_;
     Fl_Color buttonColor_;
     Fl_Color tabColor_;
 
-    auto_ptr<Fl_Button>       buttonQuit_;
-    auto_ptr<Fl_Button>       buttonSave_;
-    auto_ptr<Fl_Button>       buttonLoad_;
-    auto_ptr<Fl_File_Browser> fileBrowserFPGA_;
-    auto_ptr<Fl_Group> fpgaGroup_;
+    std::unique_ptr<Fl_Button>       buttonQuit_;
+    std::unique_ptr<Fl_Button>       buttonSave_;
+    std::unique_ptr<Fl_Button>       buttonLoad_;
+    std::unique_ptr<Fl_File_Browser> fileBrowserFPGA_;
+    std::unique_ptr<Fl_Group> fpgaGroup_;
 
     ///Callback for Quit button
     static void QuitClicked(Fl_Widget* flw, void* userData){
-	UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
+	//UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
 	std::cout << "Goodbye" << std::endl;
 	exit(0);
     }
@@ -126,7 +125,7 @@ class UsrpInterface : public Fl_Window
 
     int Find(const vector<string>& vec, const string& value){
 	int ret=0;
-	for(int i=0; i<vec.size(); ++i){
+	for(uint i=0; i<vec.size(); ++i){
 	    if(value == vec[i]){
 		ret = i;
 		break;

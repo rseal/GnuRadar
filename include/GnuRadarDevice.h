@@ -64,16 +64,19 @@ class GnuRadarDevice: public Device{
 
       int bytesRead;
       int byteAlign = bytes;
-      cout << "GnuRadarDevice::Start bytes = " << bytes << endl;
+      //cout << "GnuRadarDevice::Start bytes = " << bytes << endl;
 
       //start data collection and flush fx2 buffer
       if(firstCall_){
 
+        cout << "bytes = " << bytes << endl;
+        cout << "iq    = " << bytes/sizeof(int16_t) << endl;
          // Initialize stream buffer
          stBuf_.Init(bytes/sizeof(int16_t),512);
-
+        
+        cout << "pad   = " << stBuf_.Padding() << endl;
          // syncSize = user request + alignment + extra samples for sync
-         int syncSize = bytes/sizeof(int16_t) + stBuf_.Padding() + stBuf_.Padding()*6;
+         int syncSize = 5*(bytes/sizeof(int16_t) + stBuf_.Padding())/4;
 
          //create temporary buffer to sync data
          int16_t buf[syncSize];
@@ -83,7 +86,7 @@ class GnuRadarDevice: public Device{
          //(2) read 512 bytes to clear FX2 buffer
          //(3) read syncSize samples to temporary buffer for data sync
          usrp_->start();
-         usrp_->read(bufPtr,512,&overrun_);
+         usrp_->read(bufPtr,syncSize*sizeof(int16_t)/4,&overrun_);
          usrp_->read(bufPtr,syncSize*sizeof(int16_t),&overrun_);
 
          //call stream buffer sync member - will copy synchronized portion of stream to 

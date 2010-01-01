@@ -21,7 +21,6 @@
 using std::cerr;
 using std::endl;
 using std::string;
-using std::auto_ptr;
 using boost::lexical_cast;
 
 ///\todo Add rule checking to ChannelGroup 
@@ -29,12 +28,12 @@ using boost::lexical_cast;
 ///Class definition
 class ChannelGroup: public Fl_Group 
 {
-    const float pi_;
     const int id_;
-    auto_ptr<Fl_Float_Input>  ddc_;
-    auto_ptr<Fl_Choice>       ddcUnits_;
-    auto_ptr<Fl_Float_Input>  phase_;
-    auto_ptr<Fl_Choice>       phaseUnits_;
+    const float pi_;
+    std::unique_ptr<Fl_Float_Input>  ddc_;
+    std::unique_ptr<Fl_Choice>       ddcUnits_;
+    std::unique_ptr<Fl_Float_Input>  phase_;
+    std::unique_ptr<Fl_Choice>       phaseUnits_;
 
     static void Update(Fl_Widget* flw, void* userData){
 	ChannelGroup* cgPtr = reinterpret_cast<ChannelGroup*>(userData);
@@ -46,15 +45,15 @@ public:
     ChannelGroup(const int& id, int X, int Y, int width, int height, 
 		     const char* label);
     const int&  ID() { return id_;}
-    const float DDC()        { return lexical_cast<float>(ddc_->value());}
+    const double DDC()        { return lexical_cast<double>(ddc_->value());}
     const int   DDCUnits()   { return ddcUnits_->value();}
-    const float Phase()      { return lexical_cast<float>(phase_->value());}
+    const double Phase()      { return lexical_cast<double>(phase_->value());}
     const int   PhaseUnits() { return phaseUnits_->value();}
     const bool  ChannelValid(const float& sampleRate);
 
-    void DDC(const float& ddc);
+    void DDC(const double& ddc);
     void DDCUnits(const int& ddcUnits);
-    void Phase(const float& phase);
+    void Phase(const double& phase);
     void PhaseUnits(const int& phaseUnits);
 
 };

@@ -2,6 +2,7 @@
 #include <vector>
 #include <string.h>
 #include <gnuradar/StreamBuffer.hpp>
+#include <fstream>
 #include "SigGen.hpp"
 
 using namespace std;
@@ -10,16 +11,14 @@ int main(void){
 
    typedef short Int16;
 
-   int samples  = 1864;
-   int extra    = 16384;
+   int samples  = 10;
    int iq       = samples*2;
    int ipp      = 250;
    int tSize    = ipp*iq;
-   int offset   = 7;
-   int align    = 512;
+   int offset   = 8;
+   int align    = 256;
    int channels = 1;
    int size;
-
    //data tagging sequence for synchronization
    vector<int> sequence(channels,16384);
 
@@ -27,13 +26,18 @@ int main(void){
    //using data tags
    StreamBuffer<Int16> sBuf(tSize,align);
    int atSize = tSize + sBuf.Padding();
+   int extra    = atSize/4;
 
+   cout << "Table Size = " << tSize << "\n"
+      << "Padding    = " << sBuf.Padding() << "\n"
+      << "extra      = " << extra << endl;
    //create signal generator to test streaming buffer
    SigGen<Int16> sigGen(iq,atSize,sequence[0],offset);
 
    //The first buffer contains an unsynchronized data stream and "extra" samples
    //are required to handle alignment
    size = atSize + extra;
+
    void* tPtr = reinterpret_cast<void*>(sigGen.GenerateTable(size));
    //find tag data and update internal pointers to align data requests
    sBuf.Sync(tPtr,size, sequence);
@@ -46,16 +50,25 @@ int main(void){
    memcpy(aPtr, sBuf.ReadPtr(), sBuf.ReadSize());
    sBuf.UpdateRead();
 
+   fstream fout("test.dat", ios::out);
    size = atSize;
-   for(int i=0; i<10000; ++i){
-      cout << i << " ";
-      cout.flush();
-      memcpy(sBuf.WritePtr(), sigGen.GenerateTable(sBuf.WriteSize()), sBuf.WriteSize());
+   for(int i=0; i<1000; ++i){
+      int wrSize = sBuf.WriteSize();
+      memcpy(sBuf.WritePtr(), sigGen.GenerateTable(wrSize/sizeof(Int16)), wrSize);
       sBuf.UpdateWrite();
+      fout << sBuf.Level() << endl;
       if(sBuf.Level() >= sBuf.ReadSize()) cout << endl << "Buffer Level at threshold " << endl;
       memcpy(aPtr, sBuf.ReadPtr(), sBuf.ReadSize());
       sBuf.UpdateRead();
-      if(locArray[0] != 16384) cout << endl << "Misalignment!!!! at i = " << i << endl;
+      if(locArray[0] != 16384){
+         fout << endl << "Misalignment!!!! = " << locArray[i] << endl;
+      }
+      for(int i=0; i<tSize; ++i){
+         fout << locArray[i] << " ";
+         //if(i%50 == 0) fout << endl;
+         }
+      fout << endl << endl;
    }
-   return 0;
+fout.close();
+return 0;
 }

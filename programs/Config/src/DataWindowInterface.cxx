@@ -117,7 +117,7 @@ void DataWindowInterface::Load(){
     }
 
     //load windows
-    for(int i=0; i<window.size(); ++i){
+    for(uint i=0; i<window.size(); ++i){
 	USRP::DataGroupPtr dgp = 
 	    USRP::DataGroupPtr(new DataGroup(i, x0_,y0_, w0_, h0_, ""));
 	dgp->DataWindow(window[i]);

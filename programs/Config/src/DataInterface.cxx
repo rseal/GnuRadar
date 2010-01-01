@@ -8,6 +8,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/DataInterface.h"
 
+using namespace std;
+
 ///Constructor
 DataInterface::DataInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y,
 			     int width, int height, const char* label):
@@ -19,30 +21,30 @@ DataInterface::DataInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y,
     int h0 = 100;
 
     dataWindowInterface_ = 
-	auto_ptr<DataWindowInterface>(new DataWindowInterface(usrpConfigStruct_, 
+	unique_ptr<DataWindowInterface>(new DataWindowInterface(usrpConfigStruct_, 
 							      x0+170, y0+5,
 							      w0, h0, NULL));
     dataWindowInterface_->box(FL_ENGRAVED_BOX);
     this->add(dataWindowInterface_.get());
 
-    addButton_ = auto_ptr<Fl_Button>(new Fl_Button(x0+10,y0+70,70,25,"Add"));
+    addButton_ = unique_ptr<Fl_Button>(new Fl_Button(x0+10,y0+70,70,25,"Add"));
     addButton_->box(FL_PLASTIC_DOWN_BOX);
     addButton_->callback(DataInterface::AddClicked,
 			 dataWindowInterface_.get());
     this->add(addButton_.get());
 
-    removeButton_ = auto_ptr<Fl_Button>(new Fl_Button(x0+90,y0+70,70,25,"Remove"));
+    removeButton_ = unique_ptr<Fl_Button>(new Fl_Button(x0+90,y0+70,70,25,"Remove"));
     removeButton_->box(FL_PLASTIC_DOWN_BOX);
     removeButton_->callback(DataInterface::RemoveClicked,
 			    dataWindowInterface_.get());
     this->add(removeButton_.get());
     
-    ippInput_ = auto_ptr<Fl_Int_Input>(new Fl_Int_Input(x0+30,y0+20,50,25,"IPP"));
+    ippInput_ = unique_ptr<Fl_Int_Input>(new Fl_Int_Input(x0+30,y0+20,50,25,"IPP"));
     ippInput_->callback(DataInterface::Update,this);
     ippInput_->value("10");
     this->add(ippInput_.get());
 
-    unitsChoice_ = auto_ptr<Fl_Choice>(new Fl_Choice(x0+90,y0+20,70,25,NULL));
+    unitsChoice_ = unique_ptr<Fl_Choice>(new Fl_Choice(x0+90,y0+20,70,25,NULL));
     unitsChoice_->box(FL_PLASTIC_DOWN_BOX);
     unitsChoice_->callback(DataInterface::Update,this);
     unitsChoice_->add("msec");

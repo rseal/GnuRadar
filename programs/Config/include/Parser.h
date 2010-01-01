@@ -61,14 +61,12 @@ class Parser{
 
   template <typename T>
     T Get(const string& name){
-    T result = T();
     Iter iter_ = map_.find(name);
     if(iter_ == map_.end()) throw NoKeyException();
     return lexical_cast<T>(iter_->second);
   }
 
   const int GetHex(string name){
-    int result;
     Iter iter_ = map_.find(name);
     if(iter_ == map_.end()) throw NoKeyException();
     return lexical_cast<int>(iter_->second);

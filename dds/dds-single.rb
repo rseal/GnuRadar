@@ -22,7 +22,7 @@ sp.puts "S\n"
 sp.gets
 print sp.gets
 
-sp.puts "V0 30\n"
+sp.puts "V0 37\n"
 sp.gets
 print sp.gets
 

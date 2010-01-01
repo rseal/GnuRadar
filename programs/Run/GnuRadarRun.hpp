@@ -9,7 +9,7 @@
 #include <gnuradar/Console.h>
 #include <gnuradar/ConfigFile.h>
 #include <gnuradar/Units.h>
-#include <gnuradar/CommandLineParser.h>
+#include <clp/CommandLineParser.hpp>
 #include <simpleHeader/Shs.h>
 #include <simpleHeader/Time.h>
 

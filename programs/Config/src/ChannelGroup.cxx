@@ -8,6 +8,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "../include/ChannelGroup.h"
 
+using namespace std;
+
 ///Constructor
 ChannelGroup::ChannelGroup(const int& id, int x, int y, int width, int height, 
 			   const char* label):
@@ -20,12 +22,12 @@ ChannelGroup::ChannelGroup(const int& id, int x, int y, int width, int height,
     int h0=25;
     int sp0=40;
 
-    ddc_ = auto_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0, w1, h0,"Frequency"));
+    ddc_ = unique_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0, w1, h0,"Frequency"));
     ddc_->callback(ChannelGroup::Update,this);
     ddc_->value("0.0");
     this->add(ddc_.get());
 
-    ddcUnits_ = auto_ptr<Fl_Choice>(new Fl_Choice(x0+w0+25, y0, w1, h0, ""));
+    ddcUnits_ = unique_ptr<Fl_Choice>(new Fl_Choice(x0+w0+25, y0, w1, h0, ""));
     ddcUnits_->add("MHz",0,0);
     ddcUnits_->add("kHz",0,0);
     ddcUnits_->add("hz",0,0);
@@ -33,12 +35,12 @@ ChannelGroup::ChannelGroup(const int& id, int x, int y, int width, int height,
     ddcUnits_->callback(ChannelGroup::Update,this);
     this->add(ddcUnits_.get());
 
-    phase_ = auto_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0+sp0, w1, h0, "Phase"));
+    phase_ = unique_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0+sp0, w1, h0, "Phase"));
     phase_->callback(ChannelGroup::Update,this);
     phase_->value("0.0");
     this->add(phase_.get());
 
-    phaseUnits_ = auto_ptr<Fl_Choice>(new Fl_Choice(x0+w0+25, y0+sp0, w1, h0, ""));
+    phaseUnits_ = unique_ptr<Fl_Choice>(new Fl_Choice(x0+w0+25, y0+sp0, w1, h0, ""));
     phaseUnits_->add("Deg",0,0);
     phaseUnits_->add("Rad",0,0);
     phaseUnits_->value(0);
@@ -52,7 +54,7 @@ ChannelGroup::ChannelGroup(const int& id, int x, int y, int width, int height,
 /// create limits.
 const bool ChannelGroup::ChannelValid(const float& sampleRate){
     bool valid = true;
-    float ddc;
+    float ddc = float();
     const float fs = sampleRate/2.0f;
     float phase = Phase();
     float maxDeg = 360.0f;
@@ -114,9 +116,9 @@ exit:
     return valid;
 }
 
-void ChannelGroup::DDC(const float& ddc){
+void ChannelGroup::DDC(const double& ddc){
     string str = lexical_cast<string>(ddc);
-    str = StringFormat::SetPrecision(str,3);
+    str = StringFormat::SetPrecision(str,6);
     ddc_->value(str.c_str());
 }
 
@@ -124,9 +126,9 @@ void ChannelGroup::DDCUnits(const int& ddcUnits){
     ddcUnits_->value(ddcUnits);
 }
 
-void ChannelGroup::Phase(const float& phase){
+void ChannelGroup::Phase(const double& phase){
     string str = lexical_cast<string>(phase);
-    str = StringFormat::SetPrecision(str,3);
+    str = StringFormat::SetPrecision(str,6);
     phase_->value(str.c_str());
 }
 

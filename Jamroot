@@ -1,0 +1,7 @@
+project gnuradar 
+	: default-build release
+	;
+
+build-project programs/Replay ;
+build-project programs/Run ;
+build-project programs/Config ;

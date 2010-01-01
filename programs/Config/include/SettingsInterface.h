@@ -31,7 +31,6 @@
 
 using std::cout;
 using std::endl;
-using std::auto_ptr;
 using std::string;
 using std::vector;
 
@@ -41,13 +40,13 @@ class SettingsInterface : public Fl_Group
     Fl_Color color1_;
 
     UsrpConfigStruct& usrpConfigStruct_;
-    auto_ptr<SettingsCompute> settingsCompute_;
-    auto_ptr<Fl_Output>       units1_;
-    auto_ptr<Fl_Output>       units2_;
-    auto_ptr<Fl_Float_Input>  sampleRate_;
-    auto_ptr<Fl_Value_Slider> decimation_;
-    auto_ptr<Fl_Output>       bandwidth_;
-    auto_ptr<Fl_Choice>       channels_;
+    std::unique_ptr<SettingsCompute> settingsCompute_;
+    std::unique_ptr<Fl_Output>       units1_;
+    std::unique_ptr<Fl_Output>       units2_;
+    std::unique_ptr<Fl_Float_Input>  sampleRate_;
+    std::unique_ptr<Fl_Value_Slider> decimation_;
+    std::unique_ptr<Fl_Output>       bandwidth_;
+    std::unique_ptr<Fl_Choice>       channels_;
 
     ///Callback to update decimation value
     static void UpdateDecimation(Fl_Widget* flw, void* userData){

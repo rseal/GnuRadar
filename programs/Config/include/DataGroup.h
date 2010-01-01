@@ -32,15 +32,14 @@
 // };
 
 using boost::lexical_cast;
-using std::auto_ptr;
 using std::string;
 
 ///Class definition
 class DataGroup: public Fl_Group{
     DataWindowStruct dataWindow_;
-    auto_ptr<Fl_Int_Input> startInput_;
-    auto_ptr<Fl_Int_Input> sizeInput_;
-    auto_ptr<Fl_Choice> unitChoice_;
+    std::unique_ptr<Fl_Int_Input> startInput_;
+    std::unique_ptr<Fl_Int_Input> sizeInput_;
+    std::unique_ptr<Fl_Choice> unitChoice_;
     
 //     static void Update(Fl_Widget* flw, void* userData){
 // 	DataGroup* dgPtr = reinterpret_cast<DataGroup*>(userData);

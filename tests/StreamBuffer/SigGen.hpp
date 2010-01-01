@@ -27,15 +27,18 @@ struct SigGen{
    // with a data tag inserted into the stream. The user requests a table of 
    // data that represents a snap shot in time of streaming data. 
    T* GenerateTable(const int size){
-      table_.clear();
-      table_.resize(size/sizeof(T),0);
+      //table_.clear();
+      table_.resize(size,0);
 
-      for(int i=0; i<tLength_; ++i){
-         if((idx_++%pLength_)==0){
+      for(int i=0; i<size; ++i){
+         table_[i]=idx_;
+         if((idx_%pLength_)==0){
             table_[i]=sequence_;
             idx_=0;
          }
+         ++idx_;
       }
+      
       return &table_[0];
    }
 };

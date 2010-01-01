@@ -18,7 +18,6 @@
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 
-using std::auto_ptr;
 using std::cout; 
 using std::endl;
 using boost::lexical_cast;
@@ -27,11 +26,11 @@ using boost::lexical_cast;
 class DataInterface : public Fl_Group
 {
     UsrpConfigStruct& usrpConfigStruct_;
-    auto_ptr<DataWindowInterface> dataWindowInterface_;
-    auto_ptr<Fl_Button> addButton_;
-    auto_ptr<Fl_Button> removeButton_;
-    auto_ptr<Fl_Int_Input> ippInput_;
-    auto_ptr<Fl_Choice> unitsChoice_;
+    std::unique_ptr<DataWindowInterface> dataWindowInterface_;
+    std::unique_ptr<Fl_Button> addButton_;
+    std::unique_ptr<Fl_Button> removeButton_;
+    std::unique_ptr<Fl_Int_Input> ippInput_;
+    std::unique_ptr<Fl_Choice> unitsChoice_;
 
     ///Callback for Add button
     static void AddClicked(Fl_Widget* flw, void* userData){

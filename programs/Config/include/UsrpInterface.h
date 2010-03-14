@@ -31,37 +31,33 @@
 #include "UsrpConfigStruct.h"
 #include "Parser.h"
 
-using boost::shared_ptr;
-using std::vector;
-
 ///Provides a container and display interface for the 
 ///USRP data collection system.
 class UsrpInterface : public Fl_Window 
 {
-    vector<string> phaseStr;
-    vector<string> ddcStr;
-    vector<string> windowStr;
-    vector<string> ippStr;
+    std::vector<string> phaseStr;
+    std::vector<string> ddcStr;
+    std::vector<string> windowStr;
+    std::vector<string> ippStr;
     
     const int maxChannels_;
-    //int numChannels_;
     UsrpConfigStruct usrpConfigStruct_;
 
-    std::unique_ptr<Fl_Menu_Bar> menuBar_;
-    std::unique_ptr<SettingsInterface> settingsInterface_;
-    std::unique_ptr<ChannelInterface> channelTab_;
-    std::unique_ptr<HeaderInterface> headerInterface_;
-    std::unique_ptr<DataInterface> dataInterface_;
+    boost::shared_ptr<Fl_Menu_Bar> menuBar_;
+    boost::shared_ptr<SettingsInterface> settingsInterface_;
+    boost::shared_ptr<ChannelInterface> channelTab_;
+    boost::shared_ptr<HeaderInterface> headerInterface_;
+    boost::shared_ptr<DataInterface> dataInterface_;
 
     Fl_Color windowColor_;
     Fl_Color buttonColor_;
     Fl_Color tabColor_;
 
-    std::unique_ptr<Fl_Button>       buttonQuit_;
-    std::unique_ptr<Fl_Button>       buttonSave_;
-    std::unique_ptr<Fl_Button>       buttonLoad_;
-    std::unique_ptr<Fl_File_Browser> fileBrowserFPGA_;
-    std::unique_ptr<Fl_Group> fpgaGroup_;
+    boost::shared_ptr<Fl_Button>       buttonQuit_;
+    boost::shared_ptr<Fl_Button>       buttonSave_;
+    boost::shared_ptr<Fl_Button>       buttonLoad_;
+    boost::shared_ptr<Fl_File_Browser> fileBrowserFPGA_;
+    boost::shared_ptr<Fl_Group> fpgaGroup_;
 
     ///Callback for Quit button
     static void QuitClicked(Fl_Widget* flw, void* userData){
@@ -123,7 +119,7 @@ class UsrpInterface : public Fl_Window
     void LoadFile(Parser& parser);
     void UpdateGUI();
 
-    int Find(const vector<string>& vec, const string& value){
+    int Find(const std::vector<string>& vec, const string& value){
 	int ret=0;
 	for(uint i=0; i<vec.size(); ++i){
 	    if(value == vec[i]){

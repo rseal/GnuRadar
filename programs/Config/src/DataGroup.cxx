@@ -9,6 +9,8 @@
 #include "../include/DataGroup.h"
 
 using namespace std;
+using namespace boost;
+
 ///Constructor
 DataGroup::DataGroup(const int& id, int x, int y, int width, int height, const char* label):
     Fl_Group(x, y, width, height, label){
@@ -21,19 +23,17 @@ DataGroup::DataGroup(const int& id, int x, int y, int width, int height, const c
     int h0=25;
     int sp=30;
 
-    //this->box(FL_ENGRAVED_BOX);
-
-    startInput_ = unique_ptr<Fl_Int_Input>(new Fl_Int_Input(x0, y0, w0, h0, "Start"));
+    startInput_ = shared_ptr<Fl_Int_Input>(new Fl_Int_Input(x0, y0, w0, h0, "Start"));
     startInput_->align(FL_ALIGN_LEFT);
     startInput_->callback(DataGroup::UpdateStart, this);
     this->add(startInput_.get());
 
-    sizeInput_ = unique_ptr<Fl_Int_Input>(new Fl_Int_Input(x0, y0+sp, w0, h0, "Size"));
+    sizeInput_ = shared_ptr<Fl_Int_Input>(new Fl_Int_Input(x0, y0+sp, w0, h0, "Size"));
     sizeInput_->align(FL_ALIGN_LEFT);
     sizeInput_->callback(DataGroup::UpdateSize, this);
     this->add(sizeInput_.get());
 
-    unitChoice_ = unique_ptr<Fl_Choice>(new Fl_Choice(x0+85, y0, 80, h0, "Units"));
+    unitChoice_ = shared_ptr<Fl_Choice>(new Fl_Choice(x0+85, y0, 80, h0, "Units"));
     unitChoice_->add("SMPL");
     unitChoice_->add("usec");
     unitChoice_->add("Km");

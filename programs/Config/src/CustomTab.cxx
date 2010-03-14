@@ -33,7 +33,7 @@ void CustomTab::UpdateTabs(){
    int labelWidth,labelHeight,xOffset;
    int tabWidth,tabHeight;
    //static bool first = true;
-   const uint numTabs = this->children();
+   const unsigned int numTabs = this->children();
    const int hSpace = 15;
    const int vSpace = 0;
 
@@ -56,7 +56,7 @@ void CustomTab::UpdateTabs(){
             tabHeight);
 
       //store remaining dimensions referenced from first
-      for(uint i=1; i<numTabs; ++i){
+      for(unsigned int i=1; i<numTabs; ++i){
          this->child(i)->measure_label(labelWidth,labelHeight);
          tabHeight = labelHeight + 2*vSpace;
          tabWidth = labelWidth + 2*hSpace;
@@ -151,7 +151,7 @@ int CustomTab::tab_height() {
 ///Finds the tab responsible for the event
 Fl_Widget *CustomTab::which(int event_x, int event_y) {
    UpdateTabs();
-   for(uint i=0; i<tabDimArray_.size(); ++i)
+   for(unsigned int i=0; i<tabDimArray_.size(); ++i)
       if(tabDimArray_[i].Selected(event_x,event_y)) return this->child(i);
    return 0;
 };

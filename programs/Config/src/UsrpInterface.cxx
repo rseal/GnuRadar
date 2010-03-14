@@ -9,6 +9,7 @@
 #include "../include/UsrpInterface.h"
 
 using namespace std;
+using namespace boost;
 
 ///Primary display interface for the USRP configuration GUI program.
 ///Root class of the USRP configuration GUI program. 
@@ -19,16 +20,9 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
 
     this->resize(X,Y,width,height);
 
-    //int baseX      = 25;
-    //int baseY      = 25;
-    //int tab1Width  = 50;
-    //int width2     = 80;
-    //int tab1Height = 30;
-
     windowColor_     = fl_rgb_color(200,200,200);
     buttonColor_     = fl_rgb_color(180,180,180);
     tabColor_        = fl_rgb_color(200,200,255);
-    //Fl_Color wColor_ = fl_rgb_color(220,220,220);
 
     //unit conversion vectors.
     phaseStr.push_back("Deg");
@@ -63,13 +57,13 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     };
 
     //menu bar at top of main window
-    menuBar_ = unique_ptr<Fl_Menu_Bar>(new Fl_Menu_Bar(5, 5, width-10, 30, 0));
+    menuBar_ = shared_ptr<Fl_Menu_Bar>(new Fl_Menu_Bar(5, 5, width-10, 30, 0));
     menuBar_->box(FL_ENGRAVED_BOX);
     menuBar_->copy(menuItems);
 
     //channel options interface
     channelTab_ = 
-	unique_ptr<ChannelInterface>
+	shared_ptr<ChannelInterface>
 	(new ChannelInterface(usrpConfigStruct_,5,165,width-340,120,0));
     channelTab_->box(FL_ENGRAVED_BOX);
     channelTab_->Enable(0);
@@ -79,28 +73,28 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     for(int i=1; i<4; ++i) channelTab_->Disable(i);
 
     //general settings interface
-    settingsInterface_ = unique_ptr<SettingsInterface>
+    settingsInterface_ = shared_ptr<SettingsInterface>
 	(new SettingsInterface(5, 40, 410, 120, 0,usrpConfigStruct_));
     settingsInterface_->box(FL_ENGRAVED_BOX);
     settingsInterface_->callback(UsrpInterface::UpdateChannels,channelTab_.get());
 
     //header system group box interface
-    headerInterface_ = unique_ptr<HeaderInterface>
+    headerInterface_ = shared_ptr<HeaderInterface>
 	(new HeaderInterface(usrpConfigStruct_,width-330,40));
     headerInterface_->box(FL_ENGRAVED_BOX);
 
     //data window group box interface
-    dataInterface_ = unique_ptr<DataInterface>
+    dataInterface_ = shared_ptr<DataInterface>
 	(new DataInterface(usrpConfigStruct_,5,290,width-340,120,0));
     dataInterface_->box(FL_ENGRAVED_BOX);
 
     //fpga bit image interface
-    fpgaGroup_ = unique_ptr<Fl_Group>(new Fl_Group(420,290,325,120));
+    fpgaGroup_ = shared_ptr<Fl_Group>(new Fl_Group(420,290,325,120));
     fpgaGroup_->box(FL_ENGRAVED_BOX);
 
     // !!!! this needs to be modified to load a selectable image 
     //      into the UsrpConfigStruct to be useful !!!!
-    fileBrowserFPGA_ = unique_ptr<Fl_File_Browser>(
+    fileBrowserFPGA_ = shared_ptr<Fl_File_Browser>(
 	new Fl_File_Browser(545, 320, 190, 25, "FPGA Bit Image"));
     fileBrowserFPGA_->align(FL_ALIGN_LEFT);
     fileBrowserFPGA_->load("../../../fpga");
@@ -108,17 +102,17 @@ UsrpInterface::UsrpInterface(int X, int Y): Fl_Window(X, Y,750,400), maxChannels
     fpgaGroup_->end();
 
     //load button
-    buttonLoad_ = unique_ptr<Fl_Button>(new Fl_Button(20,420,70,25,"&Load"));
+    buttonLoad_ = shared_ptr<Fl_Button>(new Fl_Button(20,420,70,25,"&Load"));
     buttonLoad_->box(FL_PLASTIC_DOWN_BOX);
     buttonLoad_->callback(UsrpInterface::LoadClicked,this);
 
     //save button
-    buttonSave_ = unique_ptr<Fl_Button>(new Fl_Button(100,420,70,25,"&Save"));
+    buttonSave_ = shared_ptr<Fl_Button>(new Fl_Button(100,420,70,25,"&Save"));
     buttonSave_->box(FL_PLASTIC_DOWN_BOX);
     buttonSave_->callback(UsrpInterface::SaveClicked,this);
 
     //quit button
-    buttonQuit_ = unique_ptr<Fl_Button>(new Fl_Button(660,420,70,25,"&Quit"));
+    buttonQuit_ = shared_ptr<Fl_Button>(new Fl_Button(660,420,70,25,"&Quit"));
     buttonQuit_->box(FL_PLASTIC_DOWN_BOX);
     buttonQuit_->callback(UsrpInterface::QuitClicked);
 

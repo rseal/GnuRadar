@@ -17,20 +17,17 @@
 #include "UsrpConfigStruct.h"
 #include <iostream>
 #include <boost/lexical_cast.hpp>
-
-using std::cout; 
-using std::endl;
-using boost::lexical_cast;
+#include <boost/shared_ptr.hpp>
 
 ///Class definition
 class DataInterface : public Fl_Group
 {
     UsrpConfigStruct& usrpConfigStruct_;
-    std::unique_ptr<DataWindowInterface> dataWindowInterface_;
-    std::unique_ptr<Fl_Button> addButton_;
-    std::unique_ptr<Fl_Button> removeButton_;
-    std::unique_ptr<Fl_Int_Input> ippInput_;
-    std::unique_ptr<Fl_Choice> unitsChoice_;
+    boost::shared_ptr<DataWindowInterface> dataWindowInterface_;
+    boost::shared_ptr<Fl_Button> addButton_;
+    boost::shared_ptr<Fl_Button> removeButton_;
+    boost::shared_ptr<Fl_Int_Input> ippInput_;
+    boost::shared_ptr<Fl_Choice> unitsChoice_;
 
     ///Callback for Add button
     static void AddClicked(Fl_Widget* flw, void* userData){
@@ -43,7 +40,7 @@ class DataInterface : public Fl_Group
 	    str = str2;
 	}
 	catch(std::exception){
-	    cout << "DataInterface::AddClicked - Empty string" << endl;
+	    std::cout << "DataInterface::AddClicked - Empty string" << std::endl;
 	}
 	
 	if(str.size() != 0) dwi->Add(str.c_str());
@@ -60,18 +57,17 @@ class DataInterface : public Fl_Group
 	    str = str2;
 	}
 	catch(std::exception){
-	    cerr << "DataInterface::RemoveClicked - Empty string" << endl;
+	    cerr << "DataInterface::RemoveClicked - Empty string" << std::endl;
 	}
 	
 	if(str.size() != 0) dwi->Remove(str.c_str());
-	//cout << "finished remove" << endl;
     }
 
     ///Callback to Update IPP and units
     static void Update(Fl_Widget* flw, void* userData){
 	DataInterface* dwiPtr = reinterpret_cast<DataInterface*>(userData);
 
-	int ipp = lexical_cast<int>(dwiPtr->ippInput_->value());
+	int ipp = boost::lexical_cast<int>(dwiPtr->ippInput_->value());
 	int units = dwiPtr->unitsChoice_->value();
 
 	//validate ipp choice
@@ -82,11 +78,8 @@ class DataInterface : public Fl_Group
 	}
 	else{
 	    cerr << "DataInterface::Update - invalid ipp chosen "
-		 << "- global structure not updated." << endl;
+		 << "- global structure not updated." << std::endl;
 	}
-
-	//debug only
-//	cout << "DataInterface::Update" << endl;
     }
 public:
     ///Constructor

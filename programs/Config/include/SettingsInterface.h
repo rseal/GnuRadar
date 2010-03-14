@@ -29,10 +29,6 @@
 #include <iostream>
 #include <vector>
 
-using std::cout;
-using std::endl;
-using std::string;
-using std::vector;
 
 ///Class definition
 class SettingsInterface : public Fl_Group
@@ -40,13 +36,13 @@ class SettingsInterface : public Fl_Group
     Fl_Color color1_;
 
     UsrpConfigStruct& usrpConfigStruct_;
-    std::unique_ptr<SettingsCompute> settingsCompute_;
-    std::unique_ptr<Fl_Output>       units1_;
-    std::unique_ptr<Fl_Output>       units2_;
-    std::unique_ptr<Fl_Float_Input>  sampleRate_;
-    std::unique_ptr<Fl_Value_Slider> decimation_;
-    std::unique_ptr<Fl_Output>       bandwidth_;
-    std::unique_ptr<Fl_Choice>       channels_;
+    boost::shared_ptr<SettingsCompute> settingsCompute_;
+    boost::shared_ptr<Fl_Output>       units1_;
+    boost::shared_ptr<Fl_Output>       units2_;
+    boost::shared_ptr<Fl_Float_Input>  sampleRate_;
+    boost::shared_ptr<Fl_Value_Slider> decimation_;
+    boost::shared_ptr<Fl_Output>       bandwidth_;
+    boost::shared_ptr<Fl_Choice>       channels_;
 
     ///Callback to update decimation value
     static void UpdateDecimation(Fl_Widget* flw, void* userData){

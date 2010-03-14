@@ -15,11 +15,6 @@
 #include <iostream>
 #include <vector>
 
-using std::vector;
-using std::cerr;
-using std::endl;
-using std::cout;
-
 ///Structure to hold tab dimensions used in creating box boundaries for 
 ///tab labels.
 struct TabDim{
@@ -45,10 +40,10 @@ public:
     }
 
     void Print() {
-	cout << "X = " << x_ << "\n";
-	cout << "Y = " << y_ << "\n";
-	cout << "W = " << width_ << "\n";
-	cout << "H = " << height_ << endl;
+	std::cout << "X = " << x_ << "\n";
+	std::cout << "Y = " << y_ << "\n";
+	std::cout << "W = " << width_ << "\n";
+	std::cout << "H = " << height_ << std::endl;
     }
 };
 
@@ -61,14 +56,14 @@ class CustomTab: public Fl_Group {
     const Fl_Widget *activeChild_;
     int labelWidth_;
     int labelHeight_;
-    vector<TabDim> tabDimArray_;
+    std::vector<TabDim> tabDimArray_;
     int tab_height();
     void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
     const bool ValidateTabIndex(const int& tab);
     const bool CurrentVisible(const int& tab);
     const int SelectedTab(const int& event_x, const int& event_y) {
 	int ret = -1;
-	for(uint i=0; i<tabDimArray_.size(); ++i)
+	for(unsigned int i=0; i<tabDimArray_.size(); ++i)
 	    if(tabDimArray_[i].Selected(event_x,event_y)) ret = i;
 	return ret;
     }

@@ -23,12 +23,12 @@ ChannelGroup::ChannelGroup(const int& id, int x, int y, int width, int height,
     int h0=25;
     int sp0=40;
 
-    ddc_ = shared_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0, w1, h0,"Frequency"));
+    ddc_ = boost::shared_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0, w1, h0,"Frequency"));
     ddc_->callback(ChannelGroup::Update,this);
     ddc_->value("0.0");
     this->add(ddc_.get());
 
-    ddcUnits_ = shared_ptr<Fl_Choice>(new Fl_Choice(x0+w0+25, y0, w1, h0, ""));
+    ddcUnits_ = boost::shared_ptr<Fl_Choice>(new Fl_Choice(x0+w0+25, y0, w1, h0, ""));
     ddcUnits_->add("MHz",0,0);
     ddcUnits_->add("kHz",0,0);
     ddcUnits_->add("hz",0,0);
@@ -36,12 +36,12 @@ ChannelGroup::ChannelGroup(const int& id, int x, int y, int width, int height,
     ddcUnits_->callback(ChannelGroup::Update,this);
     this->add(ddcUnits_.get());
 
-    phase_ = shared_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0+sp0, w1, h0, "Phase"));
+    phase_ = boost::shared_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0+sp0, w1, h0, "Phase"));
     phase_->callback(ChannelGroup::Update,this);
     phase_->value("0.0");
     this->add(phase_.get());
 
-    phaseUnits_ = shared_ptr<Fl_Choice>(new Fl_Choice(x0+w0+25, y0+sp0, w1, h0, ""));
+    phaseUnits_ = boost::shared_ptr<Fl_Choice>(new Fl_Choice(x0+w0+25, y0+sp0, w1, h0, ""));
     phaseUnits_->add("Deg",0,0);
     phaseUnits_->add("Rad",0,0);
     phaseUnits_->value(0);

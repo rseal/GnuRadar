@@ -2,10 +2,10 @@
 #define DEVICE_H
 
 //interface for data source hardware
-class Device{
+class Device {
 public:
-    virtual void Start(void* address, const int bytes)=0;
-    virtual void Stop()=0;
+    virtual void StartDevice(void* address, const int bytes)=0;
+    virtual void StopDevice()=0;
 };
 
 

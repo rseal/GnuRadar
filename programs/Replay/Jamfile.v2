@@ -7,8 +7,8 @@ project replay
 exe gradar-replay 
         : Replay.cxx 
         : <variant>release
-        : <cxxflags>"-std=gnu++0x -O2 -msse3 -march=athlon-xp -fomit-frame-pointer -pipe"
-          <linkflags>"-lrt -lpthread "
+        : <cxxflags>"-std=gnu++0x -O2 -msse3 -march=native -fomit-frame-pointer -pipe"
+          <linkflags>"-lrt -lpthread -lhdf5_hl_cpp -lhdf5_cpp"
         ;
 #exe dataGen
 #        : examples/dataGenerator.cxx

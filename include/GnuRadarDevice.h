@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <fstream>
 
 using std::memcpy;
 using std::vector;
@@ -60,7 +61,7 @@ class GnuRadarDevice: public Device{
       }
 
    //Thread to request data from USRP device
-   virtual void Start(void* address, const int bytes){
+   virtual void StartDevice(void* address, const int bytes){
 
       int bytesRead;
       int byteAlign = bytes;
@@ -86,8 +87,22 @@ class GnuRadarDevice: public Device{
          //(2) read 512 bytes to clear FX2 buffer
          //(3) read syncSize samples to temporary buffer for data sync
          usrp_->start();
-         usrp_->read(bufPtr,syncSize*sizeof(int16_t)/4,&overrun_);
          usrp_->read(bufPtr,syncSize*sizeof(int16_t),&overrun_);
+
+         cout << "size of buffer write is " << syncSize*sizeof(int16_t)/4 << " bytes" << endl;
+
+         //ofstream out1("/home/rseal/streamDebug1.dat", ofstream::binary);
+         //for(int i=0; i<syncSize/4; ++i)
+         //    out1.write(reinterpret_cast<char*>(&buf[i*sizeof(int16_t)]), sizeof(int16_t));
+         //out1.close();
+
+
+         usrp_->read(bufPtr,syncSize*sizeof(int16_t),&overrun_);
+
+         //ofstream out2("/home/rseal/streamDebug2.dat", ofstream::binary);
+         //for(int i=0; i<syncSize; ++i)
+         //    out2.write(reinterpret_cast<char*>(&buf[i*sizeof(int16_t)]), sizeof(int16_t));
+         //out2.close();
 
          //call stream buffer sync member - will copy synchronized portion of stream to 
          //internal buffers and adjust pointers accordingly
@@ -100,6 +115,8 @@ class GnuRadarDevice: public Device{
          firstCall_ = false;
       }
       else{
+
+         cout << "Writing data to shared memory" << endl;
 
          //read data from USRP
          bytesRead = usrp_->read(stBuf_.WritePtr(), stBuf_.WriteSize(), &overrun_);
@@ -117,6 +134,6 @@ class GnuRadarDevice: public Device{
    }
    
    //stop data collection
-   virtual void Stop(){usrp_->stop();}
+   virtual void StopDevice(){usrp_->stop();}
 };
 #endif

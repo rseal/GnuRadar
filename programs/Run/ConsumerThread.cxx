@@ -3,17 +3,7 @@
 //redefine run method for threading - define this external for 
 //modularity
 void ConsumerThread::Run(){
-    static bool keywordInit = false;
-    Time time;
-    
-    if(!keywordInit){
-	//create constants in data table shs_
-	shs_.data.Add("TIME", time.GetTime(), "System time (CDT)");
-	keywordInit = true;
-    } 
-    else{
-	shs_.data.Value("TIME", time.GetTime());
-    }    
-    
-    shs_.WriteTable(reinterpret_cast<short*>(address_),bytes_);
+   h5File_->CreateTable(cpx_.GetRef(), space_);
+   h5File_->WriteTStrAttrib("TIME", time_.GetTime());
+   h5File_->WriteTable(reinterpret_cast<void*>(address_));
 }

@@ -1,29 +1,49 @@
-#include <simpleHeader/Shs.h>
+#include <HDF5/HDF5.hpp>
+#include <HDF5/Complex.hpp>
 #include <clp/CommandLineParser.hpp>
 #include <gnuradar/SThread.h>
 #include <string>
 #include <fstream>
+#include <vector>
 
 using namespace std;
+using namespace hdf5;
 
 class Viewer: public SThread{
 
+   ComplexHDF5 cpx_;
+   HDF5 h5File_;
+   
    typedef short Int16;
-   typedef SimpleHeader<Int16,2> Header;
-   Header header_;
    int numTables_;
    int sleep_;
    int offset_;
+   float sampleRate_;
+   string startTime_;
+   int channels_;
+   vector<hsize_t> dims_;
+   vector<complex_t> buffer_;
 
    public: 
-   Viewer(const string& fileName): header_(fileName, File::READ, File::BINARY){
-      header_.ReadPrimary();
-      header_.ReadData(0);
-      //Waiting on IPP keyword to be added - hardcode for now
-      //header_.primaryValue<int>("IPP");
+   Viewer(const string& fileName): h5File_(fileName + "_", hdf5::READ){
+
+      dims_ = h5File_.TableDims();
+      buffer_.resize(dims_[0]*dims_[1]);
+
+      cout << "-------------------- DESCRIPTION --------------------" << endl;
+      cout << h5File_.Description() << endl;
+      h5File_.ReadTable<complex_t>(0, buffer_, cpx_.GetRef());
+      cout << "-----------------------------------------------------\n" << endl;
+      h5File_.ReadAttrib<float>("SAMPLE_RATE", sampleRate_, H5::PredType::NATIVE_FLOAT);
+      h5File_.ReadAttrib<int>("CHANNELS", channels_, H5::PredType::NATIVE_INT);
+      startTime_ = h5File_.ReadStrAttrib("START_TIME");
+      cout << "Sample Rate = " << sampleRate_ << endl;
+      cout << "Start Time  = " << startTime_ << endl;
+      cout << "Channels    = " << channels_ << endl;
+      
       sleep_ = 10;
       offset_ = 0;
-      numTables_ = header_.NumTables();
+      numTables_ = h5File_.NumTables();
    }
 
    void RefreshRate(const int& ms){ sleep_ = ms; }
@@ -31,34 +51,24 @@ class Viewer: public SThread{
 
    void Run(){
 
-      Int16* dataPtr;
-      int ipp=header_.data.Dim(0);
-      int sample=header_.data.Dim(1);
+      int ipp= dims_[0];
+      int rangeCells = dims_[1];
+
       int table=0;
-      int channels=header_.primaryValue<int>("Channels");
 
       cout << "IPPs    = " << ipp << endl;
-      cout << "Samples = " << sample << endl;
-      float f = 200e3/500e3;
-      float phase = 0;
+      cout << "Range Cells = " << rangeCells << endl;
 
       while(table != numTables_){
-         dataPtr = header_.ReadData(table);
+         h5File_.ReadTable<complex_t>(0, buffer_, cpx_.GetRef());
          for(int i=0; i<ipp; ++i){
             ofstream out("/dev/shm/splot.buf",ios::out); 
-            for(int j=offset_; j<sample/(2*channels); ++j){
-               float t1=static_cast<float>(j-offset_);
-               float t2=static_cast<float>(dataPtr[i*sample + j*2*channels]);
-               float t2_cos = cos(2*M_PI*j*f + M_PI*phase/180.0)*t2;
-               t2 = 1.6*t2;
-               t2 = t2_cos;
-               out.write(reinterpret_cast<char*>(&t1),sizeof(float));
-               out.write(reinterpret_cast<char*>(&t2),sizeof(float));
-               //if(i%100 == 0 && j==offset_){
-               //   cout << "phase = " << ++phase << endl;
-               //   if(phase == 361) phase=0;
-               //}
-            }
+            for(int j=offset_; j<rangeCells; ++j){
+               float x = j-offset_;
+               float rs = buffer_[i*rangeCells + j*channels_].real*1.0f;
+               out.write(reinterpret_cast<char*>(&x),sizeof(float));
+               out.write(reinterpret_cast<char*>(&rs),sizeof(float));
+               }
             out.close();
             Sleep(ST::ms, sleep_);
          } 
@@ -69,7 +79,6 @@ class Viewer: public SThread{
 
 int main(int argc, char** argv){
    typedef short Int16;
-   typedef SimpleHeader<Int16,2> Header;
    string fileName;
    int refreshRate;
    int offset;

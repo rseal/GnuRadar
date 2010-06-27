@@ -2,5 +2,5 @@
 
 void ProducerThread::Run()
 {
-    device_.Start(address_,bytes_);
+    device_.StartDevice(address_,bytes_);
 }

@@ -10,11 +10,12 @@
 #include <gnuradar/ConfigFile.h>
 #include <gnuradar/Units.h>
 #include <clp/CommandLineParser.hpp>
-#include <simpleHeader/Shs.h>
-#include <simpleHeader/Time.h>
+#include <HDF5/HDF5.hpp>
+#include <HDF5/Complex.hpp>
+#include <HDF5/Time.hpp>
+#include <boost/shared_ptr.hpp>
 
-typedef SimpleHeader<short,2> SimpleHeaderSystem;
-SimpleHeaderSystem* header;
+boost::shared_ptr<HDF5> h5File;
 
 const int    Kb            = 1024;
 const int    Mb            = Kb*Kb;
@@ -30,7 +31,7 @@ const double IPP           = 25*ms;
 const double dataWindow    = 16500.0*us;
 const int    numBuffers    = 20;
 vector<int> windowVector;
-vector<int> dimVector;
+vector<hsize_t> dimVector;
 vector<double> tuningFreq;
 Time currentTime;
 GnuRadarSettings settings;

@@ -19,7 +19,7 @@ public:
     }
 
     virtual void Stop(){ 
-	device_.Stop();
+	device_.StopDevice();
     }
 
     virtual void RequestData(void* address){

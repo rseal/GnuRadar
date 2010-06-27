@@ -17,12 +17,12 @@ sp.puts "Kp 0f\n"
 sp.gets
 print sp.gets
 
-sp.puts "F0 49.8000000\n"
+sp.puts "F1 49.8000000\n"
 sp.puts "S\n"
 sp.gets
 print sp.gets
 
-sp.puts "V0 42\n"
+sp.puts "V1 100\n"
 sp.gets
 print sp.gets
 

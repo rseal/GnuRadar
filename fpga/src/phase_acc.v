@@ -15,35 +15,33 @@
 //  GNU General Public License for more details.
 //
 //  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
+//  along with this program. If not write to the Free Software
 //  Foundation, Inc., 51 Franklin Street, Boston, MA  02110-1301  USA
 //
 
-
-
 // Basic Phase accumulator for DDS
 module phase_acc (clk,reset,enable,strobe,serial_addr,serial_data,serial_strobe,phase);   
-   parameter FREQADDR = 0;
-   parameter PHASEADDR = 0;
-   parameter resolution = 32;
-   
-   input     clk, reset, enable, strobe;
-   input [6:0] serial_addr;
-   input [31:0] serial_data;
-   input 	serial_strobe;
-   
-   output reg [resolution-1:0] phase;
-   wire [resolution-1:0] freq;
+parameter FREQADDR = 0;
+parameter PHASEADDR = 0;
+parameter resolution = 32;
 
-   setting_reg #(FREQADDR) sr_rxfreq0(.clock(clk),.reset(1'b0),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(freq));
+input     clk, reset, enable, strobe;
+input [6:0] serial_addr;
+input [31:0] serial_data;
+input 	serial_strobe;
 
-   //removed redundant 2:1 mux -- 11/16/2009 RS
-   always @(posedge clk)
-     if(reset || (serial_strobe && (serial_addr == PHASEADDR)))
-       phase <= #1 32'b0;
-     else if(enable & strobe)
-       phase <= #1 phase + freq;
+output reg [resolution-1:0] phase;
+wire [resolution-1:0] freq;
+
+setting_reg #(FREQADDR) sr_rxfreq0(.clock(clk),.reset(1'b0),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(freq));
+
+//removed redundant 2:1 mux -- 11/16/2009 RS
+always @(posedge clk)
+begin
+   if(reset || (serial_strobe && (serial_addr == PHASEADDR)))
+      phase <= #1 32'b0;
+   else if(enable & strobe)
+      phase <= #1 phase + freq;
+end
 
 endmodule // phase_acc
-
-   

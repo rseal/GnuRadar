@@ -101,10 +101,10 @@ module cordic(clock, reset, enable, xi, yi, zi, xo, yo, zo );
    cordic_stage #(bitwidth+2,zwidth-1,10) cordic_stage10 (clock,reset,enable,x10,y10,z10,`c10,x11,y11,z11);
    cordic_stage #(bitwidth+2,zwidth-1,11) cordic_stage11 (clock,reset,enable,x11,y11,z11,`c11,x12,y12,z12);
 
-   assign xo = x12[bitwidth:1];  
-   assign yo = y12[bitwidth:1];
-   //assign xo = x12[bitwidth+1:2];  // CORDIC gain is ~1.6, plus gain from rotating vectors
-   //assign yo = y12[bitwidth+1:2];
+   //assign xo = x12[bitwidth:1];  
+   //assign yo = y12[bitwidth:1];
+   assign xo = x12[bitwidth+1:2];  // CORDIC gain is ~1.6, plus gain from rotating vectors
+   assign yo = y12[bitwidth+1:2];
    assign zo = z12;		  
 
 endmodule // cordic

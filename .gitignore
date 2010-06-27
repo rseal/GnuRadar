@@ -2,7 +2,10 @@
 usrpSVN/
 *.o
 *~
+*.swp
 programs/Analyze/binary.dat
 programs/Run/config
+programs/Config/java
 tests/bin
 work/
+simulation/

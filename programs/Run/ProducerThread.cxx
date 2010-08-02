@@ -16,7 +16,9 @@
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 #include <gnuradar/ProducerThread.h>
 
+/// worker thread implementation. Calls GnuRadarDevice's 
+/// StartDevice method.
 void ProducerThread::Run()
 {
-    device_.StartDevice(address_,bytes_);
+    device_.RequestData(address_,bytes_);
 }

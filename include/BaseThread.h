@@ -20,19 +20,28 @@
 #include <gnuradar/SharedMemory.h>
 #include <gnuradar/SThread.h>
 
+/// Abstract class for use with Producer and Consumer threads.
 class BaseThread{
+
 public:
-    BaseThread(const int& bytes):bytes_(bytes){}
-    virtual const int&         Status() { return status_;}
-    virtual const std::string& Error()  { return error_;}
-    //abstract classes 
-    virtual void Stop()=0;
-    virtual void RequestData(void* address)=0;
+
+   // Constructor.
+   BaseThread(const int& bytes):bytes_(bytes){}
+
+   // abstract members
+   virtual const int&         Status() { return status_;}
+   virtual const std::string& Error()  { return error_;}
+
+   //virtual members 
+   virtual void Stop()=0;
+   virtual void RequestData(void* address)=0;
+
 protected:
-    void* address_;
-    const int& bytes_;
-    int  status_;
-    std::string error_;
+
+   void* address_;
+   const int& bytes_;
+   int  status_;
+   std::string error_;
 };
 
 #endif

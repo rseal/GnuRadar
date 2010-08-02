@@ -3,72 +3,96 @@
 #include <string.h>
 #include <gnuradar/StreamBuffer.hpp>
 #include <fstream>
+#include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
 #include "SigGen.hpp"
 
 using namespace std;
 
 int main(void){
 
-   typedef short Int16;
+   // define an output file stream
+   typedef boost::shared_ptr< ofstream > FileOutputStreamPtr;
+   FileOutputStreamPtr fos;
 
-   int samples  = 10;
-   int iq       = samples*2;
-   int ipp      = 250;
-   int tSize    = ipp*iq;
-   int offset   = 8;
-   int align    = 256;
-   int channels = 1;
-   int size;
+   const char* DATA_OUTPUT_FILE_NAME = "test.dat";
+   const int NUM_STREAM_BUFFERS = 100;
+   const int DATA_TAG = 16384;
+   const int PACKET_SIZE_SAMPLES = 128;
+   const int OFFSET_SAMPLES = 24;
+   const int SAMPLES_PER_IPP = 466;
+   const int IPPS_PER_SECOND = 250;
+   const int NUM_CHANNELS = 1;
+   const int TABLE_SIZE_SAMPLES = SAMPLES_PER_IPP * IPPS_PER_SECOND * 
+      NUM_CHANNELS;
+   const int SEQUENCE_SPACING_SAMPLES = SAMPLES_PER_IPP;
+
    //data tagging sequence for synchronization
-   vector<int> sequence(channels,16384);
+   vector<int> tags(NUM_CHANNELS, DATA_TAG);
 
-   //streaming buffer class to properly align variable size data requests
-   //using data tags
-   StreamBuffer<Int16> sBuf(tSize,align);
-   int atSize = tSize + sBuf.Padding();
-   int extra    = atSize/4;
+   // Device under test.
+   StreamBuffer<boost::int16_t> 
+      streamBuffer( TABLE_SIZE_SAMPLES, PACKET_SIZE_SAMPLES, tags );
 
-   cout << "Table Size = " << tSize << "\n"
-      << "Padding    = " << sBuf.Padding() << "\n"
-      << "extra      = " << extra << endl;
    //create signal generator to test streaming buffer
-   SigGen<Int16> sigGen(iq,atSize,sequence[0],offset);
+   SigGen<boost::int16_t> sigGen(
+         SEQUENCE_SPACING_SAMPLES,
+         streamBuffer.WriteSize(),
+         tags[0],
+         OFFSET_SAMPLES
+         );
 
-   //The first buffer contains an unsynchronized data stream and "extra" samples
-   //are required to handle alignment
-   size = atSize + extra;
+   // copy generated data stream to the stream buffer
+   memcpy(
+         streamBuffer.WritePtr(), 
+         sigGen.GenerateTable( streamBuffer.WriteSize() ),
+         streamBuffer.WriteSizeBytes() 
+         );
 
-   void* tPtr = reinterpret_cast<void*>(sigGen.GenerateTable(size));
-   //find tag data and update internal pointers to align data requests
-   sBuf.Sync(tPtr,size, sequence);
+   // sync the data stream and exit if we couldn't locate the tag.
+   if(!streamBuffer.Sync()) {
+      cerr << "Could not locate sync tag" << endl;
+      exit(1);
+   }
 
    //create a local array to store aligned data
-   vector<Int16> locArray(tSize);
-   void* aPtr = reinterpret_cast<void*>(&locArray[0]);
+   vector<boost::int16_t> locArray( streamBuffer.ReadSize() );
+   void* localPtr = reinterpret_cast<void*>(&locArray[0]);
 
-   //copy data from the streaming buffer to the local array
-   memcpy(aPtr, sBuf.ReadPtr(), sBuf.ReadSize());
-   sBuf.UpdateRead();
+   // create an output file stream
+   fos = FileOutputStreamPtr( new ofstream(DATA_OUTPUT_FILE_NAME, ios::out));
 
-   fstream fout("test.dat", ios::out);
-   size = atSize;
-   for(int i=0; i<1000; ++i){
-      int wrSize = sBuf.WriteSize();
-      memcpy(sBuf.WritePtr(), sigGen.GenerateTable(wrSize/sizeof(Int16)), wrSize);
-      sBuf.UpdateWrite();
-      fout << sBuf.Level() << endl;
-      if(sBuf.Level() >= sBuf.ReadSize()) cout << endl << "Buffer Level at threshold " << endl;
-      memcpy(aPtr, sBuf.ReadPtr(), sBuf.ReadSize());
-      sBuf.UpdateRead();
-      if(locArray[0] != 16384){
-         fout << endl << "Misalignment!!!! = " << locArray[i] << endl;
+   // perform several iterations to ensure that the data stream
+   // remains synchronized.
+   for(int i=0; i<NUM_STREAM_BUFFERS; ++i){
+
+      // write data into stream buffer
+      memcpy ( 
+            streamBuffer.WritePtr(), 
+            sigGen.GenerateTable( streamBuffer.WriteSize() ),
+            streamBuffer.WriteSizeBytes()
+            );
+
+      // read data from stream buffer
+      memcpy(localPtr, streamBuffer.ReadPtr(), streamBuffer.ReadSizeBytes());
+
+      // update the read/write pointers
+      streamBuffer.Update();
+
+      // if an error is detected, alert the user.
+      if(locArray[0] != DATA_TAG){
+       cout << endl << "Misalignment!!!! = " << locArray[0] << endl;
       }
-      for(int i=0; i<tSize; ++i){
-         fout << locArray[i] << " ";
-         //if(i%50 == 0) fout << endl;
-         }
-      fout << endl << endl;
+
+      // dump the output to a file for debugging.
+      //*fos << "Table " << i << endl;
+      //for(int i=0; i<streamBuffer.ReadSize(); ++i){
+      //  *fos << locArray[i] << " ";
+      //  }
+      //*fos << endl << endl;
+      //fos->flush();
    }
-fout.close();
-return 0;
+   //fos->close();
+   return 0;
 }
+

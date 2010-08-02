@@ -7,5 +7,6 @@ programs/Analyze/binary.dat
 programs/Run/config
 programs/Config/java
 tests/bin
+bin/
 work/
 simulation/

@@ -1,0 +1,12 @@
+project window_validator
+        : build-dir ../bin
+        : default-build debug
+        ;
+
+
+exe test-window_validator 
+        : test.cpp
+        : <cxxflags>"-g -msse3 -march=native -fomit-frame-pointer -pipe"
+	;
+
+install ./ : test-window_validator ;

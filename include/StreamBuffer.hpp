@@ -17,110 +17,208 @@
 #ifndef STREAM_BUFFER_HPP
 #define STREAM_BUFFER_HPP
 
+#include<boost/circular_buffer.hpp>
 #include<vector>
+#include<deque>
 #include<cassert>
+#include<iomanip>
+
+using std::cout;
+using std::endl;
 
 template<typename T>
 struct StreamBuffer{
-   T* rdPtr_;
-   T* wrPtr_;
-   T* cpPtr_;
-   int userSize_;
-   int pad_;
-   int align_;
-   int level_;
-   int bufSize_;
-   int wrSize_;
-   int cpSize_;
-   std::vector<T> buf_;
 
-   const int Bytes(const int& size) { return size*sizeof(T);}
+   // define constants
+   const int NUM_BUFFERS;
+   const int READ_SIZE;
+   const int READ_SIZE_BYTES;
+   const int PACKET_SIZE;
+   const int PACKET_SIZE_BYTES;
+   const int START_INDEX;
+   // these are considered constants.
+   int BUFFER_SIZE;
+   int STORAGE_SIZE;
+   int END_INDEX;
 
-   void Copy(T* dest, T* src, int size){
-      for(int i=0; i<size; ++i) *(dest+i) = *(src+i);
+   typedef std::vector<T> Buffer;
+   typedef std::vector<int> TagVector;
+   TagVector tags_;
+
+   // pointers for buffer positioning
+   T* readPtr_;
+   T* writePtr_;
+   T* copyPtr_;
+   T* beginPtr_;
+   T* endPtr_;
+   Buffer buffer_;
+
+   int writeSize_;
+   int bufferLevel_;
+   int bufferRemaining_;
+   int currentBuffer_;
+
+   int readIndex_;
+   int writeIndex_;
+   int startIndex_;
+   int endIndex_;
+
+   bool isSynchronized_;
+
+   /// copies remaining data from last buffer to the top of first, giving
+   /// the appearance of a circular buffer, but not quite. This was 
+   /// necessary since we have no control over read/write pointers, 
+   /// they're used by external processes.
+   void Copy(int destIndex, int srcIndex) {
+
+      readIndex_ = 0;
+      writeIndex_ = 0;
+      T temp;
+
+      for( int i=0; i<bufferLevel_; ++i) {
+         buffer_[destIndex+i] = buffer_[srcIndex + i] ;
+         ++writeIndex_;
+      }
    }
 
    public:
    StreamBuffer(){};
 
-   StreamBuffer(const int& userSize, const int& pad){ Init(userSize,pad);}
+   /// Accepts alignment size and buffer size in bytes and sets up
+   /// an internal aligned buffer
+   StreamBuffer( const int readSize, const int packetSize, 
+         const TagVector& tags ): 
+      START_INDEX(0), NUM_BUFFERS(3), READ_SIZE(readSize), 
+      READ_SIZE_BYTES(readSize*sizeof(T)), PACKET_SIZE(packetSize),
+      PACKET_SIZE_BYTES(packetSize*sizeof(T)), isSynchronized_(false)
+   {
+      // adjust write size if alignment required
+      writeSize_ = !READ_SIZE%PACKET_SIZE ? 
+         READ_SIZE : static_cast<int>(READ_SIZE/PACKET_SIZE + 1)*PACKET_SIZE;
 
-   void Init(const int& userSize, const int& pad){
-      userSize_ = userSize;
-      pad_      = pad;
-      align_    = pad;
-      level_    = 0;
+      BUFFER_SIZE = writeSize_;
+      STORAGE_SIZE = NUM_BUFFERS*BUFFER_SIZE;
+      END_INDEX = STORAGE_SIZE;
 
-      if(userSize_%pad_ != 0){
-         pad_ = static_cast<int>(userSize/align_ + 1)*align_;
-         pad_ -= userSize_;
-      }
-      else pad_=0;
-
-      bufSize_ = userSize_ + pad_;
-      wrSize_  = bufSize_;
-      cpSize_  = 0;
+      bufferLevel_= 0;
+      bufferRemaining_ = STORAGE_SIZE;
+      currentBuffer_ = 0;
+      tags_ = tags;
       
-      //create 2 oversized buffers to manage data stream
-      buf_.resize(bufSize_*2);
-
-      rdPtr_ = &buf_[0];
-      wrPtr_ = &buf_[0];
-      cpPtr_ = &buf_[userSize_];
+      readIndex_=0;
+      writeIndex_=0;
+      
+      // manually create contiguous buffer and pointers
+      buffer_ = Buffer( STORAGE_SIZE );
    }
 
-   const bool Sync(void* src, const int& size, const std::vector<int>& sequence){
+   /// get write pointer to write to the data buffer
+   void* WritePtr() { return &buffer_[writeIndex_]; }
+
+   /// get read pointer to read from the data buffer
+   void* ReadPtr() { return &buffer_[readIndex_]; }
+
+   /// get read size in bytes 
+   const int ReadSize()  { return READ_SIZE; }
+   const int ReadSizeBytes()  { return READ_SIZE_BYTES; }
+
+   /// get write size in bytes 
+   const int WriteSize() { return writeSize_; }
+   const int WriteSizeBytes() { return writeSize_*sizeof(T); }
+
+   /// Monitors the buffersize and adjust subsequent write sizes 
+   /// in an attempt to minimize buffer depth.
+   void AdjustWriteSize() {
+
+      int samplesRequired = READ_SIZE - bufferLevel_;
+      writeSize_ = samplesRequired > 0 ? 
+         (samplesRequired/PACKET_SIZE + 1 )*PACKET_SIZE : PACKET_SIZE ;
+   }
+
+   /// Called after a write and subsequent read. Updates read and write
+   /// indexes, as well as the buffer level.
+   void Update(){
+
+      writeIndex_ += writeSize_;
+      readIndex_ += READ_SIZE;
+      bufferLevel_ = writeIndex_ - readIndex_;
+
+      AdjustWriteSize();
+
+      int nextWriteIndex = writeIndex_ + writeSize_;
+      int nextReadIndex  = readIndex_ + READ_SIZE;
+
+      if( nextWriteIndex > STORAGE_SIZE || nextReadIndex > STORAGE_SIZE ) {
+         Copy( START_INDEX , readIndex_ );
+      }
+   }
+   
+   /// returns the current buffer level
+   const int& Level()   { return bufferLevel_; }
+
+   /// returns the buffers smallest unit ( a.k.a packet size ).
+   const int& PacketSize() { return PACKET_SIZE; }
+
+   /// Synchronizes data stream by finding the tag sequence. Called
+   /// internally on the first buffer write.
+   const bool Sync( )
+   {
+
+      int i=0;
+      int j=0;
       bool found=false;
-      int size_=size;
-      int i,j;
-      T* buf = reinterpret_cast<T*>(src);
-      for(i=0; i<size_; ++i){
-         if(buf[i]==sequence[0]){
-            found=true;
-            for(j=0; j<sequence.size(); ++j)
-               if(buf[i+j] != sequence[j]) found=false;
+      
+      // we have to assume the user has written samples before syncing
+      writeIndex_ = writeSize_;
+
+      // search for data tag
+      for( i=0; i<BUFFER_SIZE; ++i) {
+
+         if( buffer_[i] == tags_[j] ){
+
+            found = true;
+            readIndex_ = i;
+
+            for( j=1; j<tags_.size(); ++j){
+               if( buffer_[i+j] != tags_[j] )
+                  found = false;
+            }
+            break;
          }
-         if(found) break;
       }
 
-      if(found){
-         size_ -= i;
-         Copy(rdPtr_,&buf[i],size_);
-         level_ = size_;
-         wrPtr_ = &buf_[level_];
-         assert(i+size_ <= buf_.size()-1);
-      }
+      bufferLevel_ = writeSize_ - readIndex_;
+      isSynchronized_ = true;
       return found;
    }
 
-   void UpdateWrite(){
-      level_ += wrSize_;
-      assert(rdPtr_ + level_ > cpPtr_);
-   } 
+   /// Used for debugging. Displays current state of all important variables.
+   void Status(){
+      static int printHeader = 0;
 
-   void* WritePtr() { return wrPtr_;}
-   void* ReadPtr() { return rdPtr_;}
-   const int ReadSize()  { return Bytes(userSize_); }
-   const int WriteSize() { return Bytes(wrSize_);   }
+      if( !(printHeader%30) ){
+         cout 
+            << std::setw(10) << "rd " 
+            << std::setw(10) << "wr " 
+            << std::setw(10) << "wr size " 
+            << std::setw(10) << "level " 
+            << std::setw(10) << " max " 
+            << endl;
+      }
 
-   void UpdateRead(){
-      assert(level_ <= buf_.size()-1);
-      level_ -= userSize_;
-      assert(rdPtr_ + level_ < cpPtr_);
-      Copy(rdPtr_,cpPtr_,level_);
-      wrPtr_ = &buf_[level_];
-      assert(rdPtr_ + level_  == wrPtr_);
+      cout 
+         << std::setw(10) << readIndex_
+         << std::setw(10) << writeIndex_
+         << std::setw(10) << writeSize_
+         << std::setw(10) << bufferLevel_ 
+         << std::setw(10) << STORAGE_SIZE
+         << endl;
 
-      //the write size always meets the n-byte boundary requirements
-      //this algorithm simply minimizes the memory footprint by constantly 
-      //adjusting the write size based on buffer levels
-      wrSize_ = static_cast<int>((userSize_-level_)/align_ + 1)*align_;
-
-      if(level_ >= userSize_) std::cout << "DECREASING WRITE REQUEST SIZE" << std::endl;
-      if(static_cast<T*>(cpPtr_) + level_ > &buf_[buf_.size()-1]) std::cout << "CRITICAL: BUFFER SIZE EXCEEDED" << std::endl;
+      ++printHeader;
    }
 
-   const int& Level()   {return level_;}
-   const int& Padding() {return pad_;}
+   /// Returns a reference to the internal buffer. Currently
+   /// used for debugging purposes.
+   Buffer& GetBuffer() { return buffer_;}
 };
 #endif

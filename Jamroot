@@ -5,3 +5,4 @@ project gnuradar
 build-project programs/Replay ;
 build-project programs/Run ;
 build-project programs/Config ;
+build-project programs/Verify ;

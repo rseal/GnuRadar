@@ -39,6 +39,8 @@ int main(int argc, char** argv){
       exit(0);
    }
 
+   clp.Validate();
+
    fileName = clp.GetArgValue<string>("f");
    dataSet  = clp.GetArgValue<string>("d");
 
@@ -46,24 +48,29 @@ int main(int argc, char** argv){
    ConfigFile cf(fileName);
 
    //compute bytes per second
-   BPS = cf.OutputRate()*cf.NumChannels()*4;
-   float PRF = ceil(1.0f/cf.IPP());
+   BPS = cf.OutputRate()*cf.NumChannels() * BYTES_PER_SAMPLE;
+   const float PRF = ceil(1.0f/cf.IPP());
+
    //buffersize in bytes
    //window / IPP * numChannels * 4 = bytes per second
-   int bufferSize = cf.WindowLength()*cf.NumChannels()*4*static_cast<int>(PRF);
+   const int BUFFER_SIZE = cf.WindowLength() * 
+      cf.NumChannels() * BYTES_PER_SAMPLE * static_cast<int>(PRF);
 
-   cout << "PRF        = " << PRF             << endl;
-   cout << "BPS        = " << BPS             << endl;
-   cout << "BufferSize = " << bufferSize      << endl;
-   cout << "sampleRate = " << cf.SampleRate() << endl;
-   cout << "Decimation = " << cf.Decimation() << endl;
-   cout << "OutputRate = " << cf.OutputRate() << endl;
-   cout << endl;
+   cout 
+      << "PRF        = " << PRF             << "\n"
+      << "BPS        = " << BPS             << "\n"
+      << "BufferSize = " << BUFFER_SIZE     << "\n"
+      << "sampleRate = " << cf.SampleRate() << "\n"
+      << "Decimation = " << cf.Decimation() << "\n"
+      << "OutputRate = " << cf.OutputRate() << "\n"
+      << endl;
 
    for (int i=0; i<cf.NumWindows(); ++i){
-      cout << "Window: " << cf.WindowName(i)  << "\n"
+      cout 
+         << "Window: " << cf.WindowName(i)  << "\n"
          << "Start = " << cf.WindowStart(i) << "\n"
-         << "Size  = " << cf.WindowSize(i)  << "\n" << endl;
+         << "Size  = " << cf.WindowSize(i)  << "\n"
+         << endl;
    }
 
    cout << "WindowLength = " << cf.WindowLength() << endl;
@@ -83,43 +90,80 @@ int main(int argc, char** argv){
    dimVector.push_back(static_cast<int>(cf.WindowLength()*cf.NumChannels()));
 
    //create consumer buffer - destination 
-   buffer = new short[bufferSize/sizeof(short)];
+   buffer = new short[ BUFFER_SIZE /sizeof(short) ];
 
-   cout << "--------------------Settings----------------------" << endl;
-   cout << "Sample Rate                 = " << cf.SampleRate()  << endl;
-   cout << "Bandwidth                   = " << cf.Bandwidth()   << endl;
-   cout << "Decimation                  = " << cf.Decimation()  << endl;
-   cout << "Output Rate                 = " << cf.OutputRate()  << endl;
-   cout << "Number of Channels          = " << cf.NumChannels() << endl;
-   cout << "Bytes Per Second (System)   = " << BPS << endl;
-   cout << "BufferSize                  = " << bufferSize << endl;
-   cout << "IPP                         = " << cf.IPP() << endl;
+   cout 
+      << "--------------------Settings----------------------" << "\n"
+      << "Sample Rate                 = " << cf.SampleRate()  << "\n"
+      << "Bandwidth                   = " << cf.Bandwidth()   << "\n"
+      << "Decimation                  = " << cf.Decimation()  << "\n"
+      << "Output Rate                 = " << cf.OutputRate()  << "\n"
+      << "Number of Channels          = " << cf.NumChannels() << "\n"
+      << "Bytes Per Second (System)   = " << BPS              << "\n"
+      << "BufferSize                  = " << BUFFER_SIZE      << "\n"
+      << "IPP                         = " << cf.IPP() 
+      << endl;
+
    for(int i=0; i<cf.NumChannels(); ++i)
       cout << "Channel[" << i << "] Tuning Frequency = " << cf.DDC(i) << endl;
+
    cout << "--------------------Settings----------------------\n\n" << endl;
 
    //write a test file for demonstration purposes
    //header = new SimpleHeaderSystem(dataSet, File::WRITE, File::BINARY);
-   h5File.reset(new HDF5(dataSet + "_", hdf5::WRITE));
+   h5File = Hdf5Ptr( new HDF5(dataSet + "_", hdf5::WRITE) );
 
    h5File->Description("USRP Radar Receiver");
    h5File->WriteStrAttrib("START_TIME", currentTime.GetTime());
    h5File->WriteStrAttrib("INSTRUMENT", "GNURadio Rev4.5");
 
-   h5File->WriteAttrib<int>("CHANNELS", cf.NumChannels(), H5::PredType::NATIVE_INT, H5::DataSpace());
-   h5File->WriteAttrib<double>("SAMPLE_RATE", cf.SampleRate(), H5::PredType::NATIVE_DOUBLE, H5::DataSpace());
-   h5File->WriteAttrib<double>("BANDWIDTH", cf.Bandwidth(), H5::PredType::NATIVE_DOUBLE, H5::DataSpace());
-   h5File->WriteAttrib<int>("DECIMATION", cf.Decimation(), H5::PredType::NATIVE_INT, H5::DataSpace());
-   h5File->WriteAttrib<double>("OUTPUT_RATE", cf.OutputRate(), H5::PredType::NATIVE_DOUBLE, H5::DataSpace());
-   h5File->WriteAttrib<double>("IPP", cf.IPP(), H5::PredType::NATIVE_DOUBLE, H5::DataSpace());
-   h5File->WriteAttrib<double>("RF", 49.80e6, H5::PredType::NATIVE_DOUBLE, H5::DataSpace());
+   h5File->WriteAttrib<int>("CHANNELS", cf.NumChannels(), 
+         H5::PredType::NATIVE_INT, H5::DataSpace()
+         );
+
+   h5File->WriteAttrib<double>("SAMPLE_RATE", cf.SampleRate(), 
+         H5::PredType::NATIVE_DOUBLE, H5::DataSpace()
+         );
+
+   h5File->WriteAttrib<double>("BANDWIDTH", cf.Bandwidth(), 
+         H5::PredType::NATIVE_DOUBLE, H5::DataSpace()
+         );
+
+   h5File->WriteAttrib<int>("DECIMATION", cf.Decimation(), 
+         H5::PredType::NATIVE_INT, H5::DataSpace()
+         );
+
+   h5File->WriteAttrib<double>("OUTPUT_RATE", cf.OutputRate(), 
+         H5::PredType::NATIVE_DOUBLE, H5::DataSpace()
+         );
+
+   h5File->WriteAttrib<double>("IPP", cf.IPP(), H5::PredType::NATIVE_DOUBLE, 
+         H5::DataSpace()
+         );
+
+   h5File->WriteAttrib<double>("RF", 49.80e6, H5::PredType::NATIVE_DOUBLE, 
+         H5::DataSpace()
+         );
+
    for(int i=0; i<cf.NumChannels(); ++i){
-      h5File->WriteAttrib<double>("DDC" + lexical_cast<string>(i), cf.DDC(i), H5::PredType::NATIVE_DOUBLE, H5::DataSpace());
+
+      h5File->WriteAttrib<double>("DDC" + lexical_cast<string>(i), 
+            cf.DDC(i), H5::PredType::NATIVE_DOUBLE, H5::DataSpace());
    }
-   h5File->WriteAttrib<int>("SAMPLE_WINDOWS", cf.NumWindows(), H5::PredType::NATIVE_INT, H5::DataSpace());
+
+   h5File->WriteAttrib<int>("SAMPLE_WINDOWS", cf.NumWindows(), 
+         H5::PredType::NATIVE_INT, H5::DataSpace()
+         );
+
    for(int i=0; i<cf.NumWindows(); ++i){
-      h5File->WriteAttrib<int>(cf.WindowName(i)+"_START", cf.WindowStart(i), H5::PredType::NATIVE_INT, H5::DataSpace());
-      h5File->WriteAttrib<int>(cf.WindowName(i)+"_SIZE", cf.WindowSize(i), H5::PredType::NATIVE_INT, H5::DataSpace());
+
+      h5File->WriteAttrib<int>(cf.WindowName(i)+"_START", cf.WindowStart(i), 
+            H5::PredType::NATIVE_INT, H5::DataSpace()
+            );
+
+      h5File->WriteAttrib<int>(cf.WindowName(i)+"_SIZE", cf.WindowSize(i), 
+            H5::PredType::NATIVE_INT, H5::DataSpace()
+            );
    }
 
    //Program GNURadio 
@@ -136,23 +180,30 @@ int main(int argc, char** argv){
 
    GnuRadarDevice grDevice(settings);
 
+   // setup producer thread
+   gnu_radar::ProducerThreadPtr producerThread(
+         new ProducerThread(BUFFER_SIZE , grDevice )
+         );
+
+   // setup consumer thread
+   gnu_radar::ConsumerThreadPtr consumerThread(
+         new ConsumerThread(BUFFER_SIZE , buffer, h5File, dimVector )
+               );
+
    //Initialize Producer/Consumer Model
-   ProducerConsumerModel pcmodel(
-         bufferSize,
-         buffer,
-         numBuffers,
-         sizeof(int),
+   gnu_radar::ProducerConsumerModel pcmodel(
          "GnuRadar",
-         grDevice,
-         h5File,
-         dimVector
+         NUM_BUFFERS,
+         BUFFER_SIZE,
+         producerThread,
+         consumerThread
          );
 
    //this is the primary system loop - console controls operation
    cout << "Starting Data Collection... type <quit> to exit" << endl;
    Console console(pcmodel);
    pcmodel.Start();
-   pcmodel.RequestData(buffer);
+   pcmodel.RequestData();
    pcmodel.Wait();
    cout << "Stopping Data Collection... Exiting Program" << endl;
 

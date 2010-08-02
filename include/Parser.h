@@ -22,6 +22,7 @@
 #include<fstream>
 #include<map>
 #include<algorithm>
+#include<vector>
 
 using std::string;
 
@@ -168,7 +169,7 @@ class Parser{
 
     if(!in) {
       std::cout << filename_ << " does not exist" << std::endl;
-      //      throw FileOpenException();
+      throw FileOpenException();
     }
 
     //read and parse the entire file.

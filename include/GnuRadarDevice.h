@@ -22,6 +22,7 @@
 #include <gnuradar/StreamBuffer.hpp>
 
 #include <boost/cstdint.hpp>
+#include <boost/shared_ptr.hpp>
 #include<usrp_standard.h>
 
 #include <iostream>
@@ -29,127 +30,170 @@
 #include <cstring>
 #include <fstream>
 
-using std::memcpy;
-using std::vector;
-using std::cout;
-using std::cerr;
-
+/// Device class providing access to the USRP data stream. 
 class GnuRadarDevice: public Device{
+
+   // define width of I/Q components
+   typedef int16_t iq_t;
+
+   // define synchro buffer
+   typedef StreamBuffer< iq_t > SynchronizationBuffer;
+   typedef boost::shared_ptr< SynchronizationBuffer > 
+      SynchronizationBufferPtr;
+   SynchronizationBufferPtr synchroBuffer_;
+
+   // define constants
+   const int ALIGNMENT_SIZE_BYTES;
+   const int ALIGNMENT_SIZE;
+   const int FX2_FLUSH_FIFO_SIZE_BYTES;
+
+   // this is a gnuradio pointer of some sort.
+   // older versions did not use this.
    usrp_standard_rx_sptr usrp_;
+
+   // configuration settings class
    GnuRadarSettings grSettings_;
-   bool overrun_;
-   bool firstCall_;
-   StreamBuffer<int16_t> stBuf_;
+
+   // define flags
+   bool overFlow_;
+   bool isFirstDataRequest_;
+
+   //StreamBuffer<int16_t> stBuf_;
    vector<int> sequence_;
 
    public:
+
+   /// Constructor.
    GnuRadarDevice(const GnuRadarSettings& grSettings): 
-      grSettings_(grSettings),overrun_(false),firstCall_(true),
-      sequence_(grSettings.numChannels,16384){
+      ALIGNMENT_SIZE(256),
+      ALIGNMENT_SIZE_BYTES(ALIGNMENT_SIZE*sizeof(iq_t)),
+      FX2_FLUSH_FIFO_SIZE_BYTES( 2048 ),
+      grSettings_(grSettings),
+      overFlow_(false),
+      isFirstDataRequest_(true),
+      sequence_(grSettings.numChannels,16384)
+   {
 
-         usrp_ = usrp_standard_rx::make(
-               grSettings_.whichBoard,
-               grSettings_.decimationRate,
-               grSettings_.numChannels,
-               grSettings_.mux,
-               grSettings_.mode,
-               grSettings_.fUsbBlockSize,
-               grSettings_.fUsbNblocks,
-               grSettings_.fpgaFileName,
-               grSettings_.firmwareFileName
-               );
-         cout << "Requested bit image " << grSettings_.fpgaFileName << endl;
-         
-         //check to see if device is connected
-         if(usrp_.get()==0){ 
-            cout << "no USRP found - check your connections" << endl;
-            exit(0);
-         }
+      // static helper function to initialize USRP settings
+      usrp_ = usrp_standard_rx::make(
+            grSettings_.whichBoard,
+            grSettings_.decimationRate,
+            grSettings_.numChannels,
+            grSettings_.mux,
+            grSettings_.mode,
+            grSettings_.fUsbBlockSize,
+            grSettings_.fUsbNblocks,
+            grSettings_.fpgaFileName,
+            grSettings_.firmwareFileName
+            );
 
-         for(int i=0; i<grSettings_.numChannels; ++i){
-            usrp_->set_rx_freq(i,grSettings_.Tune(i));
-            usrp_->set_ddc_phase(i,0);
-         }
+      cout << "Requested bit image " << grSettings_.fpgaFileName << endl;
 
-         //set all gain to 0dB by default	
-         for(int i=0; i<4; ++i)
-            usrp_->set_pga(i,0);
+      //check to see if device is connected
+      if(usrp_.get()==0){ 
+         cout << "no USRP found - check your connections" << endl;
+         //TODO: thow an exception
+         exit(0);
       }
 
-   //Thread to request data from USRP device
-   virtual void StartDevice(void* address, const int bytes){
+      // setup frequency and phase for each ddc
+      for(int i=0; i<grSettings_.numChannels; ++i){
+         usrp_->set_rx_freq(i,grSettings_.Tune(i));
+         usrp_->set_ddc_phase(i,0);
+      }
+
+      //set all gain to 0dB by default	
+      // TODO: Make this programmable from the top-level at some point.
+      for(int i=0; i<4; ++i)
+         usrp_->set_pga(i,0);
+   }
+
+   /// This method is called from the Producer thread and transfers 
+   /// data from the hardware device to a specified buffer given 
+   /// by the address and bytes parameters.
+   /// 
+   ///\param address shared memory write address.
+   ///\param bytes number of bytes to write.
+   virtual void RequestData(void* address, const int bytes){
 
       int bytesRead;
-      int byteAlign = bytes;
-      //cout << "GnuRadarDevice::Start bytes = " << bytes << endl;
+      bool overrun;
+      int readRequestSizeSamples = bytes/sizeof(iq_t);
 
       //start data collection and flush fx2 buffer
-      if(firstCall_){
+      if( isFirstDataRequest_ ){
 
-        cout << "bytes = " << bytes << endl;
-        cout << "iq    = " << bytes/sizeof(int16_t) << endl;
          // Initialize stream buffer
-         stBuf_.Init(bytes/sizeof(int16_t),512);
-        
-        cout << "pad   = " << stBuf_.Padding() << endl;
-         // syncSize = user request + alignment + extra samples for sync
-         int syncSize = 5*(bytes/sizeof(int16_t) + stBuf_.Padding())/4;
+         synchroBuffer_ = SynchronizationBufferPtr( 
+               new SynchronizationBuffer( 
+                  readRequestSizeSamples, 
+                  ALIGNMENT_SIZE,
+                  sequence_
+                  )
+               );
 
          //create temporary buffer to sync data
-         int16_t buf[syncSize];
-         void* bufPtr = reinterpret_cast<void*>(&buf[0]);
+         iq_t buf[FX2_FLUSH_FIFO_SIZE_BYTES/sizeof(iq_t)];
 
          //(1) initialize usrp for data collection
          //(2) read 512 bytes to clear FX2 buffer
          //(3) read syncSize samples to temporary buffer for data sync
          usrp_->start();
-         usrp_->read(bufPtr,syncSize*sizeof(int16_t),&overrun_);
+         usrp_->read( buf, FX2_FLUSH_FIFO_SIZE_BYTES, &overFlow_ );
+         
+         // write aligned data into the synchro buffer
+         usrp_->read( 
+               synchroBuffer_->WritePtr(),
+               synchroBuffer_->WriteSizeBytes(),
+               &overrun
+               );
+               
+         // synchronize the data stream
+         synchroBuffer_->Sync();
 
-         cout << "size of buffer write is " << syncSize*sizeof(int16_t)/4 << " bytes" << endl;
+         // read 1 second of data from synchro buffer
+         memcpy(
+               address,
+               synchroBuffer_->ReadPtr(),
+               synchroBuffer_->ReadSizeBytes()
+               );
 
-         //ofstream out1("/home/rseal/streamDebug1.dat", ofstream::binary);
-         //for(int i=0; i<syncSize/4; ++i)
-         //    out1.write(reinterpret_cast<char*>(&buf[i*sizeof(int16_t)]), sizeof(int16_t));
-         //out1.close();
+         // update read and write pointers
+         synchroBuffer_->Update();
 
+         isFirstDataRequest_ = false;
 
-         usrp_->read(bufPtr,syncSize*sizeof(int16_t),&overrun_);
-
-         //ofstream out2("/home/rseal/streamDebug2.dat", ofstream::binary);
-         //for(int i=0; i<syncSize; ++i)
-         //    out2.write(reinterpret_cast<char*>(&buf[i*sizeof(int16_t)]), sizeof(int16_t));
-         //out2.close();
-
-         //call stream buffer sync member - will copy synchronized portion of stream to 
-         //internal buffers and adjust pointers accordingly
-         stBuf_.Sync(bufPtr, syncSize, sequence_);
-
-         //Transfer data to shared memory buffer
-         memcpy(address,stBuf_.ReadPtr(), stBuf_.ReadSize());
-         stBuf_.UpdateRead();
-
-         firstCall_ = false;
       }
       else{
 
-         cout << "Writing data to shared memory" << endl;
-
          //read data from USRP
-         bytesRead = usrp_->read(stBuf_.WritePtr(), stBuf_.WriteSize(), &overrun_);
-         stBuf_.UpdateWrite();
+         bytesRead = usrp_->read(
+               synchroBuffer_->WritePtr(),
+               synchroBuffer_->WriteSizeBytes(),
+               &overFlow_
+               );
 
          //Transfer data to shared memory buffer
-         memcpy(address,stBuf_.ReadPtr(), stBuf_.ReadSize());
-         stBuf_.UpdateRead();
+         memcpy(
+               address,
+               synchroBuffer_->ReadPtr(),
+               synchroBuffer_->ReadSizeBytes()
+               );
 
-         if(overrun_){
-            cout << "data overrun - you are losing data" << endl;
-            //throw exception here
+         // update read and write pointers
+         synchroBuffer_->Update();
+         
+         if(overFlow_){
+            //TODO: throw exception here
+            std::cerr << "GnuRadarDevice: Data overflow detected !!!" 
+               << std::endl;
          }
       }
    }
-   
-   //stop data collection
-   virtual void StopDevice(){usrp_->stop();}
+
+   /// Stops data collection.
+   virtual void Stop(){
+      usrp_->stop();
+   }
 };
 #endif

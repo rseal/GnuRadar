@@ -6,5 +6,5 @@ project streambuffer
 exe test-streamBuffer 
         : test.cpp
         : <variant>release
-        : <cxxflags>"-O2 -msse3 -march=athlon-xp -fomit-frame-pointer -pipe"
+        : <cxxflags>"-g -O2 -msse3 -march=native -fomit-frame-pointer -pipe"
         ;

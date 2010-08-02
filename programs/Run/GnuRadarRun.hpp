@@ -31,8 +31,11 @@
 #include <HDF5/Time.hpp>
 #include <boost/shared_ptr.hpp>
 
-boost::shared_ptr<HDF5> h5File;
+typedef boost::shared_ptr<HDF5> Hdf5Ptr;
+Hdf5Ptr h5File;
 
+const int BYTES_PER_SAMPLE = 4;
+const int NUM_BUFFERS      = 20;
 const int    Kb            = 1024;
 const int    Mb            = Kb*Kb;
 const double ms            = 1e-3;
@@ -43,12 +46,10 @@ double BPS;
 string dataSet;
 string fileName;
 
-const double IPP           = 25*ms;
-const double dataWindow    = 16500.0*us;
-const int    numBuffers    = 20;
 vector<int> windowVector;
 vector<hsize_t> dimVector;
 vector<double> tuningFreq;
+
 Time currentTime;
 GnuRadarSettings settings;
 short* buffer;

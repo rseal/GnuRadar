@@ -16,9 +16,10 @@
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 #include <gnuradar/ConsumerThread.h>
 
-//redefine run method for threading - define this external for 
-//modularity
+// worker thread implementation.
 void ConsumerThread::Run(){
+
+   // write an HDF5 table to disk 
    h5File_->CreateTable(cpx_.GetRef(), space_);
    h5File_->WriteTStrAttrib("TIME", time_.GetTime());
    h5File_->WriteTable(reinterpret_cast<void*>(address_));

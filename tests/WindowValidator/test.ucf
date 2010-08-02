@@ -1,0 +1,49 @@
+### USRP Configuration Interface File ###
+### Version 0.99 ###
+
+SampleRate=64000000
+NumChannels=1
+Decimation=8
+IPP=10
+IPPUnits=msec
+FPGAImage=usrp_trigger_tags.rbf
+
+### Channel 0 ###
+DDC0=-14.2
+DDCUnits0=MHz
+Phase0=0
+PhaseUnits0=Deg
+
+### Channel 1 ###
+DDC1=0
+DDCUnits1=MHz
+Phase1=0
+PhaseUnits1=Deg
+
+### Channel 2 ###
+DDC2=0
+DDCUnits2=MHz
+Phase2=0
+PhaseUnits2=Deg
+
+### Channel 3 ###
+DDC3=0
+DDCUnits3=MHz
+Phase3=0
+PhaseUnits3=Deg
+
+### Number of Windows ###
+NumWindows=1
+
+### Window 0 ###
+Name0=Data
+Start0=80
+Size0=50
+Units0=km
+
+### Header Settings ###
+Institution=PSU
+Observer=rseal
+Object=Test
+Radar=NA
+Receiver=USRP SN:0025

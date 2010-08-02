@@ -18,6 +18,7 @@
 #define GNURADAR_SETTINGS_H
 
 #include <iostream>
+#include <vector>
 
 struct GnuRadarSettings{
 
@@ -36,11 +37,11 @@ struct GnuRadarSettings{
    int mode;
    int fUsbBlockSize;
    int fUsbNblocks;
-   string fpgaFileName;
-   string firmwareFileName;
-   vector<double> tuningFrequency;
+   std::string fpgaFileName;
+   std::string firmwareFileName;
+   std::vector<double> tuningFrequency;
    int fpgaMode;
-   vector<double> ddcPhase;
+   std::vector<double> ddcPhase;
    int format;
    double clockRate;
 

@@ -44,147 +44,209 @@
 //is available to average these bursty reads so you don't overflow and lose data 
 //due to unseen latencies.
 
-struct ProducerConsumerModel: public SThread {
-   const int& bytes_;
-   const int& buffers_;
-   const std::string& baseFileName_;
-   Device& device_;
+namespace gnu_radar{
 
-   std::auto_ptr<ProducerThread> pThread_;
-   std::auto_ptr<ConsumerThread> cThread_;
-   int head_;
-   int tail_;
-   int depth_;
-   Mutex mutex_;
-   void* memBuffer;
-   void* memIndex;
-   void* destination_;
-   const int& dataWidth_;
-   int error_;
+   typedef boost::shared_ptr<ProducerThread> ProducerThreadPtr;
+   typedef boost::shared_ptr<ConsumerThread> ConsumerThreadPtr;
 
-   std::vector<boost::shared_ptr<SharedMemory> > bufferPtr_;
-   bool stop_;
-   bool stopProducer_;
-   bool stopConsumer_;
-   bool overFlow_;
+   struct ProducerConsumerModel: public SThread {
 
-   std::string FileName(){
-      //lock head_ variable
-      ScopedLock scopedLock(mutex_);
-      return baseFileName_ + boost::lexical_cast<string>(head_) + ".buf";
-   }
+      const int NUM_BUFFERS;
+      const int BYTES_PER_BUFFER;
+      const std::string& BASE_FILE_NAME;
 
-   //lock head variable
-   void IncrementHead(){
-      ScopedLock scopedLock(mutex_);
-      if(depth_ == buffers_) overFlow_ = true;
-      if(++head_ == buffers_) head_=0;
-   }
+      typedef boost::shared_ptr<SharedMemory> SharedMemoryPtr;
+      typedef std::vector<SharedMemoryPtr> SharedMemoryVector;
 
-   //lock tail variable for update
-   void IncrementTail(){
-      ScopedLock scopedLock(mutex_);
-      if(++tail_ == buffers_) tail_=0;
-   }
+      SharedMemoryVector bufferArray_;
+      ProducerThreadPtr producerThread_;
+      ConsumerThreadPtr consumerThread_;
 
-   void IncrementDepth(){
-      ScopedLock scopedLock(mutex_);
-      ++depth_;
-   }
+      int head_;
+      int tail_;
+      int depth_;
+      
+      Mutex mutex_;
+      void* memBuffer;
+      void* memIndex;
+      int error_;
 
-   void DecrementDepth(){
-      ScopedLock scopedLock(mutex_);
-      --depth_;
-   }
+      bool stop_;
+      bool stopProducer_;
+      bool stopConsumer_;
+      bool overFlow_;
 
-   bool DataAvailable(){
-      ScopedLock scopedLock(mutex_);
-      return (depth_ != 0) ? true:false;
-   }
-
-   //track variables for debugging/testing
-   void Debug(){
-      ScopedLock scopedLock(mutex_);
-      cout << endl << ">>> head = " << head_ << " tail = " << tail_ << " depth = " << depth_ << endl;
-   }
-
-   public:
-   ProducerConsumerModel
-      ( 
-       const int& bytes, 
-       void* destination, 
-       const int& buffers, 
-       const int& dataWidth, 
-       const std::string baseFileName, 
-       Device& device, 
-       boost::shared_ptr<HDF5> const h5File, 
-       std::vector<hsize_t>& dims
-      )
-      :  bytes_(bytes), destination_(destination),buffers_(buffers), 
-      baseFileName_(baseFileName), device_(device), head_(),
-      tail_(),depth_(),dataWidth_(dataWidth),stop_(false),
-      stopProducer_(false),stopConsumer_(false),overFlow_(false)
-   {
-      //create producer and consumer
-      pThread_.reset(new ProducerThread(bytes_,device_));
-      cThread_.reset(new ConsumerThread(bytes_,destination_, h5File, dims));
-
-      //create std::vector of memory buffers in /dev/shm using POSIX shared memory (tmpfs)
-      for(int i=0; i<buffers_; ++i){
-         std::string bufferStr = baseFileName_ + boost::lexical_cast<string>(i) + ".buf";
-         boost::shared_ptr<SharedMemory> bufPtr(new SharedMemory(bufferStr, bytes_, SHM::CreateShared, 0666));
-         bufferPtr_.push_back(bufPtr);
+      /// Returns the FileName - thread safe
+      std::string FileName(){
+         ScopedLock scopedLock(mutex_);
+         return BASE_FILE_NAME + boost::lexical_cast<string>(head_) + ".buf";
       }
-   }
 
-   virtual void Run(){
-
-      stopProducer_ = false;
-      stopConsumer_ = false;
-
-      //Run Until User Tells Us To Stop
-      while(!stopProducer_){
-         if(OverFlow()) throw PCException::OverFlow();
-         //Request Data From Hardware And Return Error Status
-         pThread_->RequestData((bufferPtr_[head_])->GetPtr());
-         //cout << "producer thread " << head_ << endl;
-         //Sync Thread To Keep Data Streaming Properly
-         pThread_->Wait();
-         //Increment Head
-         IncrementHead();
-         IncrementDepth();
-         //wake up consumer
-         cThread_->Wake();
-         //sleep(1);
+      /// Increments the buffer head - thread safe
+      void IncrementHead(){
+         ScopedLock scopedLock(mutex_);
+         if(depth_ == NUM_BUFFERS) overFlow_ = true;
+         if(++head_ == NUM_BUFFERS) head_=0;
       }
-      pThread_->Stop();
-      cout << "ProducerConsumerModel: Producer Stopped" << endl;
 
-   }
-
-   void RequestData(void* memory){
-
-      while(!stopConsumer_){
-
-         if(!DataAvailable()) cThread_->Pause();
-
-         cThread_->RequestData((bufferPtr_[tail_])->GetPtr());
-         Debug();
-         cThread_->Wait();
-         IncrementTail();
-         DecrementDepth();
+      /// Increments the buffer tail - thread safe
+      void IncrementTail(){
+         ScopedLock scopedLock(mutex_);
+         if(++tail_ == NUM_BUFFERS) tail_=0;
       }
-      cout << "ProducerConsumerModel: Consumer Stopped" << endl;
-   }
 
-   const bool& OverFlow() { return overFlow_;}
+      /// Increases the buffer depth - thread safe
+      void IncrementDepth(){
+         ScopedLock scopedLock(mutex_);
+         ++depth_;
+      }
 
-   void Stop(void){ 
-      stopConsumer_=true;
-      cThread_->Wait();
-      stopProducer_ = true;
-      cout << "ProducerConsumerModel: System Stop activated" << endl;
-   } 
+      /// Decreases buffer depth - thread safe
+      void DecrementDepth(){
+         ScopedLock scopedLock(mutex_);
+         --depth_;
+      }
+
+      /// Returns true if data is available - thread safe
+      bool DataAvailable(){
+         ScopedLock scopedLock(mutex_);
+         return (depth_ != 0) ? true:false;
+      }
+
+      void CreateSharedBuffers() {
+
+         // setup shared memory buffers 
+         for(int i=0; i<NUM_BUFFERS; ++i){
+
+            // create unique buffer file names
+            std::string bufferName = BASE_FILE_NAME + 
+               boost::lexical_cast<string>(i) + ".buf";
+
+            // create shared buffers
+            SharedMemoryPtr bufPtr( 
+                  new SharedMemory(
+                     bufferName, 
+                     BYTES_PER_BUFFER, 
+                     SHM::CreateShared, 
+                     0666)
+                  );
+
+            // store buffer in a vector
+            bufferArray_.push_back(bufPtr);
+         }
+
+      }
+
+      /// track variables for debugging/testing - thread safe
+      void Debug(){
+
+         ScopedLock scopedLock(mutex_);
+         cout 
+            << endl << ">>> head = " 
+            << head_ << " tail = " 
+            << tail_ << " depth = " 
+            << depth_ 
+            << endl;
+      }
+
+      public: 
+
+      /// Constructor
+      ProducerConsumerModel ( 
+            const std::string& baseFileName, 
+            const int numBuffers, 
+            const int bytesPerBuffer,
+            ProducerThreadPtr producerThread,
+            ConsumerThreadPtr consumerThread
+            ): 
+         BASE_FILE_NAME( baseFileName ), 
+         NUM_BUFFERS( numBuffers ),
+         BYTES_PER_BUFFER( bytesPerBuffer )
+      {
+         // initialize buffer markers
+         head_ = 0;
+         tail_ = 0;
+         depth_ = 0;
+
+         // initialize flags
+         stop_ = false;
+         stopProducer_ = false;
+         stopConsumer_ = false;
+         overFlow_ = false;
+
+         //create producer and consumer
+         producerThread_ = producerThread;
+         consumerThread_ = consumerThread;
+
+         CreateSharedBuffers();
+      }
+
+      /// This method is called with Start() and is the worker thread
+      virtual void Run(){
+
+         stopProducer_ = false;
+         stopConsumer_ = false;
+
+         //Run Until User Tells Us To Stop
+         while(!stopProducer_){
+
+            // if the buffer overflows - throw an exception
+            if(OverFlow()) throw PCException::OverFlow();
+
+            //Request Data From Hardware And Return Error Status
+            producerThread_->RequestData( (bufferArray_[head_])->GetPtr() );
+
+            //Sync Thread To Keep Data Streaming Properly
+            producerThread_->Wait();
+
+            IncrementHead();
+            IncrementDepth();
+
+            //wake up consumer
+            consumerThread_->Wake();
+         }
+
+         producerThread_->Stop();
+         cout << "ProducerConsumerModel: Producer Stopped" << endl;
+      }
+
+      /// start both producer and consumer threads.
+      void RequestData(){
+
+         while(!stopConsumer_){
+
+            // if no data is available - wait for signal
+            if(!DataAvailable()) consumerThread_->Pause();
+
+            // Request data from the shared buffer
+            consumerThread_->RequestData( (bufferArray_[tail_])->GetPtr() );
+
+            // print debug information
+            // TODO: Replace this and implement some sort of port
+            // accessible status calls
+            Debug();
+
+            // wait for thread to complete before continuing
+            consumerThread_->Wait();
+
+            // update pointers
+            IncrementTail();
+            DecrementDepth();
+         }
+
+         cout << "ProducerConsumerModel: Consumer Stopped" << endl;
+      }
+
+      /// Return true if numBuffers have overflowed.
+      const bool& OverFlow() { return overFlow_;}
+
+      /// Stop the producer and consumer.
+      void Stop(void){ 
+         stopConsumer_=true;
+         consumerThread_->Wait();
+         stopProducer_ = true;
+         cout << "ProducerConsumerModel: System Stop activated" << endl;
+      } 
+   };
 };
-
 #endif

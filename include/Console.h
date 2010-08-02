@@ -20,20 +20,25 @@
 #include <gnuradar/ProducerConsumerModel.h>
 
 class Console: public SThread{
-  ProducerConsumerModel& pcmodel_;
+   gnu_radar::ProducerConsumerModel& pcmodel_;
   std::string input_;
   bool quit_;
 
 public:
 
-  Console(ProducerConsumerModel& pcmodel): pcmodel_(pcmodel),quit_(false){this->Start();}
+  Console(gnu_radar::ProducerConsumerModel& pcmodel): 
+     pcmodel_(pcmodel),quit_(false)
+   {
+     this->Start();
+   }
+
   virtual void Run(){
-    while(true){
-      cout << ">>>";
-      cin >> input_;
-      if(input_ == "quit") pcmodel_.Stop();
-      sleep(1);
-    }
+     while(true){
+        cout << ">>>";
+        cin >> input_;
+        if(input_ == "quit") pcmodel_.Stop();
+        sleep(1);
+     }
   }
 };
 

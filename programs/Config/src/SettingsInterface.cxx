@@ -45,7 +45,9 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     Fl_Color wColor_ = fl_rgb_color(220,220,220);
     color1_ = fl_rgb_color(180,180,180);									
 
-    sampleRate_ = boost::shared_ptr<Fl_Float_Input>(new Fl_Float_Input(x0, y0, w0, h1, "Sample Rate"));
+    sampleRate_ = boost::shared_ptr<Fl_Float_Input>(
+          new Fl_Float_Input(x0, y0, w0, h1, "Sample Rate")
+          );
     string str = lexical_cast<string>(settingsCompute_->SampleRate()/1e6);
     sampleRate_->value(str.c_str());
     sampleRate_->callback(SettingsInterface::UpdateSampleRate,this);
@@ -65,7 +67,9 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     chNum.push_back("2");
     chNum.push_back("4");
 
-    channels_ = boost::shared_ptr<Fl_Choice>( new Fl_Choice(x0+sp2, y0, w0, h1, "Channels"));
+    channels_ = boost::shared_ptr<Fl_Choice>( 
+          new Fl_Choice(x0+sp2, y0, w0, h1, "Channels")
+          );
     channels_->add(chNum[0].c_str(),0,0);
     channels_->add(chNum[1].c_str(),0,0);
     channels_->add(chNum[2].c_str(),0,0);
@@ -74,7 +78,9 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     channels_->callback(SettingsInterface::UpdateChannel,this);
     this->add(channels_.get());
 
-    decimation_ = boost::shared_ptr<Fl_Value_Slider>(new Fl_Value_Slider(x0, y0+sp1, w1+25, h1, "Decimation"));
+    decimation_ = boost::shared_ptr<Fl_Value_Slider>(
+          new Fl_Value_Slider(x0, y0+sp1, w1+25, h1, "Decimation")
+          );
     decimation_->align(FL_ALIGN_LEFT);
     decimation_->type(FL_HOR_NICE_SLIDER);
     decimation_->textsize(14);
@@ -86,7 +92,9 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     decimation_->callback(SettingsInterface::UpdateDecimation,this);
     this->add(decimation_.get());
 
-    bandwidth_ = boost::shared_ptr<Fl_Output>(new Fl_Output(x0+sp2, y0+sp1, w0, h1, "Bandwidth"));
+    bandwidth_ = boost::shared_ptr<Fl_Output>(
+          new Fl_Output(x0+sp2, y0+sp1, w0, h1, "Bandwidth")
+          );
     bandwidth_->value("8");
     bandwidth_->clear_visible_focus();
     bandwidth_->box(FL_PLASTIC_UP_BOX);
@@ -94,7 +102,9 @@ SettingsInterface::SettingsInterface(int x, int y, int width, int height,
     bandwidth_->align(FL_ALIGN_LEFT);
     this->add(bandwidth_.get());
 
-    units2_ = boost::shared_ptr<Fl_Output>(new Fl_Output(x0+sp2+65,y0+sp1, 40, h1));
+    units2_ = boost::shared_ptr<Fl_Output>(
+          new Fl_Output(x0+sp2+65,y0+sp1, 40, h1)
+          );
     units2_->value("MHz");
     units2_->clear_visible_focus();
     units2_->box(FL_PLASTIC_UP_BOX);

@@ -103,10 +103,22 @@ int main(int argc, char** argv){
    Arg arg1("f", "file to view", 1, true);
    Arg arg2("r", "refresh rate", 1, false, "100");
    Arg arg3("o", "offset", 1, false, "0");
+   Switch sw1("h", "print this message", false);
+   Switch sw2("help", "print this message", false);
+   clp.AddSwitch(sw1);
+   clp.AddSwitch(sw2);
    clp.AddArg(arg1);
    clp.AddArg(arg2);
    clp.AddArg(arg3);
    clp.Parse();
+
+   if(clp.SwitchSet("h") || clp.SwitchSet("help")){
+      clp.PrintHelp();
+      exit(0);
+   }
+
+   clp.Validate();
+
    fileName = clp.GetArgValue<string>("f");
    refreshRate = clp.GetArgValue<int>("r");
    offset = clp.GetArgValue<int>("o");

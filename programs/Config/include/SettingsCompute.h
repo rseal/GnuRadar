@@ -26,9 +26,6 @@
 #define SETTINGS_COMPUTE_H
 
 #include <iostream>
-#include <boost/lexical_cast.hpp>
-
-using boost::lexical_cast;
 
 ///Validates selected parameters and formats for display as needed.
 struct SettingsCompute{
@@ -67,9 +64,9 @@ struct SettingsCompute{
          << "value = " << value << " valid ranges are (" 
          << min << "," 
          << max << ").\n"; 
-
    }
    public:
+
    ///Constructor
    SettingsCompute(): sampleRate_(MAX_SAMPLE_RATE), 
    decimation_(MIN_DECIMATION_RATE), bandwidth_(8e6), channels_(1){}
@@ -99,6 +96,7 @@ struct SettingsCompute{
 
       Update();
    }
+
    ///Validates and sets sample rate settings
    void SampleRate(const double sampleRate) { 
 
@@ -124,8 +122,7 @@ struct SettingsCompute{
       Update();
    }
 
-   ///Checks all parameters and returns true if valid
-   //Validation Rules: 
+   ///Checks all parameters and returns true if valid.
    const bool ValidateParameters() { 
 
       bool sampleRateBounded = BoundCheck<double>( sampleRate_, 
@@ -136,7 +133,6 @@ struct SettingsCompute{
 
       return ( sampleRateBounded && even && decimationBounded );
    }
-
 };
 
 #endif

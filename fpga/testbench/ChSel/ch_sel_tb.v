@@ -36,7 +36,7 @@ module ch_sel_tb;
 
    always @(posedge clk)
      if(rst)
-       channels <= 3'd3;
+       channels <= 3'd1;
    
    /*
     *MODULE: ch_sel

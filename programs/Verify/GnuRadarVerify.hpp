@@ -10,5 +10,8 @@
 #include <stdexcept>
 #include <vector>
 
-std::vector<gnuradar::iq_t> buffer;
+typedef std::vector<gnuradar::iq_t> Buffer;
+typedef Buffer::iterator BufferIterator;
+
+Buffer buffer;
 #endif

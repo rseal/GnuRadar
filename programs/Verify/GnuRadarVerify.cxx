@@ -1,7 +1,9 @@
 #include "GnuRadarVerify.hpp"
+#include <boost/lexical_cast.hpp>
 
 using std::string;
 using std::vector;
+using boost::lexical_cast;
 
 int main(int argc, char** argv)
 {
@@ -77,19 +79,39 @@ int main(int argc, char** argv)
    usrp->start();
    usrp->read( bufferPtr, gnuradar::FX2_FLUSH_FIFO_SIZE_BYTES, &overFlow );
 
-   //read data from USRP
-   int bytesRead = usrp->read( bufferPtr, cf.BytesPerSecond(), &overFlow );
+   // resize buffer aligned on required byte boundary - 512 bytes
+   int byteRequest= cf.BytesPerSecond();
+   int alignedBytes = byteRequest%gnuradar::BUFFER_ALIGNMENT_SIZE_BYTES; 
+   int alignedByteRequest = byteRequest - alignedBytes;
+   buffer.resize( alignedByteRequest / sizeof( gnuradar::iq_t ));
 
-   if( bytesRead != cf.BytesPerSecond() ){
+   //read data from USRP
+   int bytesRead = usrp->read( bufferPtr, alignedByteRequest, &overFlow );
+
+   if( bytesRead != alignedByteRequest ){
          throw std::runtime_error(
                "GnuRadarVerify: Number of bytes read is not equal to the "
-               "number of requested bytes.\n"
+               "number of requested bytes.\n Expected " + 
+               lexical_cast<string>(alignedByteRequest) + " Found " + 
+               lexical_cast<string>(bytesRead)  + "\n"
                );
+   } 
+   
+   int stride = cf.NumChannels()*2;
+
+   Buffer channelBuffer( buffer.size() / stride );
+   BufferIterator bufferIter = buffer.begin();
+   BufferIterator channelBufferIter = channelBuffer.begin();
+
+   while( bufferIter != buffer.end() ){
+      *channelBufferIter = *bufferIter;
+      bufferIter += stride ;
+      ++channelBufferIter;
    }
 
    // validate collected window sizes with those in configuration file.
    WindowValidator windowValidator_;
-   bool valid = windowValidator_.Validate( buffer, cf.Windows() );
+   bool valid = windowValidator_.Validate( channelBuffer, cf.Windows() );
 
    if( !valid ){
       cout << " GnuRadar window verification failed. \n";

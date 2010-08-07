@@ -135,9 +135,8 @@ class GnuRadarDevice: public Device{
          //create temporary buffer to sync data
          iq_t buf[FX2_FLUSH_FIFO_SIZE_BYTES/sizeof(iq_t)];
 
-         //(1) initialize usrp for data collection
-         //(2) read 512 bytes to clear FX2 buffer
-         //(3) read syncSize samples to temporary buffer for data sync
+         // Read some data to flush the FX2 buffers in the USRP.
+         // This data is discarded. 
          usrp_->start();
          usrp_->read( buf, FX2_FLUSH_FIFO_SIZE_BYTES, &overFlow_ );
          
@@ -151,7 +150,15 @@ class GnuRadarDevice: public Device{
          // synchronize the data stream
          synchroBuffer_->Sync();
 
-         // read 1 second of data from synchro buffer
+         // write a another buffer after synchronizing. 
+         // This is a requirement of the StreamBuffer class.
+         usrp_->read( 
+               synchroBuffer_->WritePtr(),
+               synchroBuffer_->WriteSizeBytes(),
+               &overrun
+               );
+
+         // copy 1 second of data from synchro buffer
          memcpy(
                address,
                synchroBuffer_->ReadPtr(),

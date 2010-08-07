@@ -3,7 +3,7 @@
 #include <string.h>
 #include <fstream>
 #include "SigGen.hpp"
-#include <gnuradar/GnuRadarTypes.h>
+#include <gnuradar/GnuRadarTypes.hpp>
 #include <gnuradar/ConfigFile.h>
 #include <gnuradar/WindowValidator.hpp>
 

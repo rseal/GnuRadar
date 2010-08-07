@@ -29,7 +29,7 @@ struct WindowValidator{
             bufferIter_ != buffer_.end() 
            );
 
-      return count;
+      return count+1;
    }
 
    // compares the determined window sizes to the 
@@ -55,6 +55,7 @@ struct WindowValidator{
       buffer_ = buffer;
       windows_ = windows;
 
+
       bufferIter_ = buffer_.begin();
 
       // search for the first data tag and reposition the iterator.
@@ -67,6 +68,8 @@ struct WindowValidator{
                );
       }
 
+      ++bufferIter_;
+      
       // store a sample count for each window defined by the window vector.
       for( int i=0; i<windows_.size(); ++i) 
          measuredWindows_.push_back( getCount() ); 

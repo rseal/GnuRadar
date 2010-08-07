@@ -53,8 +53,9 @@ int main(int argc, char** argv){
 
    //buffersize in bytes
    //window / IPP * numChannels * 4 = bytes per second
-   const int BUFFER_SIZE = cf.WindowLength() * 
-      cf.NumChannels() * BYTES_PER_SAMPLE * static_cast<int>(PRF);
+   const int BUFFER_SIZE = cf.BytesPerSecond();
+      //cf.WindowLength() * 
+      //cf.NumChannels() * BYTES_PER_SAMPLE * static_cast<int>(PRF);
 
    cout 
       << "PRF        = " << PRF             << "\n"
@@ -90,7 +91,7 @@ int main(int argc, char** argv){
    dimVector.push_back(static_cast<int>(cf.WindowLength()*cf.NumChannels()));
 
    //create consumer buffer - destination 
-   buffer = new short[ BUFFER_SIZE /sizeof(short) ];
+   buffer = new gnuradar::iq_t[ BUFFER_SIZE /sizeof(gnuradar::iq_t) ];
 
    cout 
       << "--------------------Settings----------------------" << "\n"
@@ -137,10 +138,11 @@ int main(int argc, char** argv){
          H5::PredType::NATIVE_DOUBLE, H5::DataSpace()
          );
 
-   h5File->WriteAttrib<double>("IPP", cf.IPP(), H5::PredType::NATIVE_DOUBLE, 
+   h5File->WriteAttrib<double>("IPP", ceil(cf.IPP()), H5::PredType::NATIVE_DOUBLE, 
          H5::DataSpace()
          );
 
+   // FIXME - RF carrier frequency should be in the configuration file.
    h5File->WriteAttrib<double>("RF", 49.80e6, H5::PredType::NATIVE_DOUBLE, 
          H5::DataSpace()
          );

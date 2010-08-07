@@ -9,9 +9,10 @@ module ch_mux_tb;
    parameter SIM_TIME=1e6;
    
    reg 	     clk,rst;
-   reg 	     strobe;
+   wire 	     strobe;
    
    reg [3:0] numch;
+   reg [3:0] maxChannels;
    wire [7:0] channel;
    wire [15:0] data;
    
@@ -29,19 +30,45 @@ module ch_mux_tb;
     */
    initial
      begin
-	sel <= 3'd0;
-	numch = 4'd8;
+	numch = 4'd2;
+   maxChannels = numch - 4'd1;
 	//reset pulse
 	rst <= 1'b0;
 	rst <= #10 1'b1;
 	rst <= #100 1'b0;
      end
 
-   reg [2:0] sel;
+   wire [2:0] sel;
    
-   always @(posedge clk)
-     sel <= (sel == numch-4'd1) ? 3'd0 : sel + 3'd1;
+   //always @(posedge clk)
+   //  sel <= (sel == numch-4'd1) ? 3'd0 : sel + 3'd1;
+   //
+   /*
+    *MODULE: strobe_gen
+    */
+   strobe_gen sgn
+     (
+      .clock(clk),
+      .reset(rst),
+      .enable(1'b1),
+      .rate(8'd63), // Rate should be 1 LESS THAN your desired divide ratio
+      .strobe_in(1'b1),
+      .strobe(strobe),
+      .dbus()
+    );
    
+   /*
+    *MODULE: ch_sel
+    */
+   ch_sel cs
+     (
+      .clk(clk),
+      .reset(rst),
+      .strobe(strobe),
+      .sel(sel),
+      .channels(maxChannels[2:0])
+      );
+
    /*
     MODULE: ch_mux
     */

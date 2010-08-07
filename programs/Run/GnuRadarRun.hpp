@@ -20,6 +20,7 @@
 #include <gnuradar/ProducerConsumerModel.h>
 #include <usrp_standard.h>
 #include <gnuradar/GnuRadarDevice.h>
+#include <gnuradar/GnuRadarTypes.hpp>
 #include <gnuradar/GnuRadarSettings.h>
 #include <gnuradar/SThread.h>
 #include <gnuradar/Console.h>
@@ -52,6 +53,6 @@ vector<double> tuningFreq;
 
 Time currentTime;
 GnuRadarSettings settings;
-short* buffer;
+gnuradar::iq_t* buffer;
 
 #endif 

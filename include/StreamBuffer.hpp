@@ -17,14 +17,8 @@
 #ifndef STREAM_BUFFER_HPP
 #define STREAM_BUFFER_HPP
 
-#include<boost/circular_buffer.hpp>
 #include<vector>
-#include<deque>
-#include<cassert>
 #include<iomanip>
-
-using std::cout;
-using std::endl;
 
 template<typename T>
 struct StreamBuffer{
@@ -42,16 +36,10 @@ struct StreamBuffer{
    int END_INDEX;
 
    typedef std::vector<T> Buffer;
+   Buffer buffer_;
+
    typedef std::vector<int> TagVector;
    TagVector tags_;
-
-   // pointers for buffer positioning
-   T* readPtr_;
-   T* writePtr_;
-   T* copyPtr_;
-   T* beginPtr_;
-   T* endPtr_;
-   Buffer buffer_;
 
    int writeSize_;
    int bufferLevel_;
@@ -82,7 +70,6 @@ struct StreamBuffer{
    }
 
    public:
-   StreamBuffer(){};
 
    /// Accepts alignment size and buffer size in bytes and sets up
    /// an internal aligned buffer
@@ -197,22 +184,22 @@ struct StreamBuffer{
       static int printHeader = 0;
 
       if( !(printHeader%30) ){
-         cout 
+         std::cout 
             << std::setw(10) << "rd " 
             << std::setw(10) << "wr " 
             << std::setw(10) << "wr size " 
             << std::setw(10) << "level " 
             << std::setw(10) << " max " 
-            << endl;
+            << std::endl;
       }
 
-      cout 
+      std::cout 
          << std::setw(10) << readIndex_
          << std::setw(10) << writeIndex_
          << std::setw(10) << writeSize_
          << std::setw(10) << bufferLevel_ 
          << std::setw(10) << STORAGE_SIZE
-         << endl;
+         << std::endl;
 
       ++printHeader;
    }

@@ -20,7 +20,7 @@ public class GnuRadarVerifyButtonPanel extends JPanel
    implements ActionListener
 {
    private static final long serialVersionUID = 1L;
-private static final String PROGRAM_NAME = "gradar-verify";
+   private static final String PROGRAM_NAME = "gradar-verify";
    private static final String PROGRAM_ARGS = "-f ";
    private static final int BUTTON_WIDTH = 100;
    private static final int BUTTON_HEIGHT = 20;

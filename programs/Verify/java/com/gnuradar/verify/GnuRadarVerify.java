@@ -13,19 +13,30 @@ import javax.swing.JTextPane;
 
 import com.corejava.GBC;
 
+/// This class is a basic wrapper around the C++ command line version.
+/// Console IO is captured and printed to the text box in the application.
+/// The program is designed to validate proper settings between the receiver's 
+/// configuration and the radar controller's ( pulse generator ) configuration.
+/// Any discrepencies will be reported. 
 public class GnuRadarVerify
 {
+   // define constants
    public static final int DEFAULT_WIDTH = 450;
    public static final int DEFAULT_HEIGHT = 300;
    public static final String TITLE = "GnuRadarVerify";
    public static final String VERSION = "0.99";
 
+   // main entry point
    public static void main( String[] args )
    {
+      // this is required for proper event-handling
       EventQueue.invokeLater( new Runnable() {
          public void run()
       {
+         // use the grid bag layout manager
          GridBagLayout gridBagLayout = new GridBagLayout();
+
+         // create a text pane, set properties, and initialize text.
          JTextPane status = new JTextPane();
          status.setMinimumSize( new Dimension( 400, 200 ) );
          status.setPreferredSize( new Dimension( 400, 200 ) );
@@ -47,52 +58,36 @@ public class GnuRadarVerify
             "button and then clicking [Verify]."
             );
 
-         JMenuBar menuBar;
-         JMenu fileMenu;
-         JMenu helpMenu;
-         menuBar = new JMenuBar();
+         // create menu bar and menu items
+         JMenuBar menuBar = new JMenuBar();
 
-         fileMenu = new JMenu("File");
+         JMenu fileMenu = new JMenu("File");
          fileMenu.add( new JMenuItem("Load",'L'));
          fileMenu.addSeparator();
          fileMenu.add( new JMenuItem("Quit",'Q'));
 
-         helpMenu = new JMenu("Help");
+         JMenu helpMenu = new JMenu("Help");
          helpMenu.add( new JMenuItem("About",'A'));
 
          menuBar.add( fileMenu );
          menuBar.add( Box.createHorizontalGlue() );
          menuBar.add( helpMenu );
 
+         // create button panel and set properties.
          GnuRadarVerifyButtonPanel buttonPanel = 
             new GnuRadarVerifyButtonPanel( status );
-
          buttonPanel.setMinimumSize( new Dimension(400,50) );
          buttonPanel.setPreferredSize( new Dimension(400,30) );
 
-         SimpleFrame frame = new SimpleFrame( 
+         // create main window frame and set properties.
+         FixedFrame frame = new FixedFrame( 
                DEFAULT_WIDTH, DEFAULT_HEIGHT, TITLE + " " + VERSION );
-
          frame.setLayout( gridBagLayout );
          frame.setJMenuBar( menuBar );
          frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-
          frame.add( buttonPanel, new GBC( 0,1,100,100).setIpad(5,5));
          frame.add( status, new GBC( 0,0,100,100).setIpad(5,5));
          frame.setVisible( true );
       }});
-   }
-}
-
-
-class SimpleFrame extends JFrame 
-{
-  	private static final long serialVersionUID = 1L;
-
-public SimpleFrame( int width, int height, String title )
-   {
-      setTitle( title );
-      setSize( width, height );
-      setResizable( true );
    }
 }

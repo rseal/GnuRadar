@@ -3,6 +3,7 @@ usrpSVN/
 *.o
 *~
 *.swp
+.sconsign.dblite
 programs/Analyze/binary.dat
 programs/Run/config
 programs/Config/java

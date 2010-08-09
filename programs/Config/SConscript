@@ -1,0 +1,10 @@
+#custom build flags
+warnFlags = ['-Wall', '-W']
+
+#define build environment
+env = Environment();
+env.ParseConfig('fltk-config --cxxflags --ldflags');
+warnEnv = env.Clone(CXXFLAGS=warnFlags);
+
+warnEnv.Program(target='gradar-config', source=Glob('src/*.cxx'));
+

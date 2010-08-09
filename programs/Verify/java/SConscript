@@ -1,0 +1,8 @@
+#SCONS build file
+
+# create environment
+env = Environment();
+
+appClasses = env.Java('classes','com');
+env.Jar('gradar-verify.jar', appClasses + ['com/MANIFEST.MF'] );
+Clean('.', 'classes');

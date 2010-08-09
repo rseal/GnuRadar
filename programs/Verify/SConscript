@@ -5,6 +5,6 @@ warnFlags = ['-Wall', '-W']
 env = Environment();
 warnEnv = env.Clone(CXXFLAGS=warnFlags);
 
-warnEnv.Program(target='gradar-verify', source='GnuRadarVerify.cxx', LIBS=['rt', 'pthread', 'usrp', 'usb']);
+warnEnv.Program(target='../../bin/gradar-verify', source='GnuRadarVerify.cxx', LIBS=['rt', 'pthread', 'usrp', 'usb']);
 env.SConscript('java/SConscript');
 

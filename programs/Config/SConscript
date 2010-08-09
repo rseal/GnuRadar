@@ -6,5 +6,5 @@ env = Environment();
 env.ParseConfig('fltk-config --cxxflags --ldflags');
 warnEnv = env.Clone(CXXFLAGS=warnFlags);
 
-warnEnv.Program(target='gradar-config', source=Glob('src/*.cxx'));
+warnEnv.Program(target='../../bin/gradar-config', source=Glob('src/*.cxx'));
 

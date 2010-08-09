@@ -3,6 +3,10 @@
 # create environment
 env = Environment();
 
+jarName='gradar-verify.jar';
+installDir='../../../bin';
+
 appClasses = env.Java('classes','com');
-env.Jar('gradar-verify.jar', appClasses + ['com/MANIFEST.MF'] );
-Clean('.', 'classes');
+env.Jar(installDir+'/'+jarName, appClasses + ['com/MANIFEST.MF'] );
+#env.Command(installDir+'/'+jarName, jarName, Copy("$TARGET", "$SOURCE"));
+env.Clean('.', 'classes');

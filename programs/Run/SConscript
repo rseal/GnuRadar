@@ -6,5 +6,5 @@ env = Environment();
 warnEnv = env.Clone(CXXFLAGS=warnFlags);
 
 libs=['rt','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp'];
-warnEnv.Program(target='gradar-run', source=Glob('*.cxx'), LIBS=libs);
+warnEnv.Program(target='../../bin/gradar-run', source=Glob('*.cxx'), LIBS=libs);
 

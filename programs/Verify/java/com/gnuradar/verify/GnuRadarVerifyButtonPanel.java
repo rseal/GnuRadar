@@ -16,8 +16,6 @@ import javax.swing.JTextPane;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.gnuradar.verify.StatusPanel.Status;
-
 public class GnuRadarVerifyButtonPanel extends JPanel 
    implements ActionListener
 {

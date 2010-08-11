@@ -1,12 +1,16 @@
 #SCONS build file
+import os;
 
 # create environment
 env = Environment();
 
-jarName='gradar-verify.jar';
-installDir='../../../bin';
+# scons fails to properly pull inner classes into the jar files
+# this seems to work
+env['JARCHDIR']=os.path.join(env.Dir('.').get_abspath(),'classes')
 
-appClasses = env.Java('classes','com');
-env.Jar(installDir+'/'+jarName, appClasses + ['com/MANIFEST.MF'] );
-#env.Command(installDir+'/'+jarName, jarName, Copy("$TARGET", "$SOURCE"));
+jarName='../../../bin/gradar-verify.jar';
+
+env.Java(target = 'classes', source = 'com',JAVAVERSION='1.6');
+
+env.Jar(jarName, ['classes', 'com/MANIFEST.MF']);
 env.Clean('.', 'classes');

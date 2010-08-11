@@ -7,10 +7,9 @@ import java.awt.Color;
 
 public class StatusPanel extends JPanel
 {
-  	private static final long serialVersionUID = 1L;
-private JLabel label;
+   //private static final long serialVersionUID = 1L;
 
-   public enum Status { IDLE, LOADED, VERIFY, SUCCESS, FAILURE }
+   private JLabel label;
 
    public StatusPanel()
    {

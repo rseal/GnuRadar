@@ -71,7 +71,7 @@ public class GnuRadarVerifyButtonPanel extends JPanel
 
    public void actionPerformed( ActionEvent e )
    {
-      String SUCCESS = "Success";
+      String SUCCESS = "passed";
       int NOT_FOUND = -1;
 
       int result = 0;

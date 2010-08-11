@@ -4,12 +4,14 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTextPane;
+import javax.swing.border.Border;
 
 import com.corejava.GBC;
 
@@ -17,12 +19,12 @@ import com.corejava.GBC;
 /// Console IO is captured and printed to the text box in the application.
 /// The program is designed to validate proper settings between the receiver's 
 /// configuration and the radar controller's ( pulse generator ) configuration.
-/// Any discrepencies will be reported. 
+/// Any discrepancies will be reported. 
 public class GnuRadarVerify
 {
    // define constants
    public static final int DEFAULT_WIDTH = 450;
-   public static final int DEFAULT_HEIGHT = 300;
+   public static final int DEFAULT_HEIGHT = 340;
    public static final String TITLE = "GnuRadarVerify";
    public static final String VERSION = "0.99";
 
@@ -72,11 +74,17 @@ public class GnuRadarVerify
          menuBar.add( fileMenu );
          menuBar.add( Box.createHorizontalGlue() );
          menuBar.add( helpMenu );
+         
+         Border border = BorderFactory.createEtchedBorder();
+         StatusPanel statusPanel = new StatusPanel();
+         statusPanel.setMinimumSize( new Dimension(400,20) );
+         statusPanel.setBorder( border);
+         statusPanel.setPreferredSize( new Dimension(400,20) );
 
          // create button panel and set properties.
          GnuRadarVerifyButtonPanel buttonPanel = 
-            new GnuRadarVerifyButtonPanel( status );
-         buttonPanel.setMinimumSize( new Dimension(400,50) );
+            new GnuRadarVerifyButtonPanel( statusPanel, status );
+         buttonPanel.setMinimumSize( new Dimension(400,30) );
          buttonPanel.setPreferredSize( new Dimension(400,30) );
 
          // create main window frame and set properties.
@@ -85,8 +93,9 @@ public class GnuRadarVerify
          frame.setLayout( gridBagLayout );
          frame.setJMenuBar( menuBar );
          frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-         frame.add( buttonPanel, new GBC( 0,1,100,100).setIpad(5,5));
-         frame.add( status, new GBC( 0,0,100,100).setIpad(5,5));
+         frame.add( statusPanel, new GBC( 0,0,100,100).setIpad(5,5));
+         frame.add( buttonPanel, new GBC( 0,2,100,100).setIpad(5,5));
+         frame.add( status, new GBC( 0,1,100,100).setIpad(5,5));
          frame.setVisible( true );
       }});
    }

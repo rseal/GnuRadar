@@ -16,6 +16,8 @@ import javax.swing.JTextPane;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.gnuradar.verify.StatusPanel.Status;
+
 public class GnuRadarVerifyButtonPanel extends JPanel 
    implements ActionListener
 {
@@ -35,10 +37,12 @@ public class GnuRadarVerifyButtonPanel extends JPanel
    private JFileChooser fileChooser;
    private File configurationFile = null;
    private JTextPane textPane = null;
+   private StatusPanel statusPanel = null;
 
-   public GnuRadarVerifyButtonPanel( JTextPane textPane )
+   public GnuRadarVerifyButtonPanel( 
+         StatusPanel statusPanel, JTextPane textPane )
    {
-
+      this.statusPanel = statusPanel;
       this.textPane = textPane;
       this.setLayout( new FlowLayout() );
 
@@ -69,6 +73,9 @@ public class GnuRadarVerifyButtonPanel extends JPanel
 
    public void actionPerformed( ActionEvent e )
    {
+      String SUCCESS = "Success";
+      int NOT_FOUND = -1;
+
       int result = 0;
       Object source = e.getSource();
 
@@ -91,6 +98,7 @@ public class GnuRadarVerifyButtonPanel extends JPanel
                   "enabled, and then press [Verify] to begin the " + 
                   "verification process."
                   );
+            statusPanel.setStatus( Status.LOADED );
             verifyButton.setEnabled( true );
          }
       }
@@ -117,7 +125,14 @@ public class GnuRadarVerifyButtonPanel extends JPanel
 
             byte[] bytes = new byte[ bis.available() ];
             bis.read( bytes );
-            textPane.setText( new String( bytes ) );
+            
+            String result1 = new String( bytes );
+            textPane.setText( result1 );
+
+            int searchIndex = result1.indexOf( SUCCESS );
+
+            statusPanel.setStatus( searchIndex == NOT_FOUND ?  
+                  Status.FAILURE : Status.SUCCESS );
          }
          catch( IOException ioe )
          {

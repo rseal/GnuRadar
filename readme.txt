@@ -29,7 +29,7 @@ Currently, there are 4 primary programs of interest:
 Dependencies:
 
 1. Latest version of the boost libraries.
-2. Latest version of boost jam ( bjam ).
+2. Latest version of gnuradio.
 3. Latest version of boost-book ( optional ).
 4. Latest version of FLTK1.
 5. Latest CommandLineParser library ( see local repo ).
@@ -38,17 +38,20 @@ Dependencies:
 
 Installation:
 
-1. Currently you can build the system using boost-build (bjam) by running the
-command in the root directory. This will go away very soon.
-2. The newer build system uses scons. Go to the 'programs' directory and type
+GNURadio:
+
+To help ease gnuradio installation difficulties, a configuration script is
+located in the scripts directory. To install gnuradio, do the following:
+
+1. As root, cd to /usr/local and run 
+      "git clone http://gnuradio.org/git/gnuradio.git"
+2. Copy the gnuradar_configure.sh script to /usr/local/gnuradio.
+3. Cd into /usr/local/gnuradio and run "./gnuradar_configure.sh"
+
+GNURadar:
+
+1. After successfully installing gnuradio and all other dependencies, simply
+   go to the root project directory and run "scons". All executables will be
+   placed in the root's bin directory. Eventually these will be installed in
+   /usr/local/bin when code development begins to stabilize.
    'scons'.
-
-A new java-based wrapper has been written for the gradar-verify program. I've
-not had the chance to create an official executable just yet, but you can use
-the program by running 'java -jar gradar-verify.jar' if you want to use it. 
-
-TODO:
-1. Finish scons implementation.
-2. Create install script for binaries.
-3. Create a script to run java packages.
-

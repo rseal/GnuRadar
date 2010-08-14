@@ -1,0 +1,33 @@
+08/13/2010:
+
+There are a number of items to complete before the code-base can be considered
+simple enough for the average joe. Of course, most users should have a decent
+understanding of the system before attempting to operate any high-powered
+system. Every program in the system was designed with emphasis on command-line
+operation and scripting in mind. GUIs, in my opinion, are useful, but should
+only be a light-weight wrapper around the heavy lifter ( a.k.a command-line )
+in order to prevent an unmaintainable mess of GUI-coupled logic that will
+forever haunt you. 
+
+Here's a brief wish list for the very near future:
+
+   1. Add XML-based message passing to better decouple command-line programs
+      while providing inter-process communication.
+
+   2. Replace current configuration files with XML-based versions to
+      future-proof ( i.e. replace FLTK with a simple Java wrapper ).
+
+   3. Use boost::ASIO libraries to provide socket-based client/servers to
+      communicate messages.
+
+   4. Provide more robust status messaging for gradar-run.
+
+   5. Refactor data types and data arrays to simplify and unify configuration
+      and runtime data transfer.
+
+   6. Replace family-size HDF5 setup with the default 'single' file
+      implementation. If multiple files are needed for transport, tools are
+      available to split files post-observation.
+
+   7. Provide a Java-based toolbar to encompass all Java wrappers
+      into a single location ( similar to the old radarTk toolbar ).

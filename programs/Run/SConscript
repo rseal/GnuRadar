@@ -1,10 +1,14 @@
 #custom build flags
 warnFlags = ['-Wall', '-W']
 
-#define build environment
-env = Environment();
-warnEnv = env.Clone(CXXFLAGS=warnFlags);
+#setup libraries to link and paths
+libs=['rt','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp']
+libPath=['/usr/lib','/usr/local/lib']
 
-libs=['rt','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp'];
-warnEnv.Program(target='../../bin/gradar-run', source=Glob('*.cxx'), LIBS=libs);
+#define build environment
+env = Environment()
+warnEnv = env.Clone(LIBS=libs, LIBPATH=libPath, CXXFLAGS=warnFlags)
+
+#build target and install in root/bin directory
+warnEnv.Program(target='../../bin/gradar-run', source=Glob('*.cxx'))
 

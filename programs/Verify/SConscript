@@ -1,10 +1,14 @@
 #custom build flags
 warnFlags = ['-Wall', '-W']
 
-#define build environment
-env = Environment();
-warnEnv = env.Clone(CXXFLAGS=warnFlags);
+#setup library path and libraries
+libPath=['/usr/lib','/usr/local/lib']
+libs = ['rt', 'pthread', 'usrp', 'usb']
 
-warnEnv.Program(target='../../bin/gradar-verify', source='GnuRadarVerify.cxx', LIBS=['rt', 'pthread', 'usrp', 'usb']);
-env.SConscript('java/SConscript');
+#define build environment
+env = Environment(LIBS=libs, LIBPATH=libPath)
+warnEnv = env.Clone(CXXFLAGS=warnFlags)
+
+warnEnv.Program(target='../../bin/gradar-verify', source='GnuRadarVerify.cxx')
+env.SConscript('java/SConscript')
 

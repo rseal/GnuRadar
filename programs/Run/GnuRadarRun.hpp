@@ -18,7 +18,7 @@
 #define GNURADIOTEST_H
 
 #include <gnuradar/ProducerConsumerModel.h>
-#include <usrp_standard.h>
+#include <usrp/usrp_standard.h>
 #include <gnuradar/GnuRadarDevice.h>
 #include <gnuradar/GnuRadarTypes.hpp>
 #include <gnuradar/GnuRadarSettings.h>

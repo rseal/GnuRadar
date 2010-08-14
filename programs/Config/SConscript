@@ -1,10 +1,19 @@
 #custom build flags
 warnFlags = ['-Wall', '-W']
 
+#setup library path
+libPath=['$LIBPATH','/usr/lib','/usr/local/lib']
+
 #define build environment
-env = Environment();
+env = Environment(LIBPATH=libPath);
+
+#add FLTK flags
 env.ParseConfig('fltk-config --cxxflags --ldflags');
+
+#add compiler flags
 warnEnv = env.Clone(CXXFLAGS=warnFlags);
 
-warnEnv.Program(target='../../bin/gradar-config', source=Glob('src/*.cxx'));
+#build target
+warnEnv.Program(target='../../bin/gradar-config', source=Glob('src/*.cxx'),
+LIBPATH=libPath);
 

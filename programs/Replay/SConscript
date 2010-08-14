@@ -1,8 +1,11 @@
 #custom build flags
 warnFlags = ['-Wall', '-W']
 
+#setup library path
+libPath=['/usr/lib','/usr/local/lib']
+
 #define build environment
-env = Environment();
+env = Environment(LIBPATH=libPath);
 warnEnv = env.Clone(CXXFLAGS=warnFlags);
 
 libs=['rt','pthread','hdf5_hl_cpp','hdf5_cpp'];

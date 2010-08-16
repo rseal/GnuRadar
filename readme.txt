@@ -50,8 +50,17 @@ located in the scripts directory. To install gnuradio, do the following:
 
 GNURadar:
 
-1. After successfully installing gnuradio and all other dependencies, simply
+1. First you will have to install the gnuradar development headers. Go to the
+   root project directory, login in as root, and type 'scons install-headers'.
+
+2. After successfully installing gnuradio and all other dependencies, simply
    go to the root project directory and run "scons". All executables will be
    placed in the root's bin directory. Eventually these will be installed in
    /usr/local/bin when code development begins to stabilize.
    'scons'.
+
+Developer Notes:
+
+Any time headers are modified, added, or removed; you must run 'scons
+install-headers' to refresh the header location. 
+

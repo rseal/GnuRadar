@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
        boost::array<char, 512> buf;
        boost::system::error_code error;
 
-       socket.async_write_some( boost::asio::buffer("health"), handle_write);
+       socket.async_write_some( boost::asio::buffer("test"), handle_write);
 
        size_t len = socket.read_some(boost::asio::buffer(buf), error);
 

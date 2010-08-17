@@ -3,8 +3,8 @@
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
-#include <map>
 #include <gnuradar/network/TcpConnection.hpp>
+#include <gnuradar/CommandList.hpp>
 
 using boost::asio::ip::tcp;
 
@@ -19,15 +19,17 @@ namespace gnuradar{
          public:
 
             TcpRequestServer ( boost::asio::io_service& io_service, 
-                  TcpConnection::MessageMap& map ) 
-               : acceptor_ ( io_service, tcp::endpoint(tcp::v4(), 
-                        GNURADAR_TCP_SERVICE_PORT )), map_(map) {
-                  start_accept();
-               }
+                  gnuradar::CommandList& commands ) : acceptor_ ( 
+                     io_service, 
+                     tcp::endpoint(tcp::v4(), GNURADAR_TCP_SERVICE_PORT )), 
+                  commands_(commands) 
+         {
+            start_accept();
+         }
 
          private:
 
-            TcpConnection::MessageMap& map_;
+            gnuradar::CommandList& commands_;
             tcp::acceptor acceptor_;
 
             // accept request from client
@@ -35,7 +37,7 @@ namespace gnuradar{
             {
                // create a new tcp connection
                TcpConnection::pointer new_connection =
-                  TcpConnection::create(acceptor_.io_service(), map_);
+                  TcpConnection::create(acceptor_.io_service(), commands_);
 
                // wait for incoming requests
                acceptor_.async_accept(
@@ -49,7 +51,8 @@ namespace gnuradar{
             }
 
             // accept handler to handle incoming request
-            void handle_accept(TcpConnection::pointer connection,
+            void handle_accept(
+                  TcpConnection::pointer connection,
                   const boost::system::error_code& error)
             {
                if (!error)

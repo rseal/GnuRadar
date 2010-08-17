@@ -1,10 +1,14 @@
 #ifndef GNURADAR_TCP_REQUEST_CONNECTION_HPP
 #define GNURADAR_TCP_REQUEST_CONNECTION_HPP
 
+#include <stdexcept>
+#include <iostream>
+
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
+#include <gnuradar/CommandList.hpp>
 
 using boost::asio::ip::tcp;
 
@@ -19,14 +23,12 @@ namespace gnuradar{
          public:
             typedef boost::shared_ptr<TcpConnection> pointer;
             typedef boost::array< char, MESSAGE_SIZE_BYTES > Message;
-            typedef std::map< std::string, std::string > MessageMap;
 
             // create and return a shared pointer to this
             static pointer create(boost::asio::io_service& io_service,
-                  MessageMap& map)
+                  CommandList& commands)
             {
-               return pointer( 
-                     new TcpConnection(io_service, map) );
+               return pointer( new TcpConnection(io_service, commands) );
             }
 
             // return the connection's socket
@@ -41,18 +43,17 @@ namespace gnuradar{
                Message readMessage;
                std::string result;
 
+               // read incoming message
                size_t readSize = socket_.read_some( 
                      boost::asio::buffer( readMessage ),
                      error_
                      );
 
+               // resize to match actual received message length
                result = readMessage.data();
                result = result.substr(0,readSize);
 
                ExecuteRequest( result );
-
-               //std::cout << "message is " << message_ << std::endl;
-
 
                boost::asio::async_write(
                      socket_, 
@@ -67,7 +68,7 @@ namespace gnuradar{
             }
 
          private:
-            MessageMap& map_;
+            CommandList& commands_;
             boost::system::error_code error_;
             tcp::socket socket_;
             std::string message_;
@@ -75,20 +76,29 @@ namespace gnuradar{
             void ExecuteRequest( std::string& message )
             {
 
+               // FIXME: Remove pseudo args and replace with XML parsed args
+               const std::string pseudoArgs = "fake args";
+
                // TODO: Add XML parser here and pass in XML structure
 
-               MessageMap::iterator iter = map_.find( message );
+               // TODO: Add error handling here for unknown command
+               try{
+               CommandPtr commandPtr = commands_.Find( message );
+               commandPtr->Execute( pseudoArgs );
+               }
+               catch( std::exception& e)
+               {
+                  std::cerr 
+                     << "Invalid command " << message << " found!" 
+                     << std::endl;
+               }
 
-               if( iter != map_.end() ) message_ = iter->second;
-               else
-                  throw std::runtime_error( 
-                        "TcpConnection: invalid Message request" );
             }
 
 
             TcpConnection(
-                  boost::asio::io_service& io_service, MessageMap& map)
-               : socket_(io_service), map_(map) { }
+                  boost::asio::io_service& io_service, CommandList& commands)
+               : socket_(io_service), commands_(commands) { }
 
             void handle_write(const boost::system::error_code&, size_t size) { }
       };

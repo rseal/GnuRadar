@@ -22,7 +22,7 @@ class StopCommand: public GnuRadarCommand
 
    virtual void Execute( const std::string& args ){ 
       std::cout << "found args = " << args << std::endl;
-      std::cout << "stop this wild son-of-a-bitch" << std::endl;
+      std::cout << "stop called" << std::endl;
       service_.stop(); }
 };
 

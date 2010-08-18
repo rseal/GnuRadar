@@ -183,12 +183,12 @@ int main(int argc, char** argv){
    GnuRadarDevice grDevice(settings);
 
    // setup producer thread
-   gnu_radar::ProducerThreadPtr producerThread(
+   gnu_radar::ProducerThreadPtr producerThread = gnu_radar::ProducerThreadPtr(
          new ProducerThread(BUFFER_SIZE , grDevice )
          );
 
    // setup consumer thread
-   gnu_radar::ConsumerThreadPtr consumerThread(
+   gnu_radar::ConsumerThreadPtr consumerThread = gnu_radar::ConsumerThreadPtr(
          new ConsumerThread(BUFFER_SIZE , buffer, h5File, dimVector )
                );
 

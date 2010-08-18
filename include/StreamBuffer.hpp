@@ -94,7 +94,7 @@ struct StreamBuffer{
       
       readIndex_=0;
       writeIndex_=0;
-      
+
       // manually create contiguous buffer and pointers
       buffer_ = Buffer( STORAGE_SIZE );
    }

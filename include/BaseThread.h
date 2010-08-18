@@ -39,7 +39,7 @@ public:
 protected:
 
    void* address_;
-   const int& bytes_;
+   const int bytes_;
    int  status_;
    std::string error_;
 };

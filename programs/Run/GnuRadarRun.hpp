@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,7 +38,7 @@ Hdf5Ptr h5File;
 const int BYTES_PER_SAMPLE = 4;
 const int NUM_BUFFERS      = 20;
 const int    Kb            = 1024;
-const int    Mb            = Kb*Kb;
+const int    Mb            = Kb * Kb;
 const double ms            = 1e-3;
 const double MHz           = 1e6;
 const double us            = 1e-6;
@@ -55,4 +55,4 @@ Time currentTime;
 GnuRadarSettings settings;
 gnuradar::iq_t* buffer;
 
-#endif 
+#endif

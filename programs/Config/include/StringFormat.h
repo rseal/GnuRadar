@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,9 +19,9 @@
 
 #include <string>
 
-struct StringFormat{
+struct StringFormat {
 public:
-    static const std::string SetPrecision(const std::string& str, const int& precision);
+    static const std::string SetPrecision ( const std::string& str, const int& precision );
 };
 
 

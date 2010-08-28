@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,8 +36,7 @@
 #include <boost/shared_ptr.hpp>
 
 ///Class definition
-class DataInterface : public Fl_Group
-{
+class DataInterface : public Fl_Group {
     UsrpConfigStruct& usrpConfigStruct_;
     boost::shared_ptr<DataWindowInterface> dataWindowInterface_;
     boost::shared_ptr<Fl_Button> addButton_;
@@ -46,65 +45,64 @@ class DataInterface : public Fl_Group
     boost::shared_ptr<Fl_Choice> unitsChoice_;
 
     ///Callback for Add button
-    static void AddClicked(Fl_Widget* flw, void* userData){
-	DataWindowInterface* dwi = reinterpret_cast<DataWindowInterface*>(userData);
+    static void AddClicked ( Fl_Widget* flw, void* userData ) {
+        DataWindowInterface* dwi = reinterpret_cast<DataWindowInterface*> ( userData );
 
-	//really screwed up way to catch exception - until I find the proper method
-	string str;
-	try { 
-	    string str2(fl_input("Enter a label for new data window."));
-	    str = str2;
-	}
-	catch(std::exception){
-	    std::cout << "DataInterface::AddClicked - Empty string" << std::endl;
-	}
-	
-	if(str.size() != 0) dwi->Add(str.c_str());
+        //really screwed up way to catch exception - until I find the proper method
+        string str;
+        try {
+            string str2 ( fl_input ( "Enter a label for new data window." ) );
+            str = str2;
+        } catch ( std::exception ) {
+            std::cout << "DataInterface::AddClicked - Empty string" << std::endl;
+        }
+
+        if ( str.size() != 0 ) dwi->Add ( str.c_str() );
     }
 
     ///Callback for Remove Button
-    static void RemoveClicked(Fl_Widget* flw, void* userData){
-	DataWindowInterface* dwi = reinterpret_cast<DataWindowInterface*>(userData);
+    static void RemoveClicked ( Fl_Widget* flw, void* userData ) {
+        DataWindowInterface* dwi = reinterpret_cast<DataWindowInterface*> ( userData );
 
-	//really screwed up way to catch exception - until I find the proper method
-	string str;
-	try { 
-	    string str2(fl_input("Enter the label for removal."));
-	    str = str2;
-	}
-	catch(std::exception){
-	    cerr << "DataInterface::RemoveClicked - Empty string" << std::endl;
-	}
-	
-	if(str.size() != 0) dwi->Remove(str.c_str());
+        //really screwed up way to catch exception - until I find the proper method
+        string str;
+        try {
+            string str2 ( fl_input ( "Enter the label for removal." ) );
+            str = str2;
+        } catch ( std::exception ) {
+            cerr << "DataInterface::RemoveClicked - Empty string" << std::endl;
+        }
+
+        if ( str.size() != 0 ) dwi->Remove ( str.c_str() );
     }
 
     ///Callback to Update IPP and units
-    static void Update(Fl_Widget* flw, void* userData){
-	DataInterface* dwiPtr = reinterpret_cast<DataInterface*>(userData);
+    static void Update ( Fl_Widget* flw, void* userData ) {
+        DataInterface* dwiPtr = reinterpret_cast<DataInterface*> ( userData );
 
-	int ipp = boost::lexical_cast<int>(dwiPtr->ippInput_->value());
-	int units = dwiPtr->unitsChoice_->value();
+        int ipp = boost::lexical_cast<int> ( dwiPtr->ippInput_->value() );
+        int units = dwiPtr->unitsChoice_->value();
 
-	//validate ipp choice
-	if(ipp > 0){
-	    //update global structure
-	    dwiPtr->usrpConfigStruct_.ipp = ipp;
-	    dwiPtr->usrpConfigStruct_.ippUnits = units;
-	}
-	else{
-	    cerr << "DataInterface::Update - invalid ipp chosen "
-		 << "- global structure not updated." << std::endl;
-	}
+        //validate ipp choice
+        if ( ipp > 0 ) {
+            //update global structure
+            dwiPtr->usrpConfigStruct_.ipp = ipp;
+            dwiPtr->usrpConfigStruct_.ippUnits = units;
+        } else {
+            cerr << "DataInterface::Update - invalid ipp chosen "
+                 << "- global structure not updated." << std::endl;
+        }
     }
 public:
     ///Constructor
-    DataInterface(UsrpConfigStruct& usrpConfigStruct, int x, int y, 
-		  int width=325, int height=245, const char* label=NULL);
+    DataInterface ( UsrpConfigStruct& usrpConfigStruct, int x, int y,
+                    int width = 325, int height = 245, const char* label = NULL );
 
-    DataWindowInterface& DataWindowRef() { return *dataWindowInterface_.get();}
-    void IPP(const int& ipp);
-    void IPPUnits(const int& ippUnits);
+    DataWindowInterface& DataWindowRef() {
+        return *dataWindowInterface_.get();
+    }
+    void IPP ( const int& ipp );
+    void IPPUnits ( const int& ippUnits );
 
 };
 #endif

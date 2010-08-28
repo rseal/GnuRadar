@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,27 +19,26 @@
 #include <gnuradar/SThread.h>
 #include <gnuradar/ProducerConsumerModel.h>
 
-class Console: public SThread{
-   gnu_radar::ProducerConsumerModel& pcmodel_;
-  std::string input_;
-  bool quit_;
+class Console: public SThread {
+    gnuradar::ProducerConsumerModel& pcmodel_;
+    std::string input_;
+    bool quit_;
 
 public:
 
-  Console(gnu_radar::ProducerConsumerModel& pcmodel): 
-     pcmodel_(pcmodel),quit_(false)
-   {
-     this->Start();
-   }
+    Console ( gnuradar::ProducerConsumerModel& pcmodel ) :
+            pcmodel_ ( pcmodel ), quit_ ( false ) {
+        this->Start();
+    }
 
-  virtual void Run(){
-     while(true){
-        cout << ">>>";
-        cin >> input_;
-        if(input_ == "quit") pcmodel_.Stop();
-        sleep(1);
-     }
-  }
+    virtual void Run() {
+        while ( true ) {
+            cout << ">>>";
+            cin >> input_;
+            if ( input_ == "quit" ) pcmodel_.Stop();
+            sleep ( 1 );
+        }
+    }
 };
 
 #endif

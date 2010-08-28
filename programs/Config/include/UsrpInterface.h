@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,15 +47,14 @@
 #include "UsrpConfigStruct.h"
 #include "Parser.h"
 
-///Provides a container and display interface for the 
+///Provides a container and display interface for the
 ///USRP data collection system.
-class UsrpInterface : public Fl_Window 
-{
+class UsrpInterface : public Fl_Window {
     std::vector<string> phaseStr;
     std::vector<string> ddcStr;
     std::vector<string> windowStr;
     std::vector<string> ippStr;
-    
+
     const int maxChannels_;
     UsrpConfigStruct usrpConfigStruct_;
 
@@ -76,79 +75,79 @@ class UsrpInterface : public Fl_Window
     boost::shared_ptr<Fl_Group> fpgaGroup_;
 
     ///Callback for Quit button
-    static void QuitClicked(Fl_Widget* flw, void* userData){
-	//UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
-	std::cout << "Goodbye" << std::endl;
-	exit(0);
+    static void QuitClicked ( Fl_Widget* flw, void* userData ) {
+        //UsrpInterface* userInterface = reinterpret_cast<UsrpInterface*>(userData);
+        std::cout << "Goodbye" << std::endl;
+        exit ( 0 );
     }
 
     ///Callback for Load button
-    static void LoadClicked(Fl_Widget* flw, void* userData){
+    static void LoadClicked ( Fl_Widget* flw, void* userData ) {
 
-	UsrpInterface* usrpInterface = reinterpret_cast<UsrpInterface*>(userData);
-	//really screwed up way to catch exception - until I find the proper method
-	string str;
-	try { 
-	    string str2(fl_file_chooser("Choose USRP Configuration File", "*.ucf", NULL));
-	    str = str2;
-	}
-	catch(std::exception){
-	    cerr << "UsrpInterface::LoadClicked - Empty string" << endl;
-	}
-	
-	if(str.size() != 0){
-	    Parser parser(str);
-	    usrpInterface->LoadFile(parser);
-	}
-	//fill GUI forms with global structure here
+        UsrpInterface* usrpInterface = reinterpret_cast<UsrpInterface*> ( userData );
+        //really screwed up way to catch exception - until I find the proper method
+        string str;
+        try {
+            string str2 ( fl_file_chooser ( "Choose USRP Configuration File", "*.ucf", NULL ) );
+            str = str2;
+        } catch ( std::exception ) {
+            cerr << "UsrpInterface::LoadClicked - Empty string" << endl;
+        }
+
+        if ( str.size() != 0 ) {
+            Parser parser ( str );
+            usrpInterface->LoadFile ( parser );
+        }
+        //fill GUI forms with global structure here
     };
-    
+
     ///Callback for Save button
-    static void SaveClicked(Fl_Widget* flw, void* userData){
-	UsrpInterface* usrpInterface = reinterpret_cast<UsrpInterface*>(userData);
-	string str;
-	try { 
-	    string str2(fl_file_chooser("Choose USRP Configuration File", "*.ucf", NULL));
-	    str = str2;
-	}
-	catch(std::exception){
-	    cerr << "UsrpInterface::SaveClicked - Empty string" << endl;
-	}
-	
-	if(str.size() != 0){
-	    Parser parser(str);
-	    usrpInterface->WriteFile(parser);
-	}
+    static void SaveClicked ( Fl_Widget* flw, void* userData ) {
+        UsrpInterface* usrpInterface = reinterpret_cast<UsrpInterface*> ( userData );
+        string str;
+        try {
+            string str2 ( fl_file_chooser ( "Choose USRP Configuration File", "*.ucf", NULL ) );
+            str = str2;
+        } catch ( std::exception ) {
+            cerr << "UsrpInterface::SaveClicked - Empty string" << endl;
+        }
+
+        if ( str.size() != 0 ) {
+            Parser parser ( str );
+            usrpInterface->WriteFile ( parser );
+        }
     };
 
     ///Callback used to update channel settings
-    static void UpdateChannels(Fl_Widget* flw, void* userData){
- 	SettingsInterface* siPtr = reinterpret_cast<SettingsInterface*>(flw);
-	CustomTab* ctPtr         = reinterpret_cast<CustomTab*>(userData);
- 	int numChannels          = siPtr->NumChannels();
- 	int index                = 0;
-	for(int i=0; i<4; ++i) ctPtr->Disable(i);
-	for(index=0; index<numChannels; ++index) ctPtr->Enable(index);
+    static void UpdateChannels ( Fl_Widget* flw, void* userData ) {
+        SettingsInterface* siPtr = reinterpret_cast<SettingsInterface*> ( flw );
+        CustomTab* ctPtr         = reinterpret_cast<CustomTab*> ( userData );
+        int numChannels          = siPtr->NumChannels();
+        int index                = 0;
+        for ( int i = 0; i < 4; ++i ) ctPtr->Disable ( i );
+        for ( index = 0; index < numChannels; ++index ) ctPtr->Enable ( index );
     }
 
-    void WriteFile(Parser& parser);
-    void LoadFile(Parser& parser);
+    void WriteFile ( Parser& parser );
+    void LoadFile ( Parser& parser );
     void UpdateGUI();
 
-    int Find(const std::vector<string>& vec, const string& value){
-	int ret=0;
-	for(uint i=0; i<vec.size(); ++i){
-	    if(value == vec[i]){
-		ret = i;
-		break;
-	    }
-	}
-	return ret;
+    int Find ( const std::vector<string>& vec, const string& value ) {
+        int ret = 0;
+        for ( uint i = 0; i < vec.size(); ++i ) {
+            if ( value == vec[i] ) {
+                ret = i;
+                break;
+            }
+        }
+        return ret;
     }
-	
+
 public:
     ///Constructor
-    UsrpInterface(int X, int Y);
-    ~UsrpInterface(){exit(0);};
+    UsrpInterface ( int X, int Y );
+    ~UsrpInterface() {
+        exit ( 0 );
+    };
 };
 #endif

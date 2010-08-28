@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -17,8 +17,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///SettingsInterface.h
 ///
-///Provides interactive formatting and display of sample rate, bandwidth, 
-///and decimation 
+///Provides interactive formatting and display of sample rate, bandwidth,
+///and decimation
 ///
 ///Author: Ryan Seal
 ///Modified: 08/06/08
@@ -47,8 +47,7 @@
 
 
 ///Class definition
-class SettingsInterface : public Fl_Group
-{
+class SettingsInterface : public Fl_Group {
     Fl_Color color1_;
 
     UsrpConfigStruct& usrpConfigStruct_;
@@ -61,35 +60,37 @@ class SettingsInterface : public Fl_Group
     boost::shared_ptr<Fl_Choice>       channels_;
 
     ///Callback to update decimation value
-    static void UpdateDecimation(Fl_Widget* flw, void* userData){
-	SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*>(userData);
-	settingsInterface->UpdateParameters();
+    static void UpdateDecimation ( Fl_Widget* flw, void* userData ) {
+        SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*> ( userData );
+        settingsInterface->UpdateParameters();
     }
 
     //Callback to update sample rate
-    static void UpdateSampleRate(Fl_Widget* flw, void* userData){
-	SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*>(userData);
-	settingsInterface->UpdateParameters();
+    static void UpdateSampleRate ( Fl_Widget* flw, void* userData ) {
+        SettingsInterface* settingsInterface = reinterpret_cast<SettingsInterface*> ( userData );
+        settingsInterface->UpdateParameters();
     }
 
     ///Callback to update channels
-    static void UpdateChannel(Fl_Widget* flw, void* userData){
-	SettingsInterface* settingsInterface = 
-	    reinterpret_cast<SettingsInterface*>(userData);
-	settingsInterface->UpdateParameters();
+    static void UpdateChannel ( Fl_Widget* flw, void* userData ) {
+        SettingsInterface* settingsInterface =
+            reinterpret_cast<SettingsInterface*> ( userData );
+        settingsInterface->UpdateParameters();
     }
 
 public:
     ///Constructor
-    SettingsInterface(int x, int y, int width, int height, const char* label,
-	UsrpConfigStruct& usrpConfigStruct);
+    SettingsInterface ( int x, int y, int width, int height, const char* label,
+                        UsrpConfigStruct& usrpConfigStruct );
     ///Returns number of defined channels
-    const int NumChannels(){ return lexical_cast<int>(channels_->text());}
+    const int NumChannels() {
+        return lexical_cast<int> ( channels_->text() );
+    }
 
 
-    void SampleRate(const float& sampleRate);
-    void Decimation(const int& decimation);
-    void NumChannels(const int& numChannels);
+    void SampleRate ( const float& sampleRate );
+    void Decimation ( const int& decimation );
+    void NumChannels ( const int& numChannels );
     void UpdateParameters();
 
 };

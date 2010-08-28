@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,19 +29,19 @@
 using std::string;
 
 ///Holds keywords necessary for simple header creation
-struct HeaderStruct{
+struct HeaderStruct {
 public:
     string institution;
     string observer;
     string object;
     string radar;
     string receiver;
-    void Print(){
-	cout << "institution = " << institution << "\n"
-	     << "observer    = " << observer    << "\n"
-	     << "object      = " << object      << "\n"
-	     << "radar       = " << radar       << "\n"
-	     << "receiver    = " << receiver    << endl;
+    void Print() {
+        cout << "institution = " << institution << "\n"
+             << "observer    = " << observer    << "\n"
+             << "object      = " << object      << "\n"
+             << "radar       = " << radar       << "\n"
+             << "receiver    = " << receiver    << endl;
     }
 };
 #endif

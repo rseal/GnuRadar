@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,14 +23,14 @@
 
 using std::string;
 
-class FindDataWindow{
+class FindDataWindow {
     const string& name_;
 public:
-    FindDataWindow(const string& name): name_(name){}
+    FindDataWindow ( const string& name ) : name_ ( name ) {}
 
-    const bool operator()(boost::shared_ptr<DataGroup> dgp ){
-	const DataWindowStruct& dws = dgp->DataWindowRef();
-	return dws.name == name_;
+    const bool operator() ( boost::shared_ptr<DataGroup> dgp ) {
+        const DataWindowStruct& dws = dgp->DataWindowRef();
+        return dws.name == name_;
     }
 };
 

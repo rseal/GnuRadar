@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,21 +29,21 @@ using std::cout;
 using std::endl;
 using std::string;
 
-///Describes an arbitrary number of windows that determine 
+///Describes an arbitrary number of windows that determine
 ///which portions of data to collect.
-struct DataWindowStruct{
+struct DataWindowStruct {
     string name;
     int start;
     int size;
     int units;
     int id;
-    DataWindowStruct(): start(0), size(0), units(0), id(0) {}
-    void Print(){
-	cout << "name   = " << name  << "\n"
-	     << "start  = " << start 
-	     << "size   = " << size  
-	     << "units  = " << units << "\n"
-	     << "id     = " << id    << endl;
+    DataWindowStruct() : start ( 0 ), size ( 0 ), units ( 0 ), id ( 0 ) {}
+    void Print() {
+        cout << "name   = " << name  << "\n"
+             << "start  = " << start
+             << "size   = " << size
+             << "units  = " << units << "\n"
+             << "id     = " << id    << endl;
     }
 };
 #endif

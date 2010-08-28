@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///HeaderInterface.h
 ///
-///Records and displays information required for Header system. 
+///Records and displays information required for Header system.
 ///
 ///Author: Ryan Seal
 ///Modified: 08/06/08
@@ -52,38 +52,37 @@ using std::auto_ptr;
 // collection instrument - fl_input
 
 ///Class Definition
-class HeaderInterface : public Fl_Group
-{
+class HeaderInterface : public Fl_Group {
     UsrpConfigStruct& usrpConfigStruct_;
     auto_ptr<HeaderStruct> headerStruct_;
     typedef shared_ptr<Fl_Input> InputPtr;
     vector<InputPtr> inputArray_;
 
 public:
-    HeaderInterface(UsrpConfigStruct& usrpConfigStruct,
-		    int x, int y, int width=325, int height=245, 
-		    const char* label=NULL);
+    HeaderInterface ( UsrpConfigStruct& usrpConfigStruct,
+                      int x, int y, int width = 325, int height = 245,
+                      const char* label = NULL );
 
-    static void Update(Fl_Widget* flw, void* userData){
-	HeaderInterface* hiPtr = reinterpret_cast<HeaderInterface*>(userData);
-	
-	HeaderStruct& header = hiPtr->usrpConfigStruct_.HeaderRef();
+    static void Update ( Fl_Widget* flw, void* userData ) {
+        HeaderInterface* hiPtr = reinterpret_cast<HeaderInterface*> ( userData );
 
-	header.institution = hiPtr->inputArray_[0]->value();
-	header.observer    = hiPtr->inputArray_[1]->value();
-	header.object      = hiPtr->inputArray_[2]->value();
-	header.radar       = hiPtr->inputArray_[3]->value();
-	header.receiver    = hiPtr->inputArray_[4]->value();
-	//debug only
+        HeaderStruct& header = hiPtr->usrpConfigStruct_.HeaderRef();
+
+        header.institution = hiPtr->inputArray_[0]->value();
+        header.observer    = hiPtr->inputArray_[1]->value();
+        header.object      = hiPtr->inputArray_[2]->value();
+        header.radar       = hiPtr->inputArray_[3]->value();
+        header.receiver    = hiPtr->inputArray_[4]->value();
+        //debug only
 //	header.Print();
     }
 
-    void Load(const HeaderStruct& header){
-        inputArray_[0]->value(header.institution.c_str());
-        inputArray_[1]->value(header.observer.c_str());
-        inputArray_[2]->value(header.object.c_str());
-        inputArray_[3]->value(header.radar.c_str());
-        inputArray_[4]->value(header.receiver.c_str());
+    void Load ( const HeaderStruct& header ) {
+        inputArray_[0]->value ( header.institution.c_str() );
+        inputArray_[1]->value ( header.observer.c_str() );
+        inputArray_[2]->value ( header.object.c_str() );
+        inputArray_[3]->value ( header.radar.c_str() );
+        inputArray_[4]->value ( header.receiver.c_str() );
     }
 };
 #endif

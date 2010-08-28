@@ -1,14 +1,13 @@
 #custom build flags
-warnFlags = ['-Wall', '-W']
+flags = ['-Wall', '-W', '-DTIXML_USE_TICPP']
 
 #setup library path and libraries
 libPath=['/usr/lib','/usr/local/lib']
-libs = ['rt', 'pthread', 'usrp', 'usb']
+libs = ['tinyxmlcpp','rt', 'pthread', 'usrp', 'usb']
 
 #define build environment
 env = Environment(LIBS=libs, LIBPATH=libPath)
-warnEnv = env.Clone(CXXFLAGS=warnFlags)
+warnEnv = env.Clone(CXXFLAGS=flags)
 
 warnEnv.Program(target='../../bin/gradar-verify', source='GnuRadarVerify.cxx')
-env.SConscript('java/SConscript')
 

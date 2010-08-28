@@ -1,5 +1,5 @@
 #custom build flags
-warnFlags = ['-Wall', '-W']
+warnFlags = ['-Wall', '-W', '-Wno-ignored-qualifiers']
 
 #setup library path
 libPath=['$LIBPATH','/usr/lib','/usr/local/lib']

@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,9 +16,9 @@
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 #include <gnuradar/ProducerThread.h>
 
-/// worker thread implementation. Calls GnuRadarDevice's 
+/// worker thread implementation. Calls GnuRadarDevice's
 /// StartDevice method.
 void ProducerThread::Run()
 {
-    device_.RequestData(address_,bytes_);
+    device_.RequestData ( address_, bytes_ );
 }

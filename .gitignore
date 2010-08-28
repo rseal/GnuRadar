@@ -13,3 +13,5 @@ bin/
 work/
 simulation/
 install-headers
+programs/java/.classpath
+programs/java/.project

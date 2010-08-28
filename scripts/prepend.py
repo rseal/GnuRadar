@@ -9,7 +9,8 @@ fileList = os.popen('grep -RL "Copyright" ../include ../programs')
 
 #filter only source and header files
 for i in fileList:
-    if(i.find(".cpp") != -1 or i.find(".hpp") != -1 or i.find(".h") != -1 or i.find(".cxx") != -1):
+    if(i.find(".cpp") != -1 or i.find(".hpp") != -1 or 
+       i.find(".h") != -1 or i.find(".cxx") != -1 or i.find(".java") ):
         newList.append(i.strip())
 
 f_license = open('preamble.txt')

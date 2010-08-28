@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,11 +34,10 @@
 #include <iostream>
 #include "StringFormat.h"
 
-///\todo Add rule checking to ChannelGroup 
+///\todo Add rule checking to ChannelGroup
 
 ///Class definition
-class ChannelGroup: public Fl_Group 
-{
+class ChannelGroup: public Fl_Group {
     const int id_;
     const float pi_;
     boost::shared_ptr<Fl_Float_Input>  ddc_;
@@ -46,26 +45,36 @@ class ChannelGroup: public Fl_Group
     boost::shared_ptr<Fl_Float_Input>  phase_;
     boost::shared_ptr<Fl_Choice>       phaseUnits_;
 
-    static void Update(Fl_Widget* flw, void* userData){
-	ChannelGroup* cgPtr = reinterpret_cast<ChannelGroup*>(userData);
-	cgPtr->do_callback();
+    static void Update ( Fl_Widget* flw, void* userData ) {
+        ChannelGroup* cgPtr = reinterpret_cast<ChannelGroup*> ( userData );
+        cgPtr->do_callback();
     }
 
 public:
     ///Constructor
-    ChannelGroup(const int& id, int X, int Y, int width, int height, 
-		     const char* label);
-    const int&  ID() { return id_;}
-    const double DDC()        { return boost::lexical_cast<double>(ddc_->value());}
-    const int   DDCUnits()   { return ddcUnits_->value();}
-    const double Phase()      { return boost::lexical_cast<double>(phase_->value());}
-    const int   PhaseUnits() { return phaseUnits_->value();}
-    const bool  ChannelValid(const float& sampleRate);
+    ChannelGroup ( const int& id, int X, int Y, int width, int height,
+                   const char* label );
+    const int&  ID() {
+        return id_;
+    }
+    double DDC()        {
+        return boost::lexical_cast<double> ( ddc_->value() );
+    }
+    int   DDCUnits()   {
+        return ddcUnits_->value();
+    }
+    double Phase()      {
+        return boost::lexical_cast<double> ( phase_->value() );
+    }
+    int   PhaseUnits() {
+        return phaseUnits_->value();
+    }
+    const bool  ChannelValid ( const float& sampleRate );
 
-    void DDC(const double& ddc);
-    void DDCUnits(const int& ddcUnits);
-    void Phase(const double& phase);
-    void PhaseUnits(const int& phaseUnits);
+    void DDC ( const double& ddc );
+    void DDCUnits ( const int& ddcUnits );
+    void Phase ( const double& phase );
+    void PhaseUnits ( const int& phaseUnits );
 
 };
 

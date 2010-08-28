@@ -1,3 +1,19 @@
+// Copyright (c) 2010 Ryan Seal <rlseal -at- gmail.com>
+//
+// This file is part of GnuRadar Software.
+//
+// GnuRadar is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//  
+// GnuRadar is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 package com.gnuradar.verify;
 
 import java.awt.Dimension;
@@ -14,13 +30,16 @@ import javax.swing.JTextPane;
 import javax.swing.border.Border;
 
 import com.corejava.GBC;
+import com.gnuradar.common.FixedFrame;
+
+
 
 /// This class is a basic wrapper around the C++ command line version.
 /// Console IO is captured and printed to the text box in the application.
 /// The program is designed to validate proper settings between the receiver's 
 /// configuration and the radar controller's ( pulse generator ) configuration.
 /// Any discrepancies will be reported. 
-public class GnuRadarVerify
+public class Verify
 {
    // define constants
    public static final int DEFAULT_WIDTH = 450;
@@ -82,8 +101,8 @@ public class GnuRadarVerify
          statusPanel.setPreferredSize( new Dimension(400,20) );
 
          // create button panel and set properties.
-         GnuRadarVerifyButtonPanel buttonPanel = 
-            new GnuRadarVerifyButtonPanel( statusPanel, status );
+         ButtonPanel buttonPanel = 
+            new ButtonPanel( statusPanel, status );
          buttonPanel.setMinimumSize( new Dimension(400,30) );
          buttonPanel.setPreferredSize( new Dimension(400,30) );
 

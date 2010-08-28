@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -17,10 +17,11 @@
 #include <gnuradar/ConsumerThread.h>
 
 // worker thread implementation.
-void ConsumerThread::Run(){
+void ConsumerThread::Run()
+{
 
-   // write an HDF5 table to disk 
-   h5File_->CreateTable(cpx_.GetRef(), space_);
-   h5File_->WriteTStrAttrib("TIME", time_.GetTime());
-   h5File_->WriteTable(reinterpret_cast<void*>(address_));
+    // write an HDF5 table to disk
+    h5File_->CreateTable ( cpx_.GetRef(), space_ );
+    h5File_->WriteTStrAttrib ( "TIME", time_.GetTime() );
+    h5File_->WriteTable ( reinterpret_cast<void*> ( address_ ) );
 }

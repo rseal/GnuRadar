@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -48,8 +48,7 @@ using std::endl;
 ///\todo Add rule checking to ChannelInterface
 
 ///Class definition
-class ChannelInterface: public CustomTab 
-{
+class ChannelInterface: public CustomTab {
     typedef boost::shared_ptr<ChannelGroup> ChannelGroupPtr;
     UsrpConfigStruct& usrpConfigStruct_;
     Fl_Color windowColor_;
@@ -57,39 +56,38 @@ class ChannelInterface: public CustomTab
 
     vector<ChannelGroupPtr> channelArray_;
 
-    static void Update(Fl_Widget* flw, void* userData){
-	ChannelGroup*     cgPtr = reinterpret_cast<ChannelGroup*>(flw);
-	UsrpConfigStruct* ucPtr = reinterpret_cast<UsrpConfigStruct*>(userData);
-	//which channel is calling?
-	const int& id = cgPtr->ID();
+    static void Update ( Fl_Widget* flw, void* userData ) {
+        ChannelGroup*     cgPtr = reinterpret_cast<ChannelGroup*> ( flw );
+        UsrpConfigStruct* ucPtr = reinterpret_cast<UsrpConfigStruct*> ( userData );
+        //which channel is calling?
+        const int& id = cgPtr->ID();
 
-	const float& sampleRate = ucPtr->sampleRate;
-	USRP::ChannelVector& channels = ucPtr->ChannelRef();
+        const float& sampleRate = ucPtr->sampleRate;
+        USRP::ChannelVector& channels = ucPtr->ChannelRef();
 
-	if(cgPtr->ChannelValid(sampleRate)){
-	    channels[id].ddc        = cgPtr->DDC();
-	    channels[id].ddcUnits   = cgPtr->DDCUnits();
-	    channels[id].phase      = cgPtr->Phase();
-	    channels[id].phaseUnits = cgPtr->PhaseUnits();
-	}
-	else{
-	    cerr << "ChannelInterface::Update - invalid channel setting detected"
-		 << " - global structure not updated." << endl;
-	}
+        if ( cgPtr->ChannelValid ( sampleRate ) ) {
+            channels[id].ddc        = cgPtr->DDC();
+            channels[id].ddcUnits   = cgPtr->DDCUnits();
+            channels[id].phase      = cgPtr->Phase();
+            channels[id].phaseUnits = cgPtr->PhaseUnits();
+        } else {
+            cerr << "ChannelInterface::Update - invalid channel setting detected"
+                 << " - global structure not updated." << endl;
+        }
 
-	//debug only
-	//for(int i=0; i<4; ++i)
-	//    channels[i].Print();
-	//cout << "ChannelInterface::Update - channel " << id << endl;
+        //debug only
+        //for(int i=0; i<4; ++i)
+        //    channels[i].Print();
+        //cout << "ChannelInterface::Update - channel " << id << endl;
     }
 
 public:
     ///Constructor
-    ChannelInterface(UsrpConfigStruct& usrpConfigStruct, int X, int Y,
-		     int width, int height, const char* label);
+    ChannelInterface ( UsrpConfigStruct& usrpConfigStruct, int X, int Y,
+                       int width, int height, const char* label );
 
-    void Load(const USRP::ChannelVector& channels);
-    
+    void Load ( const USRP::ChannelVector& channels );
+
 };
 
 #endif

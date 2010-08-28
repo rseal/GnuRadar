@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///UsrpConfigStruct.h
 ///
-///Provides necessary rule checking and conversions for displayed/stored 
+///Provides necessary rule checking and conversions for displayed/stored
 ///configuration data.
 ///
 ///Author: Ryan Seal
@@ -40,13 +40,13 @@ using boost::lexical_cast;
 using std::cerr;
 using std::endl;
 
-namespace USRP{
-    typedef vector<DataWindowStruct> WindowVector;
-    typedef vector<ChannelStruct> ChannelVector;
+namespace USRP {
+typedef vector<DataWindowStruct> WindowVector;
+typedef vector<ChannelStruct> ChannelVector;
 };
 
-///Global configuration structure 
-struct UsrpConfigStruct{
+///Global configuration structure
+struct UsrpConfigStruct {
 private:
     bool validSampleRate_;
     USRP::WindowVector  windows_;
@@ -55,14 +55,20 @@ private:
 
 public:
 
-    UsrpConfigStruct(): validSampleRate_(false),channels_(4),
-			sampleRate(64e6),decimation(8),numChannels(1),
-			ipp(0),fpgaImage("../../fpga/std_4rx_0tx.rbf"){}
+    UsrpConfigStruct() : validSampleRate_ ( false ), channels_ ( 4 ),
+            sampleRate ( 64e6 ), decimation ( 8 ), numChannels ( 1 ),
+            ipp ( 0 ), fpgaImage ( "../../fpga/std_4rx_0tx.rbf" ) {}
 
-    USRP::ChannelVector& ChannelRef() { return channels_;} //validation complete - mostly
-    USRP::WindowVector& WindowRef() { return windows_;}
-    HeaderStruct& HeaderRef() { return header_;} //no need - for now
-    
+    USRP::ChannelVector& ChannelRef() {
+        return channels_;    //validation complete - mostly
+    }
+    USRP::WindowVector& WindowRef() {
+        return windows_;
+    }
+    HeaderStruct& HeaderRef() {
+        return header_;    //no need - for now
+    }
+
     float sampleRate;   //validation complete
     int decimation;     //validation complete
     int numChannels;    //validation complete

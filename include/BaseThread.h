@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,27 +21,31 @@
 #include <gnuradar/SThread.h>
 
 /// Abstract class for use with Producer and Consumer threads.
-class BaseThread{
+class BaseThread {
 
 public:
 
-   // Constructor.
-   BaseThread(const int& bytes):bytes_(bytes){}
+    // Constructor.
+    BaseThread ( const int bytes ) : bytes_ ( bytes ) {}
 
-   // abstract members
-   virtual const int&         Status() { return status_;}
-   virtual const std::string& Error()  { return error_;}
+    // abstract members
+    virtual const int         Status() {
+        return status_;
+    }
+    virtual const std::string& Error()  {
+        return error_;
+    }
 
-   //virtual members 
-   virtual void Stop()=0;
-   virtual void RequestData(void* address)=0;
+    //virtual members
+    virtual void Stop() = 0;
+    virtual void RequestData ( void* address ) = 0;
 
 protected:
 
-   void* address_;
-   const int bytes_;
-   int  status_;
-   std::string error_;
+    void* address_;
+    const int bytes_;
+    int  status_;
+    std::string error_;
 };
 
 #endif

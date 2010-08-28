@@ -1,13 +1,13 @@
 #custom build flags
-warnFlags = ['-Wall', '-W']
+flags = ['-Wall', '-W', '-DTIXML_USE_TICPP']
 
 #setup libraries to link and paths
-libs=['rt','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp']
+libs=['tinyxmlcpp','rt','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp']
 libPath=['/usr/lib','/usr/local/lib']
 
 #define build environment
 env = Environment()
-warnEnv = env.Clone(LIBS=libs, LIBPATH=libPath, CXXFLAGS=warnFlags)
+warnEnv = env.Clone(LIBS=libs, LIBPATH=libPath, CXXFLAGS=flags)
 
 #build target and install in root/bin directory
 warnEnv.Program(target='../../bin/gradar-run', source=Glob('*.cxx'))

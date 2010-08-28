@@ -43,13 +43,16 @@ public class Configure {
     public static final int DEFAULT_HEIGHT = 530;
     public static final int LEFT_WIDTH = 420;
     public static final int RIGHT_WIDTH = 200;
-    public static final String TITLE = "GnuRadarConfigure";
-    public static final String VERSION = "0.99";
+    public static final String TITLE = "GnuRadarConfigure";    
+    public static final String VERSION = "Version: 1.0.0";
+    public static final String BUILD = "Build: August 28, 2010";
+    public static final String COPYRIGHT = "Copyright: \u00a9 2009-2010";
+    public static final String AUTHOR = "Author: Ryan Seal";
 
     private static HashMap<String, String> settingsMap =
-        new HashMap<String, String> ( 33 );
+        new HashMap<String, String> ( 50 );
 
-    public static void loadFile()
+      public static void loadFile()
     {   
     	settingsMap.clear();
     	
@@ -66,9 +69,8 @@ public class Configure {
     		File file = jf.getSelectedFile();
     		settingsMap = XmlParser.load( file);
     	}
-    	
-    	
     }
+    
     private static void saveFile( )
     {
         FileNameExtensionFilter fileFilter =
@@ -141,13 +143,86 @@ public class Configure {
                 // create menu bar and menu items
                 JMenuBar menuBar = new JMenuBar();
 
+                JMenuItem loadAction = new JMenuItem( "Load", 'L');
+                
+                loadAction.addActionListener(
+                		new ActionListener() {
+                			public void actionPerformed( ActionEvent e)
+                			{
+                				loadFile( );
+                				settingsPanel.pushSettings( settingsMap );
+                                ddcSettingsPanel.pushSettings( settingsMap );
+                                pulseSettingsPanel.pushSettings( settingsMap );
+                                informationPanel.pushSettings( settingsMap );
+                                fileSettingsPanel.pushSettings( settingsMap );
+                			}
+                		});
+                
+                            		
+                JMenuItem quitAction = new JMenuItem( "Quit", 'Q');
+                
+                quitAction.addActionListener(
+                		new ActionListener() {
+                			public void actionPerformed( ActionEvent e)
+                			{
+                				  HashMap<String, String> map =
+                                      new HashMap<String, String> (50);
+                                  map.putAll ( settingsPanel.getSettings() );
+                                  map.putAll ( ddcSettingsPanel.getSettings() );
+                                  map.putAll ( pulseSettingsPanel.getSettings() );
+                                  map.putAll ( informationPanel.getSettings() );
+                                  map.putAll ( fileSettingsPanel.getSettings() );
+
+                                  // compare our local map with the global to see if
+                                  // the user has changed anything since their last
+                                  // save. If so, give them a chance to save
+                                  // modifications.
+                                  if ( !map.equals ( settingsMap ) &&
+                                  !settingsMap.isEmpty() ) {
+                                      System.out.println ( " Settings do not match " );
+                                      int saveChanges =
+                                          JOptionPane.showConfirmDialog (
+                                              null, "Unsaved changes detected. Would " +
+                                              "you like to save now?",
+                                              "Input", JOptionPane.YES_NO_OPTION );
+
+                                      if ( saveChanges == JOptionPane.YES_OPTION ) {
+                                      	settingsMap.clear();
+                                          settingsMap.putAll ( settingsPanel.getSettings() );
+                                          settingsMap.putAll ( ddcSettingsPanel.getSettings() );
+                                          settingsMap.putAll ( pulseSettingsPanel.getSettings() );
+                                          settingsMap.putAll ( informationPanel.getSettings() );
+                                          settingsMap.putAll ( fileSettingsPanel.getSettings() );
+                                          saveFile();
+                                      }
+                                  }
+                                  System.exit(0);
+                			}
+                		});
+                
+                JMenuItem aboutAction = new JMenuItem( "About", 'A');
+                
+                aboutAction.addActionListener( 
+                		new ActionListener(){
+                			
+                			public void actionPerformed(ActionEvent e){
+                				JOptionPane.showMessageDialog(null,
+                						TITLE + "\n" +
+                						VERSION + "\n" + 
+                						BUILD + "\n" + 
+                						AUTHOR + "\n" + 
+                						COPYRIGHT + "\n"
+                						);
+                			}
+                		});
+                
                 JMenu fileMenu = new JMenu ( "File" );
-                fileMenu.add ( new JMenuItem ( "Load", 'L' ) );
+                fileMenu.add ( loadAction );
                 fileMenu.addSeparator();
-                fileMenu.add ( new JMenuItem ( "Quit", 'Q' ) );
+                fileMenu.add ( quitAction );
 
                 JMenu helpMenu = new JMenu ( "Help" );
-                helpMenu.add ( new JMenuItem ( "About", 'A' ) );
+                helpMenu.add ( aboutAction );
 
                 menuBar.add ( fileMenu );
                 menuBar.add ( Box.createHorizontalGlue() );

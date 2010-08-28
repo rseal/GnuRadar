@@ -31,7 +31,6 @@ Dependencies:
 1. Latest version of the boost libraries.
 2. Latest version of gnuradio.
 3. Latest version of boost-book ( optional ).
-4. Latest version of FLTK1.
 5. Latest CommandLineParser library ( see local repo ).
 6. Latest HDF5R library ( see local repo ).
 7. Latest scons ( python-based build tool ).

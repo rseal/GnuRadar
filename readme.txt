@@ -1,6 +1,6 @@
 GnuRadar Project 
-Date: August 08, 2010
-Version: 0.99_08-AUG-2010
+Date: August 29, 2010
+Version: 1.0.0_08-AUG-2010
 Author: Ryan Seal
 
 Introduction:
@@ -34,6 +34,7 @@ Dependencies:
 5. Latest CommandLineParser library ( see local repo ).
 6. Latest HDF5R library ( see local repo ).
 7. Latest scons ( python-based build tool ).
+8. Latest version of c++ tinyxml ( a.k.a ticpp ) <-- included in deps.
 
 Installation:
 
@@ -52,14 +53,22 @@ GNURadar:
 1. First you will have to install the gnuradar development headers. Go to the
    root project directory, login in as root, and type 'scons install-headers'.
 
-2. After successfully installing gnuradio and all other dependencies, simply
-   go to the root project directory and run "scons". All executables will be
-   placed in the root's bin directory. Eventually these will be installed in
-   /usr/local/bin when code development begins to stabilize.
-   'scons'.
+2. The new tinyxml source is included under the deps directory. CD to this
+   directory, run "scons", login as root, run "scons install". This will
+   install the necessary headers and the compiled library. 
+
+3. After successfully installing gnuradio and all other dependencies, simply
+   go to the root project directory and run "scons", login as root and run
+   "scons install". This will install all binaries in /usr/local/bin by
+   default ( edit the SConstruct file if you're not happy with that ). All
+   binaries are prefixed with "gradar-", so you can type "gradar" followed by
+   TAB a few times to see what programs are available.
 
 Developer Notes:
 
 Any time headers are modified, added, or removed; you must run 'scons
-install-headers' to refresh the header location. 
+install-headers' to refresh the header location. It's actually much easier to
+write a short bash script to create soft links to the include directory. Any
+changes using this method will be picked up by scons and udpated as needed.
+
 

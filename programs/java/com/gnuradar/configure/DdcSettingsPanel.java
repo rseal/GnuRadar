@@ -57,9 +57,17 @@ public class DdcSettingsPanel extends JTabbedPane
     {
 
         JComboBox comboBox = ( JComboBox ) e.getSource();
+                
+        try{
         Integer value = Integer.valueOf ( ( String )
                                           comboBox.getSelectedItem() );
         setEnabledTabs ( value );
+        }
+        catch( NumberFormatException nfe)
+        {
+        	nfe.printStackTrace();
+        }
+       
     }
 
     private void setEnabledTabs ( int tabs )

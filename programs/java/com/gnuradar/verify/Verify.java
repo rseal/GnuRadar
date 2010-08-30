@@ -19,6 +19,8 @@ package com.gnuradar.verify;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -26,6 +28,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 import javax.swing.border.Border;
 
@@ -44,8 +47,11 @@ public class Verify
    // define constants
    public static final int DEFAULT_WIDTH = 450;
    public static final int DEFAULT_HEIGHT = 340;
-   public static final String TITLE = "GnuRadarVerify";
-   public static final String VERSION = "0.99";
+   public static final String TITLE = "GnuRadarVerify";   
+   public static final String VERSION = "Version: 1.0.0";
+   public static final String BUILD = "Build: August 29, 2010";
+   public static final String COPYRIGHT = "Copyright: \u00a9 2009-2010";
+   public static final String AUTHOR = "Author: Ryan Seal";
 
    // main entry point
    public static void main( String[] args )
@@ -88,8 +94,23 @@ public class Verify
          fileMenu.add( new JMenuItem("Quit",'Q'));
 
          JMenu helpMenu = new JMenu("Help");
-         helpMenu.add( new JMenuItem("About",'A'));
+         
+         JMenuItem aboutAction = new JMenuItem("About", 'A');        
+         helpMenu.add( aboutAction );
 
+         aboutAction.addActionListener( 
+        		 new ActionListener(){
+        	 public void actionPerformed( ActionEvent e){        		 
+        	            JOptionPane.showMessageDialog ( 
+        	            		null, TITLE + "\n" +
+        	            		VERSION + "\n" + BUILD + "\n" +
+        	            		AUTHOR + "\n" +
+        	            		COPYRIGHT + "\n"
+        	            );
+        	 }
+        		 
+        		 });
+         
          menuBar.add( fileMenu );
          menuBar.add( Box.createHorizontalGlue() );
          menuBar.add( helpMenu );

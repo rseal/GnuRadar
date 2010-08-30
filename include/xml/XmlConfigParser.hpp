@@ -34,17 +34,15 @@ class XmlConfigParser
          ticpp::Element* elementPtr;
          
          try{
+
             doc.LoadFile();
             elementPtr = doc.FirstChildElement()->FirstChildElement();
-
-            std::cout << elementPtr->Value() << std::endl;
 
             ticpp::Iterator< ticpp::Element > iter = 
                elementPtr->FirstChildElement();
             
             while( iter != iter.end() )
             {
-               std::cout << iter->Value() << std::endl;
                if( iter->Value() == "window" || iter->Value() == "channel" ) {
                   ParseChild(iter.Get());
                }
@@ -53,8 +51,8 @@ class XmlConfigParser
                }
 
                ++iter;
+
             }
-            std::cout << "ending ctor" << std::endl;
          }
          catch( ticpp::Exception& e ) {
             std::cout << e.what();

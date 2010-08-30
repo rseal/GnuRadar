@@ -16,9 +16,25 @@
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 #include "GnuRadarRun.hpp"
 #include <boost/lexical_cast.hpp>
+#include <boost/filesystem.hpp>
 #include <cmath>
 
 using namespace boost;
+
+void CheckForExistingFileSet( std::string& fileSet ){
+
+   boost::filesystem::path file( fileSet + "_0000.h5" );
+
+   if( boost::filesystem::exists( file ) )
+   {
+      std::cerr 
+         << "The chosen file set name <" + fileSet + 
+         "> already exists. Correct the problem and try again. " 
+         << endl;
+      exit(1);
+   }
+
+}
 
 int main ( int argc, char** argv )
 {
@@ -35,28 +51,29 @@ int main ( int argc, char** argv )
     clp.AddArg ( arg2 );
     clp.Parse();
 
+    // if help requested - display and exit
     if ( clp.SwitchSet ( "h" ) || clp.SwitchSet ( "help" ) ) {
         clp.PrintHelp();
         exit ( 0 );
     }
 
+    // validate required settings
     clp.Validate();
 
+    // convert command-line arguments
     fileName = clp.GetArgValue<string> ( "f" );
     dataSet  = clp.GetArgValue<string> ( "d" );
+
+    CheckForExistingFileSet( dataSet );
 
     //parse configuration file
     ConfigFile cf ( fileName );
 
-    //compute bytes per second
-    BPS = cf.OutputRate() * cf.NumChannels() * BYTES_PER_SAMPLE;
+    // compute the pulse repetition frequency
     const float PRF = ceil ( 1.0f / cf.IPP() );
 
     //buffersize in bytes
-    //window / IPP * numChannels * 4 = bytes per second
     const int BUFFER_SIZE = cf.BytesPerSecond();
-    //cf.WindowLength() *
-    //cf.NumChannels() * BYTES_PER_SAMPLE * static_cast<int>(PRF);
 
     cout
         << "PRF        = " << PRF             << "\n"
@@ -75,21 +92,16 @@ int main ( int argc, char** argv )
             << endl;
     }
 
-    cout << "WindowLength = " << cf.WindowLength() << endl;
+    cout << "Samples per IPP = " << cf.SamplesPerIpp() << endl;
 
     for ( int i = 0; i < cf.NumChannels(); ++i )
         cout << "ddc" + lexical_cast<string> ( i ) << " = " << cf.DDC ( i ) << endl;
 
-    //need to be careful here - definition of multiple channels can be tricky
-    //normally I separate the channels : channel 1 = 0 - buffer/2
-    //channel 2: buffer/2 - end
-    //These channels, as they are now, are interleaved, so Dim1
-    //should be extended to contain the IPP for both channels (double)
-    cout << "dim0 = " << PRF << endl;
-    cout << "dim1 = " << cf.WindowLength() *cf.NumChannels() << endl;
-
+    // dimension 0 holds the number of IPPs per second ( or PRF )
+    // dimension 1 contains the number of samples captured in a single IPP
     dimVector.push_back ( static_cast<int> ( PRF ) );
-    dimVector.push_back ( static_cast<int> ( cf.WindowLength() *cf.NumChannels() ) );
+    dimVector.push_back ( static_cast<int> ( 
+             cf.SamplesPerIpp() *cf.NumChannels() ) );
 
     //create consumer buffer - destination
     buffer = new gnuradar::iq_t[ BUFFER_SIZE /sizeof ( gnuradar::iq_t ) ];
@@ -144,7 +156,7 @@ int main ( int argc, char** argv )
                                 );
 
     // FIXME - RF carrier frequency should be in the configuration file.
-    h5File->WriteAttrib<double> ( "RF", 49.80e6, H5::PredType::NATIVE_DOUBLE,
+    h5File->WriteAttrib<double> ( "RF", cf.SampleRate(), H5::PredType::NATIVE_DOUBLE,
                                   H5::DataSpace()
                                 );
 

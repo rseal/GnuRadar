@@ -18,87 +18,40 @@
 #define CONFIG_FILE_H
 
 #include <gnuradar/Units.h>
+#include <gnuradar/ReceiveWindow.hpp>
+#include <gnuradar/ReceiveChannel.hpp>
 #include <gnuradar/GnuRadarTypes.hpp>
 #include <gnuradar/xml/XmlConfigParser.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string/case_conv.hpp>
 #include <boost/cstdint.hpp>
+#include <iostream>
 #include <cmath>
 #include <vector>
 #include <map>
 
-using boost::lexical_cast;
-using std::vector;
-using std::endl;
-using std::cout;
-
-///channel structure
-struct Channel {
-public:
-    double ddc;
-    int ddcUnits;
-    double phase;
-    double phaseUnits;
-};
-
-///window structure
-struct Window {
-public:
-    string name;
-    unsigned int start;
-    unsigned int stop;
-    double units;
-
-    unsigned int Size() {
-        return stop - start;
-    }
-};
-
 ///main structure
 struct ConfigFile {
+
     double sampleRate_;
     int numChannels_;
-    float ipp_;
+    double ipp_;
     int numWindows_;
     int decimation_;
-    int ippLength_;
-    int windowLength_;
     double outputRate_;
     double ippUnits_;
-    string fpgaImage_;
-    string dataFileBaseName_;
-    vector<Channel> channels_;
-    vector<Window> windows_;
+    std::string fpgaImage_;
+    std::string dataFileBaseName_;
+    int samplesPerIpp_;
+
+    std::vector<ReceiveChannel> channels_;
+    std::vector<ReceiveWindow> windows_;
 
     XmlConfigParser parser_;
 
-    //window conversion factor
-    const double WCF ( const string& units ) {
-
-        std::map<std::string, double> map;
-        map["samples"] = 1.0;
-        map["usec"] = 1e-6;
-        map["km"] = 2e-5 / 3.0;
-
-        string unitStr = units;
-        boost::to_lower ( unitStr );
-
-        std::map<std::string, double>::iterator iter =
-            map.find ( unitStr );
-
-        if ( iter == map.end() ) {
-            throw std::runtime_error (
-                " Failed to convert window units " + units );
-        }
-
-        return iter->second;
-    }
-
 public:
 
-    explicit ConfigFile ( const string& fileName ) :
-            windowLength_ ( 0 ), parser_ ( fileName ) {
+    explicit ConfigFile ( const std::string& fileName ) : 
+       samplesPerIpp_(0), parser_ ( fileName ) {
 
         Units units;
 
@@ -107,94 +60,94 @@ public:
         outputRate_       = sampleRate_ / decimation_;
         numChannels_      = parser_.Get<int> ( "num_channels" );
         numWindows_       = parser_.Get<int> ( "num_windows" );
-        ippLength_        = parser_.Get<int> ( "ipp" );
-        ippUnits_         = units ( parser_.Get<string> ( "ipp_units" ) );
-        ipp_              = ippLength_ * ippUnits_;
-        fpgaImage_        = parser_.Get<string> ( "fpga_image_file" );
-        dataFileBaseName_ = parser_.Get<string> ( "base_file_name" );
+        ippUnits_         = units ( parser_.Get<std::string> ( "ipp_units" ) );
+        ipp_              = parser_.Get<double>("ipp") * ippUnits_;
+        fpgaImage_        = parser_.Get<std::string> ( "fpga_image_file" );
+        dataFileBaseName_ = parser_.Get<std::string> ( "base_file_name" );
 
-        string idx;
         double factor;
 
+        std::string idx;
         for ( int i = 0; i < gnuradar::USRP_MAX_CHANNELS; ++i ) {
-            Channel ch;
-            idx           = lexical_cast<string> ( i );
-            ch.ddc        = parser_.Get<double> ( "frequency_" + idx );
-            ch.ddcUnits   = units (
-                                parser_.Get<string> ( "frequency_units_" + idx ) );
-            ch.ddc       *= ch.ddcUnits;
-            ch.phase      = parser_.Get<double> ( "phase_" + idx );
-            ch.phaseUnits = units ( parser_.Get<string> ( "phase_units_" + idx ) );
-            //phase in degrees
-            ch.phase     *= ch.phaseUnits;
-            channels_.push_back ( ch );
+
+            idx = lexical_cast<std::string> ( i );
+
+            ReceiveChannel channel( 
+                  parser_.Get<double> ( "frequency_" + idx ),
+                  parser_.Get<std::string> ( "frequency_units_" + idx ), 
+                  parser_.Get<double> ( "phase_" + idx ),
+                  parser_.Get<std::string> ( "phase_units_" + idx )
+                  );
+
+            channels_.push_back ( channel );
         }
 
         for ( int i = 0; i < numWindows_; ++i ) {
-            Window win;
-            idx       = lexical_cast<string> ( i );
-            win.name  = parser_.Get<string> ( "name_" + idx );
-            win.start = parser_.Get<int> ( "start_" + idx );
-            win.stop  = parser_.Get<int> ( "stop_" + idx );
-            factor    = WCF ( parser_.Get<string> ( "units_" + idx ) );
-            //convert units to samples
-            win.start = static_cast<int> ( win.start * factor );
-            win.stop  = static_cast<int> ( win.stop * factor );
-            windows_.push_back ( win );
-            windowLength_ = win.stop - win.start;
+
+            idx = lexical_cast<std::string> ( i );
+
+            ReceiveWindow window (
+                  parser_.Get<std::string> ( "name_" + idx ),
+                  parser_.Get<double> ( "start_" + idx ),
+                  parser_.Get<double> ( "stop_" + idx ),
+                  parser_.Get<std::string> ( "units_" + idx ),
+                  sampleRate_
+                  );
+            
+            windows_.push_back ( window );
+            samplesPerIpp_ += window.Size();
         }
     }
 
-    const int    Phase ( const int num )       {
-        return channels_[num].phase;
+    const int    Phase ( const int num ){
+        return channels_[num].Phase();
     }
-    const double& DDC ( const int num )         {
-        return channels_[num].ddc;
+    const double& DDC ( const int num ) {
+        return channels_[num].Frequency();
     }
-    const string& WindowName ( const int num )  {
-        return windows_[num].name;
+    const std::string& WindowName ( const int num )  {
+        return windows_[num].Name();
     }
     const int    WindowStart ( const int num ) {
-        return windows_[num].start;
+        return windows_[num].Start();
     }
     const int    WindowStop ( const int num )  {
-        return windows_[num].stop;
+        return windows_[num].Stop();
     }
-    const int    WindowLength()              {
-        return windowLength_;
-    }
-    const double& SampleRate()                {
+    const double& SampleRate() {
         return sampleRate_;
     }
-    const double& OutputRate()                {
+    const double& OutputRate() {
         return outputRate_;
     }
-    const double& Decimation()                {
+    const double& Decimation() {
         return decimation_;
     }
-    const int    NumChannels()               {
+    const int    NumChannels() {
         return numChannels_;
     }
-    const int    NumWindows()                {
+    const int    NumWindows() {
         return numWindows_;
     }
-    const double& Bandwidth()                 {
+    const double& Bandwidth() {
         return outputRate_;
     }
-    const float&  IPP()                       {
+    const float&  IPP(){
         return ipp_;
     }
-    const string& FPGAImage()                 {
+    const std::string& FPGAImage(){
         return fpgaImage_;
     }
-    const vector<Window>& Windows()           {
+    const std::vector<ReceiveWindow>& Windows(){
         return windows_;
     }
+
+    const int SamplesPerIpp() { return samplesPerIpp_; }
 
     // returns the hardware's output rate in BPS.
     const long BytesPerSecond() {
         return numChannels_ * gnuradar::BYTES_PER_COMPLEX_SAMPLE *
-               ceil ( windowLength_ / ipp_ );
+               ceil ( samplesPerIpp_ / ipp_ );
     }
 };
 

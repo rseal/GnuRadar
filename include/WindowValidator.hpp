@@ -19,11 +19,12 @@
 
 #include <gnuradar/ConfigFile.h>
 #include <gnuradar/GnuRadarTypes.hpp>
+#include <boost/shared_ptr.hpp>
 
 struct WindowValidator {
 
     typedef std::vector<int> MeasuredWindowVector;
-    typedef std::vector<Window> WindowVector;
+    typedef std::vector<ReceiveWindow> WindowVector;
     typedef std::vector<gnuradar::iq_t> IqVector;
     typedef IqVector::const_iterator IqIterator;
 
@@ -64,12 +65,10 @@ struct WindowValidator {
 public:
     const bool Validate (
         const std::vector<gnuradar::iq_t>& buffer,
-        const std::vector<Window>& windows
+        const std::vector<ReceiveWindow>& windows
     ) {
         buffer_ = buffer;
         windows_ = windows;
-
-
         bufferIter_ = buffer_.begin();
 
         // search for the first data tag and reposition the iterator.

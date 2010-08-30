@@ -93,7 +93,7 @@ public class FileSettingsPanel extends JPanel
         fileBaseNamePanel = new JPanel ( new GridLayout ( 3, 1, 5, 5 ) );
         fileBaseNameLabel = new JLabel ( "Data Set Base Name", JLabel.CENTER );
         fileBaseNameTextField = new JTextField();
-        fileBaseNameButton = new JButton ( "Browse Data Set Base Name" );
+        fileBaseNameButton = new JButton ( "Set File Base Name" );
         fileBaseNamePanel.add ( fileBaseNameLabel );
         fileBaseNamePanel.add ( fileBaseNameTextField );
         fileBaseNamePanel.add ( fileBaseNameButton );

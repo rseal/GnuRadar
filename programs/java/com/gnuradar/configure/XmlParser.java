@@ -47,8 +47,7 @@ public class XmlParser {
 
         for ( int i = 0; i < element.getChildCount(); ++i ) {
             child = element.getChild ( i );
-            if ( child instanceof Element ) {
-                System.out.print ( child );
+            if ( child instanceof Element ) {            
                 map.put ( ( ( Element ) child ).getQualifiedName()
                           + "_" + num,
                           child.getValue() );

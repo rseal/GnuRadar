@@ -9,5 +9,5 @@ libs = ['tinyxmlcpp','rt', 'pthread', 'usrp', 'usb']
 env = Environment(LIBS=libs, LIBPATH=libPath)
 warnEnv = env.Clone(CXXFLAGS=flags)
 
-warnEnv.Program(target='../../bin/gradar-verify', source='GnuRadarVerify.cxx')
+warnEnv.Program(target='../../bin/gradar-verify-cli', source='GnuRadarVerify.cxx')
 

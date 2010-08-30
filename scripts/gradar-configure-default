@@ -1,0 +1,5 @@
+#!/bin/bash
+
+LOCATION=<LOCATION>
+
+java -jar $LOCATION/gradar-configure.jar

@@ -20,5 +20,5 @@
 /// StartDevice method.
 void ProducerThread::Run()
 {
-    device_.RequestData ( address_, bytes_ );
+    device_->RequestData ( address_, bytes_ );
 }

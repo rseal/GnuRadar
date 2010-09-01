@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 Created-By: 1.6.0_21 (Sun Microsystems Inc.)
 Main-Class: com/gnuradar/configure/Configure
-Class-Path: lib/xom-1.2.6.jar
+Class-Path: xom-1.2.6.jar
 

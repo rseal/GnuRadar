@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,55 +24,56 @@
 
 using boost::asio::ip::tcp;
 
-namespace gnuradar
-{
-namespace network
-{
 
-static const int GNURADAR_TCP_SERVICE_PORT = 54321;
+namespace gnuradar {
+   namespace network {
 
-class TcpRequestServer
-{
+      static const int GNURADAR_TCP_SERVICE_PORT = 54321;
 
-public:
+      class TcpRequestServer {
 
-    TcpRequestServer ( boost::asio::io_service& io_service, gnuradar::CommandList& commands ) : acceptor_ ( io_service, tcp::endpoint(tcp::v4(), GNURADAR_TCP_SERVICE_PORT )), commands_(commands) {
-        start_accept();
-    }
+         public:
 
-private:
+            TcpRequestServer ( boost::asio::io_service& io_service, 
+                  command::CommandList& commands )
+               : acceptor_ ( io_service, tcp::endpoint ( tcp::v4(), GNURADAR_TCP_SERVICE_PORT ) ),
+               commands_ ( commands ) {
+                  start_accept();
+               }
 
-    gnuradar::CommandList& commands_;
-    tcp::acceptor acceptor_;
+         private:
 
-    // accept request from client
-    void start_accept() {
-        // create a new tcp connection
-        TcpConnection::pointer new_connection =
-            TcpConnection::create(acceptor_.io_service(), commands_);
+            command::CommandList& commands_;
+            tcp::acceptor acceptor_;
 
-        // wait for incoming requests
-        acceptor_.async_accept(
-            new_connection->socket(),
-            boost::bind(
-                &TcpRequestServer::handle_accept,
-                this,
-                new_connection,
-                boost::asio::placeholders::error)
-        );
-    }
+            // accept request from client
+            void start_accept() {
+               // create a new tcp connection
+               TcpConnection::pointer new_connection =
+                  TcpConnection::create ( acceptor_.io_service(), commands_ );
 
-    // accept handler to handle incoming request
-    void handle_accept(
-        TcpConnection::pointer connection,
-        const boost::system::error_code& error) {
-        if (!error) {
-            connection->start();
-            start_accept();
-        }
-    }
-};
-};
+               // wait for incoming requests
+               acceptor_.async_accept (
+                     new_connection->socket(),
+                     boost::bind (
+                        &TcpRequestServer::handle_accept,
+                        this,
+                        new_connection,
+                        boost::asio::placeholders::error )
+                     );
+            }
+
+            // accept handler to handle incoming request
+            void handle_accept (
+                  TcpConnection::pointer connection,
+                  const boost::system::error_code& error ) {
+               if ( !error ) {
+                  connection->start();
+                  start_accept();
+               }
+            }
+      };
+   };
 };
 
 #endif

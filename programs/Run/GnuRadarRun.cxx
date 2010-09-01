@@ -16,211 +16,37 @@
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 #include "GnuRadarRun.hpp"
 #include <boost/lexical_cast.hpp>
-#include <boost/filesystem.hpp>
+#include <boost/asio.hpp>
 #include <cmath>
 
+#include <gnuradar/network/TcpRequestServer.hpp>
+#include <gnuradar/CommandList.hpp>
+#include <gnuradar/commands/Start.hpp>
+//#include <gnuradar/commands/Stop.hpp>
+
 using namespace boost;
-
-void CheckForExistingFileSet( std::string& fileSet ){
-
-   boost::filesystem::path file( fileSet + "_0000.h5" );
-
-   if( boost::filesystem::exists( file ) )
-   {
-      std::cerr 
-         << "The chosen file set name <" + fileSet + 
-         "> already exists. Correct the problem and try again. " 
-         << endl;
-      exit(1);
-   }
-
-}
+using namespace gnuradar;
 
 int main ( int argc, char** argv )
 {
 
-    //class to handle command line options/parsing
-    CommandLineParser clp ( argc, argv );
-    Arg arg1 ( "f", "configuration file name", 1, false, "test.ucf" );
-    Arg arg2 ( "d", "base file name", 1, true );
-    Switch sw1 ( "h", "print this message", false );
-    Switch sw2 ( "help", "print this message", false );
-    clp.AddSwitch ( sw1 );
-    clp.AddSwitch ( sw2 );
-    clp.AddArg ( arg1 );
-    clp.AddArg ( arg2 );
-    clp.Parse();
+   typedef boost::shared_ptr<command::GnuRadarCommand> CommandPtr;
+   typedef boost::shared_ptr<HDF5> Hdf5Ptr;
+   typedef boost::shared_ptr<ProducerConsumerModel> PCModelPtr;
+   boost::asio::io_service ioService;
+   command::CommandList commandList;
 
-    // if help requested - display and exit
-    if ( clp.SwitchSet ( "h" ) || clp.SwitchSet ( "help" ) ) {
-        clp.PrintHelp();
-        exit ( 0 );
-    }
+    // create a Producer/Consumer model, but don't initialize the
+    // object until ready
+    PCModelPtr pcModel = PCModelPtr ( new gnuradar::ProducerConsumerModel() );
 
-    // validate required settings
-    clp.Validate();
+    CommandPtr startCommand = command::CommandPtr ( 
+          new command::Start ( pcModel ) );
 
-    // convert command-line arguments
-    fileName = clp.GetArgValue<string> ( "f" );
-    dataSet  = clp.GetArgValue<string> ( "d" );
+    commandList.Add( startCommand );
 
-    CheckForExistingFileSet( dataSet );
-
-    //parse configuration file
-    ConfigFile cf ( fileName );
-
-    // compute the pulse repetition frequency
-    const float PRF = ceil ( 1.0f / cf.IPP() );
-
-    //buffersize in bytes
-    const int BUFFER_SIZE = cf.BytesPerSecond();
-
-    cout
-        << "PRF        = " << PRF             << "\n"
-        << "BPS        = " << BPS             << "\n"
-        << "BufferSize = " << BUFFER_SIZE     << "\n"
-        << "sampleRate = " << cf.SampleRate() << "\n"
-        << "Decimation = " << cf.Decimation() << "\n"
-        << "OutputRate = " << cf.OutputRate() << "\n"
-        << endl;
-
-    for ( int i = 0; i < cf.NumWindows(); ++i ) {
-        cout
-            << "Window: " << cf.WindowName ( i )  << "\n"
-            << "Start = " << cf.WindowStart ( i ) << "\n"
-            << "Size  = " << cf.WindowStop ( i )  << "\n"
-            << endl;
-    }
-
-    cout << "Samples per IPP = " << cf.SamplesPerIpp() << endl;
-
-    for ( int i = 0; i < cf.NumChannels(); ++i )
-        cout << "ddc" + lexical_cast<string> ( i ) << " = " << cf.DDC ( i ) << endl;
-
-    // dimension 0 holds the number of IPPs per second ( or PRF )
-    // dimension 1 contains the number of samples captured in a single IPP
-    dimVector.push_back ( static_cast<int> ( PRF ) );
-    dimVector.push_back ( static_cast<int> ( 
-             cf.SamplesPerIpp() *cf.NumChannels() ) );
-
-    //create consumer buffer - destination
-    buffer = new gnuradar::iq_t[ BUFFER_SIZE /sizeof ( gnuradar::iq_t ) ];
-
-    cout
-        << "--------------------Settings----------------------" << "\n"
-        << "Sample Rate                 = " << cf.SampleRate()  << "\n"
-        << "Bandwidth                   = " << cf.Bandwidth()   << "\n"
-        << "Decimation                  = " << cf.Decimation()  << "\n"
-        << "Output Rate                 = " << cf.OutputRate()  << "\n"
-        << "Number of Channels          = " << cf.NumChannels() << "\n"
-        << "Bytes Per Second (System)   = " << BPS              << "\n"
-        << "BufferSize                  = " << BUFFER_SIZE      << "\n"
-        << "IPP                         = " << cf.IPP()
-        << endl;
-
-    for ( int i = 0; i < cf.NumChannels(); ++i )
-        cout << "Channel[" << i << "] Tuning Frequency = " << cf.DDC ( i ) << endl;
-
-    cout << "--------------------Settings----------------------\n\n" << endl;
-
-    //write a test file for demonstration purposes
-    //header = new SimpleHeaderSystem(dataSet, File::WRITE, File::BINARY);
-    h5File = Hdf5Ptr ( new HDF5 ( dataSet + "_", hdf5::WRITE ) );
-
-    h5File->Description ( "USRP Radar Receiver" );
-    h5File->WriteStrAttrib ( "START_TIME", currentTime.GetTime() );
-    h5File->WriteStrAttrib ( "INSTRUMENT", "GNURadio Rev4.5" );
-
-    h5File->WriteAttrib<int> ( "CHANNELS", cf.NumChannels(),
-                               H5::PredType::NATIVE_INT, H5::DataSpace()
-                             );
-
-    h5File->WriteAttrib<double> ( "SAMPLE_RATE", cf.SampleRate(),
-                                  H5::PredType::NATIVE_DOUBLE, H5::DataSpace()
-                                );
-
-    h5File->WriteAttrib<double> ( "BANDWIDTH", cf.Bandwidth(),
-                                  H5::PredType::NATIVE_DOUBLE, H5::DataSpace()
-                                );
-
-    h5File->WriteAttrib<int> ( "DECIMATION", cf.Decimation(),
-                               H5::PredType::NATIVE_INT, H5::DataSpace()
-                             );
-
-    h5File->WriteAttrib<double> ( "OUTPUT_RATE", cf.OutputRate(),
-                                  H5::PredType::NATIVE_DOUBLE, H5::DataSpace()
-                                );
-
-    h5File->WriteAttrib<double> ( "IPP", ceil ( cf.IPP() ), H5::PredType::NATIVE_DOUBLE,
-                                  H5::DataSpace()
-                                );
-
-    // FIXME - RF carrier frequency should be in the configuration file.
-    h5File->WriteAttrib<double> ( "RF", cf.SampleRate(), H5::PredType::NATIVE_DOUBLE,
-                                  H5::DataSpace()
-                                );
-
-    for ( int i = 0; i < cf.NumChannels(); ++i ) {
-
-        h5File->WriteAttrib<double> ( "DDC" + lexical_cast<string> ( i ),
-                                      cf.DDC ( i ), H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-    }
-
-    h5File->WriteAttrib<int> ( "SAMPLE_WINDOWS", cf.NumWindows(),
-                               H5::PredType::NATIVE_INT, H5::DataSpace()
-                             );
-
-    for ( int i = 0; i < cf.NumWindows(); ++i ) {
-
-        h5File->WriteAttrib<int> ( cf.WindowName ( i ) + "_START", cf.WindowStart ( i ),
-                                   H5::PredType::NATIVE_INT, H5::DataSpace()
-                                 );
-
-        h5File->WriteAttrib<int> ( cf.WindowName ( i ) + "_SIZE", cf.WindowStop ( i ),
-                                   H5::PredType::NATIVE_INT, H5::DataSpace()
-                                 );
-    }
-
-    //Program GNURadio
-    for ( int i = 0; i < cf.NumChannels(); ++i ) settings.Tune ( i, cf.DDC ( i ) );
-
-    settings.numChannels    = cf.NumChannels();
-    settings.decimationRate = cf.Decimation();
-    settings.fpgaFileName   = cf.FPGAImage();
-
-    //change these as needed
-    settings.fUsbBlockSize  = 0;
-    settings.fUsbNblocks    = 0;
-    settings.mux            = 0xf0f0f1f0;
-
-    GnuRadarDevice grDevice ( settings );
-
-    // setup producer thread
-    gnuradar::ProducerThreadPtr producerThread (
-        new ProducerThread ( BUFFER_SIZE , grDevice )
-    );
-
-    // setup consumer thread
-    gnuradar::ConsumerThreadPtr consumerThread (
-        new ConsumerThread ( BUFFER_SIZE , buffer, h5File, dimVector )
-    );
-
-    //Initialize Producer/Consumer Model
-    gnuradar::ProducerConsumerModel pcmodel (
-        "GnuRadar",
-        NUM_BUFFERS,
-        BUFFER_SIZE,
-        producerThread,
-        consumerThread
-    );
-
-    //this is the primary system loop - console controls operation
-    cout << "Starting Data Collection... type <quit> to exit" << endl;
-    Console console ( pcmodel );
-    pcmodel.Start();
-    pcmodel.RequestData();
-    pcmodel.Wait();
-    cout << "Stopping Data Collection... Exiting Program" << endl;
+    network::TcpRequestServer server( ioService, commandList ); 
+    ioService.run();
 
     return 0;
 };

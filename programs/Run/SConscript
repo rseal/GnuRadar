@@ -2,14 +2,18 @@
 flags = ['-Wall', '-W', '-DTIXML_USE_TICPP']
 
 #setup libraries to link and paths
-libs=['boost_filesystem','tinyxmlcpp','rt','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp']
+libs=['boost_system','boost_filesystem','tinyxmlcpp','rt','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp']
 libPath=['/usr/lib','/usr/local/lib']
 
 #define build environment
 env = Environment()
 warnEnv = env.Clone(LIBS=libs, LIBPATH=libPath, CXXFLAGS=flags)
 
-#build target and install in root/bin directory
-program = warnEnv.Program(target='../../bin/gradar-run-cli', source=Glob('*.cxx'));
-warnEnv.Depends(program, Glob('../../include/*'))
+prog1 = warnEnv.Program(target='../../bin/gradar-run-cli', 
+   source=['GnuRadarRunCli.cxx','ProducerThread.cxx','ConsumerThread.cxx']);
+prog2 = warnEnv.Program(target='../../bin/gradar-run', 
+   source=['GnuRadarRun.cxx','ProducerThread.cxx','ConsumerThread.cxx']);
+
+warnEnv.Depends(prog1, Glob('../../include/*'))
+warnEnv.Depends(prog2, Glob('../../include/*'))
 

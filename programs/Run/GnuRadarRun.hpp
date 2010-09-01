@@ -33,6 +33,7 @@
 #include <boost/shared_ptr.hpp>
 
 typedef boost::shared_ptr<HDF5> Hdf5Ptr;
+typedef boost::shared_ptr<GnuRadarDevice> GnuRadarDevicePtr;
 Hdf5Ptr h5File;
 
 const int BYTES_PER_SAMPLE = 4;

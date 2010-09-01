@@ -131,6 +131,7 @@ public class XmlParser {
         Element root = new Element ( "gnuradar" );
         Element configuration = new Element ( "configuration" );
 
+        configuration.appendChild ( parser.constructElement ( "version") );
         configuration.appendChild ( parser.constructElement ( "sample_rate" ) );
         configuration.appendChild ( parser.constructElement ( "decimation" ) );
         configuration.appendChild ( parser.constructElement ( "num_channels" ) );
@@ -178,6 +179,7 @@ public class XmlParser {
 
         configuration.appendChild ( parser.constructElement ( "ipp" ) );
         configuration.appendChild ( parser.constructElement ( "ipp_units" ) );
+        configuration.appendChild ( parser.constructElement ( "tx_carrier") );
         configuration.appendChild ( parser.constructElement ( "organization"  ) );
         configuration.appendChild ( parser.constructElement ( "site" ) );
         configuration.appendChild ( parser.constructElement ( "user" ) );

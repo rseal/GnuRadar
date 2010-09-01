@@ -20,6 +20,9 @@ import java.util.HashMap;
 
 public interface ApplicationSettings {
 
+	//pull settings from Application.
     public HashMap< String, String > getSettings();
+    
+    //push settings to Application.
     public void pushSettings( HashMap< String, String> map );
 }

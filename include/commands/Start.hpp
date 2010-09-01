@@ -20,10 +20,13 @@
 #include <boost/tokenizer.hpp>
 
 #include <gnuradar/ConfigFile.h>
-#include <gnuradar/GnuRadarCommand.h>
+#include <gnuradar/GnuRadarCommand.hpp>
 #include <gnuradar/ProducerConsumerModel.h>
+#include <gnuradar/Device.h>
+#include <gnuradar/GnuRadarDevice.h>
 #include <gnuradar/ProducerThread.h>
 #include <gnuradar/ConsumerThread.h>
+#include <gnuradar/xml/XmlPacket.hpp>
 
 namespace gnuradar {
 namespace command {
@@ -36,23 +39,25 @@ class Start : public GnuRadarCommand {
 
     // setup shared pointers to extend life beyond this call
     typedef boost::shared_ptr< ProducerConsumerModel > ProducerConsumerModelPtr;
-    ProducerConsumerModel pcModel_;
+    ProducerConsumerModelPtr pcModel_;
     typedef boost::shared_ptr< ProducerThread > ProducerThreadPtr;
     typedef boost::shared_ptr< ConsumerThread > ConsumerThreadPtr;
+    typedef boost::shared_ptr< GnuRadarDevice > GnuRadarDevicePtr;
+    typedef boost::shared_ptr< Device > DevicePtr;
 
     // pull settings from the configuration file
-    const GnuRadarSettings GetSettings( ConfigFile& config ) {
+    const GnuRadarSettings GetSettings( ConfigFile& configuration ) {
 
         GnuRadarSettings settings;
 
         //Program GNURadio
-        for ( int i = 0; i < cf.NumChannels(); ++i ) {
-            settings.Tune ( i, cf.DDC ( i ) );
+        for ( int i = 0; i < configuration.NumChannels(); ++i ) {
+            settings.Tune ( i, configuration.DDC ( i ) );
         }
 
-        settings.numChannels    = cf.NumChannels();
-        settings.decimationRate = cf.Decimation();
-        settings.fpgaFileName   = cf.FPGAImage();
+        settings.numChannels    = configuration.NumChannels();
+        settings.decimationRate = configuration.Decimation();
+        settings.fpgaFileName   = configuration.FPGAImage();
 
         //change these as needed
         settings.fUsbBlockSize  = 0;
@@ -65,48 +70,52 @@ class Start : public GnuRadarCommand {
     const void SetupHDF5( ConfigFile& configuration, 
           std::string&    )
     {
+       std::string fileSet = configuration.DataFileBaseName();
        
-       h5File = Hdf5Ptr ( new HDF5 ( dataSet + "_", hdf5::WRITE ) );
+       h5File = Hdf5Ptr ( new HDF5 ( fileSet + "_", hdf5::WRITE ) );
 
-       h5File->Description ( "USRP Radar Receiver" );
+       h5File->Description ( "GnuRadar Software" + configuration.Version() );
        h5File->WriteStrAttrib ( "START_TIME", currentTime.GetTime() );
-       h5File->WriteStrAttrib ( "INSTRUMENT", "GNURadio Rev4.5" );
-       h5File->WriteAttrib<int> ( "CHANNELS", cf.NumChannels(),
+       h5File->WriteStrAttrib ( "INSTRUMENT", configuration.Receiver() );
+       h5File->WriteAttrib<int> ( "CHANNELS", configuration.NumChannels(),
              H5::PredType::NATIVE_INT, H5::DataSpace() );
-       h5File->WriteAttrib<double> ( "SAMPLE_RATE", cf.SampleRate(),
+       h5File->WriteAttrib<double> ( "SAMPLE_RATE", configuration.SampleRate(),
              H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-       h5File->WriteAttrib<double> ( "BANDWIDTH", cf.Bandwidth(),
+       h5File->WriteAttrib<double> ( "BANDWIDTH", configuration.Bandwidth(),
              H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-       h5File->WriteAttrib<int> ( "DECIMATION", cf.Decimation(),
+       h5File->WriteAttrib<int> ( "DECIMATION", configuration.Decimation(),
              H5::PredType::NATIVE_INT, H5::DataSpace() );
-       h5File->WriteAttrib<double> ( "OUTPUT_RATE", cf.OutputRate(),
+       h5File->WriteAttrib<double> ( "OUTPUT_RATE", configuration.OutputRate(),
              H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-       h5File->WriteAttrib<double> ( "IPP", ceil ( cf.IPP() ),
+       h5File->WriteAttrib<double> ( "IPP", configuration.IPP(),
              H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-       h5File->WriteAttrib<double> ( "RF", 49.80e6, H5::PredType::NATIVE_DOUBLE,
-             H5::DataSpace() );
+       h5File->WriteAttrib<double> ( "RF", configuration.TxCarrier() , 
+             H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
 
-       for ( int i = 0; i < cf.NumChannels(); ++i ) {
+       for ( int i = 0; i < configuration.NumChannels(); ++i ) {
           h5File->WriteAttrib<double> ( 
                 "DDC" + lexical_cast<string> ( i ),
-                cf.DDC ( i ), H5::PredType::NATIVE_DOUBLE, H5::DataSpace() 
+                configuration.DDC ( i ), H5::PredType::NATIVE_DOUBLE, 
+                H5::DataSpace() 
                 );
        }
 
        h5File->WriteAttrib<int> ( 
-             "SAMPLE_WINDOWS", cf.NumWindows(),
+             "SAMPLE_WINDOWS", configuration.NumWindows(),
              H5::PredType::NATIVE_INT, H5::DataSpace()
              );
 
-       for ( int i = 0; i < cf.NumWindows(); ++i ) {
+       for ( int i = 0; i < configuration.NumWindows(); ++i ) {
 
           h5File->WriteAttrib<int> ( 
-                cf.WindowName ( i ) + "_START", cf.WindowStart ( i ),
+                configuration.WindowName ( i ) + "_START", 
+                configuration.WindowStart ( i ),
                 H5::PredType::NATIVE_INT, H5::DataSpace()
                 );
 
           h5File->WriteAttrib<int> ( 
-                cf.WindowName ( i ) + "_SIZE", cf.WindowSize ( i ),
+                configuration.WindowName ( i ) + "_STOP", 
+                configuration.WindowStop ( i ),
                 H5::PredType::NATIVE_INT, H5::DataSpace()
                 );
        }
@@ -114,45 +123,58 @@ class Start : public GnuRadarCommand {
 
    public:
 
-    Start( ProducerConsumerModelPtr pcModel, std::string& fileName ):
-       pcModel_( pcModel ) {
-
-          ConfigFile configFile( fileName );
-          const int bufferSize = cf.BytesPerSecond();
-
-          // create a device to communicate with hardware
-          GnuRadarDevicePtr grDevice(
-                new GnuRadarDevice( GetSettings( configFile ))
-                );
-
-          // setup producer thread
-          gnuradar::ProducerThreadPtr producerThread (
-                new ProducerThread ( bufferSize , grDevice )
-                );
-
-          // setup consumer thread
-          gnuradar::ConsumerThreadPtr consumerThread (
-                new ConsumerThread ( bufferSize , buffer, h5File, dimVector )
-                );
-
-          // create a producer/consumer model for streaming data
-          pcModel = gnuradar::ProducerConsumerModelPtr(
-                new ProducerConsumerModel(
-                   "GnuRadar",
-                   NUM_BUFFERS,
-                   bufferSize,
-                   producerThread,
-                   consumerThread
-                   )
-                );
+    Start( ProducerConsumerModelPtr pcModel ): 
+       GnuRadarCommand( "start" ), pcModel_( pcModel ) {
        }
 
-    virtual void Execute( std::string& args ) {
+    virtual void Execute( const xml::XmlPacketArgs& args ) {
+
+       xml::XmlPacketArgs::const_iterator iter = args.find("file_name");
+       
+       if( iter == args.end() )
+       {
+          throw std::runtime_error( "Start command parsing failure - "
+                "check message arguments");
+       }
+
+       std::string fileName = iter->second; 
+
+       ConfigFile configFile( fileName );
+       const int bufferSize = configFile.BytesPerSecond();
+
+       // create a device to communicate with hardware
+       GnuRadarDevicePtr grDevice(
+             new GnuRadarDevice( GetSettings( configFile ))
+             );
+
+       // setup producer thread
+       gnuradar::ProducerThreadPtr producerThread (
+             new ProducerThread ( bufferSize , grDevice ));
+
+       // setup consumer thread
+       gnuradar::ConsumerThreadPtr consumerThread (
+             new ConsumerThread ( bufferSize , buffer, h5File, dimVector )
+             );
+
+       // create a producer/consumer model for streaming data
+       pcModel_ = ProducerConsumerModelPtr(
+             new ProducerConsumerModel(
+                "GnuRadar",
+                NUM_BUFFERS,
+                bufferSize,
+                producerThread,
+                consumerThread
+                )
+             );
+
        // start consumer thread
-       pcModel.RequestData();
+       pcModel_->RequestData();
 
        // start producer thread
-       pcModel.Start();
+       pcModel_->Start();
     }
 };
 };
+};
+
+#endif

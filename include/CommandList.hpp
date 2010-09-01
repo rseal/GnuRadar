@@ -26,36 +26,42 @@
 #include <gnuradar/GnuRadarCommand.hpp>
 
 namespace gnuradar {
+   namespace command{
 
-typedef boost::shared_ptr< GnuRadarCommand > CommandPtr;
+      typedef boost::shared_ptr< command::GnuRadarCommand > CommandPtr;
 
-struct CommandList {
-    typedef std::vector< CommandPtr > CommandVector;
-    CommandVector commands_;
+      struct CommandList {
 
-public:
-    CommandList() {}
+         typedef std::vector< CommandPtr > CommandVector;
+         CommandVector commands_;
 
-    void Add ( CommandPtr commandPtr ) {
-        commands_.push_back ( commandPtr );
-    }
+         public:
+         CommandList() {}
 
-    const CommandPtr Find ( std::string& name ) {
-        CommandVector::const_iterator iter = commands_.begin();
+         void Add ( CommandPtr commandPtr ) {
+            commands_.push_back ( commandPtr );
+         }
 
-        while ( iter != commands_.end() ) {
-            if ( name == ( *iter )->Name() ) break;
-            ++iter;
-        }
+         const CommandPtr Find ( const std::string& name ) {
+            CommandVector::const_iterator iter = commands_.begin();
 
-        // check for an invalid command and throw
-        if ( iter == commands_.end() )
-            throw std::runtime_error ( "Invalid command request" );
+            while ( iter != commands_.end() ) {
+               if ( name == ( *iter )->Name() ) break;
+               ++iter;
+            }
 
-        return *iter;
-    }
-};
+            // check for an invalid command and throw
+            if ( iter == commands_.end() )
+               throw std::runtime_error ( "Invalid command request" );
 
+            // TODO: Remove me
+            std::cout << "FOUND " << (*iter)->Name() << " in the command list" << std::endl;
+
+            return *iter;
+         }
+      };
+
+   };
 };
 
 #endif

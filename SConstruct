@@ -4,7 +4,7 @@ env = Environment()
 install_prog_dir='/usr/local/bin'
 install_prog_dir2='\/usr\/local\/bin'
 install_bin=[Glob('bin/gradar*')]
-install_lib=[Glob('bin/lib*')]
+install_lib=[Glob('bin/xom*')]
 
 #define directories
 include_dir = '/usr/local/include/gnuradar'

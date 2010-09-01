@@ -17,6 +17,7 @@
 #ifndef PRODUCER_THREAD_H
 #define PRODUCER_THREAD_H
 
+#include <boost/shared_ptr.hpp>
 #include <gnuradar/BaseThread.h>
 #include <gnuradar/SThread.h>
 #include <gnuradar/Device.h>
@@ -25,19 +26,21 @@
 /// collecting data from the hardware device and transferring
 /// it to the shared buffer memory region.
 class ProducerThread: public BaseThread, public SThread {
-    Device& device_;
+
+   typedef boost::shared_ptr<Device> DevicePtr;
+   DevicePtr device_;
 
 public:
 
     /// Constructor
     /// \param bytes data write size in bytes
     /// \param device GnuRadar device reference
-    ProducerThread ( const int bytes, Device& device ) :
+    ProducerThread ( const int bytes, DevicePtr device ) :
             BaseThread ( bytes ), SThread(), device_ ( device ) { }
 
     /// stops the device
     virtual void Stop() {
-        device_.Stop();
+        device_->Stop();
     }
 
     /// executes worker thread

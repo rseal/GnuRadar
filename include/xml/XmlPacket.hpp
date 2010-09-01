@@ -19,13 +19,15 @@
 
 #include <iostream>
 #include <sstream>
+#include <map>
 #include <ticpp/ticpp.h>
 #include <boost/shared_ptr.hpp>
+#include <boost/any.hpp>
 
 namespace gnuradar{
    namespace xml{
 
-      typedef std::map< std::string, std::string > XmlPacketMap;
+      typedef std::map< std::string, std::string > XmlPacketArgs;
 
       struct XmlPacket
       {
@@ -51,9 +53,9 @@ namespace gnuradar{
          }
 
 
-         static const XmlPacketMap Parse( std::string& xmlPacket ){
+         static const XmlPacketArgs Parse( const std::string& xmlPacket ){
 
-            XmlPacketMap map;
+            XmlPacketArgs map;
             ticpp::Document document;
             document.Parse( xmlPacket );
 
@@ -74,9 +76,9 @@ namespace gnuradar{
             return map;
          }
 
-         const std::string Format( XmlPacketMap map ){
+         const std::string Format( XmlPacketArgs map ){
 
-            XmlPacketMap::iterator iter = map.begin();
+            XmlPacketArgs::iterator iter = map.begin();
 
             while( iter != map.end() )
             {

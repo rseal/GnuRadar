@@ -40,6 +40,11 @@ public class PulseSettingsPanel extends JPanel
     private JComboBox ippComboBox;
     private String[] ippUnits = { "MSEC", "USEC", "SAMPLES" };
 
+    private JPanel txPanel;
+    private JLabel txLabel;
+    private JTextField txTextField;
+    private JLabel txUnitsLabel;
+    
     private JButton addDataWindowButton;
     private JButton removeDataWindowButton;
     private JPanel buttonPanel;
@@ -59,7 +64,7 @@ public class PulseSettingsPanel extends JPanel
 
     public PulseSettingsPanel ( Dimension dims )
     {
-        this.setLayout ( new FlowLayout ( FlowLayout.CENTER, 2, 2 ) );
+        this.setLayout ( new FlowLayout ( FlowLayout.LEFT, 3, 2 ) );
         setComponentSize ( this, dims );
 
         Border border = BorderFactory.createEtchedBorder();
@@ -77,6 +82,15 @@ public class PulseSettingsPanel extends JPanel
         ippPanel.add ( ippLabel );
         ippPanel.add ( ippTextField );
         ippPanel.add ( ippComboBox );
+        
+        txPanel = new JPanel();
+        txLabel = new JLabel( "Tx Carrier Frequency", JLabel.RIGHT);
+        txTextField = new JTextField("");
+        setComponentSize ( txTextField, new Dimension(80, 20 ));
+        txUnitsLabel = new JLabel( "MHz", JLabel.LEFT);
+        txPanel.add( txLabel );
+        txPanel.add( txTextField );
+        txPanel.add( txUnitsLabel );
 
         buttonPanel = new JPanel();
         addDataWindowButton = new JButton ( "Add" );
@@ -86,18 +100,22 @@ public class PulseSettingsPanel extends JPanel
         buttonPanel.add ( addDataWindowButton );
         buttonPanel.add ( removeDataWindowButton );
 
-        leftPanel.add ( ippPanel );
+        leftPanel.add ( ippPanel );        
         leftPanel.add ( buttonPanel );
 
         dataSettingsPanel = new DataSettingsPanel();
 
         this.add ( dataSettingsPanel );
         this.add ( leftPanel );
+        this.add ( txPanel );
 
         addDataWindowButton.addActionListener ( dataSettingsPanel );
         removeDataWindowButton.addActionListener ( dataSettingsPanel );
     }
 
+    /**
+     * Reads all the settings from the GUI into the HashMap.
+     */
     @Override
     public HashMap<String, String> getSettings()
     {
@@ -105,16 +123,20 @@ public class PulseSettingsPanel extends JPanel
         settings.putAll ( dataSettingsPanel.getSettings() );
         settings.put ( "ipp", ippTextField.getText() );
         settings.put ( "ipp_units", ( String ) ippComboBox.getSelectedItem() );
+        settings.put ( "tx_carrier", txTextField.getText());
 
         return settings;
     }
 
+    /**
+     * Takes settings from a HashMap and pushes them to the Application.
+     */
 	@Override
 	public void pushSettings(HashMap<String, String> map) {		
 		ippTextField.setText( map.get("ipp"));
 		ippComboBox.setSelectedItem( map.get("ipp_units"));
+		txTextField.setText( map.get("tx_carrier"));
+		
 		dataSettingsPanel.pushSettings(map);		
 	}
-
-
 }

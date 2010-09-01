@@ -18,17 +18,23 @@
 #define GNURADAR_COMMAND_HPP
 
 #include <iostream>
+#include <gnuradar/xml/XmlPacket.hpp>
 
-class GnuRadarCommand {
-    std::string name_;
+namespace gnuradar{
+   namespace command{
+      
+      class GnuRadarCommand {
+         std::string name_;
 
-public:
+         public:
 
-    GnuRadarCommand ( const std::string& name ) : name_ ( name ) {}
-    virtual void Execute ( const std::string& args ) = 0;
-    const std::string& Name() {
-        return name_;
-    }
+         GnuRadarCommand ( const std::string& name ) : name_ ( name ) {}
+         virtual void Execute ( const xml::XmlPacketArgs& args ) = 0;
+         const std::string& Name() {
+            return name_;
+         }
+      };
+   };
 };
 
 #endif

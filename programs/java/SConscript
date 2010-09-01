@@ -16,7 +16,7 @@ jar_verify='../../bin/gradar-verify.jar';
 env.Java(target = 'classes', source = 'com', JAVAVERSION='1.6')
 
 #place 3rd party lib in bin/lib  directory
-env.InstallAs('../../bin/lib/xom-1.2.6.jar', lib )
+env.InstallAs('../../bin/xom-1.2.6.jar', lib )
 
 env.Jar(jar_configure, ['classes', 'com/CONFIGURE_MANIFEST.MF']);
 env.Jar(jar_verify, ['classes', 'com/VERIFY_MANIFEST.MF']);

@@ -13,14 +13,14 @@ using namespace std;
 int main()
 {
    // create packet map to store the parsed packet
-   gnuradar::xml::XmlPacketMap map;
+   gnuradar::xml::XmlPacketArgs map;
 
    // create an XmlPacket object and populate
    gnuradar::xml::XmlPacket packet( "command", "ticpp_test");
    map["destination"] = "server_test";
    map["type"] = "control";
    map["name"] = "start";
-   map["args"] = "1,2,3,4,5,6";
+   map["file_name"] = "/usr/local/GnuRadar/config/HomeTest.ucf";
 
    // convert the XmlPacket into a string representation
    string xmlString = packet.Format( map );
@@ -31,7 +31,7 @@ int main()
    cout << "xml packet = " << xmlString << endl;
 
    // iterate through map and print key/value pairs
-   gnuradar::xml::XmlPacketMap::iterator iter = map.begin();
+   gnuradar::xml::XmlPacketArgs::iterator iter = map.begin();
    while( iter != map.end() )
    {
       cout 

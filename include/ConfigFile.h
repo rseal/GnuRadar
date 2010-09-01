@@ -39,8 +39,11 @@ struct ConfigFile {
     int decimation_;
     double outputRate_;
     double ippUnits_;
+    double txCarrier_;
     std::string fpgaImage_;
     std::string dataFileBaseName_;
+    std::string version_;
+    std::string receiver_;
     int samplesPerIpp_;
 
     std::vector<ReceiveChannel> channels_;
@@ -55,13 +58,16 @@ public:
 
         Units units;
 
-        sampleRate_       = parser_.Get<double> ( "sample_rate" );
+        version_          = parser_.Get<std::string>( "version" );
+        receiver_ = parser_.Get<std::string>( "receiver" );
+        sampleRate_       = parser_.Get<double> ( "sample_rate" ) * 1e6;
         decimation_       = parser_.Get<int> ( "decimation" );
         outputRate_       = sampleRate_ / decimation_;
         numChannels_      = parser_.Get<int> ( "num_channels" );
         numWindows_       = parser_.Get<int> ( "num_windows" );
         ippUnits_         = units ( parser_.Get<std::string> ( "ipp_units" ) );
         ipp_              = parser_.Get<double>("ipp") * ippUnits_;
+        txCarrier_ = parser_.Get<double>("tx_carrier") * 1e6;
         fpgaImage_        = parser_.Get<std::string> ( "fpga_image_file" );
         dataFileBaseName_ = parser_.Get<std::string> ( "base_file_name" );
 
@@ -102,45 +108,68 @@ public:
     const int    Phase ( const int num ){
         return channels_[num].Phase();
     }
+
     const double& DDC ( const int num ) {
         return channels_[num].Frequency();
     }
+
     const std::string& WindowName ( const int num )  {
         return windows_[num].Name();
     }
+
     const int    WindowStart ( const int num ) {
         return windows_[num].Start();
     }
+
     const int    WindowStop ( const int num )  {
         return windows_[num].Stop();
     }
+
     const double& SampleRate() {
         return sampleRate_;
     }
+
     const double& OutputRate() {
         return outputRate_;
     }
+
     const double& Decimation() {
         return decimation_;
     }
+
     const int    NumChannels() {
         return numChannels_;
     }
+
     const int    NumWindows() {
         return numWindows_;
     }
-    const double& Bandwidth() {
+
+    const double Bandwidth() {
         return outputRate_;
     }
-    const float&  IPP(){
+
+    const double  IPP(){
         return ipp_;
     }
+
+    const double TxCarrier() {
+       return txCarrier_;
+    }
+
     const std::string& FPGAImage(){
         return fpgaImage_;
     }
+
     const std::vector<ReceiveWindow>& Windows(){
         return windows_;
     }
+
+    const std::string& Version() { return version_; }
+
+    const std::string& DataFileBaseName() { return dataFileBaseName_; }
+
+    const std::string& Receiver() { return receiver_; }
 
     const int SamplesPerIpp() { return samplesPerIpp_; }
 

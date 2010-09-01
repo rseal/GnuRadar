@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,6 +25,7 @@
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 #include <gnuradar/CommandList.hpp>
+#include <gnuradar/xml/XmlPacket.hpp>
 
 using boost::asio::ip::tcp;
 
@@ -41,7 +42,7 @@ public:
 
     // create and return a shared pointer to this
     static pointer create ( boost::asio::io_service& io_service,
-                            CommandList& commands ) {
+                            gnuradar::command::CommandList& commands ) {
         return pointer ( new TcpConnection ( io_service, commands ) );
     }
 
@@ -80,34 +81,42 @@ public:
     }
 
 private:
-    CommandList& commands_;
+    gnuradar::command::CommandList& commands_;
     boost::system::error_code error_;
     tcp::socket socket_;
     std::string message_;
 
-    void ExecuteRequest ( std::string& message ) {
+    void ExecuteRequest ( const std::string& message ) {
 
-        // FIXME: Remove pseudo args and replace with XML parsed args
-        const std::string pseudoArgs = "fake args";
-
-        // TODO: Add XML parser here and pass in XML structure
-
-        // TODO: Add error handling here for unknown command
         try {
-            CommandPtr commandPtr = commands_.Find ( message );
-            commandPtr->Execute ( pseudoArgs );
+
+           // parse the received xml packet
+           const xml::XmlPacketArgs args = xml::XmlPacket::Parse( message );
+
+           xml::XmlPacketArgs::const_iterator iter = args.find( "name" );
+
+           if( iter == args.end() )
+           {
+              throw std::runtime_error( 
+                    "TcpConnection command name was not found");
+           }
+           
+           const std::string commandName = iter->second;
+           command::CommandPtr commandPtr = commands_.Find ( commandName );
+           commandPtr->Execute ( args );
+
         } catch ( std::exception& e ) {
             std::cerr
-                << "Invalid command " << message << " found!"
+                << "Invalid command " << e.what() << " found!"
                 << std::endl;
         }
 
     }
 
 
-    TcpConnection (
-        boost::asio::io_service& io_service, CommandList& commands )
-            : socket_ ( io_service ), commands_ ( commands ) { }
+    TcpConnection ( boost::asio::io_service& io_service,
+                    gnuradar::command::CommandList& commands ) :
+            socket_ ( io_service ), commands_ ( commands ) { }
 
     void handle_write ( const boost::system::error_code&, size_t size ) { }
 };

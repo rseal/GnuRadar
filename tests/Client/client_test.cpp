@@ -11,6 +11,7 @@
 #include <iostream>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
+#include <gnuradar/xml/XmlPacket.hpp>
 
 using boost::asio::ip::tcp;
 
@@ -51,7 +52,20 @@ int main(int argc, char* argv[])
        boost::array<char, 512> buf;
        boost::system::error_code error;
 
-       socket.async_write_some( boost::asio::buffer("test"), handle_write);
+       // create packet map to store the parsed packet
+       gnuradar::xml::XmlPacketArgs map;
+
+       // create an XmlPacket object and populate
+       gnuradar::xml::XmlPacket packet( "command", "ticpp_test");
+       map["destination"] = "server_test";
+       map["type"] = "control";
+       map["name"] = "start";
+       map["file_name"] = "/usr/local/GnuRadar/config/HomeTest.ucf";
+
+       // convert the XmlPacket into a string representation
+       std::string xmlString = packet.Format( map );
+
+       socket.async_write_some( boost::asio::buffer( xmlString ), handle_write);
 
        size_t len = socket.read_some(boost::asio::buffer(buf), error);
 

@@ -83,6 +83,7 @@ public class Configure implements ActionListener {
         if ( loadFile == JFileChooser.APPROVE_OPTION ) {
             File file = jf.getSelectedFile();
             settingsMap = XmlParser.load ( file );
+            settingsMap.put("version", VERSION);
             loadSuccess = true;
         }
 
@@ -264,6 +265,7 @@ public class Configure implements ActionListener {
             settingsMap.putAll ( pulseSettingsPanel.getSettings() );
             settingsMap.putAll ( informationPanel.getSettings() );
             settingsMap.putAll ( fileSettingsPanel.getSettings() );
+            settingsMap.put("version", VERSION);
             saveFile();
         }
 
@@ -275,6 +277,7 @@ public class Configure implements ActionListener {
             map.putAll ( pulseSettingsPanel.getSettings() );
             map.putAll ( informationPanel.getSettings() );
             map.putAll ( fileSettingsPanel.getSettings() );
+            map.put("version", VERSION);
 
             // compare our local map with the global to see if
             // the user has changed anything since their last
@@ -296,6 +299,7 @@ public class Configure implements ActionListener {
                     settingsMap.putAll ( pulseSettingsPanel.getSettings() );
                     settingsMap.putAll ( informationPanel.getSettings() );
                     settingsMap.putAll ( fileSettingsPanel.getSettings() );
+                    settingsMap.put("version", VERSION);
                     saveFile();
                 }
             }

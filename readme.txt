@@ -14,27 +14,37 @@ project by Ettus. This software features the following:
 4. Parameter based configuration program for radar mode configuration.
 5. CLI-based run-time software to start/stop data recording. 
 6. C++ interface currently functional with the Basic RX daughterboard.
+7. Both command line and GUI-based programs for configuration,verification,
+   data collection.
 
 Programs:
 
 Currently, there are 4 primary programs of interest:
 
-1. gradar-config: Configuration GUI to setup the receiver.
+1. gradar-configure ( gradar-configure-cli ): Configuration GUI to setup the receiver.
 2. gradar-verify: Validation tool to ensure that both receiver and pulse
    generator are properly synchronized.
-3. gradar-run: Data collection tool for the USRP receiver.
+3. gradar-run ( gradar-run-cli ): Data collection tool for the USRP receiver.
 4. gradar-replay: Data replay tool for HDF5 files. Requires rtPlotter for
    display. 
 
 Dependencies:
 
-1. Latest version of the boost libraries.
-2. Latest version of gnuradio.
-3. Latest version of boost-book ( optional ).
-5. Latest CommandLineParser library ( see local repo ).
-6. Latest HDF5R library ( see local repo ).
-7. Latest scons ( python-based build tool ).
-8. Latest version of c++ tinyxml ( a.k.a ticpp ) <-- included in deps.
+1. Latest version of the boost libraries ( http://www.boost.org ).
+2. Latest version of gnuradio ( http://gnuradio.org/git/gnuradio.git ).
+3. Latest CommandLineParser library 
+   ( http://github.com/rseal/CommandLineParser ).
+4. Latest HDF5R library ( http://github.com/rseal/HDF5R ).
+5. Latest scons ( http://www.scons.org ).
+6. Latest version of c++ tinyxml ( http://code.google.com/p/ticpp/ ).
+7. Latest version of Sun Java Java Runtime Environment 
+   ( http://www.oracle.com/technetwork/java/javase/downloads/index.html#need).
+8. Latest version of java xom library ( http://www.xom.nu ). 
+
+Optional:
+
+1. Latest version of boost-book ( http://www.boost.org/doc/libs/1_44_0/doc/html/boostbook.html ).
+
 
 Installation:
 
@@ -70,5 +80,3 @@ Any time headers are modified, added, or removed; you must run 'scons
 install-headers' to refresh the header location. It's actually much easier to
 write a short bash script to create soft links to the include directory. Any
 changes using this method will be picked up by scons and udpated as needed.
-
-

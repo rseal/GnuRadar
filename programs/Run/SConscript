@@ -11,7 +11,7 @@ warnEnv = env.Clone(LIBS=libs, LIBPATH=libPath, CXXFLAGS=flags)
 
 prog1 = warnEnv.Program(target='../../bin/gradar-run-cli', 
    source=['GnuRadarRunCli.cxx','ProducerThread.cxx','ConsumerThread.cxx']);
-prog2 = warnEnv.Program(target='../../bin/gradar-run', 
+prog2 = warnEnv.Program(target='../../bin/gradar-run-server',
    source=['GnuRadarRun.cxx','ProducerThread.cxx','ConsumerThread.cxx']);
 
 warnEnv.Depends(prog1, Glob('../../include/*'))

@@ -33,6 +33,11 @@ env.Command('bin/gradar-verify','scripts/gradar-verify-default',
 		    Chmod("$TARGET",0755)
 		 ])
 
+env.Command('bin/gradar-run','scripts/gradar-run-default',
+                 [
+                    "sed \'s/<LOCATION>/" + install_prog_dir2 + "/\' < $SOURCE > $TARGET",
+		    Chmod("$TARGET",0755)
+		 ])
 
 
 

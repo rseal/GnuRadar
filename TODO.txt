@@ -13,7 +13,7 @@ Here's a brief wish list for the very near future:
 
    1. Add XML-based message passing to better decouple command-line programs
       while providing inter-process communication.
-      -- 75% complete 08/28/2010
+      -- 85% complete 09/03/2010
 
    2. Replace current configuration files with XML-based versions to
       future-proof ( i.e. replace FLTK with a simple Java wrapper ).
@@ -21,9 +21,10 @@ Here's a brief wish list for the very near future:
 
    3. Use boost::ASIO libraries to provide socket-based client/servers to
       communicate messages.
-      -- 50% complete 08/28/2010 --
+      -- 85% complete 09/03/2010 --
 
    4. Provide more robust status messaging for gradar-run.
+      -- 50% complete 09/03/2010 --
 
    5. Refactor data types and data arrays to simplify and unify configuration
       and runtime data transfer.
@@ -31,6 +32,7 @@ Here's a brief wish list for the very near future:
    6. Replace family-size HDF5 setup with the default 'single' file
       implementation. If multiple files are needed for transport, tools are
       available to split files post-observation.
+      -- under consideration 09/03/2010 --
 
    7. Provide a Java-based toolbar to encompass all Java wrappers
       into a single location ( similar to the old radarTk toolbar ).

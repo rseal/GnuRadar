@@ -13,7 +13,7 @@ Here's a brief wish list for the very near future:
 
    1. Add XML-based message passing to better decouple command-line programs
       while providing inter-process communication.
-      -- 85% complete 09/03/2010
+      -- 95% complete 09/03/2010
 
    2. Replace current configuration files with XML-based versions to
       future-proof ( i.e. replace FLTK with a simple Java wrapper ).
@@ -21,7 +21,7 @@ Here's a brief wish list for the very near future:
 
    3. Use boost::ASIO libraries to provide socket-based client/servers to
       communicate messages.
-      -- 85% complete 09/03/2010 --
+      -- 95% complete 09/03/2010 --
 
    4. Provide more robust status messaging for gradar-run.
       -- 50% complete 09/03/2010 --

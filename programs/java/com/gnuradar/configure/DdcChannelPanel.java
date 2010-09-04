@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -103,14 +103,15 @@ public class DdcChannelPanel extends JPanel
         return settings;
     }
 
-	@Override
-	public void pushSettings(HashMap<String, String> map) {
-		
-		frequencyTextField.setText(map.get("frequency_" + channelIndex));
-		frequencyComboBox.setSelectedItem( map.get("frequency_units_" + channelIndex));
-		phaseTextField.setText(map.get("phase_" + channelIndex));
-		phaseComboBox.setSelectedItem(map.get("phase_units_" + channelIndex));
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void pushSettings ( HashMap<String, String> map )
+    {
+
+        frequencyTextField.setText ( map.get ( "frequency_" + channelIndex ) );
+        frequencyComboBox.setSelectedItem ( map.get ( "frequency_units_" + channelIndex ) );
+        phaseTextField.setText ( map.get ( "phase_" + channelIndex ) );
+        phaseComboBox.setSelectedItem ( map.get ( "phase_units_" + channelIndex ) );
+        // TODO Auto-generated method stub
+
+    }
 }

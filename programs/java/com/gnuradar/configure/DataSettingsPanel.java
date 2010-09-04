@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,10 +44,10 @@ public class DataSettingsPanel extends JTabbedPane
     public void addWindow()
     {
         if ( numTabs != MAX_WINDOWS ) {
-        	
-        	DataWindowPanel dataWindowPanel = new DataWindowPanel( numTabs );
-        	this.addTab ( "Window " + ++numTabs , dataWindowPanel );
-            windows.add ( dataWindowPanel );           
+
+            DataWindowPanel dataWindowPanel = new DataWindowPanel ( numTabs );
+            this.addTab ( "Window " + ++numTabs , dataWindowPanel );
+            windows.add ( dataWindowPanel );
         }
     }
 
@@ -55,8 +55,8 @@ public class DataSettingsPanel extends JTabbedPane
     {
         if ( numTabs != MIN_WINDOWS ) {
             // does this dispose of objects in the tab?
-            this.removeTabAt ( this.getSelectedIndex() );            
-            windows.remove(this.getSelectedIndex());
+            this.removeTabAt ( this.getSelectedIndex() );
+            windows.remove ( this.getSelectedIndex() );
             --numTabs;
         }
 
@@ -81,29 +81,30 @@ public class DataSettingsPanel extends JTabbedPane
     {
         HashMap<String, String> settings = new HashMap<String, String>();
 
-        settings.put("num_windows", Integer.toString( windows.size()) );
-                
+        settings.put ( "num_windows", Integer.toString ( windows.size() ) );
+
         for ( int i = 0; i < windows.size(); ++i ) {
             settings.putAll ( windows.get ( i ).getSettings() );
         }
-        
+
         return settings;
     }
 
-	@Override
-	public void pushSettings(HashMap<String, String> map) {
-		
-		int numAdd = Integer.valueOf( map.get("num_windows") );
-		
-		// remove existing windows first.
-		this.removeAll();
-		windows.clear();
-		numTabs=0;
-				
-		// add windows from configuration file
-		for(int i=0; i<numAdd; ++i){			
-			addWindow();
-			windows.get(i).pushSettings(map);
-		}
-	}
+    @Override
+    public void pushSettings ( HashMap<String, String> map )
+    {
+
+        int numAdd = Integer.valueOf ( map.get ( "num_windows" ) );
+
+        // remove existing windows first.
+        this.removeAll();
+        windows.clear();
+        numTabs = 0;
+
+        // add windows from configuration file
+        for ( int i = 0; i < numAdd; ++i ) {
+            addWindow();
+            windows.get ( i ).pushSettings ( map );
+        }
+    }
 }

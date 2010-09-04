@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -250,24 +250,25 @@ public class SettingsPanel extends JPanel
 
         HashMap<String, String> settings = new HashMap<String, String> ( 5 );
         //update settings
- 
+
         settings.put ( "sample_rate", sampleRateTextField.getText() );
         settings.put ( "num_channels", Integer.toString ( numChannels ) );
         settings.put ( "bandwidth", bandwidthTextField.getText() );
         settings.put ( "bandwidth_units", bandwidthUnitsLabel.getText() );
         settings.put ( "decimation" , decimationTextField.getText() );
-        
+
         return settings;
     }
 
-	@Override
-	public void pushSettings(HashMap<String, String> map) {
-		
-		sampleRateTextField.setText(map.get("sample_rate"));
-		channelsComboBox.setSelectedItem(map.get("num_channels"));
-		bandwidthTextField.setText(map.get("bandwidth"));
-		bandwidthUnitsLabel.setText(map.get("bandwidth_units"));
-		decimationSlider.setValue(Integer.valueOf(map.get("decimation")));
-		
-	}
+    @Override
+    public void pushSettings ( HashMap<String, String> map )
+    {
+
+        sampleRateTextField.setText ( map.get ( "sample_rate" ) );
+        channelsComboBox.setSelectedItem ( map.get ( "num_channels" ) );
+        bandwidthTextField.setText ( map.get ( "bandwidth" ) );
+        bandwidthUnitsLabel.setText ( map.get ( "bandwidth_units" ) );
+        decimationSlider.setValue ( Integer.valueOf ( map.get ( "decimation" ) ) );
+
+    }
 }

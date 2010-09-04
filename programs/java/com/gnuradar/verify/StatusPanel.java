@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,46 +21,44 @@ import javax.swing.JLabel;
 
 import java.awt.Color;
 
-public class StatusPanel extends JPanel
-{
-	private static final long serialVersionUID = 1L;
-	
-private JLabel label;
+public class StatusPanel extends JPanel {
+    private static final long serialVersionUID = 1L;
 
-   public StatusPanel()
-   {
-      label = new JLabel("", JLabel.CENTER);
-      this.add( label );
-      setStatus( Status.IDLE );
-   }
+    private JLabel label;
 
-   public void setStatus( Status status )
-   {
-      switch( status )
-      {
-         case IDLE:
-            this.setBackground( Color.YELLOW );
-            label.setText("IDLE");
+    public StatusPanel()
+    {
+        label = new JLabel ( "", JLabel.CENTER );
+        this.add ( label );
+        setStatus ( Status.IDLE );
+    }
+
+    public void setStatus ( Status status )
+    {
+        switch ( status ) {
+        case IDLE:
+            this.setBackground ( Color.YELLOW );
+            label.setText ( "IDLE" );
             break;
-         case LOADED:
-            this.setBackground( Color.YELLOW );
-            label.setText("Configuration Loaded");
+        case LOADED:
+            this.setBackground ( Color.YELLOW );
+            label.setText ( "Configuration Loaded" );
             break;
-         case VERIFY:
-            this.setBackground( Color.ORANGE );
-            label.setText("Verifying...");
+        case VERIFY:
+            this.setBackground ( Color.ORANGE );
+            label.setText ( "Verifying..." );
             break;
-         case SUCCESS:
-            this.setBackground( Color.GREEN );
-            label.setText("VERIFICATION PASSED");
+        case SUCCESS:
+            this.setBackground ( Color.GREEN );
+            label.setText ( "VERIFICATION PASSED" );
             break;
-         case FAILURE:
-            this.setBackground( Color.RED );
-            label.setText("VERIFICATION FAILED");
+        case FAILURE:
+            this.setBackground ( Color.RED );
+            label.setText ( "VERIFICATION FAILED" );
             break;
-         default:
-            System.out.println("StatusPanel.setStatus : Unrecognized option");
-            break; 
-      }
-   }
+        default:
+            System.out.println ( "StatusPanel.setStatus : Unrecognized option" );
+            break;
+        }
+    }
 }

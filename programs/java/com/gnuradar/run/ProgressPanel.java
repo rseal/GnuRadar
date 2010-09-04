@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,13 +31,13 @@ public class ProgressPanel extends JPanel
             implements ActionListener {
 
     private static final long serialVersionUID = 1L;
-    
+
     public JProgressBar readLevel;
     public JProgressBar writeLevel;
     public JProgressBar depthLevel;
-          
+
     private Dimension progressSize = new Dimension ( 400, 15 );
-    
+
     private void setComponentSize ( JComponent obj, Dimension dimension )
     {
         obj.setMinimumSize ( dimension );
@@ -50,29 +50,29 @@ public class ProgressPanel extends JPanel
         this.setLayout ( new BoxLayout ( this, BoxLayout.Y_AXIS ) );
 
         readLevel = new JProgressBar();
-        readLevel.setString("READ BUFFER");
-        readLevel.setStringPainted(true);
+        readLevel.setString ( "READ BUFFER" );
+        readLevel.setStringPainted ( true );
         writeLevel = new JProgressBar();
-        writeLevel.setString("WRITE BUFFER");
-        writeLevel.setStringPainted(true);
+        writeLevel.setString ( "WRITE BUFFER" );
+        writeLevel.setStringPainted ( true );
         depthLevel = new JProgressBar();
-        depthLevel.setString("BUFFER LEVEL");
-        depthLevel.setStringPainted(true);
-        
+        depthLevel.setString ( "BUFFER LEVEL" );
+        depthLevel.setStringPainted ( true );
+
         setComponentSize ( readLevel, progressSize );
         setComponentSize ( writeLevel, progressSize );
         setComponentSize ( depthLevel, progressSize );
-              
-        this.add ( readLevel );        
+
+        this.add ( readLevel );
         this.add ( writeLevel );
         this.add ( depthLevel );
-                                
+
         Border border = BorderFactory.createEtchedBorder( );
         this.setBorder ( border );
-        
+
     }
 
     @Override
     public void actionPerformed ( ActionEvent e )
-    {        }          
+    {        }
 }

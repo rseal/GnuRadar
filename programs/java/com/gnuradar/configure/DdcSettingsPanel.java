@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -57,17 +57,15 @@ public class DdcSettingsPanel extends JTabbedPane
     {
 
         JComboBox comboBox = ( JComboBox ) e.getSource();
-                
-        try{
-        Integer value = Integer.valueOf ( ( String )
-                                          comboBox.getSelectedItem() );
-        setEnabledTabs ( value );
+
+        try {
+            Integer value = Integer.valueOf ( ( String )
+                                              comboBox.getSelectedItem() );
+            setEnabledTabs ( value );
+        } catch ( NumberFormatException nfe ) {
+            nfe.printStackTrace();
         }
-        catch( NumberFormatException nfe)
-        {
-        	nfe.printStackTrace();
-        }
-       
+
     }
 
     private void setEnabledTabs ( int tabs )
@@ -95,21 +93,20 @@ public class DdcSettingsPanel extends JTabbedPane
         return settings;
     }
 
-	@Override
-	public void pushSettings(HashMap<String, String> map) {
-		
-		for( int i=0; i<MAX_CHANNELS; ++i)
-		{
-			this.setEnabledAt(i, false);
-			channels.get(i).pushSettings(map);
-		}
-		
-		int activeChannels = Integer.valueOf(map.get("num_channels"));
-			
-		for( int i=0; i<activeChannels; ++i)
-		{
-			this.setEnabledAt(i,true);			
-		}
-		
-	}
+    @Override
+    public void pushSettings ( HashMap<String, String> map )
+    {
+
+        for ( int i = 0; i < MAX_CHANNELS; ++i ) {
+            this.setEnabledAt ( i, false );
+            channels.get ( i ).pushSettings ( map );
+        }
+
+        int activeChannels = Integer.valueOf ( map.get ( "num_channels" ) );
+
+        for ( int i = 0; i < activeChannels; ++i ) {
+            this.setEnabledAt ( i, true );
+        }
+
+    }
 }

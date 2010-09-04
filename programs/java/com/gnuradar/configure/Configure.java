@@ -67,7 +67,7 @@ public class Configure implements ActionListener {
 
     public boolean loadFile()
     {
-       boolean loadSuccess = false;
+        boolean loadSuccess = false;
 
         settingsMap.clear();
 
@@ -83,7 +83,7 @@ public class Configure implements ActionListener {
         if ( loadFile == JFileChooser.APPROVE_OPTION ) {
             File file = jf.getSelectedFile();
             settingsMap = XmlParser.load ( file );
-            settingsMap.put("version", VERSION);
+            settingsMap.put ( "version", VERSION );
             loadSuccess = true;
         }
 
@@ -92,7 +92,7 @@ public class Configure implements ActionListener {
 
     private boolean saveFile( )
     {
-       boolean saveSuccess = false;
+        boolean saveSuccess = false;
 
         FileNameExtensionFilter fileFilter =
             new FileNameExtensionFilter (
@@ -121,10 +121,10 @@ public class Configure implements ActionListener {
     // main entry point
     public static void main ( String[] args )
     {
-       // create an instance of the containing class. Should
-       // probably put this in another class file to minize 
-       // confusion. Java still feels a bit weird with the 
-       // inner static main member.
+        // create an instance of the containing class. Should
+        // probably put this in another class file to minize
+        // confusion. Java still feels a bit weird with the
+        // inner static main member.
         final Configure configure = new Configure();
 
         // this is required for proper event-handling
@@ -150,7 +150,7 @@ public class Configure implements ActionListener {
                     new Dimension ( LEFT_WIDTH, 170 )
                 );
                 configure.pulseSettingsPanel.setMinimumSize (
-                      new Dimension ( LEFT_WIDTH, 170 ) );
+                    new Dimension ( LEFT_WIDTH, 170 ) );
                 configure.pulseSettingsPanel.setPreferredSize (
                     new Dimension ( LEFT_WIDTH, 170 ) );
 
@@ -248,13 +248,12 @@ public class Configure implements ActionListener {
         Object source = e.getSource();
 
         if ( source == configureButtonPanel.loadButton || source == loadAction ) {
-            if( loadFile() )
-            {
-               settingsPanel.pushSettings ( settingsMap );
-               ddcSettingsPanel.pushSettings ( settingsMap );
-               pulseSettingsPanel.pushSettings ( settingsMap );
-               informationPanel.pushSettings ( settingsMap );
-               fileSettingsPanel.pushSettings ( settingsMap );
+            if ( loadFile() ) {
+                settingsPanel.pushSettings ( settingsMap );
+                ddcSettingsPanel.pushSettings ( settingsMap );
+                pulseSettingsPanel.pushSettings ( settingsMap );
+                informationPanel.pushSettings ( settingsMap );
+                fileSettingsPanel.pushSettings ( settingsMap );
             }
         }
 
@@ -265,7 +264,7 @@ public class Configure implements ActionListener {
             settingsMap.putAll ( pulseSettingsPanel.getSettings() );
             settingsMap.putAll ( informationPanel.getSettings() );
             settingsMap.putAll ( fileSettingsPanel.getSettings() );
-            settingsMap.put("version", VERSION);
+            settingsMap.put ( "version", VERSION );
             saveFile();
         }
 
@@ -277,7 +276,7 @@ public class Configure implements ActionListener {
             map.putAll ( pulseSettingsPanel.getSettings() );
             map.putAll ( informationPanel.getSettings() );
             map.putAll ( fileSettingsPanel.getSettings() );
-            map.put("version", VERSION);
+            map.put ( "version", VERSION );
 
             // compare our local map with the global to see if
             // the user has changed anything since their last
@@ -299,7 +298,7 @@ public class Configure implements ActionListener {
                     settingsMap.putAll ( pulseSettingsPanel.getSettings() );
                     settingsMap.putAll ( informationPanel.getSettings() );
                     settingsMap.putAll ( fileSettingsPanel.getSettings() );
-                    settingsMap.put("version", VERSION);
+                    settingsMap.put ( "version", VERSION );
                     saveFile();
                 }
             }

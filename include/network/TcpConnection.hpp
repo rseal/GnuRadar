@@ -66,11 +66,15 @@ public:
         result = readMessage.data();
         result = result.substr ( 0, readSize );
 
+        // run requested command
         ExecuteRequest ( result );
+
+        std::cout << "sending message " << message_ << " from server " 
+           << std::endl;
 
         boost::asio::async_write (
             socket_,
-            boost::asio::buffer ( message_ ),
+            boost::asio::buffer ( message_ + "\n" ),
             boost::bind (
                 &TcpConnection::handle_write,
                 shared_from_this(),
@@ -78,6 +82,8 @@ public:
                 boost::asio::placeholders::bytes_transferred
             )
         );
+
+        std::cout << "message sent from server " << std::endl;
     }
 
 private:
@@ -103,11 +109,11 @@ private:
            
            const std::string commandName = iter->second;
            command::CommandPtr commandPtr = commands_.Find ( commandName );
-           commandPtr->Execute ( args );
+           message_ = commandPtr->Execute ( args );
 
         } catch ( std::exception& e ) {
             std::cerr
-                << "Invalid command " << e.what() << " found!"
+                << "Invalid command " << e.what() 
                 << std::endl;
         }
 

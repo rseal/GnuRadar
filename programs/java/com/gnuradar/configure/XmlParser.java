@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,7 +47,7 @@ public class XmlParser {
 
         for ( int i = 0; i < element.getChildCount(); ++i ) {
             child = element.getChild ( i );
-            if ( child instanceof Element ) {            
+            if ( child instanceof Element ) {
                 map.put ( ( ( Element ) child ).getQualifiedName()
                           + "_" + num,
                           child.getValue() );
@@ -71,9 +71,9 @@ public class XmlParser {
     private void parseNode ( Node node )
     {
 
-       // step through each sibling element inside the configuration element
-       for ( int i = 0; i < node.getChildCount(); ++i ) {
-            
+        // step through each sibling element inside the configuration element
+        for ( int i = 0; i < node.getChildCount(); ++i ) {
+
             Node child = node.getChild ( i );
 
             // we're only concerned with elements at this depth
@@ -92,8 +92,8 @@ public class XmlParser {
                 }
 
             } else {
-               // if we didn't find an element, continue to recurse through
-               // nodes.
+                // if we didn't find an element, continue to recurse through
+                // nodes.
                 parseNode ( child );
             }
         }
@@ -131,7 +131,7 @@ public class XmlParser {
         Element root = new Element ( "gnuradar" );
         Element configuration = new Element ( "configuration" );
 
-        configuration.appendChild ( parser.constructElement ( "version") );
+        configuration.appendChild ( parser.constructElement ( "version" ) );
         configuration.appendChild ( parser.constructElement ( "sample_rate" ) );
         configuration.appendChild ( parser.constructElement ( "decimation" ) );
         configuration.appendChild ( parser.constructElement ( "num_channels" ) );
@@ -179,7 +179,7 @@ public class XmlParser {
 
         configuration.appendChild ( parser.constructElement ( "ipp" ) );
         configuration.appendChild ( parser.constructElement ( "ipp_units" ) );
-        configuration.appendChild ( parser.constructElement ( "tx_carrier") );
+        configuration.appendChild ( parser.constructElement ( "tx_carrier" ) );
         configuration.appendChild ( parser.constructElement ( "organization"  ) );
         configuration.appendChild ( parser.constructElement ( "site" ) );
         configuration.appendChild ( parser.constructElement ( "user" ) );

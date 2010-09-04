@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -137,12 +137,13 @@ public class FileSettingsPanel extends JPanel
         return settings;
     }
 
-	@Override
-	public void pushSettings(HashMap<String, String> map) {
-		
-		fpgaImageTextField.setText( map.get("fpga_image_file"));
-		fileBaseNameTextField.setText( map.get("base_file_name"));
-		
-	}
+    @Override
+    public void pushSettings ( HashMap<String, String> map )
+    {
+
+        fpgaImageTextField.setText ( map.get ( "fpga_image_file" ) );
+        fileBaseNameTextField.setText ( map.get ( "base_file_name" ) );
+
+    }
 
 }

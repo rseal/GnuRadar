@@ -17,8 +17,6 @@
 #ifndef START_HPP
 #define START_HPP
 
-#include <boost/tokenizer.hpp>
-
 #include <gnuradar/ConfigFile.h>
 #include <gnuradar/GnuRadarCommand.hpp>
 #include <gnuradar/ProducerConsumerModel.h>
@@ -34,8 +32,6 @@ namespace command {
 class Start : public GnuRadarCommand {
 
     static const int NUM_BUFFERS = 20;
-
-    typedef boost::tokenizer< boost::char_separator<char> > Tokenizer;
 
     // setup shared pointers to extend life beyond this call
     typedef boost::shared_ptr< ProducerConsumerModel > ProducerConsumerModelPtr;
@@ -127,51 +123,57 @@ class Start : public GnuRadarCommand {
        GnuRadarCommand( "start" ), pcModel_( pcModel ) {
        }
 
-    virtual void Execute( const xml::XmlPacketArgs& args ) {
+    virtual const std::string Execute( const xml::XmlPacketArgs& args ) {
 
-       xml::XmlPacketArgs::const_iterator iter = args.find("file_name");
-       
-       if( iter == args.end() )
-       {
-          throw std::runtime_error( "Start command parsing failure - "
-                "check message arguments");
-       }
+       std::string fileName = command::ParseArg( "file_name", args );
 
-       std::string fileName = iter->second; 
+       std::cout << " Start Command FileName = " <<  fileName << std::endl;
 
        ConfigFile configFile( fileName );
        const int bufferSize = configFile.BytesPerSecond();
 
        // create a device to communicate with hardware
-       GnuRadarDevicePtr grDevice(
-             new GnuRadarDevice( GetSettings( configFile ))
-             );
+       //GnuRadarDevicePtr grDevice(
+       //      new GnuRadarDevice( GetSettings( configFile ))
+       //      );
 
-       // setup producer thread
-       gnuradar::ProducerThreadPtr producerThread (
-             new ProducerThread ( bufferSize , grDevice ));
+       //// setup producer thread
+       //gnuradar::ProducerThreadPtr producerThread (
+       //      new ProducerThread ( bufferSize , grDevice ));
 
-       // setup consumer thread
-       gnuradar::ConsumerThreadPtr consumerThread (
-             new ConsumerThread ( bufferSize , buffer, h5File, dimVector )
-             );
+       //// setup consumer thread
+       //gnuradar::ConsumerThreadPtr consumerThread (
+       //      new ConsumerThread ( bufferSize , buffer, h5File, dimVector )
+       //      );
 
-       // create a producer/consumer model for streaming data
-       pcModel_ = ProducerConsumerModelPtr(
-             new ProducerConsumerModel(
-                "GnuRadar",
-                NUM_BUFFERS,
-                bufferSize,
-                producerThread,
-                consumerThread
-                )
-             );
+       //// create a producer/consumer model for streaming data
+       //pcModel_ = ProducerConsumerModelPtr(
+       //      new ProducerConsumerModel(
+       //         "GnuRadar",
+       //         NUM_BUFFERS,
+       //         bufferSize,
+       //         producerThread,
+       //         consumerThread
+       //         )
+       //      );
 
        // start consumer thread
-       pcModel_->RequestData();
+       //pcModel_->RequestData();
 
        // start producer thread
-       pcModel_->Start();
+       //pcModel_->Start();
+
+       // create a response packet and return to requester
+       std::string destination = command::ParseArg( "destination", args );
+       xml::XmlPacketArgs responsePacket;
+       responsePacket["destination"] = destination;
+       responsePacket["type"] = "response";
+       responsePacket["value"] = "OK";
+       gnuradar::xml::XmlPacket packet("gnuradar_server");
+       const std::string response = packet.Format( responsePacket );
+
+
+       return response;
     }
 };
 };

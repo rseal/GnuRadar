@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,7 +44,7 @@ public class PulseSettingsPanel extends JPanel
     private JLabel txLabel;
     private JTextField txTextField;
     private JLabel txUnitsLabel;
-    
+
     private JButton addDataWindowButton;
     private JButton removeDataWindowButton;
     private JPanel buttonPanel;
@@ -82,15 +82,15 @@ public class PulseSettingsPanel extends JPanel
         ippPanel.add ( ippLabel );
         ippPanel.add ( ippTextField );
         ippPanel.add ( ippComboBox );
-        
+
         txPanel = new JPanel();
-        txLabel = new JLabel( "Tx Carrier Frequency", JLabel.RIGHT);
-        txTextField = new JTextField("");
-        setComponentSize ( txTextField, new Dimension(80, 20 ));
-        txUnitsLabel = new JLabel( "MHz", JLabel.LEFT);
-        txPanel.add( txLabel );
-        txPanel.add( txTextField );
-        txPanel.add( txUnitsLabel );
+        txLabel = new JLabel ( "Tx Carrier Frequency", JLabel.RIGHT );
+        txTextField = new JTextField ( "" );
+        setComponentSize ( txTextField, new Dimension ( 80, 20 ) );
+        txUnitsLabel = new JLabel ( "MHz", JLabel.LEFT );
+        txPanel.add ( txLabel );
+        txPanel.add ( txTextField );
+        txPanel.add ( txUnitsLabel );
 
         buttonPanel = new JPanel();
         addDataWindowButton = new JButton ( "Add" );
@@ -100,7 +100,7 @@ public class PulseSettingsPanel extends JPanel
         buttonPanel.add ( addDataWindowButton );
         buttonPanel.add ( removeDataWindowButton );
 
-        leftPanel.add ( ippPanel );        
+        leftPanel.add ( ippPanel );
         leftPanel.add ( buttonPanel );
 
         dataSettingsPanel = new DataSettingsPanel();
@@ -123,7 +123,7 @@ public class PulseSettingsPanel extends JPanel
         settings.putAll ( dataSettingsPanel.getSettings() );
         settings.put ( "ipp", ippTextField.getText() );
         settings.put ( "ipp_units", ( String ) ippComboBox.getSelectedItem() );
-        settings.put ( "tx_carrier", txTextField.getText());
+        settings.put ( "tx_carrier", txTextField.getText() );
 
         return settings;
     }
@@ -131,12 +131,13 @@ public class PulseSettingsPanel extends JPanel
     /**
      * Takes settings from a HashMap and pushes them to the Application.
      */
-	@Override
-	public void pushSettings(HashMap<String, String> map) {		
-		ippTextField.setText( map.get("ipp"));
-		ippComboBox.setSelectedItem( map.get("ipp_units"));
-		txTextField.setText( map.get("tx_carrier"));
-		
-		dataSettingsPanel.pushSettings(map);		
-	}
+    @Override
+    public void pushSettings ( HashMap<String, String> map )
+    {
+        ippTextField.setText ( map.get ( "ipp" ) );
+        ippComboBox.setSelectedItem ( map.get ( "ipp_units" ) );
+        txTextField.setText ( map.get ( "tx_carrier" ) );
+
+        dataSettingsPanel.pushSettings ( map );
+    }
 }

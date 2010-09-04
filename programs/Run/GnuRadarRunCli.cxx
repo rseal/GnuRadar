@@ -21,18 +21,18 @@
 
 using namespace boost;
 
-void CheckForExistingFileSet( std::string& fileSet ){
+void CheckForExistingFileSet ( std::string& fileSet )
+{
 
-   boost::filesystem::path file( fileSet + "_0000.h5" );
+    boost::filesystem::path file ( fileSet + "_0000.h5" );
 
-   if( boost::filesystem::exists( file ) )
-   {
-      std::cerr 
-         << "The chosen file set name <" + fileSet + 
-         "> already exists. Correct the problem and try again. " 
-         << endl;
-      exit(1);
-   }
+    if ( boost::filesystem::exists ( file ) ) {
+        std::cerr
+            << "The chosen file set name <" + fileSet +
+            "> already exists. Correct the problem and try again. "
+            << endl;
+        exit ( 1 );
+    }
 
 }
 
@@ -64,7 +64,7 @@ int main ( int argc, char** argv )
     fileName = clp.GetArgValue<string> ( "f" );
     dataSet  = clp.GetArgValue<string> ( "d" );
 
-    CheckForExistingFileSet( dataSet );
+    CheckForExistingFileSet ( dataSet );
 
     //parse configuration file
     ConfigFile cf ( fileName );
@@ -100,8 +100,8 @@ int main ( int argc, char** argv )
     // dimension 0 holds the number of IPPs per second ( or PRF )
     // dimension 1 contains the number of samples captured in a single IPP
     dimVector.push_back ( static_cast<int> ( PRF ) );
-    dimVector.push_back ( static_cast<int> ( 
-             cf.SamplesPerIpp() *cf.NumChannels() ) );
+    dimVector.push_back ( static_cast<int> (
+                              cf.SamplesPerIpp() *cf.NumChannels() ) );
 
     //create consumer buffer - destination
     buffer = new gnuradar::iq_t[ BUFFER_SIZE /sizeof ( gnuradar::iq_t ) ];
@@ -193,7 +193,7 @@ int main ( int argc, char** argv )
     settings.fUsbNblocks    = 0;
     settings.mux            = 0xf0f0f1f0;
 
-    GnuRadarDevicePtr grDevice( new GnuRadarDevice(settings) );
+    GnuRadarDevicePtr grDevice ( new GnuRadarDevice ( settings ) );
 
     // setup producer thread
     gnuradar::ProducerThreadPtr producerThread (

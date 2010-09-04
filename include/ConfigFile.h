@@ -53,21 +53,21 @@ struct ConfigFile {
 
 public:
 
-    explicit ConfigFile ( const std::string& fileName ) : 
-       samplesPerIpp_(0), parser_ ( fileName ) {
+    explicit ConfigFile ( const std::string& fileName ) :
+            samplesPerIpp_ ( 0 ), parser_ ( fileName ) {
 
         Units units;
 
-        version_          = parser_.Get<std::string>( "version" );
-        receiver_ = parser_.Get<std::string>( "receiver" );
+        version_          = parser_.Get<std::string> ( "version" );
+        receiver_ = parser_.Get<std::string> ( "receiver" );
         sampleRate_       = parser_.Get<double> ( "sample_rate" ) * 1e6;
         decimation_       = parser_.Get<int> ( "decimation" );
         outputRate_       = sampleRate_ / decimation_;
         numChannels_      = parser_.Get<int> ( "num_channels" );
         numWindows_       = parser_.Get<int> ( "num_windows" );
         ippUnits_         = units ( parser_.Get<std::string> ( "ipp_units" ) );
-        ipp_              = parser_.Get<double>("ipp") * ippUnits_;
-        txCarrier_ = parser_.Get<double>("tx_carrier") * 1e6;
+        ipp_              = parser_.Get<double> ( "ipp" ) * ippUnits_;
+        txCarrier_ = parser_.Get<double> ( "tx_carrier" ) * 1e6;
         fpgaImage_        = parser_.Get<std::string> ( "fpga_image_file" );
         dataFileBaseName_ = parser_.Get<std::string> ( "base_file_name" );
 
@@ -78,12 +78,12 @@ public:
 
             idx = lexical_cast<std::string> ( i );
 
-            ReceiveChannel channel( 
-                  parser_.Get<double> ( "frequency_" + idx ),
-                  parser_.Get<std::string> ( "frequency_units_" + idx ), 
-                  parser_.Get<double> ( "phase_" + idx ),
-                  parser_.Get<std::string> ( "phase_units_" + idx )
-                  );
+            ReceiveChannel channel (
+                parser_.Get<double> ( "frequency_" + idx ),
+                parser_.Get<std::string> ( "frequency_units_" + idx ),
+                parser_.Get<double> ( "phase_" + idx ),
+                parser_.Get<std::string> ( "phase_units_" + idx )
+            );
 
             channels_.push_back ( channel );
         }
@@ -93,19 +93,19 @@ public:
             idx = lexical_cast<std::string> ( i );
 
             ReceiveWindow window (
-                  parser_.Get<std::string> ( "name_" + idx ),
-                  parser_.Get<double> ( "start_" + idx ),
-                  parser_.Get<double> ( "stop_" + idx ),
-                  parser_.Get<std::string> ( "units_" + idx ),
-                  sampleRate_
-                  );
-            
+                parser_.Get<std::string> ( "name_" + idx ),
+                parser_.Get<double> ( "start_" + idx ),
+                parser_.Get<double> ( "stop_" + idx ),
+                parser_.Get<std::string> ( "units_" + idx ),
+                sampleRate_
+            );
+
             windows_.push_back ( window );
             samplesPerIpp_ += window.Size();
         }
     }
 
-    const int    Phase ( const int num ){
+    const int    Phase ( const int num ) {
         return channels_[num].Phase();
     }
 
@@ -149,29 +149,37 @@ public:
         return outputRate_;
     }
 
-    const double  IPP(){
+    const double  IPP() {
         return ipp_;
     }
 
     const double TxCarrier() {
-       return txCarrier_;
+        return txCarrier_;
     }
 
-    const std::string& FPGAImage(){
+    const std::string& FPGAImage() {
         return fpgaImage_;
     }
 
-    const std::vector<ReceiveWindow>& Windows(){
+    const std::vector<ReceiveWindow>& Windows() {
         return windows_;
     }
 
-    const std::string& Version() { return version_; }
+    const std::string& Version() {
+        return version_;
+    }
 
-    const std::string& DataFileBaseName() { return dataFileBaseName_; }
+    const std::string& DataFileBaseName() {
+        return dataFileBaseName_;
+    }
 
-    const std::string& Receiver() { return receiver_; }
+    const std::string& Receiver() {
+        return receiver_;
+    }
 
-    const int SamplesPerIpp() { return samplesPerIpp_; }
+    const int SamplesPerIpp() {
+        return samplesPerIpp_;
+    }
 
     // returns the hardware's output rate in BPS.
     const long BytesPerSecond() {

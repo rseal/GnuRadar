@@ -37,12 +37,11 @@ namespace gnuradar{
 
          public:
 
-         XmlPacket( const std::string& rootName, 
-               const std::string& sourceName )
+         XmlPacket( const std::string& sourceName )
          {
 
             documentPtr_ = NodePtr( new ticpp::Document() );
-            rootPtr_ = NodePtr( new ticpp::Element( rootName ) );
+            rootPtr_ = NodePtr( new ticpp::Element( "command" ) );
 
             documentPtr_->InsertEndChild( *rootPtr_ );
 

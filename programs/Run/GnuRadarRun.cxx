@@ -22,7 +22,8 @@
 #include <gnuradar/network/TcpRequestServer.hpp>
 #include <gnuradar/CommandList.hpp>
 #include <gnuradar/commands/Start.hpp>
-//#include <gnuradar/commands/Stop.hpp>
+#include <gnuradar/commands/Stop.hpp>
+#include <gnuradar/commands/Status.hpp>
 
 using namespace boost;
 using namespace gnuradar;
@@ -30,22 +31,28 @@ using namespace gnuradar;
 int main ( int argc, char** argv )
 {
 
-   typedef boost::shared_ptr<command::GnuRadarCommand> CommandPtr;
-   typedef boost::shared_ptr<HDF5> Hdf5Ptr;
-   typedef boost::shared_ptr<ProducerConsumerModel> PCModelPtr;
-   boost::asio::io_service ioService;
-   command::CommandList commandList;
+    typedef boost::shared_ptr<command::GnuRadarCommand> CommandPtr;
+    typedef boost::shared_ptr<HDF5> Hdf5Ptr;
+    typedef boost::shared_ptr<ProducerConsumerModel> PCModelPtr;
+    boost::asio::io_service ioService;
+    command::CommandList commandList;
 
     // create a Producer/Consumer model, but don't initialize the
     // object until ready
     PCModelPtr pcModel = PCModelPtr ( new gnuradar::ProducerConsumerModel() );
 
-    CommandPtr startCommand = command::CommandPtr ( 
-          new command::Start ( pcModel ) );
+    CommandPtr startCommand = command::CommandPtr (
+                                  new command::Start ( pcModel ) );
+    CommandPtr stopCommand = command::CommandPtr (
+                                 new command::Stop ( pcModel ) );
+    CommandPtr statusCommand = command::CommandPtr (
+                                   new command::Status ( pcModel ) );
 
-    commandList.Add( startCommand );
+    commandList.Add ( startCommand );
+    commandList.Add ( stopCommand );
+    commandList.Add ( statusCommand );
 
-    network::TcpRequestServer server( ioService, commandList ); 
+    network::TcpRequestServer server ( ioService, commandList );
     ioService.run();
 
     return 0;

@@ -49,7 +49,7 @@ import com.gnuradar.run.ButtonPanel.State;
 
 public class Run implements ActionListener, PropertyChangeListener {
 
-	
+
     // define constants
     public static final int DEFAULT_WIDTH = 575;
     public static final int DEFAULT_HEIGHT = 560;
@@ -64,11 +64,11 @@ public class Run implements ActionListener, PropertyChangeListener {
     private JLabel statusLabel;
     private JTextPane statusPane;
     private ProgressPanel progressPanel;
-    
+
     private static ButtonPanel buttonPanel;
-    
+
     private JMenuItem quitAction;
-    private JMenuItem loadAction;    
+    private JMenuItem loadAction;
     private JMenuItem aboutAction;
     private JMenuItem plotAction;
     private JMenuItem bpgAction;
@@ -78,12 +78,12 @@ public class Run implements ActionListener, PropertyChangeListener {
         obj.setMinimumSize ( dimension );
         obj.setPreferredSize ( dimension );
     }
-        
+
     // main entry point
     public static void main ( String[] args )
-    {       
+    {
         final Run run = new Run();
-        
+
         // this is required for proper event-handling
         EventQueue.invokeLater ( new Runnable() {
             public void run() {
@@ -92,34 +92,34 @@ public class Run implements ActionListener, PropertyChangeListener {
                 GridBagLayout gridBagLayout = new GridBagLayout();
 
                 Border border = BorderFactory.createEtchedBorder( );
-                TitledBorder tBorder = BorderFactory.createTitledBorder(border,"Status");
-                tBorder.setTitleJustification(TitledBorder.CENTER);
-                
+                TitledBorder tBorder = BorderFactory.createTitledBorder ( border, "Status" );
+                tBorder.setTitleJustification ( TitledBorder.CENTER );
+
                 run.statusPane = new JTextPane();
-                
-                run.statusPane.setBorder(tBorder);
-                
-                setComponentSize( run.statusPane, new Dimension(400,390));
-                
-                JPanel statusPanel = new JPanel();               
-                statusPanel.setBorder(border);
-                
-                run.statusLabel = new JLabel("UNCONFIGURED", JLabel.CENTER); 
-                run.statusLabel.setFont( new Font( "", Font.BOLD, 16));
-                run.statusLabel.setForeground(Color.WHITE);
-                
-                setComponentSize( statusPanel, new Dimension(400,25));
-          
-                statusPanel.setBackground(Color.BLUE);  
-                
-                statusPanel.add( run.statusLabel);
-                
-                buttonPanel = new ButtonPanel(); 
-                setComponentSize( buttonPanel, new Dimension(100,400));
-                
+
+                run.statusPane.setBorder ( tBorder );
+
+                setComponentSize ( run.statusPane, new Dimension ( 400, 390 ) );
+
+                JPanel statusPanel = new JPanel();
+                statusPanel.setBorder ( border );
+
+                run.statusLabel = new JLabel ( "UNCONFIGURED", JLabel.CENTER );
+                run.statusLabel.setFont ( new Font ( "", Font.BOLD, 16 ) );
+                run.statusLabel.setForeground ( Color.WHITE );
+
+                setComponentSize ( statusPanel, new Dimension ( 400, 25 ) );
+
+                statusPanel.setBackground ( Color.BLUE );
+
+                statusPanel.add ( run.statusLabel );
+
+                buttonPanel = new ButtonPanel();
+                setComponentSize ( buttonPanel, new Dimension ( 100, 400 ) );
+
                 run.progressPanel = new ProgressPanel();
-                setComponentSize( run.progressPanel, new Dimension(400,50));
-               
+                setComponentSize ( run.progressPanel, new Dimension ( 400, 50 ) );
+
                 // create menu bar and menu items
                 JMenuBar menuBar = new JMenuBar();
 
@@ -127,10 +127,10 @@ public class Run implements ActionListener, PropertyChangeListener {
                 run.loadAction.addActionListener ( run );
                 run.quitAction = new JMenuItem ( "Quit", 'Q' );
                 run.quitAction.addActionListener ( run );
-                run.plotAction = new JMenuItem ( "Plotter", 'P');
-                run.plotAction.addActionListener(run);
-                run.bpgAction = new JMenuItem ("BitPatternGenerator", 'B');
-                run.bpgAction.addActionListener(run);
+                run.plotAction = new JMenuItem ( "Plotter", 'P' );
+                run.plotAction.addActionListener ( run );
+                run.bpgAction = new JMenuItem ( "BitPatternGenerator", 'B' );
+                run.bpgAction.addActionListener ( run );
                 run.aboutAction = new JMenuItem ( "About", 'A' );
                 run.aboutAction.addActionListener ( run );
 
@@ -138,18 +138,18 @@ public class Run implements ActionListener, PropertyChangeListener {
                 fileMenu.add ( run.loadAction );
                 fileMenu.addSeparator();
                 fileMenu.add ( run.quitAction );
-                
-                JMenu toolMenu = new JMenu ( "Tools");
-                toolMenu.add( run.plotAction);
-                toolMenu.add( run.bpgAction);
-                
+
+                JMenu toolMenu = new JMenu ( "Tools" );
+                toolMenu.add ( run.plotAction );
+                toolMenu.add ( run.bpgAction );
+
                 JMenu helpMenu = new JMenu ( "Help" );
                 helpMenu.add ( run.aboutAction );
-                
+
                 //TODO: Enable these when ready
-                
-                run.plotAction.setEnabled(false);
-                run.bpgAction.setEnabled(false);
+
+                run.plotAction.setEnabled ( false );
+                run.bpgAction.setEnabled ( false );
 
                 menuBar.add ( fileMenu );
                 menuBar.add ( toolMenu );
@@ -161,37 +161,37 @@ public class Run implements ActionListener, PropertyChangeListener {
                     DEFAULT_WIDTH, DEFAULT_HEIGHT, TITLE + " " + VERSION );
                 frame.setLayout ( gridBagLayout );
                 frame.setJMenuBar ( menuBar );
-                frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-              
-                frame.addWindowListener(
-                		new WindowAdapter(){
-                			public void windowClosing( WindowEvent e){
-                				run.quit();
-                			}
-                		});
-                		
+                frame.setDefaultCloseOperation ( JFrame.DO_NOTHING_ON_CLOSE );
+
+                frame.addWindowListener (
+                new WindowAdapter() {
+                    public void windowClosing ( WindowEvent e ) {
+                        run.quit();
+                    }
+                } );
+
                 frame.add ( buttonPanel,
                             new GBC ( 0, 1, 10, 100 ).setIpad ( 5, 5 ).
                             setSpan ( 1, 4 ).setFill (
                                 GridBagConstraints.VERTICAL )
                           );
                 frame.add ( statusPanel,
-                        new GBC ( 0, 0, 10, 10 ).setIpad ( 5, 5 ).
-                        setSpan ( 4, 1 ).setFill (
-                            GridBagConstraints.HORIZONTAL )
-                      );
+                            new GBC ( 0, 0, 10, 10 ).setIpad ( 5, 5 ).
+                            setSpan ( 4, 1 ).setFill (
+                                GridBagConstraints.HORIZONTAL )
+                          );
                 frame.add ( run.statusPane,
-                        new GBC ( 1, 1, 100, 100 ).setIpad ( 5, 5 ).
-                        setSpan ( 3, 3 ).setFill (
-                            GridBagConstraints.HORIZONTAL )
-                      );
+                            new GBC ( 1, 1, 100, 100 ).setIpad ( 5, 5 ).
+                            setSpan ( 3, 3 ).setFill (
+                                GridBagConstraints.HORIZONTAL )
+                          );
                 frame.add ( run.progressPanel,
-                        new GBC ( 1, 4, 100, 100 ).setIpad ( 5, 5 ).
-                        setSpan ( 3, 1 ).setFill (
-                            GridBagConstraints.HORIZONTAL )
-                      );
-                
-                buttonPanel.addPropertyChangeListener(run);
+                            new GBC ( 1, 4, 100, 100 ).setIpad ( 5, 5 ).
+                            setSpan ( 3, 1 ).setFill (
+                                GridBagConstraints.HORIZONTAL )
+                          );
+
+                buttonPanel.addPropertyChangeListener ( run );
                 frame.setVisible ( true );
             }
         } );
@@ -202,38 +202,39 @@ public class Run implements ActionListener, PropertyChangeListener {
     {
         Object source = e.getSource();
 
-        if ( source == loadAction ){ 
-        	buttonPanel.clickLoadButton();        	
+        if ( source == loadAction ) {
+            buttonPanel.clickLoadButton();
         }
-        
-        if ( source == quitAction ){
-         quit();
+
+        if ( source == quitAction ) {
+            quit();
         }
 
         if ( source == aboutAction ) {
-            JOptionPane.showMessageDialog ( 
-            		null, TITLE + "\n" +
-            		VERSION + "\n" + BUILD + "\n" +
-            		AUTHOR + "\n" +
-            		COPYRIGHT + "\n"
+            JOptionPane.showMessageDialog (
+                null, TITLE + "\n" +
+                VERSION + "\n" + BUILD + "\n" +
+                AUTHOR + "\n" +
+                COPYRIGHT + "\n"
             );
         }
     }
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {		
-		statusLabel.setText( buttonPanel.getState().getValue());			
-	}
-	
-	public void quit(){
-		
-		  if( buttonPanel.getState() == State.RUNNING ){
-       	   JOptionPane.showMessageDialog(null, 
-       			   "System is currently in operation. Press <Stop> before" +
-       			   " attempting to exit");
-          }
-          else{
-       	   System.exit(0);
-          }
-	}
+    @Override
+    public void propertyChange ( PropertyChangeEvent evt )
+    {
+        statusLabel.setText ( buttonPanel.getState().getValue() );
+    }
+
+    public void quit()
+    {
+
+        if ( buttonPanel.getState() == State.RUNNING ) {
+            JOptionPane.showMessageDialog ( null,
+                                            "System is currently in operation. Press <Stop> before" +
+                                            " attempting to exit" );
+        } else {
+            System.exit ( 0 );
+        }
+    }
 }

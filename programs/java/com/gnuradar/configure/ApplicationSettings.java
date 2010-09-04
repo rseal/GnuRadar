@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,9 +20,9 @@ import java.util.HashMap;
 
 public interface ApplicationSettings {
 
-	//pull settings from Application.
+    //pull settings from Application.
     public HashMap< String, String > getSettings();
-    
+
     //push settings to Application.
-    public void pushSettings( HashMap< String, String> map );
+    public void pushSettings ( HashMap< String, String> map );
 }

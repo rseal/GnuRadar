@@ -27,8 +27,8 @@
 /// it to the shared buffer memory region.
 class ProducerThread: public BaseThread, public SThread {
 
-   typedef boost::shared_ptr<Device> DevicePtr;
-   DevicePtr device_;
+    typedef boost::shared_ptr<Device> DevicePtr;
+    DevicePtr device_;
 
 public:
 

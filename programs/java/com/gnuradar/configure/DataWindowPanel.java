@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//  
+//
 // GnuRadar is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -56,10 +56,10 @@ public class DataWindowPanel extends JPanel
         obj.setPreferredSize ( dimension );
     }
 
-    public DataWindowPanel( int index )
+    public DataWindowPanel ( int index )
     {
 
-       this.index = index;
+        this.index = index;
 
         windowPanel = new JPanel();
         unitsPanel = new JPanel();
@@ -99,24 +99,25 @@ public class DataWindowPanel extends JPanel
     @Override
     public HashMap<String, String> getSettings()
     {
-    	
+
         HashMap<String, String> settings = new HashMap<String, String> ( 4 );
-        settings.put ( "name_"+index, nameTextField.getText() );
-        settings.put ( "start_"+index, startTextField.getText() );
-        settings.put ( "stop_"+index, stopTextField.getText() );
-        settings.put ( "units_"+index, 
-              ( String ) unitsComboBox.getSelectedItem() );
+        settings.put ( "name_" + index, nameTextField.getText() );
+        settings.put ( "start_" + index, startTextField.getText() );
+        settings.put ( "stop_" + index, stopTextField.getText() );
+        settings.put ( "units_" + index,
+                       ( String ) unitsComboBox.getSelectedItem() );
 
         // TODO Auto-generated method stub
         return settings;
     }
 
-	@Override
-	public void pushSettings(HashMap<String, String> map) {
-		nameTextField.setText( map.get("name_" + index));
-		startTextField.setText( map.get("start_"+index));
-		stopTextField.setText( map.get("stop_"+index));
-		unitsComboBox.setSelectedItem(map.get("units_"+index));		
-	}
+    @Override
+    public void pushSettings ( HashMap<String, String> map )
+    {
+        nameTextField.setText ( map.get ( "name_" + index ) );
+        startTextField.setText ( map.get ( "start_" + index ) );
+        stopTextField.setText ( map.get ( "stop_" + index ) );
+        unitsComboBox.setSelectedItem ( map.get ( "units_" + index ) );
+    }
 
 }

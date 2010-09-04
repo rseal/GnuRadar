@@ -28,6 +28,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -42,13 +46,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Document;
 
 import com.corejava.GBC;
 import com.gnuradar.common.FixedFrame;
 import com.gnuradar.run.ButtonPanel.State;
 
 public class Run implements ActionListener, PropertyChangeListener {
-
 
     // define constants
     public static final int DEFAULT_WIDTH = 575;
@@ -60,19 +65,40 @@ public class Run implements ActionListener, PropertyChangeListener {
     public static final String BUILD = "Build: September 01, 2010";
     public static final String COPYRIGHT = "Copyright: \u00a9 2009-2010";
     public static final String AUTHOR = "Author: Ryan Seal";
-
+    public final int PORT = 54321;
+    
+    public static InetAddress INET_ADDRESS;
+    private StatusListener statusListener;
+    private HashMap<String,String> responseMap = new HashMap<String,String>();    
+    
     private JLabel statusLabel;
     private JTextPane statusPane;
     private ProgressPanel progressPanel;
+    private Document statusDocument;
 
     private static ButtonPanel buttonPanel;
 
+    private Thread thread = null;
+    private StatusThread statusThread = null;
+    
     private JMenuItem quitAction;
     private JMenuItem loadAction;
     private JMenuItem aboutAction;
     private JMenuItem plotAction;
     private JMenuItem bpgAction;
+    private JMenuItem configureAction;
 
+    private void updateDisplay(String xmlResponsePacket )
+    {
+    	responseMap.clear();
+    	responseMap = XmlPacket.parse(xmlResponsePacket);
+    	
+    	progressPanel.setHead( Integer.valueOf( responseMap.get("head")));
+    	progressPanel.setTail( Integer.valueOf( responseMap.get("tail")));
+    	progressPanel.setDepth( Integer.valueOf( responseMap.get("depth")));
+    	progressPanel.setNumBuffers( Integer.valueOf( responseMap.get("num_buffers")));    	
+    }
+    
     private static void setComponentSize ( JComponent obj, Dimension dimension )
     {
         obj.setMinimumSize ( dimension );
@@ -81,8 +107,15 @@ public class Run implements ActionListener, PropertyChangeListener {
 
     // main entry point
     public static void main ( String[] args )
-    {
+    {    	
         final Run run = new Run();
+        
+		try {
+			  INET_ADDRESS = InetAddress.getByName("localhost");
+		} catch (UnknownHostException e1) {
+			System.out.println(" Could not contact the specified IP address " + INET_ADDRESS );			
+			e1.printStackTrace();
+		}    	
 
         // this is required for proper event-handling
         EventQueue.invokeLater ( new Runnable() {
@@ -96,8 +129,10 @@ public class Run implements ActionListener, PropertyChangeListener {
                 tBorder.setTitleJustification ( TitledBorder.CENTER );
 
                 run.statusPane = new JTextPane();
-
+                run.statusDocument = new DefaultStyledDocument();
                 run.statusPane.setBorder ( tBorder );
+                run.statusPane.setEditable(false);
+                run.statusPane.setDocument( run.statusDocument);
 
                 setComponentSize ( run.statusPane, new Dimension ( 400, 390 ) );
 
@@ -111,7 +146,6 @@ public class Run implements ActionListener, PropertyChangeListener {
                 setComponentSize ( statusPanel, new Dimension ( 400, 25 ) );
 
                 statusPanel.setBackground ( Color.BLUE );
-
                 statusPanel.add ( run.statusLabel );
 
                 buttonPanel = new ButtonPanel();
@@ -133,6 +167,8 @@ public class Run implements ActionListener, PropertyChangeListener {
                 run.bpgAction.addActionListener ( run );
                 run.aboutAction = new JMenuItem ( "About", 'A' );
                 run.aboutAction.addActionListener ( run );
+                run.configureAction = new JMenuItem( "GnuRadar Configure", 'C');
+                run.configureAction.addActionListener(run );
 
                 JMenu fileMenu = new JMenu ( "File" );
                 fileMenu.add ( run.loadAction );
@@ -142,12 +178,12 @@ public class Run implements ActionListener, PropertyChangeListener {
                 JMenu toolMenu = new JMenu ( "Tools" );
                 toolMenu.add ( run.plotAction );
                 toolMenu.add ( run.bpgAction );
+                toolMenu.add ( run.configureAction);
 
                 JMenu helpMenu = new JMenu ( "Help" );
                 helpMenu.add ( run.aboutAction );
 
                 //TODO: Enable these when ready
-
                 run.plotAction.setEnabled ( false );
                 run.bpgAction.setEnabled ( false );
 
@@ -163,6 +199,8 @@ public class Run implements ActionListener, PropertyChangeListener {
                 frame.setJMenuBar ( menuBar );
                 frame.setDefaultCloseOperation ( JFrame.DO_NOTHING_ON_CLOSE );
 
+                // make sure that a click to 'x' out the window passes through
+                // the quit function to ensure proper shutdown.
                 frame.addWindowListener (
                 new WindowAdapter() {
                     public void windowClosing ( WindowEvent e ) {
@@ -202,6 +240,21 @@ public class Run implements ActionListener, PropertyChangeListener {
     {
         Object source = e.getSource();
 
+        if ( source == configureAction ){
+        	
+        	ProcessBuilder pBuilder = new ProcessBuilder("gradar-configure");
+        	try {
+				Process process = pBuilder.start();
+				process.waitFor();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InterruptedException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+        
+        }
         if ( source == loadAction ) {
             buttonPanel.clickLoadButton();
         }
@@ -223,16 +276,54 @@ public class Run implements ActionListener, PropertyChangeListener {
     @Override
     public void propertyChange ( PropertyChangeEvent evt )
     {
-        statusLabel.setText ( buttonPanel.getState().getValue() );
+    	State state = buttonPanel.getState();    	
+        statusLabel.setText ( state.getValue() );
+
+        // get the response packet from the server and parse if not null
+        String xmlResponsePacket = buttonPanel.getServerResponse();
+        if( xmlResponsePacket != null)
+        {
+        	HashMap<String,String> map = XmlPacket.parse(xmlResponsePacket);
+        	String response = map.get("message");      	
+        	statusPane.setText(response);
+        }
+        
+        if( state == State.RUNNING )
+        {
+        	statusThread = new StatusThread(INET_ADDRESS, PORT);
+        	thread = new Thread(statusThread);
+        	
+        	statusListener = new StatusListener(){
+				@Override
+				public void eventOccurred(StatusEvent event) {
+					updateDisplay( statusThread.getResponse() );							
+				}};				
+        	statusThread.addStatusListener( statusListener );        	
+        }
+        
+        if( state == State.STOPPED && thread.isAlive() ){
+        	
+        	statusThread.removeStatusListener(statusListener);
+        	statusThread.stopStatus();        	
+        	try {
+				thread.join();
+			} catch (InterruptedException e) {
+				System.out.println( "Status thread join was interrupted.");
+			}
+        }
+        
+        if( state == State.CONFIGURED ){
+        	statusPane.setText( "Configuration File Loaded." );
+        }
     }
 
     public void quit()
     {
-
         if ( buttonPanel.getState() == State.RUNNING ) {
-            JOptionPane.showMessageDialog ( null,
-                                            "System is currently in operation. Press <Stop> before" +
-                                            " attempting to exit" );
+            JOptionPane.showMessageDialog ( 
+            		null,
+            		"System is currently in operation. Press <Stop> before" +
+            " attempting to exit" );
         } else {
             System.exit ( 0 );
         }

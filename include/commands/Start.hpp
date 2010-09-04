@@ -125,6 +125,7 @@ class Start : public GnuRadarCommand {
 
     virtual const std::string Execute( const xml::XmlPacketArgs& args ) {
 
+       std::string response;
        std::string fileName = command::ParseArg( "file_name", args );
 
        std::cout << " Start Command FileName = " <<  fileName << std::endl;
@@ -132,46 +133,60 @@ class Start : public GnuRadarCommand {
        ConfigFile configFile( fileName );
        const int bufferSize = configFile.BytesPerSecond();
 
-       // create a device to communicate with hardware
-       //GnuRadarDevicePtr grDevice(
-       //      new GnuRadarDevice( GetSettings( configFile ))
-       //      );
-
-       //// setup producer thread
-       //gnuradar::ProducerThreadPtr producerThread (
-       //      new ProducerThread ( bufferSize , grDevice ));
-
-       //// setup consumer thread
-       //gnuradar::ConsumerThreadPtr consumerThread (
-       //      new ConsumerThread ( bufferSize , buffer, h5File, dimVector )
-       //      );
-
-       //// create a producer/consumer model for streaming data
-       //pcModel_ = ProducerConsumerModelPtr(
-       //      new ProducerConsumerModel(
-       //         "GnuRadar",
-       //         NUM_BUFFERS,
-       //         bufferSize,
-       //         producerThread,
-       //         consumerThread
-       //         )
-       //      );
-
-       // start consumer thread
-       //pcModel_->RequestData();
-
-       // start producer thread
-       //pcModel_->Start();
-
        // create a response packet and return to requester
-       std::string destination = command::ParseArg( "destination", args );
+       std::string destination = command::ParseArg( "source", args );
        xml::XmlPacketArgs responsePacket;
        responsePacket["destination"] = destination;
        responsePacket["type"] = "response";
-       responsePacket["value"] = "OK";
        gnuradar::xml::XmlPacket packet("gnuradar_server");
-       const std::string response = packet.Format( responsePacket );
 
+       try{
+
+       // create a device to communicate with hardware
+       GnuRadarDevicePtr grDevice(
+            new GnuRadarDevice( GetSettings( configFile ))
+            );
+
+       // setup producer thread
+       gnuradar::ProducerThreadPtr producerThread (
+            new ProducerThread ( bufferSize , grDevice ));
+
+       // setup consumer thread
+       gnuradar::ConsumerThreadPtr consumerThread (
+            new ConsumerThread ( bufferSize , buffer, h5File, dimVector )
+            );
+
+       // create a producer/consumer model for streaming data
+       pcModel_ = ProducerConsumerModelPtr(
+            new ProducerConsumerModel(
+               "GnuRadar",
+               NUM_BUFFERS,
+               bufferSize,
+               producerThread,
+               consumerThread
+               )
+            );
+
+       // start consumer thread
+       pcModel_->RequestData();
+
+       // start producer thread
+       pcModel_->Start();
+
+       // TODO: Create a response packet member that will format
+       // a proper response given
+       // source,destination, OK/ERROR
+       // if ERROR, provide an extra parameter with a descriptive 
+       // message.
+
+       responsePacket["value"] = "OK";
+       response = packet.Format( responsePacket );
+       }
+       catch( std::runtime_error& e ){
+          responsePacket["value"] = "ERROR";
+          responsePacket["message"] = e.what();
+          response = packet.Format( responsePacket );
+       }
 
        return response;
     }

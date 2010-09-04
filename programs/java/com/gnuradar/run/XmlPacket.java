@@ -31,7 +31,7 @@ import nu.xom.ParsingException;
 public class XmlPacket {
 
     private HashMap<String, String> map;
-
+   
     public XmlPacket ( HashMap<String, String> map )
     {
         this.map = map;
@@ -58,14 +58,16 @@ public class XmlPacket {
     }
 
     // load user configuration settings from a file into a map and return.
-    static public HashMap<String, String> parse ( String xmlPacket )
+    static synchronized public HashMap<String, String> parse ( String xmlPacket )
     {
+    	if( xmlPacket == null) return null;
+    	
         HashMap<String, String> map = new HashMap<String, String>();
 
         try {
             XmlPacket packet = new XmlPacket ( map );
             Builder builder = new Builder();
-            nu.xom.Document doc = builder.build ( xmlPacket );
+            nu.xom.Document doc = builder.build ( xmlPacket,null );
 
             // step into the second level to access the children
             Element root = ( Element ) doc.getChild ( 0 );
@@ -74,7 +76,9 @@ public class XmlPacket {
             packet.parseNode ( root );
 
         } catch ( ParsingException e ) {
+        	e.printStackTrace();
         } catch ( IOException e ) {
+        	e.printStackTrace();
         }
         return map;
     }

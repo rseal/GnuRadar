@@ -41,15 +41,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class ButtonPanel extends JPanel
             implements ActionListener {
 
-    private Thread thread = null;
-    private StatusThread statusThread = null;
-
+    
+    
     public static enum State {
         UNCONFIGURED ( "UNCONFIGURED" ),
         CONFIGURED ( "CONFIGURED" ),
         VERIFIED ( "VERIFIED" ),
         RUNNING ( "RUNNING" ),
         STOPPED ( "STOPPED" ),
+        ERROR ( "ERROR" ),
         CONNECTION_ERROR ( "CONNECTION ERROR" );
 
         private String state;
@@ -79,6 +79,7 @@ public class ButtonPanel extends JPanel
     private JButton verifyButton;
     private JButton runButton;
     private File configurationFile = null;
+    private String xmlResponsePacket;
 
     private Dimension buttonSize = new Dimension ( 100, 25 );
 
@@ -89,11 +90,11 @@ public class ButtonPanel extends JPanel
         obj.setMaximumSize ( dimension );
     }
 
-    private String WriteToServer ( String packet )
+    private void WriteToServer ( String packet )
     throws IOException, SecurityException
     {
-        String xmlPacket = null;
-
+        xmlResponsePacket = null;
+        
         // TODO: IP and port should be read from an
         // xml-based setup file during Construction.
 
@@ -110,17 +111,12 @@ public class ButtonPanel extends JPanel
 
             writer.write ( packet );
             writer.flush();
-
-            System.out.println ( "reading stream" );
-            xmlPacket = reader.readLine();
-
-            System.out.println ( "stream" + xmlPacket );
+            
+            xmlResponsePacket = reader.readLine();
             writer.close();
             reader.close();
             socket.close();
         }
-
-        return xmlPacket;
     }
 
     public boolean loadFile()
@@ -195,46 +191,52 @@ public class ButtonPanel extends JPanel
                 String xmlPacket = XmlPacket.format ( map );
 
                 try {
+                	
+                	WriteToServer ( xmlPacket );
+                	map.clear();
+                	map = XmlPacket.parse(xmlResponsePacket);
+                	String response = map.get("value");
+                	
+                	if( response == "OK"){
 
                     // set button states
                     setState ( State.STOPPED );
                     runButton.setText ( "Run" );
                     loadButton.setEnabled ( true );
-
-                    WriteToServer ( xmlPacket );
-
-                    if ( thread.isAlive() ) {
-                        statusThread.stopStatus();
-                        thread.join();
-                    }
+                	}
+                	else{
+                		setState( State.ERROR );
+                	}
 
                 } catch ( IOException e2 ) {
                     setState ( State.CONNECTION_ERROR );
                     e2.printStackTrace();
-                }	catch ( InterruptedException e1 ) {
-                    setState ( State.CONNECTION_ERROR );
-                    e1.printStackTrace();
                 }
             } else {
-                try {
-                    // create xml packet and send to server
+            	try {
+
+            		// create xml packet and send to server
                     map.put ( "name", "start" );
                     map.put ( "file_name", configurationFile.getAbsolutePath() );
                     String xmlPacket = XmlPacket.format ( map );
 
                     WriteToServer ( xmlPacket );
 
-                    // start status thread to receive status
-                    // messages once per second to update the
-                    // display
-                    statusThread = new StatusThread ( "localhost", 54321 );
-                    thread = new Thread ( statusThread );
-                    thread.start();
-
-                    // set button states
-                    setState ( State.RUNNING );
-                    runButton.setText ( "Stop" );
-                    loadButton.setEnabled ( false );
+                    map.clear();
+                    map = XmlPacket.parse( xmlResponsePacket );
+                    String response = map.get("value");
+                    
+                    if( response == "OK")
+                    {
+                       // set button states
+                       setState ( State.RUNNING );
+                       runButton.setText ( "Stop" );
+                       loadButton.setEnabled ( false );
+                    }
+                    else
+                    {
+                    	setState( State.ERROR);                    	
+                    }
 
                 } catch ( IOException e1 ) {
                     setState ( State.CONNECTION_ERROR );
@@ -276,6 +278,10 @@ public class ButtonPanel extends JPanel
     public State getState()
     {
         return state;
+    }
+    public String getServerResponse()
+    {
+    	return xmlResponsePacket;
     }
     public void clickLoadButton()
     {

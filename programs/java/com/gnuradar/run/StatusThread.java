@@ -16,34 +16,52 @@
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 package com.gnuradar.run;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class StatusThread extends Component implements Runnable {
+import javax.swing.event.EventListenerList;
+
+public class StatusThread implements Runnable {
 
     private static final long serialVersionUID = 1L;
-    private final String SERVER_IP;
+	
+    private final InetAddress SERVER_IP;
     private final int SERVER_PORT;
     private boolean running = false;
-    private ActionEvent action = new ActionEvent ( this, 0, "response_packet" );
+    
+    protected EventListenerList eventListeners;
 
     private HashMap<String, String> map = null;
     private String xmlStatusPacket;
     private String xmlResponsePacket;
 
+    public void addStatusListener( StatusListener listener ){
+    	eventListeners.add(StatusListener.class, listener);
+    }
+    
+    public void removeStatusListener( StatusListener listener){
+    	eventListeners.remove(StatusListener.class, listener);
+    }
+    
+    public void processEvent( StatusEvent evt ){    	
+    	StatusListener[] listeners = eventListeners.getListeners(StatusListener.class);    	
+    	for( int i=0; i<listeners.length; ++i){
+    		listeners[i].eventOccurred(evt);
+    	}    	
+    }
+    
     public String getResponse()
     {
         return xmlResponsePacket;
     }
 
-    public StatusThread ( String ip, int port )
-    {
+    public StatusThread ( InetAddress ip, int port )
+    {    	    	
         SERVER_IP = ip;
         SERVER_PORT = port;
 
@@ -56,6 +74,8 @@ public class StatusThread extends Component implements Runnable {
 
         xmlStatusPacket = XmlPacket.format ( map );
         map = null;
+        
+        eventListeners = new EventListenerList();
     }
 
     public void run()
@@ -86,7 +106,8 @@ public class StatusThread extends Component implements Runnable {
                                      + " " + socket.isConnected() );
 
                 if ( xmlResponsePacket != null ) {
-                    this.processEvent ( action );
+                    //this.processEvent ( action );
+                    
                 }
             } catch ( IOException e ) {
                 // TODO Auto-generated catch block
@@ -103,6 +124,7 @@ public class StatusThread extends Component implements Runnable {
         System.out.println ( "Stop status called" );
         running = false;
     }
+	
 }
 
 

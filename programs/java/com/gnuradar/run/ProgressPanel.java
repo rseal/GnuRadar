@@ -41,8 +41,7 @@ public class ProgressPanel extends JPanel
     private void setComponentSize ( JComponent obj, Dimension dimension )
     {
         obj.setMinimumSize ( dimension );
-        obj.setPreferredSize ( dimension );
-        //obj.setMaximumSize(dimension);
+        obj.setPreferredSize ( dimension );        
     }
 
     public ProgressPanel( )
@@ -52,12 +51,17 @@ public class ProgressPanel extends JPanel
         readLevel = new JProgressBar();
         readLevel.setString ( "READ BUFFER" );
         readLevel.setStringPainted ( true );
+        readLevel.setMinimum(0);
+        
         writeLevel = new JProgressBar();
         writeLevel.setString ( "WRITE BUFFER" );
         writeLevel.setStringPainted ( true );
+        writeLevel.setMinimum(0);
+        
         depthLevel = new JProgressBar();
         depthLevel.setString ( "BUFFER LEVEL" );
         depthLevel.setStringPainted ( true );
+        depthLevel.setMinimum(0);
 
         setComponentSize ( readLevel, progressSize );
         setComponentSize ( writeLevel, progressSize );
@@ -69,9 +73,26 @@ public class ProgressPanel extends JPanel
 
         Border border = BorderFactory.createEtchedBorder( );
         this.setBorder ( border );
-
     }
 
+    public void setHead( int head ){    
+    	writeLevel.setValue(head);
+    }
+    
+    public void setTail( int tail){
+    	readLevel.setValue(tail);
+    }
+    
+    public void setDepth( int depth ){
+    	depthLevel.setValue(depth);
+    }
+    
+    public void setNumBuffers( int numBuffers ){
+    	writeLevel.setMaximum(numBuffers);
+    	readLevel.setMaximum(numBuffers);
+    	depthLevel.setMaximum(numBuffers);
+    }
+    
     @Override
     public void actionPerformed ( ActionEvent e )
     {        }

@@ -20,6 +20,7 @@
 #include <gnuradar/GnuRadarCommand.hpp>
 #include <gnuradar/ProducerConsumerModel.h>
 #include <gnuradar/xml/XmlPacket.hpp>
+#include <boost/lexical_cast.hpp>
 
 namespace gnuradar {
 namespace command {
@@ -40,11 +41,23 @@ class Status : public GnuRadarCommand
          std::cout << " Status Command " << std::endl;
 
          // create a response packet and return to requester
-         std::string destination = command::ParseArg( "destination", args );
+         std::string destination = command::ParseArg( "source", args );
          xml::XmlPacketArgs responsePacket;
          responsePacket["destination"] = destination;
          responsePacket["type"] = "response";
+         responsePacket["num_buffers"] = pcModel_->NumBuffers();
          responsePacket["value"] = "OK";
+         responsePacket["head"] = 
+            boost::lexical_cast<std::string>( pcModel_->Head() );
+         responsePacket["tail"] = 
+            boost::lexical_cast<std::string>( pcModel_->Tail() );
+         responsePacket["depth"] = 
+            boost::lexical_cast<std::string>( pcModel_->Depth() );
+         responsePacket["over_flow"] = 
+            boost::lexical_cast<std::string>( pcModel_->OverFlow() );
+         responsePacket["bytes_per_buffer"] = 
+            boost::lexical_cast<std::string>( pcModel_->BytesPerBuffer() );
+
          gnuradar::xml::XmlPacket packet("gnuradar_server");
          const std::string response = packet.Format( responsePacket );
 

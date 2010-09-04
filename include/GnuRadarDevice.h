@@ -90,9 +90,8 @@ public:
 
         //check to see if device is connected
         if ( usrp_.get() == 0 ) {
-            cout << "no USRP found - check your connections" << endl;
-            //TODO: thow an exception
-            exit ( 0 );
+            throw std::runtime_error( "No USRP found - check your connections" );
+            //exit ( 0 );
         }
 
         // setup frequency and phase for each ddc

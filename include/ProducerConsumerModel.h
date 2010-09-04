@@ -30,9 +30,6 @@
 #include <iostream>
 #include <vector>
 
-#include<HDF5/HDF5.hpp>
-#include<HDF5/Complex.hpp>
-
 //notes
 //To use this model properly, instantiate this class in your main code.
 //You must define the Run() functions for both ConsumerThread and ProducerThread
@@ -239,7 +236,7 @@ public:
             // print debug information
             // TODO: Replace this and implement some sort of port
             // accessible status calls
-            Debug();
+            //Debug();
 
             // wait for thread to complete before continuing
             consumerThread_->Wait();
@@ -264,6 +261,12 @@ public:
         stopProducer_ = true;
         cout << "ProducerConsumerModel: System Stop activated" << endl;
     }
+
+    const int& Head() { return head_; }
+    const int& Tail() { return tail_; }
+    const int& Depth() { return depth_; }
+    const int& NumBuffers() { return numBuffers_; }
+    const int& BytesPerBuffer() { return bytesPerBuffer_; }
 };
 };
 #endif

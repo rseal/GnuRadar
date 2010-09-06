@@ -178,7 +178,8 @@ public class ButtonPanel extends JPanel
     public void actionPerformed ( ActionEvent e )
     {
         if ( e.getSource() == runButton ) {
-
+        	System.out.println("Run button pressed");
+        	
             HashMap<String, String> map = new HashMap<String, String>();
             map.put ( "type", "control" );
             map.put ( "source", "gradar_run_java" );
@@ -186,6 +187,8 @@ public class ButtonPanel extends JPanel
 
             if ( state == State.RUNNING ) {
 
+            	System.out.println("Stop button pressed");
+            	
                 // create xml packet and send to server
                 map.put ( "name", "stop" );
                 String xmlPacket = XmlPacket.format ( map );
@@ -197,7 +200,7 @@ public class ButtonPanel extends JPanel
                 	map = XmlPacket.parse(xmlResponsePacket);
                 	String response = map.get("value");
                 	
-                	if( response == "OK"){
+                	if( response.contains("OK")){
 
                     // set button states
                     setState ( State.STOPPED );
@@ -224,17 +227,18 @@ public class ButtonPanel extends JPanel
 
                     map.clear();
                     map = XmlPacket.parse( xmlResponsePacket );
-                    String response = map.get("value");
-                    
-                    if( response == "OK")
+                    String response = map.get("value").replace("\n", "").trim();
+                 
+                    if( response.contains("OK") )
                     {
+                    	System.out.println("Setting state to Run");
                        // set button states
                        setState ( State.RUNNING );
                        runButton.setText ( "Stop" );
                        loadButton.setEnabled ( false );
                     }
                     else
-                    {
+                    {                    	
                     	setState( State.ERROR);                    	
                     }
 

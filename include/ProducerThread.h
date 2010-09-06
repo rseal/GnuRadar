@@ -21,25 +21,36 @@
 #include <gnuradar/BaseThread.h>
 #include <gnuradar/SThread.h>
 #include <gnuradar/Device.h>
+#include <gnuradar/SynchronizedBufferManager.hpp>
+
 
 /// This class inherits from Sthread and is responsible for
 /// collecting data from the hardware device and transferring
 /// it to the shared buffer memory region.
-class ProducerThread: public BaseThread, public SThread {
+class ProducerThread: public BaseThread, public thread::SThread {
 
-    typedef boost::shared_ptr<Device> DevicePtr;
-    DevicePtr device_;
+   typedef boost::shared_ptr<Device> DevicePtr;
+   typedef boost::shared_ptr< SynchronizedBufferManager > 
+      SynchronizedBufferManagerPtr;
+
+   SynchronizedBufferManagerPtr bufferManager_;
+   DevicePtr device_;
 
 public:
-
+   
     /// Constructor
     /// \param bytes data write size in bytes
     /// \param device GnuRadar device reference
-    ProducerThread ( const int bytes, DevicePtr device ) :
-            BaseThread ( bytes ), SThread(), device_ ( device ) { }
+    ProducerThread ( 
+          SynchronizedBufferManagerPtr bufferManager, DevicePtr device
+          ) : 
+       BaseThread ( bufferManager->BytesPerBuffer() ), thread::SThread(), 
+       device_ ( device ), bufferManager_( bufferManager ) { }
 
     /// stops the device
     virtual void Stop() {
+        running_ = false;
+        this->Wait();
         device_->Stop();
     }
 

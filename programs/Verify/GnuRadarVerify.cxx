@@ -20,6 +20,7 @@
 using std::string;
 using std::vector;
 using boost::lexical_cast;
+using namespace gnuradar;
 
 int main ( int argc, char** argv )
 {
@@ -75,10 +76,10 @@ int main ( int argc, char** argv )
 
     //check to see if device is connected
     if ( usrp.get() == 0 ) {
-        throw std::runtime_error (
-            "GnuRadarVerify: No USRP device found - please check your "
-            "connections.\n"
-        );
+       throw std::runtime_error (
+           "GnuRadarVerify: No USRP device found - please check your "
+           "connections.\n"
+       );
     }
 
     // setup frequency and phase for each ddc

@@ -106,6 +106,7 @@ public class StatusThread implements Runnable {
                                      + " " + socket.isConnected() );
 
                 if ( xmlResponsePacket != null ) {
+                	processEvent( new StatusEvent(this) );
                     //this.processEvent ( action );
                     
                 }

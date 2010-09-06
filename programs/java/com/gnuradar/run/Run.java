@@ -90,6 +90,7 @@ public class Run implements ActionListener, PropertyChangeListener {
 
     private void updateDisplay(String xmlResponsePacket )
     {
+    	System.out.println("Updating Display");
     	responseMap.clear();
     	responseMap = XmlPacket.parse(xmlResponsePacket);
     	
@@ -292,6 +293,7 @@ public class Run implements ActionListener, PropertyChangeListener {
         {
         	statusThread = new StatusThread(INET_ADDRESS, PORT);
         	thread = new Thread(statusThread);
+        	thread.start();
         	
         	statusListener = new StatusListener(){
 				@Override

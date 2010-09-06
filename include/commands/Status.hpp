@@ -45,7 +45,8 @@ class Status : public GnuRadarCommand
          xml::XmlPacketArgs responsePacket;
          responsePacket["destination"] = destination;
          responsePacket["type"] = "response";
-         responsePacket["num_buffers"] = pcModel_->NumBuffers();
+         responsePacket["num_buffers"] = 
+            boost::lexical_cast<std::string>( pcModel_->NumBuffers() );
          responsePacket["value"] = "OK";
          responsePacket["head"] = 
             boost::lexical_cast<std::string>( pcModel_->Head() );

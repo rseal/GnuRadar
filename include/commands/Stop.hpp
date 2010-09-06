@@ -38,11 +38,9 @@ class Stop : public GnuRadarCommand {
 
     virtual const std::string Execute( const xml::XmlPacketArgs& args ) {
 
-       // TODO: Uncomment these when official testing is ready.
-       //pcModel_->Stop();
-       //pcModel_->Wait();
-       
        std::cout << " Stop Command " << std::endl;
+
+       pcModel_->Stop();
 
        // create a response packet and return to requester
        std::string destination = command::ParseArg( "destination", args );

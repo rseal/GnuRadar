@@ -19,9 +19,32 @@
 // worker thread implementation.
 void ConsumerThread::Run()
 {
+   running_ = true;
 
-    // write an HDF5 table to disk
-    h5File_->CreateTable ( cpx_.GetRef(), space_ );
-    h5File_->WriteTStrAttrib ( "TIME", time_.GetTime() );
-    h5File_->WriteTable ( reinterpret_cast<void*> ( address_ ) );
+   while( running_ ){
+
+      std::cout << "consumer running" << std::endl;
+
+      // sleep if no data available
+      if(!bufferManager_->DataAvailable()){
+         std::cout << "consumer sleeping" << std::endl;
+         this->Pause( *BaseThread::condition_, *BaseThread::mutex_ );
+      }
+
+      std::cout << "consumer writing table to disk" << std::endl;
+      // write an HDF5 table to disk
+      h5File_->CreateTable ( cpx_.GetRef(), space_ );
+      h5File_->WriteTStrAttrib ( "TIME", time_.GetTime() );
+      h5File_->WriteTable ( bufferManager_->ReadFrom() );
+
+      bufferManager_->IncrementTail();
+
+      // TODO: Fix me. throw exception
+      if( bufferManager_->OverFlow() ){
+         std::cout << "OVERFLOW DETECTED !!!!" << std::endl;
+      }
+
+   }
+   h5File_->Close();
+   std::cout << "consumer exiting " << std::endl;
 }

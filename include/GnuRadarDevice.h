@@ -29,6 +29,9 @@
 #include <vector>
 #include <cstring>
 #include <fstream>
+#include <stdexcept>
+
+namespace gnuradar{
 
 /// Device class providing access to the USRP data stream.
 class GnuRadarDevice: public Device {
@@ -39,6 +42,7 @@ class GnuRadarDevice: public Device {
     // define synchro buffer
     typedef StreamBuffer< iq_t > SynchronizationBuffer;
     typedef boost::shared_ptr< SynchronizationBuffer >
+
     SynchronizationBufferPtr;
     SynchronizationBufferPtr synchroBuffer_;
 
@@ -52,41 +56,39 @@ class GnuRadarDevice: public Device {
     usrp_standard_rx_sptr usrp_;
 
     // configuration settings class
-    GnuRadarSettings grSettings_;
+    GnuRadarSettingsPtr grSettings_;
 
     // define flags
     bool overFlow_;
     bool isFirstDataRequest_;
 
     //StreamBuffer<int16_t> stBuf_;
-    vector<int> sequence_;
+    std::vector<int> sequence_;
 
 public:
 
     /// Constructor.
-    GnuRadarDevice ( const GnuRadarSettings& grSettings ) :
+    GnuRadarDevice ( GnuRadarSettingsPtr grSettings ) :
             ALIGNMENT_SIZE ( 256 ),
             ALIGNMENT_SIZE_BYTES ( ALIGNMENT_SIZE*sizeof ( iq_t ) ),
             FX2_FLUSH_FIFO_SIZE_BYTES ( 2048 ),
             grSettings_ ( grSettings ),
             overFlow_ ( false ),
             isFirstDataRequest_ ( true ),
-            sequence_ ( grSettings.numChannels, 16384 ) {
+            sequence_ ( grSettings->numChannels, 16384 ) {
 
         // static helper function to initialize USRP settings
         usrp_ = usrp_standard_rx::make (
-                    grSettings_.whichBoard,
-                    grSettings_.decimationRate,
-                    grSettings_.numChannels,
-                    grSettings_.mux,
-                    grSettings_.mode,
-                    grSettings_.fUsbBlockSize,
-                    grSettings_.fUsbNblocks,
-                    grSettings_.fpgaFileName,
-                    grSettings_.firmwareFileName
+                    grSettings_->whichBoard,
+                    grSettings_->decimationRate,
+                    grSettings_->numChannels,
+                    grSettings_->mux,
+                    grSettings_->mode,
+                    grSettings_->fUsbBlockSize,
+                    grSettings_->fUsbNblocks,
+                    grSettings_->fpgaFileName,
+                    grSettings_->firmwareFileName
                 );
-
-        cout << "Requested bit image " << grSettings_.fpgaFileName << endl;
 
         //check to see if device is connected
         if ( usrp_.get() == 0 ) {
@@ -95,8 +97,8 @@ public:
         }
 
         // setup frequency and phase for each ddc
-        for ( int i = 0; i < grSettings_.numChannels; ++i ) {
-            usrp_->set_rx_freq ( i, grSettings_.Tune ( i ) );
+        for ( int i = 0; i < grSettings_->numChannels; ++i ) {
+            usrp_->set_rx_freq ( i, grSettings_->Tune ( i ) );
             usrp_->set_ddc_phase ( i, 0 );
         }
 
@@ -199,5 +201,6 @@ public:
     virtual void Stop() {
         usrp_->stop();
     }
+};
 };
 #endif

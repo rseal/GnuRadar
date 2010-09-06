@@ -19,6 +19,8 @@
 
 #include <gnuradar/SharedMemory.h>
 #include <gnuradar/SThread.h>
+#include <gnuradar/Mutex.hpp>
+#include <gnuradar/Condition.hpp>
 
 /// Abstract class for use with Producer and Consumer threads.
 class BaseThread {
@@ -26,12 +28,14 @@ class BaseThread {
 public:
 
     // Constructor.
-    BaseThread ( const int bytes ) : bytes_ ( bytes ) {}
+    BaseThread ( const int bytes ) : bytes_ ( bytes ),
+    running_(false){}
 
     // abstract members
-    virtual const int         Status() {
+    virtual const int Status() {
         return status_;
     }
+
     virtual const std::string& Error()  {
         return error_;
     }
@@ -40,12 +44,20 @@ public:
     virtual void Stop() = 0;
     virtual void RequestData ( void* address ) = 0;
 
+    void Mutex( thread::MutexPtr mutex ) { mutex_ = mutex; }
+    void Condition( thread::ConditionPtr condition ) { condition_ = condition; }
+
 protected:
 
     void* address_;
     const int bytes_;
     int  status_;
     std::string error_;
+    bool running_;
+
+    thread::MutexPtr mutex_;
+    thread::ConditionPtr condition_;
+
 };
 
 #endif

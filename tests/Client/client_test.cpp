@@ -56,10 +56,10 @@ int main(int argc, char* argv[])
        gnuradar::xml::XmlPacketArgs map;
 
        // create an XmlPacket object and populate
-       gnuradar::xml::XmlPacket packet( "command", "ticpp_test");
+       gnuradar::xml::XmlPacket packet( "ticpp_test");
        map["destination"] = "server_test";
        map["type"] = "control";
-       map["name"] = "start";
+       map["name"] = "stop";
        map["file_name"] = "/usr/local/GnuRadar/config/HomeTest.ucf";
 
        // convert the XmlPacket into a string representation

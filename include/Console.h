@@ -19,7 +19,7 @@
 #include <gnuradar/SThread.h>
 #include <gnuradar/ProducerConsumerModel.h>
 
-class Console: public SThread {
+class Console: public thread::SThread {
     gnuradar::ProducerConsumerModel& pcmodel_;
     std::string input_;
     bool quit_;
@@ -33,8 +33,8 @@ public:
 
     virtual void Run() {
         while ( true ) {
-            cout << ">>>";
-            cin >> input_;
+           std::cout << ">>>"; 
+           std::cin >> input_;
             if ( input_ == "quit" ) pcmodel_.Stop();
             sleep ( 1 );
         }

@@ -20,6 +20,9 @@
 #include <iostream>
 #include <vector>
 
+namespace gnuradar{
+
+
 struct GnuRadarSettings {
 
     bool ValidChannel ( int channel ) {
@@ -63,6 +66,8 @@ public:
         return ValidChannel ( channel ) ? ddcPhase[channel] : 0;
     }
 
+};
+   typedef boost::shared_ptr<GnuRadarSettings> GnuRadarSettingsPtr;
 };
 
 #endif

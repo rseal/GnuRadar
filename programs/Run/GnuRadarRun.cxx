@@ -32,17 +32,16 @@ int main ( int argc, char** argv )
 {
 
     typedef boost::shared_ptr<command::GnuRadarCommand> CommandPtr;
-    typedef boost::shared_ptr<HDF5> Hdf5Ptr;
     typedef boost::shared_ptr<ProducerConsumerModel> PCModelPtr;
     boost::asio::io_service ioService;
     command::CommandList commandList;
 
     // create a Producer/Consumer model, but don't initialize the
     // object until ready
-    PCModelPtr pcModel = PCModelPtr ( new gnuradar::ProducerConsumerModel() );
+    PCModelPtr pcModel( new gnuradar::ProducerConsumerModel() );
 
-    CommandPtr startCommand = command::CommandPtr (
-                                  new command::Start ( pcModel ) );
+    CommandPtr startCommand = command::CommandPtr ( 
+          new command::Start ( pcModel ) );
     CommandPtr stopCommand = command::CommandPtr (
                                  new command::Stop ( pcModel ) );
     CommandPtr statusCommand = command::CommandPtr (

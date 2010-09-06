@@ -22,41 +22,16 @@
 #include <fcntl.h>
 
 #include <iostream>
-
-using namespace std;
+#include <stdexcept>
 
 namespace SHM {
-
 enum {CreateShared = 0, CreatePrivate, Read, Write};
-
-class Exception {
-public:
-    virtual void PrintError() {
-        cerr << "Shared Memory Exception" << endl;
-    }
-    virtual ~Exception() {}
-};
-
-class OpenFailure: public Exception {
-public:
-    virtual void PrintError() {
-        cerr << "Shared Memory Open Failure Exception" << endl;
-    }
-};
-
-class MapFailure: public Exception {
-public:
-    virtual void PrintError() {
-        cerr << "Shared Memory Map Failure Exception" << endl;
-    }
-};
-
 };
 
 struct SharedMemory {
     int size_;
     void* address_;
-    string fileName_;
+    std::string fileName_;
     int desc_;
     bool isCreate_;
     int shFlags_;
@@ -64,7 +39,7 @@ struct SharedMemory {
     int mapFlags_;
 
 public:
-    SharedMemory ( string fileName, int size, int props, int perm ) :
+    SharedMemory ( std::string fileName, int size, int props, int perm ) :
             size_ ( size ), fileName_ ( fileName ), isCreate_ ( false ) {
 
         switch ( props ) {
@@ -93,12 +68,14 @@ public:
 
         desc_ = shm_open ( fileName_.c_str(), shFlags_, perm );
 
-        if ( !desc_ ) throw SHM::OpenFailure();
+        if ( !desc_ ) 
+           throw std::runtime_error("SharedMemory: Failed to open!");
 
         // size is units of bytes
         address_ = mmap ( 0, size, protFlags_, mapFlags_ ,  desc_, 0 );
 
-        if ( address_ == MAP_FAILED ) throw SHM::MapFailure();
+        if ( address_ == MAP_FAILED ) 
+           throw std::runtime_error("SharedMemory: Failed to map memory!");
 
         ftruncate ( desc_, size_ );
     }
@@ -116,7 +93,8 @@ public:
 
         address_ = mmap ( 0, size, protFlags_, mapFlags_ ,  desc_, 0 );
 
-        if ( address_ == MAP_FAILED ) throw SHM::MapFailure();
+        if ( address_ == MAP_FAILED ) 
+           throw std::runtime_error("SharedMemory: Failed to resize/remap memory!");
     }
 
     ~SharedMemory() {

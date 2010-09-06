@@ -18,6 +18,13 @@
 #include <gnuradar/SThread.h>
 
 class ProducerThread, public BaseThread, public SThread {
+
+   typedef boost::shared_ptr< SynchronizedBufferManager > 
+      SynchronizedBufferManagerPtr;
+   SynchronizedBufferManagerPtr bufferManager_;
+    Mutex& mutex_;
+    Condition& condition_;
+
     int& bytes_;
     int& shMemKey_;
     int  status_;

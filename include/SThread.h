@@ -17,19 +17,19 @@
 #ifndef STHREAD_H
 #define STHREAD_H
 
+#include <gnuradar/Mutex.hpp>
+#include <gnuradar/Condition.hpp>
+#include <gnuradar/Lock.h>
+
 #include <iostream>
-//#include <sys/time.h>
 #include <time.h>
 #include <errno.h>
 #include <pthread.h>
-#include <gnuradar/Lock.h>
 
-using std::cerr;
-using std::endl;
+namespace thread {
 
-namespace ST {
-enum { us, ms, sec};
-};
+// units of time for sleep 
+enum { USEC, MSEC, SEC};
 
 class SThread {
 
@@ -41,9 +41,7 @@ public:
         pthread_cond_init ( &condition_, NULL );
     }
 
-    virtual ~SThread() {
-    }
-
+    virtual ~SThread() { } 
     virtual void Run() = 0;
 
     static void* Init ( void* _this ) {
@@ -56,7 +54,7 @@ public:
         int status = -1;
         status = pthread_create ( &p_sthread_, NULL, Init, this );
         if ( status < 0 )
-            cerr << "STHREAD: thread creation failed" << endl;
+            std::cerr << "STHREAD: thread creation failed" << std::endl;
     }
 
     void Wait() {
@@ -71,9 +69,6 @@ public:
         int status;
         pthread_exit ( reinterpret_cast<void*> ( &status ) );
     }
-
-//  void Lock(Mutex& mutex) {mutex.Lock();}
-//  void Unlock(Mutex& mutex) {mutex.Unlock();}
 
     void Lock ( pthread_mutex_t& mutex ) {
         pthread_mutex_lock ( &mutex );
@@ -92,17 +87,32 @@ public:
         pthread_cond_signal ( &condition_ );
     }
 
-    void Sleep ( int _type = ST::us, long _value = 1000L ) {
+    // alternative to share condition variable between 
+    // threads
+    void Wake( Condition& condition, Mutex& mutex ){
+       ScopedLock lock( mutex );
+       pthread_cond_signal( &condition.Get() );
+    }
+
+    // alternative to share condition variable between 
+    // threads
+    void Pause( Condition& condition, Mutex& mutex)
+    {
+       ScopedLock lock ( mutex );
+       pthread_cond_wait( &condition.Get(), &mutex.Get() );
+    }
+
+    void Sleep ( int _type = USEC, long _value = 1000L ) {
         int status = 0;
 
         clock_gettime ( CLOCK_REALTIME , &cTime_ );
 
         switch ( _type ) {
-        case ST::us:
+        case USEC:
             fTime_ = cTime_;
             fTime_.tv_nsec += 1000L * _value;
             break;
-        case ST::ms:
+        case MSEC:
             fTime_ = cTime_;
             fTime_.tv_nsec += _value * 1000000L;
 
@@ -112,12 +122,13 @@ public:
                 fTime_.tv_sec++;
             }
             break;
-        case ST::sec:
+        case SEC:
             fTime_ = cTime_;
             fTime_.tv_sec = cTime_.tv_sec + _value;
             break;
         default:
-            cerr << "STHREAD: invalid sleep value. default to 1 sec" << endl;
+            std::cerr << "STHREAD: invalid sleep value. default to 1 sec" 
+               << std::endl;
             fTime_ = cTime_;
             fTime_.tv_sec += 1;
         }
@@ -143,5 +154,5 @@ protected:
     timespec cTime_;
     timespec fTime_;
 };
-
+};
 #endif

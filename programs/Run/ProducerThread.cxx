@@ -20,5 +20,23 @@
 /// StartDevice method.
 void ProducerThread::Run()
 {
-    device_->RequestData ( address_, bytes_ );
+   running_ = true;
+
+   std::cout << "producer running " << std::endl;
+
+   while( running_ ){
+
+      std::cout << "producer requesting data " << std::endl;
+      device_->RequestData ( bufferManager_->WriteTo() , 
+            bufferManager_->BytesPerBuffer() );
+
+      bufferManager_->IncrementHead();
+
+      std::cout << "producer waking consumer" << std::endl;
+      // wake the consumer thread
+      this->Wake( *BaseThread::condition_, *BaseThread::mutex_ );
+   }
+      //we're exiting now, make sure Consumer is awake.
+      this->Wake( *BaseThread::condition_, *BaseThread::mutex_ );
+      std::cout << "producer exiting" << std::endl;
 }

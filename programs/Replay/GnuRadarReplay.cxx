@@ -22,7 +22,7 @@
 #include <fstream>
 #include <vector>
 
-using namespace std;
+using namespace thread;
 using namespace hdf5;
 
 class Viewer: public SThread {
@@ -90,7 +90,7 @@ public:
                     out.write ( reinterpret_cast<char*> ( &rs ), sizeof ( float ) );
                 }
                 out.close();
-                Sleep ( ST::ms, sleep_ );
+                Sleep ( thread::MSEC, sleep_ );
             }
             ++table;
         }

@@ -1,6 +1,6 @@
 GnuRadar Project 
-Date: August 29, 2010
-Version: 1.0.0_08-AUG-2010
+Date: September 06, 2010
+Version: 2.1.0_06-SEP-2010
 Author: Ryan Seal
 
 Introduction:

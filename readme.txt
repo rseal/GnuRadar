@@ -32,14 +32,10 @@ Dependencies:
 
 1. Latest version of the boost libraries ( http://www.boost.org ).
 2. Latest version of gnuradio ( http://gnuradio.org/git/gnuradio.git ).
-3. Latest CommandLineParser library 
-   ( http://github.com/rseal/CommandLineParser ).
-4. Latest HDF5R library ( http://github.com/rseal/HDF5R ).
-5. Latest scons ( http://www.scons.org ).
-6. Latest version of c++ tinyxml ( http://code.google.com/p/ticpp/ ).
-7. Latest version of Sun Java Java Runtime Environment 
+3. Latest scons ( http://www.scons.org ).
+4. Latest version of c++ tinyxml ( http://code.google.com/p/ticpp/ ).
+5. Latest version of Sun Java Java Runtime Environment 
    ( http://www.oracle.com/technetwork/java/javase/downloads/index.html#need).
-8. Latest version of java xom library ( http://www.xom.nu ). 
 
 Optional:
 
@@ -63,11 +59,17 @@ GNURadar:
 1. First you will have to install the gnuradar development headers. Go to the
    root project directory, login in as root, and type 'scons install-headers'.
 
-2. The new tinyxml source is included under the deps directory. CD to this
+2. From the root project directory:
+   a. git submodule init
+   b. git submodule update
+   c. cd deps/hdf5r, login as root, run "scons install-headers".
+   d. cd deps/clp, login as root, run "scons install-headers".
+
+3. The new tinyxml source is included under the deps directory. CD to this
    directory, run "scons", login as root, run "scons install". This will
    install the necessary headers and the compiled library. 
 
-3. After successfully installing gnuradio and all other dependencies, simply
+4. After successfully installing gnuradio and all other dependencies, simply
    go to the root project directory and run "scons", login as root and run
    "scons install". This will install all binaries in /usr/local/bin by
    default ( edit the SConstruct file if you're not happy with that ). All

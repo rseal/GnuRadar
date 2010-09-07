@@ -1,0 +1,6 @@
+[submodule "deps/hdf5r"]
+	path = deps/hdf5r
+	url = git://github.com/rseal/HDF5R.git
+[submodule "deps/clp"]
+	path = deps/clp
+	url = git://github.com/rseal/CommandLineParser.git

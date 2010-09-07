@@ -21,10 +21,10 @@ Programs:
 
 Currently, there are 4 primary programs of interest:
 
-1. gradar-configure ( gradar-configure-cli ): Configuration GUI to setup the receiver.
+1. gradar-configure : Configuration GUI to setup the receiver.
 2. gradar-verify: Validation tool to ensure that both receiver and pulse
    generator are properly synchronized.
-3. gradar-run ( gradar-run-cli ): Data collection tool for the USRP receiver.
+3. gradar-run : Data collection tool for the USRP receiver.
 4. gradar-replay: Data replay tool for HDF5 files. Requires rtPlotter for
    display. 
 
@@ -33,8 +33,7 @@ Dependencies:
 1. Latest version of the boost libraries ( http://www.boost.org ).
 2. Latest version of gnuradio ( http://gnuradio.org/git/gnuradio.git ).
 3. Latest scons ( http://www.scons.org ).
-4. Latest version of c++ tinyxml ( http://code.google.com/p/ticpp/ ).
-5. Latest version of Sun Java Java Runtime Environment 
+4. Latest version of Sun Java Java Runtime Environment 
    ( http://www.oracle.com/technetwork/java/javase/downloads/index.html#need).
 
 Optional:
@@ -65,7 +64,7 @@ GNURadar:
    c. cd deps/hdf5r, login as root, run "scons install-headers".
    d. cd deps/clp, login as root, run "scons install-headers".
 
-3. The new tinyxml source is included under the deps directory. CD to this
+3. The tinyxml project is included under the deps directory. CD to this
    directory, run "scons", login as root, run "scons install". This will
    install the necessary headers and the compiled library. 
 

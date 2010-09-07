@@ -60,8 +60,6 @@ public:
     const int Tail() { return tail_; }
     
     void* WriteTo() { 
-       std::cout << "requesting write to " << array_[head_]->GetPtr() << std::endl;
-       std::cout << "head = " << head_ << std::endl;
        return reinterpret_cast< void*>( array_[head_]->GetPtr() );
     }
 

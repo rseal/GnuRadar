@@ -98,12 +98,12 @@ public class StatusThread implements Runnable {
                 //writer.close();
 
                 xmlResponsePacket = reader.readLine();
-                System.out.println ( "status response = " + xmlResponsePacket );
+                //System.out.println ( "status response = " + xmlResponsePacket );
 
                 Thread.sleep ( 1000 );
 
-                System.out.println ( "running status thread " + xmlStatusPacket
-                                     + " " + socket.isConnected() );
+//                System.out.println ( "running status thread " + xmlStatusPacket
+//                                     + " " + socket.isConnected() );
 
                 if ( xmlResponsePacket != null ) {
                 	processEvent( new StatusEvent(this) );

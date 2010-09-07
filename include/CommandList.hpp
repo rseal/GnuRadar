@@ -54,9 +54,6 @@ public:
         if ( iter == commands_.end() )
             throw std::runtime_error ( "Invalid command request" );
 
-        // TODO: Remove me
-        std::cout << "FOUND " << ( *iter )->Name() << " in the command list" << std::endl;
-
         return *iter;
     }
 };

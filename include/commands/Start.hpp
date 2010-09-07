@@ -39,13 +39,9 @@ class Start : public GnuRadarCommand {
 
     typedef boost::shared_ptr<SharedMemory> SharedBufferPtr;
     typedef std::vector<SharedBufferPtr> SharedArray;
-    SharedArray array_;
-
     typedef boost::shared_ptr<HDF5> Hdf5Ptr;
-
     typedef boost::shared_ptr<SynchronizedBufferManager> 
        SynchronizedBufferManagerPtr;
-
     typedef boost::shared_ptr< ProducerConsumerModel > PCModelPtr;
     typedef boost::shared_ptr< ProducerThread > ProducerThreadPtr;
     typedef boost::shared_ptr< ConsumerThread > ConsumerThreadPtr;
@@ -53,13 +49,13 @@ class Start : public GnuRadarCommand {
     typedef boost::shared_ptr< GnuRadarSettings > GnuRadarSettingsPtr;
     typedef boost::shared_ptr< Device > DevicePtr;
 
-
     // setup shared pointers to extend life beyond this call
     PCModelPtr pcModel_;
     gnuradar::ProducerThreadPtr producer_;
     gnuradar::ConsumerThreadPtr consumer_;
     SynchronizedBufferManagerPtr bufferManager_;
     Hdf5Ptr hdf5_;
+    SharedArray array_;
 
     void CheckForExistingFileSet ( const std::string& fileSet ) 
        throw( std::runtime_error )
@@ -180,6 +176,13 @@ class Start : public GnuRadarCommand {
 
     virtual const std::string Execute( const xml::XmlPacketArgs& args ) {
 
+       // reset any existing configuration
+       producer_.reset();
+       consumer_.reset();
+       bufferManager_.reset();
+       hdf5_.reset();
+       array_.clear();
+
        std::string response;
        std::string fileName = command::ParseArg( "file_name", args );
 
@@ -197,18 +200,16 @@ class Start : public GnuRadarCommand {
 
           CheckForExistingFileSet ( configFile.DataFileBaseName() ) ;
 
-          std::cout << "Setup HDF5 " << std::endl;
+          // setup HDF5 attributes and file set.
           hdf5_ = SetupHDF5( configFile );
 
-          std::cout << "Setup GnuRadarSettings << " << std::endl;
+          // read and parse configuration file.
           GnuRadarSettingsPtr settings = GetSettings( configFile );
 
-          std::cout << "Setup GnuRadarDevice << " << std::endl;
           // create a device to communicate with hardware
-          GnuRadarDevicePtr gnuRadarDevice(
-                new GnuRadarDevice( settings )
-                );
+          GnuRadarDevicePtr gnuRadarDevice( new GnuRadarDevice( settings ) );
 
+          // setup shared memory buffers
           CreateSharedBuffers( bufferSize );
 
           // setup the buffer manager
@@ -216,8 +217,7 @@ class Start : public GnuRadarCommand {
                 new SynchronizedBufferManager( 
                    array_, constants::NUM_BUFFERS, bufferSize) );
 
-
-          std::cout << "Setup Dims << " << std::endl;
+          // setup table dimensions column = samples per ipp , row = IPP number
           vector<hsize_t> dims;
           dims.push_back( static_cast<int>( ceil( 1.0 / configFile.IPP() ) ) );
           dims.push_back ( 

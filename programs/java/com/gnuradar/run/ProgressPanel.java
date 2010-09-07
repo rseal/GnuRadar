@@ -16,6 +16,7 @@
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 package com.gnuradar.run;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +32,7 @@ public class ProgressPanel extends JPanel
             implements ActionListener {
 
     private static final long serialVersionUID = 1L;
+    private int numBuffers = 0;
 
     public JProgressBar readLevel;
     public JProgressBar writeLevel;
@@ -51,16 +53,19 @@ public class ProgressPanel extends JPanel
         readLevel = new JProgressBar();
         readLevel.setString ( "READ BUFFER" );
         readLevel.setStringPainted ( true );
+        readLevel.setForeground(Color.GREEN);
         readLevel.setMinimum(0);
         
         writeLevel = new JProgressBar();
         writeLevel.setString ( "WRITE BUFFER" );
+        writeLevel.setForeground(Color.BLUE);
         writeLevel.setStringPainted ( true );
         writeLevel.setMinimum(0);
         
         depthLevel = new JProgressBar();
         depthLevel.setString ( "BUFFER LEVEL" );
-        depthLevel.setStringPainted ( true );
+        depthLevel.setStringPainted ( true );   
+        depthLevel.setForeground(Color.YELLOW);
         depthLevel.setMinimum(0);
 
         setComponentSize ( readLevel, progressSize );
@@ -76,18 +81,25 @@ public class ProgressPanel extends JPanel
     }
 
     public void setHead( int head ){    
-    	writeLevel.setValue(head);
+    	writeLevel.setString("WRITE BUFFER " + (head+1) + "/" + numBuffers );
+    	writeLevel.setStringPainted(true);
+    	writeLevel.setValue(head+1);
     }
     
     public void setTail( int tail){
-    	readLevel.setValue(tail);
+    	readLevel.setString("READ BUFFER " + (tail+1) + "/" + numBuffers );
+    	readLevel.setStringPainted(true);
+    	readLevel.setValue(tail+1);
     }
     
     public void setDepth( int depth ){
+    	depthLevel.setString("BUFFER LEVEL " + depth + "/" + numBuffers );
+    	depthLevel.setStringPainted(true);
     	depthLevel.setValue(depth);
     }
     
     public void setNumBuffers( int numBuffers ){
+    	this.numBuffers = numBuffers;
     	writeLevel.setMaximum(numBuffers);
     	readLevel.setMaximum(numBuffers);
     	depthLevel.setMaximum(numBuffers);

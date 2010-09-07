@@ -69,9 +69,6 @@ public:
         // run requested command
         ExecuteRequest ( result );
 
-        std::cout << "sending message " << message_ << " from server " 
-           << std::endl;
-
         boost::asio::async_write (
             socket_,
             boost::asio::buffer ( message_ + "\n" ),
@@ -82,8 +79,6 @@ public:
                 boost::asio::placeholders::bytes_transferred
             )
         );
-
-        std::cout << "message sent from server " << std::endl;
     }
 
 private:

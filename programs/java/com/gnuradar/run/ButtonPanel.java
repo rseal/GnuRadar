@@ -227,11 +227,11 @@ public class ButtonPanel extends JPanel
 
                     map.clear();
                     map = XmlPacket.parse( xmlResponsePacket );
-                    String response = map.get("value").replace("\n", "").trim();
+                    String response = map.get("value");
                  
                     if( response.contains("OK") )
                     {
-                    	System.out.println("Setting state to Run");
+                    	//System.out.println("Setting state to Run");
                        // set button states
                        setState ( State.RUNNING );
                        runButton.setText ( "Stop" );

@@ -75,8 +75,6 @@ public:
     /// start producer thread
     void Start() {
 
-       std::cout << "consumer use_count = " << consumer_.use_count() << endl;
-       std::cout << "producer use_count = " << producer_.use_count() << endl;
        // crank up threads and fall through
        consumer_->Start();
        consumer_->Detach();

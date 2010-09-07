@@ -33,27 +33,27 @@ struct SharedMemory {
     void* address_;
     std::string fileName_;
     int desc_;
-    bool isCreate_;
+    bool mappingExists_;
     int shFlags_;
     int protFlags_;
     int mapFlags_;
 
 public:
     SharedMemory ( std::string fileName, int size, int props, int perm ) :
-            size_ ( size ), fileName_ ( fileName ), isCreate_ ( false ) {
+            size_ ( size ), fileName_ ( fileName ), mappingExists_ ( false ) {
 
         switch ( props ) {
         case SHM::CreateShared:
             shFlags_ = O_CREAT | O_RDWR | O_TRUNC;
             protFlags_ = PROT_READ | PROT_WRITE;
             mapFlags_ = MAP_SHARED;
-            isCreate_ = true;
+            mappingExists_ = true;
             break;
         case SHM::CreatePrivate:
             shFlags_    = O_CREAT | O_RDWR | O_TRUNC;
             protFlags_   = PROT_READ | PROT_WRITE;
             mapFlags_ = MAP_PRIVATE;
-            isCreate_ = true;
+            mappingExists_ = true;
             break;
         case SHM::Read:
             shFlags_   = O_RDONLY;
@@ -98,7 +98,10 @@ public:
     }
 
     ~SharedMemory() {
-        if ( isCreate_ ) shm_unlink ( fileName_.c_str() );
+        if ( mappingExists_ ) {
+           munmap( address_, size_ );
+           shm_unlink ( fileName_.c_str() );
+        }
     }
 };
 

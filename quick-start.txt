@@ -1,0 +1,28 @@
+
+After a successful setup and installation, you should be able to do the
+following:
+
+1. start the data collection server using: "gradar-run-server"
+2. collect data using the data collection GUI: "gradar-run"
+
+This assumes you have properly setup your triggering mechanism and have loaded
+a valid configuration file.
+
+Known Issues:
+
+1. The USRP attempts to load a bitstream image referenced to a path defined by
+the environment variable USRP_PATH. Loading the image when providing an
+absolute path reference in the GUI will fail. This fix will be in the next
+commit. 
+
+3. Multiple starts/stops with the same configuration loaded will fail due to
+an "existing" data set. This is not a bug, but an attempt to prevent someone
+from overwriting their own data. If the files are garbage, remove them and try
+again. Otherwise you'll need to copy these files to a new name and/or
+location, or modify the configuration file to reflect the new data set's base
+file name.
+
+4. There are likely several networking-related bugs that will have to be
+addressed. But these obviously won't be known until extensive testing has been
+completed. 
+

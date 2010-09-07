@@ -52,6 +52,7 @@ public:
         running_ = false;
         this->Wait();
         device_->Stop();
+        device_.reset();
     }
 
     /// executes worker thread

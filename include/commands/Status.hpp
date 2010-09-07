@@ -38,8 +38,6 @@ class Status : public GnuRadarCommand
 
       virtual const std::string Execute( const xml::XmlPacketArgs& args )
       {
-         std::cout << " Status Command " << std::endl;
-
          // create a response packet and return to requester
          std::string destination = command::ParseArg( "source", args );
          xml::XmlPacketArgs responsePacket;

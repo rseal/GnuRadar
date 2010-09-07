@@ -90,7 +90,7 @@ public class Run implements ActionListener, PropertyChangeListener {
 
     private void updateDisplay(String xmlResponsePacket )
     {
-    	System.out.println("Updating Display");
+    	//System.out.println("Updating Display");
     	responseMap.clear();
     	responseMap = XmlPacket.parse(xmlResponsePacket);
     	

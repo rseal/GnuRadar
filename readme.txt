@@ -81,3 +81,11 @@ Any time headers are modified, added, or removed; you must run 'scons
 install-headers' to refresh the header location. It's actually much easier to
 write a short bash script to create soft links to the include directory. Any
 changes using this method will be picked up by scons and udpated as needed.
+
+Networking Notes:
+
+For good measure, and future-proofing, add the following lines to your
+/etc/services file:
+
+gnuradar	54321/udp 	gradar		#gnuradar comm service
+gnuradar	54321/tcp 	gradar		#gnuradar comm service

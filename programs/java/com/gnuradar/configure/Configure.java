@@ -20,10 +20,12 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashMap;
+import java.util.prefs.Preferences;
 
 import javax.swing.Box;
 import javax.swing.JFileChooser;
@@ -50,12 +52,16 @@ public class Configure implements ActionListener {
     public static final String COPYRIGHT = "Copyright: \u00a9 2009-2010";
     public static final String AUTHOR = "Author: Ryan Seal";
 
+    private static File configurationFile;
+    
     private ButtonPanel configureButtonPanel;
     private SettingsPanel settingsPanel;
     private DdcSettingsPanel ddcSettingsPanel;
     private PulseSettingsPanel pulseSettingsPanel;
     private InformationPanel informationPanel;
     private FileSettingsPanel fileSettingsPanel;
+    private static FixedFrame frame;
+    private static String userNode = "/com/gnuradar/config";
 
     private JMenuItem quitAction;
     private JMenuItem loadAction;
@@ -65,6 +71,27 @@ public class Configure implements ActionListener {
     private HashMap<String, String> settingsMap =
         new HashMap<String, String> ( 50 );
 
+    private void loadPreferences()
+    {
+    	Preferences preferences = Preferences.userRoot().node(userNode);
+    	int x = preferences.getInt("x", 0);
+    	int y = preferences.getInt("y", 0);
+    	configurationFile = new File( preferences.get("config_dir", "") );
+    	
+    	frame.setLocation(x,y);
+    }
+    
+    private void savePreferences()
+    {    	
+    	Point point = frame.getLocation();    	
+    	
+    	Preferences preferences = Preferences.userRoot().node(userNode);
+    	
+        preferences.put("x", Integer.toString( point.x ));
+        preferences.put("y", Integer.toString( point.y ));
+        preferences.put("config_dir", configurationFile.toString() );
+    }
+    
     public boolean loadFile()
     {
         boolean loadSuccess = false;
@@ -77,12 +104,13 @@ public class Configure implements ActionListener {
 
         JFileChooser jf = new JFileChooser();
         jf.setFileFilter ( fileFilter );
+        jf.setCurrentDirectory(configurationFile);
 
         int loadFile = jf.showOpenDialog ( null );
 
         if ( loadFile == JFileChooser.APPROVE_OPTION ) {
-            File file = jf.getSelectedFile();
-            settingsMap = XmlParser.load ( file );
+            configurationFile = jf.getSelectedFile();
+            settingsMap = XmlParser.load ( configurationFile );
             settingsMap.put ( "version", VERSION );
             loadSuccess = true;
         }
@@ -190,7 +218,7 @@ public class Configure implements ActionListener {
                 menuBar.add ( helpMenu );
 
                 // create main window frame and set properties.
-                FixedFrame frame = new FixedFrame (
+                frame = new FixedFrame (
                     DEFAULT_WIDTH, DEFAULT_HEIGHT, TITLE + " " + VERSION );
                 frame.setLayout ( gridBagLayout );
                 frame.setJMenuBar ( menuBar );
@@ -229,6 +257,8 @@ public class Configure implements ActionListener {
                                 GridBagConstraints.HORIZONTAL )
                           );
 
+                configure.loadPreferences();
+                
                 configure.configureButtonPanel.saveButton.addActionListener (
                     configure );
                 configure.configureButtonPanel.loadButton.addActionListener (
@@ -302,6 +332,8 @@ public class Configure implements ActionListener {
                     saveFile();
                 }
             }
+            
+            savePreferences();
             System.exit ( 0 );
         }
 

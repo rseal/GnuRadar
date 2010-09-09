@@ -41,12 +41,10 @@ public class ButtonPanel extends JPanel
     private static final int BUTTON_HEIGHT = 20;
     private static final Dimension dimension =
         new Dimension ( BUTTON_WIDTH, BUTTON_HEIGHT );
-    private final static File CONFIGURATION_DIRECTORY =
-        new File ( "/usr/local/GnuRadar/config" );
-
-    private JButton loadButton;
-    private JButton verifyButton;
-    private JButton quitButton;
+    
+    public JButton loadButton;
+    public JButton verifyButton;
+    public JButton quitButton;
     private JFileChooser fileChooser;
     private File configurationFile = null;
     private JTextPane textPane = null;
@@ -96,7 +94,7 @@ public class ButtonPanel extends JPanel
             FileNameExtensionFilter fileFilter = new FileNameExtensionFilter (
                 "USRP Configuration File", "ucf" );
             fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory ( CONFIGURATION_DIRECTORY );
+            fileChooser.setCurrentDirectory ( configurationFile );
             fileChooser.setFileFilter ( fileFilter );
 
             result = fileChooser.showDialog ( null, "Load File" );
@@ -111,10 +109,7 @@ public class ButtonPanel extends JPanel
                 );
                 statusPanel.setStatus ( Status.LOADED );
                 verifyButton.setEnabled ( true );
-            }
-        } else if ( source == quitButton ) {
-            System.out.println ( "Quit called" );
-            System.exit ( 0 );
+            }        
         } else if ( source == verifyButton ) {
             Process process = null;
             ProcessBuilder pb = new ProcessBuilder (
@@ -148,6 +143,13 @@ public class ButtonPanel extends JPanel
                 textPane.setText ( "GnuRadarVerify was interrupted." );
             }
 
-        }
+        }      
     }
+    
+    public File getConfigurationFile(){ return configurationFile; }
+    
+    public void setConfigurationFile( File file){
+    	configurationFile = file;
+    }
+        
 }

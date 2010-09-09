@@ -22,16 +22,19 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -77,6 +80,8 @@ public class Run implements ActionListener, PropertyChangeListener {
     private Document statusDocument;
 
     private static ButtonPanel buttonPanel;
+    private static FixedFrame frame;
+    private static String userNode = "/com/gnuradar/run";
 
     private Thread thread = null;
     private StatusThread statusThread = null;
@@ -88,6 +93,28 @@ public class Run implements ActionListener, PropertyChangeListener {
     private JMenuItem bpgAction;
     private JMenuItem configureAction;
 
+    private void loadPreferences()
+    {
+    	Preferences preferences = Preferences.userRoot().node(userNode);
+    	int x = preferences.getInt("x", 0);
+    	int y = preferences.getInt("y", 0);
+    	File file = new File( preferences.get("config_dir", "") );
+    	buttonPanel.setConfigurationFile( file );
+    	frame.setLocation(x,y);
+    }
+    
+    private void savePreferences()
+    {    	
+    	Point point = frame.getLocation();
+    	File file = buttonPanel.getConfigurationFile();
+    	
+    	Preferences preferences = Preferences.userRoot().node(userNode);
+    	
+        preferences.put("x", Integer.toString( point.x ));
+        preferences.put("y", Integer.toString( point.y ));
+        preferences.put("config_dir", file.toString() );
+    }
+    
     private void updateDisplay(String xmlResponsePacket )
     {
     	//System.out.println("Updating Display");
@@ -194,7 +221,7 @@ public class Run implements ActionListener, PropertyChangeListener {
                 menuBar.add ( helpMenu );
 
                 // create main window frame and set properties.
-                FixedFrame frame = new FixedFrame (
+                frame = new FixedFrame (
                     DEFAULT_WIDTH, DEFAULT_HEIGHT, TITLE + " " + VERSION );
                 frame.setLayout ( gridBagLayout );
                 frame.setJMenuBar ( menuBar );
@@ -229,6 +256,8 @@ public class Run implements ActionListener, PropertyChangeListener {
                             setSpan ( 3, 1 ).setFill (
                                 GridBagConstraints.HORIZONTAL )
                           );
+                
+                run.loadPreferences();
 
                 buttonPanel.addPropertyChangeListener ( run );
                 frame.setVisible ( true );
@@ -260,7 +289,7 @@ public class Run implements ActionListener, PropertyChangeListener {
             buttonPanel.clickLoadButton();
         }
 
-        if ( source == quitAction ) {
+        if ( source == quitAction ) {        	
             quit();
         }
 
@@ -327,6 +356,7 @@ public class Run implements ActionListener, PropertyChangeListener {
             		"System is currently in operation. Press <Stop> before" +
             " attempting to exit" );
         } else {
+        	savePreferences();
             System.exit ( 0 );
         }
     }

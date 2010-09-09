@@ -19,8 +19,11 @@ package com.gnuradar.verify;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -52,6 +55,32 @@ public class Verify {
     public static final String COPYRIGHT = "Copyright: \u00a9 2009-2010";
     public static final String AUTHOR = "Author: Ryan Seal";
 
+    private static String userNode = "/com/gnuradar/verify";
+    private static FixedFrame frame;
+    private static ButtonPanel buttonPanel;
+    
+    private static void loadPreferences()
+    {
+    	Preferences preferences = Preferences.userRoot().node(userNode);
+    	int x = preferences.getInt("x", 0);
+    	int y = preferences.getInt("y", 0);
+    	File file = new File( preferences.get("config_dir", "") );
+    	buttonPanel.setConfigurationFile( file );
+    	frame.setLocation(x,y);
+    }
+    
+    private static void savePreferences()
+    {    	
+    	Point point = frame.getLocation();
+    	File file = buttonPanel.getConfigurationFile();
+    	
+    	Preferences preferences = Preferences.userRoot().node(userNode);
+    	
+        preferences.put("x", Integer.toString( point.x ));
+        preferences.put("y", Integer.toString( point.y ));
+        preferences.put("config_dir", file.toString() );
+    }
+    
     // main entry point
     public static void main ( String[] args )
     {
@@ -120,20 +149,33 @@ public class Verify {
                 statusPanel.setPreferredSize ( new Dimension ( 400, 20 ) );
 
                 // create button panel and set properties.
-                ButtonPanel buttonPanel =
+                buttonPanel =
                     new ButtonPanel ( statusPanel, status );
                 buttonPanel.setMinimumSize ( new Dimension ( 400, 30 ) );
                 buttonPanel.setPreferredSize ( new Dimension ( 400, 30 ) );
 
+               
+                
                 // create main window frame and set properties.
-                FixedFrame frame = new FixedFrame (
+                frame = new FixedFrame (
                     DEFAULT_WIDTH, DEFAULT_HEIGHT, TITLE + " " + VERSION );
                 frame.setLayout ( gridBagLayout );
                 frame.setJMenuBar ( menuBar );
-                frame.setDefaultCloseOperation ( JFrame.EXIT_ON_CLOSE );
+                frame.setDefaultCloseOperation ( JFrame.DO_NOTHING_ON_CLOSE );
                 frame.add ( statusPanel, new GBC ( 0, 0, 100, 100 ).setIpad ( 5, 5 ) );
                 frame.add ( buttonPanel, new GBC ( 0, 2, 100, 100 ).setIpad ( 5, 5 ) );
                 frame.add ( status, new GBC ( 0, 1, 100, 100 ).setIpad ( 5, 5 ) );
+                
+                loadPreferences();
+                
+                buttonPanel.quitButton.addActionListener(
+                		new ActionListener() {
+                			public void actionPerformed(ActionEvent e){
+                				savePreferences();
+                				System.exit(0);
+                			}
+                		});
+                
                 frame.setVisible ( true );
             }
         } );

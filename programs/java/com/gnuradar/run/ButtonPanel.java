@@ -129,6 +129,9 @@ public class ButtonPanel extends JPanel
 
         JFileChooser jf = new JFileChooser();
         jf.setFileFilter ( fileFilter );
+        
+        // used to set default directory from Preferences API
+        jf.setCurrentDirectory(configurationFile);
 
         int loadFile = jf.showOpenDialog ( null );
 
@@ -279,6 +282,12 @@ public class ButtonPanel extends JPanel
     {
         return configurationFile;
     }
+   
+    public void setConfigurationFile( File file )
+    {
+    	configurationFile = file;
+    }
+    
     public State getState()
     {
         return state;

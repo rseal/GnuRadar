@@ -59,18 +59,20 @@ import com.gnuradar.run.ButtonPanel.State;
 public class Run implements ActionListener, PropertyChangeListener {
 
     // define constants
-    public static final int DEFAULT_WIDTH = 575;
-    public static final int DEFAULT_HEIGHT = 560;
-    public static final int LEFT_WIDTH = 420;
-    public static final int RIGHT_WIDTH = 200;
-    public static final String TITLE = "GnuRadarRun";
-    public static final String VERSION = "Version: 1.0.0";
-    public static final String BUILD = "Build: September 01, 2010";
-    public static final String COPYRIGHT = "Copyright: \u00a9 2009-2010";
-    public static final String AUTHOR = "Author: Ryan Seal";
+    private static final int DEFAULT_WIDTH = 575;
+    private static final int DEFAULT_HEIGHT = 560;
+    private static final int LEFT_WIDTH = 420;
+    private static final int RIGHT_WIDTH = 200;
+    private static final String TITLE = "GnuRadarRun";
+    private static final String VERSION = "Version: 1.0.0";
+    private static final String BUILD = "Build: September 01, 2010";
+    private static final String COPYRIGHT = "Copyright: \u00a9 2009-2010";
+    private static final String AUTHOR = "Author: Ryan Seal";
+    private static final String RC_FILE=".gradarrc";
+    
     public final int PORT = 54321;
     
-    public static InetAddress INET_ADDRESS;
+    public static InetAddress ipAddress;
     private StatusListener statusListener;
     private HashMap<String,String> responseMap = new HashMap<String,String>();    
     
@@ -108,8 +110,7 @@ public class Run implements ActionListener, PropertyChangeListener {
     	Point point = frame.getLocation();
     	File file = buttonPanel.getConfigurationFile();
     	
-    	Preferences preferences = Preferences.userRoot().node(userNode);
-    	
+    	Preferences preferences = Preferences.userRoot().node(userNode);    	
         preferences.put("x", Integer.toString( point.x ));
         preferences.put("y", Integer.toString( point.y ));
         preferences.put("config_dir", file.toString() );
@@ -120,7 +121,7 @@ public class Run implements ActionListener, PropertyChangeListener {
     	//System.out.println("Updating Display");
     	responseMap.clear();
     	responseMap = XmlPacket.parse(xmlResponsePacket);
-    	
+    
     	progressPanel.setHead( Integer.valueOf( responseMap.get("head")));
     	progressPanel.setTail( Integer.valueOf( responseMap.get("tail")));
     	progressPanel.setDepth( Integer.valueOf( responseMap.get("depth")));
@@ -135,14 +136,25 @@ public class Run implements ActionListener, PropertyChangeListener {
 
     // main entry point
     public static void main ( String[] args )
-    {    	
+    {   
+    	// location of the rc file
+    	File rcFile = new File( System.getProperty("user.home") + 
+    	System.getProperty("file.separator") + RC_FILE );
+    	System.out.println("Opening file " + rcFile.toString());
+    	
         final Run run = new Run();
         
 		try {
-			  INET_ADDRESS = InetAddress.getByName("localhost");
+			
+			  XmlConfigParser parser = new XmlConfigParser( rcFile );
+			  ipAddress = InetAddress.getByName( parser.getServerIP() );
+			  
 		} catch (UnknownHostException e1) {
-			System.out.println(" Could not contact the specified IP address " + INET_ADDRESS );			
+			System.out.println(" Could not contact the specified IP address " );			
 			e1.printStackTrace();
+		} catch (IOException e) {
+			System.out.println(" Could not locate the rc file " + rcFile.toString());		
+			e.printStackTrace();
 		}    	
 
         // this is required for proper event-handling
@@ -276,14 +288,11 @@ public class Run implements ActionListener, PropertyChangeListener {
         	try {
 				Process process = pBuilder.start();
 				process.waitFor();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
+			} catch (IOException e1) {				
 				e1.printStackTrace();
-			} catch (InterruptedException e2) {
-				// TODO Auto-generated catch block
+			} catch (InterruptedException e2) {				
 				e2.printStackTrace();
-			}
-        
+			}        
         }
         if ( source == loadAction ) {
             buttonPanel.clickLoadButton();
@@ -320,7 +329,7 @@ public class Run implements ActionListener, PropertyChangeListener {
         
         if( state == State.RUNNING )
         {
-        	statusThread = new StatusThread(INET_ADDRESS, PORT);
+        	statusThread = new StatusThread(ipAddress, PORT);
         	thread = new Thread(statusThread);
         	thread.start();
         	

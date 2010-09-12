@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<gnu_radar>
+   <!-- modify to match server's location -->
+   <server_location>localhost</server_location>
+</gnu_radar>

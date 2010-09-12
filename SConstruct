@@ -1,6 +1,8 @@
 import os
 env = Environment()
 
+HOME_DIR = os.environ['HOME']
+
 install_prog_dir='/usr/local/bin'
 install_prog_dir2='\/usr\/local\/bin'
 install_bin=[Glob('bin/gradar*')]
@@ -20,6 +22,10 @@ bin = env.Install( dir=install_prog_dir, source = install_bin )
 lib = env.Install( dir=install_prog_dir, source = install_lib )
 env.Alias('install', install_prog_dir, bin)
 env.Alias('install', install_prog_dir, lib)
+
+#install user rc file - do not run as root.
+config = env.Install( dir=HOME_DIR, source = 'scripts/.gradarrc')
+env.Alias('install-rc', HOME_DIR, config )
 
 env.Command('bin/gradar-configure','scripts/gradar-configure-default', 
                  [

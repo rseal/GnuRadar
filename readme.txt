@@ -55,20 +55,24 @@ located in the scripts directory. To install gnuradio, do the following:
 
 GNURadar:
 
-1. First you will have to install the gnuradar development headers. Go to the
+1. First install the rc-file to your home directory by running "scons
+   install-rc" as a regular user. Every user that will run the radar software
+   will need this file ( .gradarrc ) installed in their home directory.
+
+2. First you will have to install the gnuradar development headers. Go to the
    root project directory, login in as root, and type 'scons install-headers'.
 
-2. From the root project directory:
+3. From the root project directory:
    a. git submodule init
    b. git submodule update
    c. cd deps/hdf5r, login as root, run "scons install-headers".
    d. cd deps/clp, login as root, run "scons install-headers".
 
-3. The tinyxml project is included under the deps directory. CD to this
+4. The tinyxml project is included under the deps directory. CD to this
    directory, run "scons", login as root, run "scons install". This will
    install the necessary headers and the compiled library. 
 
-4. After successfully installing gnuradio and all other dependencies, simply
+5. After successfully installing gnuradio and all other dependencies, simply
    go to the root project directory and run "scons", login as root and run
    "scons install". This will install all binaries in /usr/local/bin by
    default ( edit the SConstruct file if you're not happy with that ). All

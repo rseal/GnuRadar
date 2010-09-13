@@ -27,6 +27,8 @@
 #include <gnuradar/SharedMemory.h>
 #include <gnuradar/Constants.hpp>
 
+#include <HDF5/HDF5.hpp>
+
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -61,10 +63,11 @@ class Start : public GnuRadarCommand {
        throw( std::runtime_error )
     {
 
-       boost::filesystem::path file ( fileSet + "_0000.h5" );
+       std::string fileName = fileSet + "." + hdf5::FILE_EXT;
+       boost::filesystem::path file ( fileName );
 
        if ( boost::filesystem::exists ( file ) ) {
-          throw std::runtime_error( "HDF5 File set " + fileSet + 
+          throw std::runtime_error( "HDF5 File set " + fileName + 
                 " exists and cannot be overwritten. Change your "
                 "base file set name and try again");
        }
@@ -118,7 +121,7 @@ class Start : public GnuRadarCommand {
     Hdf5Ptr SetupHDF5( ConfigFile& configuration ) throw( H5::Exception )
     {
        std::string fileSet = configuration.DataFileBaseName();
-       Hdf5Ptr h5File_( new HDF5 ( fileSet + "_", hdf5::WRITE ) );
+       Hdf5Ptr h5File_( new HDF5 ( fileSet , hdf5::WRITE ) );
 
        h5File_->Description ( "GnuRadar Software" + configuration.Version() );
        h5File_->WriteStrAttrib ( "START_TIME", currentTime.GetTime() );
@@ -139,9 +142,18 @@ class Start : public GnuRadarCommand {
              H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
 
        for ( int i = 0; i < configuration.NumChannels(); ++i ) {
+
           h5File_->WriteAttrib<double> ( 
                 "DDC" + lexical_cast<string> ( i ),
-                configuration.DDC ( i ), H5::PredType::NATIVE_DOUBLE, 
+                configuration.DDC ( i ), 
+                H5::PredType::NATIVE_DOUBLE, 
+                H5::DataSpace() 
+                );
+
+          h5File_->WriteAttrib<double> ( 
+                "PHASE" + lexical_cast<string> ( i ),
+                configuration.Phase ( i ), 
+                H5::PredType::NATIVE_DOUBLE, 
                 H5::DataSpace() 
                 );
        }

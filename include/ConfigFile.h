@@ -105,11 +105,11 @@ public:
         }
     }
 
-    const int    Phase ( const int num ) {
+    const double Phase ( const int num ) {
         return channels_[num].Phase();
     }
 
-    const double& DDC ( const int num ) {
+    const double DDC ( const int num ) {
         return channels_[num].Frequency();
     }
 
@@ -125,15 +125,15 @@ public:
         return windows_[num].Stop();
     }
 
-    const double& SampleRate() {
+    const double SampleRate() {
         return sampleRate_;
     }
 
-    const double& OutputRate() {
+    const double OutputRate() {
         return outputRate_;
     }
 
-    const double& Decimation() {
+    const double Decimation() {
         return decimation_;
     }
 

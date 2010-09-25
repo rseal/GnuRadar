@@ -36,6 +36,8 @@ Dependencies:
 3. Latest scons ( http://www.scons.org ).
 4. Latest version of Sun Java Java Runtime Environment 
    ( http://www.oracle.com/technetwork/java/javase/downloads/index.html#need).
+5. Latest version of chaco ( http://code.enthought.com/chaco/ ).
+6. Latest version of wxpython ( http://www.wxpython.org/ ).
 
 Optional:
 

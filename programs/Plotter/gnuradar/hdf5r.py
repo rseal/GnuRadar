@@ -32,6 +32,7 @@ class Reader:
       root = self.__getRoot()
       index = int( self.__getElement( root, 'tail' ) )
       fileName = '/dev/shm/GnuRadar' + str(index) + '.buf'
+      fd = 0
       fd = open( fileName, 'rb' )
       data = np.fromfile( fd, dtype=self.dType ).reshape(self.shape) 
       return data

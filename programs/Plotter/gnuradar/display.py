@@ -32,7 +32,6 @@ class DataPlotter(Thread):
             self.pp.window.component = self.iqPlot.createPlot( 
                   self.pp.dataTagEnabled )
          else:
-
             if( self.pp.plotType.GetLabelText() == "RTI Plot" ):
                self.pp.window.component = self.rtiPlot.createPlot( 
                      self.pp.dataTagEnabled )
@@ -199,10 +198,15 @@ class Frame(wx.Frame):
          self.dataPlotter.stop()
          self.fileMenu.SetLabel(1,'&Connect')
       else:
-         self.connected = True
-         self.pp.channels = hdf5r.Reader().getChannels()
-         self.dataPlotter.start()
-         self.fileMenu.SetLabel(1,'&Disconnect')
+         try:
+            Reader().getBuffer()
+         except IOError:
+            print('Could not connect - check data collector')
+         else:
+            self.connected = True
+            self.pp.channels = Reader().getChannels()
+            self.dataPlotter.start()
+            self.fileMenu.SetLabel(1,'&Disconnect')
 
    # take a screen shot
    def OnSnapShot(self,event):

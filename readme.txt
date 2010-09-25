@@ -27,6 +27,7 @@ Currently, there are 4 primary programs of interest:
 3. gradar-run : Data collection tool for the USRP receiver.
 4. gradar-replay: Data replay tool for HDF5 files. Requires rtPlotter for
    display. 
+5. gradar-plot: Real-time data plotter for diagnostic use.
 
 Dependencies:
 
@@ -39,7 +40,6 @@ Dependencies:
 Optional:
 
 1. Latest version of boost-book ( http://www.boost.org/doc/libs/1_44_0/doc/html/boostbook.html ).
-
 
 Installation:
 
@@ -72,7 +72,10 @@ GNURadar:
    directory, run "scons", login as root, run "scons install". This will
    install the necessary headers and the compiled library. 
 
-5. After successfully installing gnuradio and all other dependencies, simply
+5. To install the real-time plotter, go to <root>/programs/Plotter and type:
+   python setup.py install as root.
+
+6. After successfully installing gnuradio and all other dependencies, simply
    go to the root project directory and run "scons", login as root and run
    "scons install". This will install all binaries in /usr/local/bin by
    default ( edit the SConstruct file if you're not happy with that ). All

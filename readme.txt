@@ -79,6 +79,11 @@ GNURadar:
    binaries are prefixed with "gradar-", so you can type "gradar" followed by
    TAB a few times to see what programs are available.
 
+Uninstalling:
+
+1. Run scons -c from the root project directory.
+2. Login as root and run "rm -rf /usr/local/include/gnuradar
+
 Developer Notes:
 
 Any time headers are modified, added, or removed; you must run 'scons

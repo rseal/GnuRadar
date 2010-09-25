@@ -28,9 +28,8 @@
 using namespace boost;
 using namespace gnuradar;
 
-int main ( int argc, char** argv )
+int main ( )
 {
-
     typedef boost::shared_ptr<command::GnuRadarCommand> CommandPtr;
     typedef boost::shared_ptr<ProducerConsumerModel> PCModelPtr;
     boost::asio::io_service ioService;
@@ -54,7 +53,7 @@ int main ( int argc, char** argv )
     network::TcpRequestServer server ( ioService, commandList );
     ioService.run();
 
-    return 0;
+    return EXIT_SUCCESS;
 };
 
 

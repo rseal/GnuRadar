@@ -23,6 +23,7 @@
 #include <gnuradar/Condition.hpp>
 #include <gnuradar/SynchronizedBufferManager.hpp>
 #include <gnuradar/SharedMemory.h>
+#include <gnuradar/xml/SharedBufferHeader.hpp>
 
 using namespace boost;
 using namespace gnuradar;
@@ -47,6 +48,8 @@ int main ( int argc, char** argv )
     typedef boost::shared_ptr<SharedMemory> SharedBufferPtr;
     typedef std::vector<SharedBufferPtr> SharedArray;
     SharedArray array;
+    typedef boost::shared_ptr<xml::SharedBufferHeader> SharedBufferHeaderPtr;
+    SharedBufferHeaderPtr header;
 
     typedef boost::shared_ptr< SynchronizedBufferManager > 
       SynchronizedBufferManagerPtr;
@@ -90,6 +93,21 @@ int main ( int argc, char** argv )
    const float PRF = ceil ( 1.0f / cf.IPP() );
    //buffersize in bytes
    const int BUFFER_SIZE = cf.BytesPerSecond();
+   const int IPPS_PER_BUFFER = static_cast<int>( PRF );
+   const int CHANNELS = cf.NumChannels();
+   const int SAMPLES_PER_BUFFER = 
+      static_cast<int> ( cf.SamplesPerIpp() * CHANNELS );
+   const double SAMPLE_RATE = cf.SampleRate();
+
+   // setup shared buffer header to assist in real-time processing 
+   header = SharedBufferHeaderPtr( new xml::SharedBufferHeader(
+            constants::NUM_BUFFERS,
+            BUFFER_SIZE,
+            SAMPLE_RATE,
+            CHANNELS,
+            IPPS_PER_BUFFER,
+            SAMPLES_PER_BUFFER
+            ));
 
    // setup shared memory buffers
    for ( int i = 0; i < constants::NUM_BUFFERS; ++i ) {
@@ -221,7 +239,14 @@ int main ( int argc, char** argv )
       h5File->WriteAttrib<int> ( cf.WindowName ( i ) + "_SIZE", cf.WindowStop ( i ),
             H5::PredType::NATIVE_INT, H5::DataSpace()
             );
+
+      // add windows
+      header->AddWindow( cf.WindowName(i), cf.WindowStart(i), 
+            cf.WindowStop(i));
    }
+
+   //flush header file and close
+   header->Close();
 
    gnuradar::GnuRadarSettingsPtr settings( new gnuradar::GnuRadarSettings() );
    //Program GNURadio
@@ -245,7 +270,7 @@ int main ( int argc, char** argv )
 
    // setup consumer thread
    gnuradar::ConsumerThreadPtr consumerThread (
-         new ConsumerThread ( bufferManager, h5File, dimVector )
+         new ConsumerThread ( bufferManager, header, h5File, dimVector )
          );
 
    //Initialize Producer/Consumer Model

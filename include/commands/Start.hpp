@@ -24,6 +24,7 @@
 #include <gnuradar/GnuRadarDevice.h>
 #include <gnuradar/xml/XmlPacket.hpp>
 #include <gnuradar/SynchronizedBufferManager.hpp>
+#include <gnuradar/xml/SharedBufferHeader.hpp>
 #include <gnuradar/SharedMemory.h>
 #include <gnuradar/Constants.hpp>
 
@@ -50,6 +51,8 @@ class Start : public GnuRadarCommand {
     typedef boost::shared_ptr< GnuRadarDevice > GnuRadarDevicePtr;
     typedef boost::shared_ptr< GnuRadarSettings > GnuRadarSettingsPtr;
     typedef boost::shared_ptr< Device > DevicePtr;
+    typedef boost::shared_ptr< ::xml::SharedBufferHeader > SharedBufferHeaderPtr;
+
 
     // setup shared pointers to extend life beyond this call
     PCModelPtr pcModel_;
@@ -58,11 +61,11 @@ class Start : public GnuRadarCommand {
     SynchronizedBufferManagerPtr bufferManager_;
     Hdf5Ptr hdf5_;
     SharedArray array_;
+    SharedBufferHeaderPtr header_;
 
     void CheckForExistingFileSet ( const std::string& fileSet ) 
        throw( std::runtime_error )
     {
-
        std::string fileName = fileSet + "." + hdf5::FILE_EXT;
        boost::filesystem::path file ( fileName );
 
@@ -176,6 +179,12 @@ class Start : public GnuRadarCommand {
                 configuration.WindowStop ( i ),
                 H5::PredType::NATIVE_INT, H5::DataSpace()
                 );
+
+          // update gnuradar shared buffer header
+          header_->AddWindow( configuration.WindowName(i),
+                configuration.WindowStart(i),
+                configuration.WindowStop(i)
+                );
        }
 
        return h5File_;
@@ -198,8 +207,28 @@ class Start : public GnuRadarCommand {
        std::string response;
        std::string fileName = command::ParseArg( "file_name", args );
 
+       // parse configuration file
        ConfigFile configFile( fileName );
-       const int bufferSize = configFile.BytesPerSecond();
+
+       // create constants
+       const int BUFFER_SIZE = configFile.BytesPerSecond();
+       const double SAMPLE_RATE = configFile.SampleRate();
+       const int NUM_CHANNELS = configFile.NumChannels();
+
+       const int IPPS_PER_BUFFER = 
+          static_cast<int>( ceil(1.0/configFile.IPP()));
+       const int SAMPLES_PER_BUFFER = static_cast<int> ( 
+                   configFile.SamplesPerIpp() * configFile.NumChannels() );
+
+       // setup shared buffer header to assist in real-time processing 
+       header_ = SharedBufferHeaderPtr( new ::xml::SharedBufferHeader(
+                constants::NUM_BUFFERS,
+                BUFFER_SIZE,
+                SAMPLE_RATE,
+                NUM_CHANNELS,
+                IPPS_PER_BUFFER,
+                SAMPLES_PER_BUFFER
+                ));
 
        // create a response packet and return to requester
        std::string destination = command::ParseArg( "source", args );
@@ -210,6 +239,7 @@ class Start : public GnuRadarCommand {
 
        try{
 
+          // make sure we don't have an existing data set
           CheckForExistingFileSet ( configFile.DataFileBaseName() ) ;
 
           // setup HDF5 attributes and file set.
@@ -222,16 +252,16 @@ class Start : public GnuRadarCommand {
           GnuRadarDevicePtr gnuRadarDevice( new GnuRadarDevice( settings ) );
 
           // setup shared memory buffers
-          CreateSharedBuffers( bufferSize );
+          CreateSharedBuffers( BUFFER_SIZE );
 
           // setup the buffer manager
           bufferManager_ = SynchronizedBufferManagerPtr( 
                 new SynchronizedBufferManager( 
-                   array_, constants::NUM_BUFFERS, bufferSize) );
+                   array_, constants::NUM_BUFFERS, BUFFER_SIZE) );
 
           // setup table dimensions column = samples per ipp , row = IPP number
           vector<hsize_t> dims;
-          dims.push_back( static_cast<int>( ceil( 1.0 / configFile.IPP() ) ) );
+          dims.push_back( IPPS_PER_BUFFER );
           dims.push_back ( 
                 static_cast<int> ( 
                    configFile.SamplesPerIpp() * configFile.NumChannels() ) 
@@ -241,9 +271,12 @@ class Start : public GnuRadarCommand {
           producer_ = gnuradar::ProducerThreadPtr (
                 new ProducerThread ( bufferManager_, gnuRadarDevice ) );
 
+          // flush header information
+          header_->Close();
+
           // setup consumer thread
           consumer_ = gnuradar::ConsumerThreadPtr(
-                new ConsumerThread ( bufferManager_ , hdf5_, dims ) );
+                new ConsumerThread ( bufferManager_ , header_, hdf5_, dims ) );
 
           // new model
           pcModel_->Initialize( bufferManager_, producer_, consumer_);

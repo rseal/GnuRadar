@@ -18,38 +18,46 @@
 #define CONSUMER_THREAD_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/filesystem.hpp>
 
 #include <gnuradar/Condition.hpp>
 #include <gnuradar/Mutex.hpp>
 #include <gnuradar/SynchronizedBufferManager.hpp>
 #include <gnuradar/BaseThread.h>
 #include <gnuradar/SThread.h>
+#include <gnuradar/xml/SharedBufferHeader.hpp>
 
 #include<HDF5/HDF5.hpp>
 #include<HDF5/Complex.hpp>
 #include<HDF5/Time.hpp>
 
-class ConsumerThread: public BaseThread, public thread::SThread {
+#include <fstream>
 
+class ConsumerThread: public BaseThread, public thread::SThread {
+   
    typedef boost::shared_ptr< SynchronizedBufferManager > 
       SynchronizedBufferManagerPtr;
+   typedef boost::shared_ptr< xml::SharedBufferHeader >
+      SharedBufferHeaderPtr;
 
    SynchronizedBufferManagerPtr bufferManager_;
    boost::shared_ptr<HDF5> h5File_;
    ComplexHDF5 cpx_;
    H5::DataSpace space_;
+   SharedBufferHeaderPtr header_;
    Time time_;
 
    public:
 
    ConsumerThread (
          SynchronizedBufferManagerPtr bufferManager,
+         SharedBufferHeaderPtr header,
          boost::shared_ptr<HDF5> h5File,
          std::vector<hsize_t> dims
          ) : 
       BaseThread ( bufferManager->BytesPerBuffer() ), thread::SThread(), 
-      bufferManager_( bufferManager ), h5File_ ( h5File ), 
-      space_ ( 2, &dims[0] ) {}
+      bufferManager_( bufferManager ), header_( header ), h5File_ ( h5File ),
+      space_ ( 2, &dims[0] ) { }
 
    virtual void Stop() {
       running_ = false;

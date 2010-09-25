@@ -14,84 +14,174 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
-#include <HDF5/HDF5.hpp>
-#include <HDF5/Complex.hpp>
-#include <clp/CommandLineParser.hpp>
-#include <gnuradar/SThread.h>
 #include <string>
 #include <fstream>
 #include <vector>
 
+#include <boost/lexical_cast.hpp>
+
+#include <HDF5/HDF5.hpp>
+#include <HDF5/Complex.hpp>
+
+#include <clp/CommandLineParser.hpp>
+
+#include <gnuradar/SThread.h>
+#include <gnuradar/SharedMemory.h>
+#include <gnuradar/SynchronizedBufferManager.hpp>
+#include <gnuradar/Constants.hpp>
+#include <gnuradar/xml/SharedBufferHeader.hpp>
+
 using namespace thread;
 using namespace hdf5;
+using namespace gnuradar;
 
 class Viewer: public SThread {
 
+    typedef boost::shared_ptr<SharedMemory> SharedBufferPtr;
+    typedef std::vector<SharedBufferPtr> SharedArray;
+    typedef boost::shared_ptr<SynchronizedBufferManager> 
+       BufferManagerPtr;
+    typedef boost::shared_ptr<xml::SharedBufferHeader> 
+       SharedBufferHeaderPtr;
+
+    BufferManagerPtr bufferManager_;
+    SharedBufferHeaderPtr header_;
     ComplexHDF5 cpx_;
     HDF5 h5File_;
 
     typedef short Int16;
     int numTables_;
-    int sleep_;
+    long sleep_;
     int offset_;
+    int bufferSize_;
     float sampleRate_;
     string startTime_;
     int channels_;
     vector<hsize_t> dims_;
-    vector<complex_t> buffer_;
+    SharedArray array_;
 
+    void CreateSharedBuffers( const int bytesPerBuffer ) {
+
+       // setup shared memory buffers
+       for ( int i = 0; i < constants::NUM_BUFFERS; ++i ) {
+
+          // create unique buffer file names
+          std::string bufferName = constants::BUFFER_BASE_NAME +
+             boost::lexical_cast<string> ( i ) + ".buf";
+
+          // create shared buffers
+          SharedBufferPtr bufPtr (
+                new SharedMemory (
+                   bufferName,
+                   bytesPerBuffer,
+                   SHM::CreateShared,
+                   0666 )
+                );
+
+
+          // store buffer in a vector
+          array_.push_back ( bufPtr );
+       }
+    }
 public:
-    Viewer ( const string& fileName ) : h5File_ ( fileName + "_", hdf5::READ ) {
+    Viewer ( const string& fileName ) : h5File_ ( fileName , hdf5::READ ) {
 
         dims_ = h5File_.TableDims();
-        buffer_.resize ( dims_[0]*dims_[1] );
+        const int bytesPerBuffer = dims_[0]*dims_[1]*sizeof(complex_t);
+        int sampleWindows;
+        string windowName;
+        int windowStart;
+        int windowStop;
+
+
+        CreateSharedBuffers( bytesPerBuffer );
 
         cout << "-------------------- DESCRIPTION --------------------" << endl;
         cout << h5File_.Description() << endl;
-        h5File_.ReadTable<complex_t> ( 0, buffer_, cpx_.GetRef() );
+        //h5File_.ReadTable<complex_t> ( 0, buffer_, cpx_.GetRef() );
         cout << "-----------------------------------------------------\n" << endl;
         h5File_.ReadAttrib<float> ( "SAMPLE_RATE", sampleRate_, H5::PredType::NATIVE_FLOAT );
         h5File_.ReadAttrib<int> ( "CHANNELS", channels_, H5::PredType::NATIVE_INT );
+        h5File_.ReadAttrib<int> ("SAMPLE_WINDOWS", sampleWindows, H5::PredType::NATIVE_INT);
         startTime_ = h5File_.ReadStrAttrib ( "START_TIME" );
-        cout << "Sample Rate = " << sampleRate_ << endl;
-        cout << "Start Time  = " << startTime_ << endl;
-        cout << "Channels    = " << channels_ << endl;
-
-        sleep_ = 10;
-        offset_ = 0;
         numTables_ = h5File_.NumTables();
+
+        header_ = SharedBufferHeaderPtr( 
+              new xml::SharedBufferHeader( 
+                 constants::NUM_BUFFERS, 
+                 bytesPerBuffer,
+                 sampleRate_,
+                 channels_,
+                 dims_[0], 
+                 dims_[1]));
+
+        // TODO: Need to fix HDF5 window handling - it's not very robust.
+        for( int i=0; i< sampleWindows; ++i)
+        {
+           h5File_.ReadAttrib<int> ("RxWin_START", windowStart, H5::PredType::NATIVE_INT);
+           h5File_.ReadAttrib<int> ("RxWin_STOP", windowStop, H5::PredType::NATIVE_INT);
+           windowName = "RxWin";
+           header_->AddWindow( windowName, windowStart, windowStop );
+        }
+
+        header_->Close();
+
+        // setup buffer manager
+        bufferManager_ = 
+           BufferManagerPtr( 
+              new SynchronizedBufferManager( 
+                 array_, 
+                 constants::NUM_BUFFERS, 
+                 bytesPerBuffer) 
+              );
+
+        cout << "Sample Rate      = " << sampleRate_ << endl;
+        cout << "Start Time       = " << startTime_ << endl;
+        cout << "Channels         = " << channels_ << endl;
+        cout << "Number of Tables = " << numTables_ << endl;
+
+        sleep_ = 1000;
+        offset_ = 0;
     }
 
-    void RefreshRate ( const int& ms ) {
+    void RefreshRate ( const long ms ) {
         sleep_ = ms;
     }
-    void Offset ( const int& offset ) {
+
+    void Offset ( const int offset ) {
         offset_ = offset;
     }
 
     void Run() {
 
-        int ipp = dims_[0];
-        int rangeCells = dims_[1];
-
         int table = 0;
 
-        cout << "IPPs    = " << ipp << endl;
-        cout << "Range Cells = " << rangeCells << endl;
-
         while ( table != numTables_ ) {
-            h5File_.ReadTable<complex_t> ( 0, buffer_, cpx_.GetRef() );
-            for ( int i = 0; i < ipp; ++i ) {
-                ofstream out ( "/dev/shm/splot.buf", ios::out );
-                for ( int j = offset_; j < rangeCells; ++j ) {
-                    float x = j - offset_;
-                    float rs = buffer_[i*rangeCells + j*channels_].real * 1.0f;
-                    out.write ( reinterpret_cast<char*> ( &x ), sizeof ( float ) );
-                    out.write ( reinterpret_cast<char*> ( &rs ), sizeof ( float ) );
-                }
-                out.close();
-                Sleep ( thread::MSEC, sleep_ );
-            }
+            cout << "Reading table " << table << endl;
+
+            h5File_.ReadTable<complex_t> ( 
+                  table, bufferManager_->WriteTo(), cpx_.GetRef() );
+
+
+            header_->Update( 
+                  bufferManager_->Head(),
+                  bufferManager_->Tail(),
+                  bufferManager_->Depth());
+
+            bufferManager_->IncrementHead();
+            bufferManager_->IncrementTail();
+
+            //for ( int i = 0; i < ipp; ++i ) {
+            //    ofstream out ( "/dev/shm/splot.buf", ios::out );
+            //    for ( int j = offset_; j < rangeCells; ++j ) {
+            //        float x = j - offset_;
+            //        float rs = buffer_[i*rangeCells + j*channels_].real * 1.0f;
+            //        out.write ( reinterpret_cast<char*> ( &x ), sizeof ( float ) );
+            //        out.write ( reinterpret_cast<char*> ( &rs ), sizeof ( float ) );
+            //    }
+            //    out.close();
+            Sleep ( thread::MSEC, sleep_ );
+            //}
             ++table;
         }
     }
@@ -125,7 +215,7 @@ int main ( int argc, char** argv )
     clp.Validate();
 
     fileName = clp.GetArgValue<string> ( "f" );
-    refreshRate = clp.GetArgValue<int> ( "r" );
+    refreshRate = clp.GetArgValue<long> ( "r" );
     offset = clp.GetArgValue<int> ( "o" );
 
     Viewer view ( fileName );

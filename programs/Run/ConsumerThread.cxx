@@ -19,6 +19,7 @@
 // worker thread implementation.
 void ConsumerThread::Run()
 {
+   static const char* LOCK_FILE = "/dev/shm/gnuradar.lock";
    running_ = true;
 
    while( running_ ){
@@ -44,6 +45,19 @@ void ConsumerThread::Run()
          std::cout << "OVERFLOW DETECTED !!!!" << std::endl;
       }
 
+      // create a lock file for other readers
+      std::ofstream out( LOCK_FILE );
+      out.close();
+
+      // update the header file
+      header_->Update(
+            bufferManager_->Head(), 
+            bufferManager_->Tail(), 
+            bufferManager_->Depth()
+            );
+
+      // remove lock after update
+      boost::filesystem::remove_all( LOCK_FILE );
    }
    h5File_->Close();
    std::cout << "consumer exiting " << std::endl;

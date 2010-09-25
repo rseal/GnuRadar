@@ -24,15 +24,10 @@ class SynchronizedBufferManager
 
 public:
 
-    SynchronizedBufferManager (
-        SharedArray& array,
-        const int numBuffers,
-        const int bytesPerBuffer ) : 
-       array_ ( array ), numBuffers_ ( numBuffers ), 
-       bytesPerBuffer_ ( bytesPerBuffer ), head_ ( 0 ), tail_ ( 0 ), 
-       depth_ ( 0 )
-    {
-    }
+    SynchronizedBufferManager ( SharedArray& array, const int numBuffers, 
+          const int bytesPerBuffer ) : array_ ( array ), 
+    numBuffers_ ( numBuffers ), bytesPerBuffer_ ( bytesPerBuffer ), 
+    head_ ( 0 ), tail_ ( 0 ), depth_ ( 0 ) { }
 
     void IncrementHead()
     {

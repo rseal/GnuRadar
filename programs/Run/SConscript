@@ -2,7 +2,7 @@
 flags = ['-g', '-Wall', '-W', '-DTIXML_USE_TICPP']
 
 #setup libraries to link and paths
-libs=['boost_system','boost_filesystem','tinyxmlcpp','rt','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp']
+libs=['boost_system','boost_filesystem','tinyxmlcpp','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp']
 libPath=['/usr/lib','/usr/local/lib']
 
 #define build environment

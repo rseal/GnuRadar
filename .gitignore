@@ -3,10 +3,12 @@ usrpSVN/
 *.o
 *~
 *.swp
+*.pyc
 .sconsign.dblite
 programs/Analyze/binary.dat
 programs/Run/config
 programs/Config/java
+programs/Plotter/build
 tests/bin
 docs/html
 bin/
@@ -15,3 +17,4 @@ simulation/
 install-headers
 programs/java/.classpath
 programs/java/.project
+programs/java/classes

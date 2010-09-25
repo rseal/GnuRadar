@@ -22,137 +22,129 @@
 #include <gnuradar/Lock.h>
 
 #include <iostream>
+#include <map>
 #include <time.h>
 #include <errno.h>
 #include <pthread.h>
 
 namespace thread {
 
-// units of time for sleep 
-enum { USEC, MSEC, SEC};
+	// units of time for sleep 
+	enum { NSEC, USEC, MSEC, SEC};
 
-class SThread {
+	const static long ONE_E0=1L;
+	const static long ONE_E3=1000L;
+	const static long ONE_E6=1000000L;
+	const static long ONE_E9=1000000000L;
 
-public:
 
-    SThread() {
-        pthread_mutex_init ( &mutex_, NULL );
-        pthread_attr_init ( &attr_ );
-        pthread_cond_init ( &condition_, NULL );
-    }
+	class SThread {
 
-    virtual ~SThread() { } 
-    virtual void Run() = 0;
+		std::map< long, double > unitMap_;
 
-    static void* Init ( void* _this ) {
-        SThread* p_object = reinterpret_cast<SThread*> ( _this );
-        p_object->Run();
-        return NULL;
-    }
+		public:
 
-    void Start() {
-        int status = -1;
-        status = pthread_create ( &p_sthread_, NULL, Init, this );
-        if ( status < 0 )
-            std::cerr << "STHREAD: thread creation failed" << std::endl;
-    }
+		SThread() {
+			pthread_mutex_init ( &mutex_, NULL );
+			pthread_attr_init ( &attr_ );
+			pthread_cond_init ( &condition_, NULL );
+			unitMap_[ NSEC ] = ONE_E9;
+			unitMap_[ USEC ] = ONE_E6;
+			unitMap_[ MSEC ] = ONE_E3;
+			unitMap_[ SEC ] = ONE_E0;
+		}
 
-    void Wait() {
-        pthread_join ( p_sthread_, NULL );
-    }
+		virtual ~SThread() { } 
+		virtual void Run() = 0;
 
-    void Detach() {
-        pthread_detach ( p_sthread_ );
-    }
+		static void* Init ( void* _this ) {
+			SThread* p_object = reinterpret_cast<SThread*> ( _this );
+			p_object->Run();
+			return NULL;
+		}
 
-    void Destroy() {
-        int status;
-        pthread_exit ( reinterpret_cast<void*> ( &status ) );
-    }
+		void Start() {
+			int status = -1;
+			status = pthread_create ( &p_sthread_, NULL, Init, this );
+			if ( status < 0 )
+				std::cerr << "STHREAD: thread creation failed" << std::endl;
+		}
 
-    void Lock ( pthread_mutex_t& mutex ) {
-        pthread_mutex_lock ( &mutex );
-    }
+		void Wait() {
+			pthread_join ( p_sthread_, NULL );
+		}
 
-    void Unlock ( pthread_mutex_t& mutex ) {
-        pthread_mutex_unlock ( &mutex );
-    }
+		void Detach() {
+			pthread_detach ( p_sthread_ );
+		}
 
-    void Pause() {
-        ScopedPThreadLock Lock ( mutex_ );
-        pthread_cond_wait ( &condition_, &mutex_ );
-    }
+		void Destroy() {
+			int status;
+			pthread_exit ( reinterpret_cast<void*> ( &status ) );
+		}
 
-    void Wake() {
-        pthread_cond_signal ( &condition_ );
-    }
+		void Lock ( pthread_mutex_t& mutex ) {
+			pthread_mutex_lock ( &mutex );
+		}
 
-    // alternative to share condition variable between 
-    // threads
-    void Wake( Condition& condition, Mutex& mutex ){
-       ScopedLock lock( mutex );
-       pthread_cond_signal( &condition.Get() );
-    }
+		void Unlock ( pthread_mutex_t& mutex ) {
+			pthread_mutex_unlock ( &mutex );
+		}
 
-    // alternative to share condition variable between 
-    // threads
-    void Pause( Condition& condition, Mutex& mutex)
-    {
-       ScopedLock lock ( mutex );
-       pthread_cond_wait( &condition.Get(), &mutex.Get() );
-    }
+		void Pause() {
+			ScopedPThreadLock Lock ( mutex_ );
+			pthread_cond_wait ( &condition_, &mutex_ );
+		}
 
-    void Sleep ( int _type = USEC, long _value = 1000L ) {
-        int status = 0;
+		void Wake() {
+			pthread_cond_signal ( &condition_ );
+		}
 
-        clock_gettime ( CLOCK_REALTIME , &cTime_ );
+		// alternative to share condition variable between 
+		// threads
+		void Wake( Condition& condition, Mutex& mutex ){
+			ScopedLock lock( mutex );
+			pthread_cond_signal( &condition.Get() );
+		}
 
-        switch ( _type ) {
-        case USEC:
-            fTime_ = cTime_;
-            fTime_.tv_nsec += 1000L * _value;
-            break;
-        case MSEC:
-            fTime_ = cTime_;
-            fTime_.tv_nsec += _value * 1000000L;
+		// alternative to share condition variable between 
+		// threads
+		void Pause( Condition& condition, Mutex& mutex)
+		{
+			ScopedLock lock ( mutex );
+			pthread_cond_wait( &condition.Get(), &mutex.Get() );
+		}
 
-            //hack to fix overflow problem
-            if ( fTime_.tv_nsec > 1000000000L ) {
-                fTime_.tv_nsec -= 1000000000L;
-                fTime_.tv_sec++;
-            }
-            break;
-        case SEC:
-            fTime_ = cTime_;
-            fTime_.tv_sec = cTime_.tv_sec + _value;
-            break;
-        default:
-            std::cerr << "STHREAD: invalid sleep value. default to 1 sec" 
-               << std::endl;
-            fTime_ = cTime_;
-            fTime_.tv_sec += 1;
-        }
+		void Sleep ( int type = USEC, long value = ONE_E3 ) {
 
-        ScopedPThreadLock Lock ( mutex_ );
-        while ( status != ETIMEDOUT ) {
-            status  = pthread_cond_timedwait ( &condition_, &mutex_, &fTime_ );
-        }
+			double time = value;
+			double multiplier = unitMap_.find( type )->second;
 
-    }
+			fTime_.tv_sec = 0;
+			fTime_.tv_nsec = 0;
 
-    void Priority ( int _value );
-    void SetCondition ( int _value );
+			while( time >= multiplier ){ 
+				time -= multiplier;
+				fTime_.tv_sec += 1;
+			}
 
-protected:
-    pthread_t p_sthread_;
-    pthread_mutex_t mutex_;
-    pthread_attr_t attr_;
-    pthread_cond_t condition_;
-    timeval time_now_;
-    timespec timeout_;
-    timespec newTime_;
-    timespec cTime_;
-    timespec fTime_;
-};
+			fTime_.tv_nsec = time*multiplier;
+
+			ScopedPThreadLock lock ( mutex_ );
+			nanosleep(&fTime_, NULL);
+		}
+
+		void Priority ( int value );
+		void SetCondition ( int value );
+
+		protected:
+		pthread_t p_sthread_;
+		pthread_mutex_t mutex_;
+		pthread_attr_t attr_;
+		pthread_cond_t condition_;
+		timeval time_now_;
+		timespec cTime_;
+		timespec fTime_;
+	};
 };
 #endif

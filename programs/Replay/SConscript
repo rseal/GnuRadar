@@ -1,5 +1,5 @@
 #custom build flags
-warnFlags = ['-Wall', '-W']
+warnFlags = ['-Wall', '-W', '-DTIXML_USE_TICPP']
 
 #setup library path
 libPath=['/usr/lib','/usr/local/lib']
@@ -8,6 +8,6 @@ libPath=['/usr/lib','/usr/local/lib']
 env = Environment(LIBPATH=libPath);
 warnEnv = env.Clone(CXXFLAGS=warnFlags);
 
-libs=['rt','pthread','hdf5_hl_cpp','hdf5_cpp'];
+libs=['rt', 'pthread','hdf5_hl_cpp','hdf5_cpp', 'tinyxmlcpp'];
 warnEnv.Program(target='../../bin/gradar-replay', source='GnuRadarReplay.cxx', LIBS=libs);
 

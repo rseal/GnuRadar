@@ -97,7 +97,7 @@ public:
                 parser_.Get<double> ( "start_" + idx ),
                 parser_.Get<double> ( "stop_" + idx ),
                 parser_.Get<std::string> ( "units_" + idx ),
-                sampleRate_
+                outputRate_
             );
 
             windows_.push_back ( window );

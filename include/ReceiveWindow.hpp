@@ -29,7 +29,6 @@ class ReceiveWindow {
     typedef UnitMap::iterator UnitMapIterator;
     UnitMap unitMap_;
 
-
     std::string name_;
     std::string unitsStr_;
     double start_;
@@ -56,13 +55,13 @@ public:
 
     ReceiveWindow ( const std::string& name, const double start,
                     const double stop, const std::string& units,
-                    const double sampleRate ) :
+                    const double outputRate ) :
             name_ ( name ), start_ ( start ), stop_ ( stop ),
             unitsStr_ ( units ) {
 
         unitMap_["samples"] = 1.0;
-        unitMap_["usec"] = sampleRate_;
-        unitMap_["km"] = 20.0 / 3.0;
+        unitMap_["usec"] = 1.0e6/outputRate_;
+        unitMap_["km"] = 1.0e6*20.0 / ( 3.0 * outputRate_ );
 
         ConvertUnits();
     }

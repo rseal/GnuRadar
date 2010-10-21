@@ -4,18 +4,22 @@ from enthought.chaco.api import ArrayPlotData, Plot, ColorBar
 from enthought.chaco.api import HPlotContainer, LinearMapper
 from enthought.chaco.tools.api import RangeSelection, RangeSelectionOverlay
 from numpy import ndarray, arange, zeros, log10, clip
+import sys
 
 
 # define base plot
 class GnuRadarPlot:
 
    def __init__( self ):
-      self.header = Reader()
+      try:
+         self.header = Reader()
+      except IOError:
+         print( 'ERROR: No Data stream available. Check your system.' )
+         sys.exit();
 
    def createPlot( self, showDataTag ):
       raise  NotImplementedError( 
             " Abstract method CreatePlot not implented. ")
-
 
 # define iq plot derived from base plot
 class IQPlot( GnuRadarPlot ):

@@ -168,6 +168,10 @@ class Start : public GnuRadarCommand {
 
        for ( int i = 0; i < configuration.NumWindows(); ++i ) {
 
+          // TODO: Window Renaming scheme - 10/19/2010
+          // Standardize window naming and add the user-defined
+          // window name as a separate attribute.
+
           h5File_->WriteAttrib<int> ( 
                 configuration.WindowName ( i ) + "_START", 
                 configuration.WindowStart ( i ),

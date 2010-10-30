@@ -1,49 +1,52 @@
-### USRP Configuration Interface File ###
-### Version 0.99 ###
-
-SampleRate=64000000
-NumChannels=1
-Decimation=8
-IPP=10
-IPPUnits=msec
-FPGAImage=usrp_trigger_tags.rbf
-
-### Channel 0 ###
-DDC0=-14.2
-DDCUnits0=MHz
-Phase0=0
-PhaseUnits0=Deg
-
-### Channel 1 ###
-DDC1=0
-DDCUnits1=MHz
-Phase1=0
-PhaseUnits1=Deg
-
-### Channel 2 ###
-DDC2=0
-DDCUnits2=MHz
-Phase2=0
-PhaseUnits2=Deg
-
-### Channel 3 ###
-DDC3=0
-DDCUnits3=MHz
-Phase3=0
-PhaseUnits3=Deg
-
-### Number of Windows ###
-NumWindows=1
-
-### Window 0 ###
-Name0=Data
-Start0=80
-Size0=50
-Units0=km
-
-### Header Settings ###
-Institution=PSU
-Observer=rseal
-Object=Test
-Radar=NA
-Receiver=USRP SN:0025
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnuradar>
+    <configuration>
+        <version>Version: 1.0.0</version>
+        <sample_rate>64.0</sample_rate>
+        <decimation>8</decimation>
+        <num_channels>1</num_channels>
+        <bandwidth>8.00</bandwidth>
+        <bandwidth_units>MHz</bandwidth_units>
+        <num_windows>1</num_windows>
+        <channel number="0">
+            <frequency>-14.2</frequency>
+            <frequency_units>MHz</frequency_units>
+            <phase>0.0</phase>
+            <phase_units>Degrees</phase_units>
+        </channel>
+        <channel number="1">
+            <frequency>0.0</frequency>
+            <frequency_units>kHz</frequency_units>
+            <phase>0.0</phase>
+            <phase_units>Degrees</phase_units>
+        </channel>
+        <channel number="2">
+            <frequency>0.0</frequency>
+            <frequency_units>Hz</frequency_units>
+            <phase>0.0</phase>
+            <phase_units>Degrees</phase_units>
+        </channel>
+        <channel number="3">
+            <frequency>0</frequency>
+            <frequency_units>Hz</frequency_units>
+            <phase>0</phase>
+            <phase_units>Radians</phase_units>
+        </channel>
+        <window number="0">
+            <name>RxWin</name>
+            <start>75.0</start>
+            <stop>125.3</stop>
+            <units>Km</units>
+        </window>
+        <ipp>4</ipp>
+        <ipp_units>MSEC</ipp_units>
+        <tx_carrier>49.8</tx_carrier>
+        <organization>GnuRadio Test</organization>
+        <site>Home</site>
+        <user>RSeal</user>
+        <radar>Noise Generator</radar>
+        <receiver>USRP-v4.5</receiver>
+        <fpga_image_file>usrp_trigger.rbf</fpga_image_file>
+        <base_file_name>/home/rseal/home_test</base_file_name>
+    </configuration>
+</gnuradar>

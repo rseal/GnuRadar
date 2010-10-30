@@ -39,8 +39,11 @@ int main(void){
 
    WindowValidator windowValidator;
    bool result = windowValidator.Validate( buffer, cf.Windows() );
+
+   vector<ReceiveWindow> windows = cf.Windows();
+
    windowValidator.PrintResults( cout );
-   cout << "result = " << result << endl;
+   cout << "verified = " << (result == 0 ? "false" : "true") << endl;
 
    return EXIT_SUCCESS;
 }

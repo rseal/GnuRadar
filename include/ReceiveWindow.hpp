@@ -60,22 +60,22 @@ public:
             unitsStr_ ( units ) {
 
         unitMap_["samples"] = 1.0;
-        unitMap_["usec"] = 1.0e6/outputRate_;
-        unitMap_["km"] = 1.0e6*20.0 / ( 3.0 * outputRate_ );
+        unitMap_["usec"] = 1.0e6/outputRate;
+        unitMap_["km"] = 1.0e6*20.0 / ( 3.0 * outputRate );
 
         ConvertUnits();
     }
 
     unsigned int Start() {
-        return start_;
+        return static_cast<int>(start_);
     }
 
     unsigned int Stop() {
-        return stop_;
+        return static_cast<int>(stop_);
     }
 
     unsigned int Size() {
-        return stop_ - start_;
+        return static_cast<int>(stop_) - static_cast<int>(start_);
     }
 
     const std::string& Name() {

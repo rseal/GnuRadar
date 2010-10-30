@@ -125,6 +125,10 @@ public:
         return windows_[num].Stop();
     }
 
+    const int WindowSize ( const int num ) {
+       return windows_[num].Stop() - windows_[num].Start();
+    }
+
     const double SampleRate() {
         return sampleRate_;
     }

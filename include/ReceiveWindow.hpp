@@ -60,7 +60,7 @@ public:
             unitsStr_ ( units ) {
 
         unitMap_["samples"] = 1.0;
-        unitMap_["usec"] = 1.0e6/outputRate;
+        unitMap_["usec"] = 1.0e-6*outputRate;
         unitMap_["km"] = outputRate*20.0 /3.0e6;
 
         ConvertUnits();

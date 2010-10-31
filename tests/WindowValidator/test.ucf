@@ -34,8 +34,8 @@
         </channel>
         <window number="0">
             <name>RxWin</name>
-            <start>75.0</start>
-            <stop>125.3</stop>
+            <start>70.0</start>
+            <stop>120.0</stop>
             <units>Km</units>
         </window>
         <ipp>4</ipp>

@@ -28,104 +28,114 @@ import javax.swing.event.EventListenerList;
 
 public class StatusThread implements Runnable {
 
-    private static final long serialVersionUID = 1L;
-	
-    private final InetAddress SERVER_IP;
-    private final int SERVER_PORT;
-    private boolean running = false;
-    
-    protected EventListenerList eventListeners;
+	private static final long serialVersionUID = 1L;
 
-    private HashMap<String, String> map = null;
-    private String xmlStatusPacket;
-    private String xmlResponsePacket;
+	private final InetAddress SERVER_IP;
+	private final int SERVER_PORT;
+	private boolean running = false;
 
-    public void addStatusListener( StatusListener listener ){
-    	eventListeners.add(StatusListener.class, listener);
-    }
-    
-    public void removeStatusListener( StatusListener listener){
-    	eventListeners.remove(StatusListener.class, listener);
-    }
-    
-    public void processEvent( StatusEvent evt ){    	
-    	StatusListener[] listeners = eventListeners.getListeners(StatusListener.class);    	
-    	for( int i=0; i<listeners.length; ++i){
-    		listeners[i].eventOccurred(evt);
-    	}    	
-    }
-    
-    public String getResponse()
-    {
-        return xmlResponsePacket;
-    }
+	protected EventListenerList eventListeners;
 
-    public StatusThread ( InetAddress ip, int port )
-    {    	    	
-        SERVER_IP = ip;
-        SERVER_PORT = port;
+	private HashMap<String, String> map = null;
+	private String xmlStatusPacket;
+	private String xmlResponsePacket;
 
-        // create an xml status packet on construction.
-        map = new HashMap<String, String>();
-        map.put ( "type", "status" );
-        map.put ( "source", "gradar_run_java" );
-        map.put ( "destination", "gradar_server" );
-        map.put ( "name", "status" );
+	public void addStatusListener( StatusListener listener ){
+		eventListeners.add(StatusListener.class, listener);
+	}
 
-        xmlStatusPacket = XmlPacket.format ( map );
-        map = null;
-        
-        eventListeners = new EventListenerList();
-    }
+	public void removeStatusListener( StatusListener listener){
+		eventListeners.remove(StatusListener.class, listener);
+	}
 
-    public void run()
-    {
-        Socket socket = null;
-        PrintWriter writer = null;
-        BufferedReader reader = null;
-        running = true;
+	public void processEvent( StatusEvent evt ){    	
+		StatusListener[] listeners = eventListeners.getListeners(StatusListener.class);    	
+		for( int i=0; i<listeners.length; ++i){
+			listeners[i].eventOccurred(evt);
+		}    	
+	}
 
-        while ( running ) {
-            // form request, send, wait for response
-            try {
-                socket = new Socket ( SERVER_IP, SERVER_PORT );
-                writer = new PrintWriter ( socket.getOutputStream() );
-                reader = new BufferedReader (
-                    new InputStreamReader ( socket.getInputStream() )
-                );
-                writer.write ( xmlStatusPacket );
-                writer.flush();
-                //writer.close();
+	public String getResponse()
+	{
+		return xmlResponsePacket;
+	}
 
-                xmlResponsePacket = reader.readLine();
-                //System.out.println ( "status response = " + xmlResponsePacket );
+	public StatusThread ( InetAddress ip, int port )
+	{    	    	
+		SERVER_IP = ip;
+		SERVER_PORT = port;
 
-                Thread.sleep ( 1000 );
+		// create an xml status packet on construction.
+		map = new HashMap<String, String>();
+		map.put ( "type", "status" );
+		map.put ( "source", "gradar_run_java" );
+		map.put ( "destination", "gradar_server" );
+		map.put ( "name", "status" );
 
-//                System.out.println ( "running status thread " + xmlStatusPacket
-//                                     + " " + socket.isConnected() );
+		xmlStatusPacket = XmlPacket.format ( map );
+		map = null;
 
-                if ( xmlResponsePacket != null ) {
-                	processEvent( new StatusEvent(this) );
-                    //this.processEvent ( action );
-                    
-                }
-            } catch ( IOException e ) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch ( InterruptedException e ) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-    }
+		eventListeners = new EventListenerList();
+	}
 
-    public void stopStatus()
-    {
-        System.out.println ( "Stop status called" );
-        running = false;
-    }
-	
+	public void run()
+	{
+		Socket socket = null;
+		PrintWriter writer = null;
+		BufferedReader reader = null;
+		running = true;
+
+		try
+		{
+			socket = new Socket ( SERVER_IP, SERVER_PORT );
+			writer = new PrintWriter( socket.getOutputStream() );
+			reader = new BufferedReader( 
+					new InputStreamReader( socket.getInputStream() )
+			);
+		}
+		catch ( IOException e ) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			running = false;
+		} 
+
+		while ( running ) {
+			// form request, send, wait for response
+
+			writer.write ( xmlStatusPacket );
+			writer.flush();
+			//writer.close();
+
+			try {
+				xmlResponsePacket = reader.readLine();
+
+				//System.out.println ( "status response = " + xmlResponsePacket );
+
+				Thread.sleep ( 1000 );
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			if ( xmlResponsePacket != null ) {
+				processEvent( new StatusEvent(this) );
+				//this.processEvent ( action );
+
+			}
+
+		}
+	}
+
+	public void stopStatus()
+	{
+		System.out.println ( "Stop status called" );
+		running = false;
+	}
+
 }
 
 

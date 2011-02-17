@@ -5,7 +5,6 @@ module strobe_gen
    input reset,
    input enable,
    input [7:0] rate, // Rate should be 1 LESS THAN your desired divide ratio
-   input strobe_in,
    output reg strobe,
    output [15:0] dbus
 );
@@ -28,9 +27,9 @@ reg 	     sync;
   begin
      if(reset || ~enable)
      begin
-        state <= #1 LOAD;
+        state  <= #1 LOAD;
         strobe <= 1'b0;
-        counter <= 8'd0;
+        counter<= 8'd0;
      end
      else
      begin
@@ -38,9 +37,9 @@ reg 	     sync;
            LOAD:
               if(enable)
               begin
-                 counter <= rate-8'd1;
+                 counter<= rate-8'd1;
                  strobe <= 1'b1;
-                 state <= COUNT;
+                 state  <= COUNT;
               end
               COUNT:
               begin
@@ -56,15 +55,14 @@ reg 	     sync;
         end // else: !if(reset || ~enable)
      end
 
-     assign dbus = {
-        2'b0,
-        clock,
-        reset,
-        enable,
-        strobe_in,
-        strobe,
-        counter
-        };
+     //assign dbus = {
+        //2'b0,
+        //clock,
+        //reset,
+        //enable,
+        //strobe,
+        //counter
+        //};
 
 
         endmodule // strobe_gen

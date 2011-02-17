@@ -35,8 +35,8 @@ module cic_decim
    input [7:0] rate;
    input strobe_in,strobe_out;	
    input [bw-1:0] signal_in;
-   output [bw-1:0] signal_out;
-   reg [bw-1:0] signal_out;
+   output reg [bw-1:0] signal_out;
+   //reg [bw-1:0] signal_out;
    wire [bw-1:0] signal_out_unreg;
    
    wire [bw+maxbitgain-1:0] signal_in_ext;

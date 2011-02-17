@@ -35,7 +35,6 @@ wire [resolution-1:0] freq;
 
 setting_reg #(FREQADDR) sr_rxfreq0(.clock(clk),.reset(1'b0),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(freq));
 
-//removed redundant 2:1 mux -- 11/16/2009 RS
 always @(posedge clk)
 begin
    if(reset || (serial_strobe && (serial_addr == PHASEADDR)))

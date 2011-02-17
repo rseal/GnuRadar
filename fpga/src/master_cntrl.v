@@ -50,68 +50,65 @@ module master_cntrl
    // Master Controls assignments
    wire [7:0] master_controls;
    wire [15:0] dbus;
-   
+   wire reset;
+
    setting_reg #(`FR_MASTER_CTRL) sr_mstr_ctrl
-     (
+   (
       .clock(master_clk),
       .reset(1'b0),
       .strobe(serial_strobe),
       .addr(serial_addr),
       .in(serial_data),
       .out(master_controls)
-      );
-   
-   assign      enable_rx = master_controls[1];
-   assign      rx_dsp_reset = master_controls[3];
-   assign      rx_bus_reset = 1'b0;
-   
+   );
+
+   assign enable_rx        = master_controls[1];
+   assign reset            = master_controls[3];
+   assign rx_bus_reset     = 1'b0;
+   assign rx_sample_strobe = 1'b1;
+
+   wire sync_gate_enable;
+
+   //synchronizer for external reset signal
+   synchronizer reset_sync
+   ( 
+      .snd_clk( master_clk ), 
+      .rcv_clk( master_clk ),
+      .snd_signal( reset ),
+      .rcv_signal1( ),
+      .rcv_signal2( rx_dsp_reset ),
+      .rcv_signal3( )
+   );
+
    //get decimation rate from serial stream
    setting_reg #(`FR_DECIM_RATE) sr_decim
-     (
+   (
       .clock(master_clk),
-      .reset(rx_dsp_reset),
+      .reset(reset),
       .strobe(serial_strobe),
       .addr(serial_addr),
       .in(serial_data),
       .out(decim_rate)
-      );
-   
-   assign      rx_sample_strobe = 1'b1;
+   );
 
-   reg 	       latched_enable;
-
-   //use flip-flop to sync master_clk with gate_enable
-   always @(posedge master_clk)
-     latched_enable <= gate_enable ? 1'b1 : 1'b0;
-   
    // generate decimation strobe for rx
-   strobe_gen 
-     ds(
-	.clock(master_clk),
-	.reset(rx_dsp_reset),
-	.enable(latched_enable),
-	.rate(decim_rate),
-	.strobe_in(rx_sample_strobe),
-	.strobe(strobe_decim),
-	.dbus(dbus)
-	);
+   strobe_gen ds(
+      .clock(master_clk),
+      .reset(reset),
+      .enable(1'b1),
+      .rate(decim_rate),
+      .strobe(strobe_decim),
+      .dbus()
+   );
 
+   //assign      debug_bus = dbus;
+   //assign  debug_bus[0] = rx_dsp_reset;
+   //assign  debug_bus[1] = rx_bus_reset;
+   //assign  debug_bus[2] = gate_enable;
+   //assign  debug_bus[3] = strobe_decim;
+   //assign  debug_bus[7] = dbus[9]; //strobe
+   //assign  debug_bus[8] = dbus[10]; //strobe_in
 
-   assign      debug_bus = dbus;
-   
-   /* -----\/----- EXCLUDED -----\/-----
-    assign  debug_bus[0] = master_clk;
-    assign  debug_bus[1] = usbclk;
-    assign  debug_bus[2] = rx_dsp_reset;
-    assign  debug_bus[3] = rx_bus_reset;
-    assign  debug_bus[4] = gate_enable;
-    assign  debug_bus[5] = strobe_decim;
-    bug_bus[6] = ;
-    assign  debug_bus[7] = dbus[9]; //strobe
-    assign  debug_bus[8] = dbus[10]; //strobe_in
-    -----/\----- EXCLUDED -----/\----- */
-   
-   
    //dbus{reset,enable,strobe_in,strobe,counter};
-   
-endmodule // master_control
+
+   endmodule // master_control

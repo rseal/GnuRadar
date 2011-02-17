@@ -10,94 +10,14 @@
 ###########################################################################
  
  
-# WARNING: Expected ENABLE_CLOCK_LATENCY to be set to 'ON', but it is set to 'OFF'
-#          In SDC, create_generated_clock auto-generates clock latency
-#
-# ------------------------------------------
-#
-# Create generated clocks based on PLLs
-derive_pll_clocks -use_tan_name
-#
-# ------------------------------------------
-# WARNING: Global Fmax translated to derive_clocks. Behavior is not identical
-if {![info exist ::qsta_message_posted]} {
-    post_message -type warning "Original Global Fmax translated from QSF using derive_clocks"
-    set ::qsta_message_posted 1
-}
-derive_clocks -period "64 MHz"
-#
 
-
-# Original Clock Setting Name: master_clk
-create_clock -period "15.625 ns" \
-             -name {master_clk} {master_clk}
-# ---------------------------------------------
-
-
-# Original Clock Setting Name: usbclk
-create_clock -period "20.833 ns" \
-             -name {usbclk} {usbclk}
-# ---------------------------------------------
-
-
-# Original Clock Setting Name: SCLK
-create_clock -period "1000.000 ns" \
-             -name {SCLK} {SCLK}
-# ---------------------------------------------
-
-# ** Clock Latency
-#    -------------
-
-# ** Clock Uncertainty
-#    -----------------
-
-# ** Multicycles
-#    -----------
-# ** Cuts
-#    ----
-
-# ** Input/Output Delays
-#    -------------------
-
-
-
-
-# ** Tpd requirements
-#    ----------------
-
-# ** Setup/Hold Relationships
-#    ------------------------
-
-# ** Tsu/Th requirements
-#    -------------------
-
-
-# ** Tco/MinTco requirements
-#    -----------------------
-
-#
-# Entity Specific Timing Assignments found in
-# the Timing Analyzer Settings report panel
-#
-
-
-# ---------------------------------------------
-# The following clock group is added to try to 
-# match the behavior of:
-#   CUT_OFF_PATHS_BETWEEN_CLOCK_DOMAINS = ON
-# ---------------------------------------------
-
-set_clock_groups -asynchronous \
-                 -group { \
-                       usbclk \
-                        } \
-                 -group { \
-                       SCLK \
-                        } \
-                 -group { \
-                       pll:pll|altpll:altpll_component|_clk0 \
-                       master_clk \
-                        } \
-
-# ---------------------------------------------
-
+ create_clock -name master_clk -period 15.625 [get_ports {master_clk}]
+ create_clock -name usb_clk -period 20.833 [get_ports {usbclk}]
+ create_generated_clock -name master_pll_clk -source [get_pins {pll|altpll_component|pll|inclk[0]}] [get_pins {pll|altpll_component|pll|clk[0]}]
+ create_generated_clock -name usb_pll_clk -source [get_pins {pll2|altpll_component|pll|inclk[0]}] [get_pins {pll2|altpll_component|pll|clk[0]}]
+ create_clock -name gate_clk -period 500000 -waveform {0 400000} [get_ports {io_rx_a[15]}]
+ create_clock -name SCLK -period 20000 [get_ports {SCLK}]
+set_false_path -from [get_registers {master_cntrl:mcm|setting_reg:sr_decim|out[3]}] -to [get_registers *rd_gate*]
+create_generated_clock -name strobe -source [get_pins {pll|altpll_component|pll|clk[0]}] -divide_by 4 -duty_cycle 25 [get_registers {master_cntrl:mcm|strobe_gen:ds|strobe}]
+set_false_path -to [get_ports {io_rx_b[0] io_rx_b[1] io_rx_b[2] io_rx_b[3] io_rx_b[4] io_rx_b[5] io_rx_b[6] io_rx_b[7] io_rx_b[8] io_rx_b[9] io_rx_b[10] io_rx_b[11] io_rx_b[12] io_rx_b[13] io_rx_b[14] io_rx_b[15]}]
+set_false_path -to [get_ports {io_tx_a[0] io_tx_a[1] io_tx_a[2] io_tx_a[3] io_tx_a[4] io_tx_a[5] io_tx_a[6] io_tx_a[7] io_tx_a[8] io_tx_a[9] io_tx_a[10] io_tx_a[11] io_tx_a[12] io_tx_a[13] io_tx_a[14] io_tx_a[15] io_tx_b[0] io_tx_b[1] io_tx_b[2] io_tx_b[3] io_tx_b[4] io_tx_b[5] io_tx_b[6] io_tx_b[7] io_tx_b[8] io_tx_b[9] io_tx_b[10] io_tx_b[11] io_tx_b[12] io_tx_b[13] io_tx_b[14] io_tx_b[15]}]

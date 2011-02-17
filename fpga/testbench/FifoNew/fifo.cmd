@@ -3,7 +3,7 @@ fifo_tb.v
 -y ../../src
 -y ../../src/megacells
 -y ../../models
-+incdir+../../models+../../src
+
 
 
 

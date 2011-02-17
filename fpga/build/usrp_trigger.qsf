@@ -27,7 +27,7 @@
 # ========================
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 3.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "00:14:04  JULY 13, 2003"
-set_global_assignment -name LAST_QUARTUS_VERSION 10.0
+set_global_assignment -name LAST_QUARTUS_VERSION 10.1
 
 # Pin & Location Assignments
 # ==========================
@@ -232,9 +232,9 @@ set_global_assignment -name CYCLONE_CONFIGURATION_SCHEME "PASSIVE SERIAL"
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
 set_global_assignment -name OPTIMIZE_HOLD_TIMING "ALL PATHS"
 set_global_assignment -name OPTIMIZE_TIMING "NORMAL COMPILATION"
-set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC OFF
-set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_DUPLICATION OFF
-set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_RETIMING OFF
+set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC ON
+set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_DUPLICATION ON
+set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_RETIMING ON
 set_global_assignment -name IO_PLACEMENT_OPTIMIZATION OFF
 set_global_assignment -name PHYSICAL_SYNTHESIS_EFFORT NORMAL
 set_global_assignment -name INC_PLC_MODE OFF
@@ -249,7 +249,7 @@ set_global_assignment -name MAX_SCC_SIZE 50
 
 # EDA Netlist Writer Assignments
 # ==============================
-set_global_assignment -name EDA_SIMULATION_TOOL "Custom Verilog HDL"
+set_global_assignment -name EDA_SIMULATION_TOOL "<None>"
 set_global_assignment -name EDA_TIMING_ANALYSIS_TOOL "<None>"
 set_global_assignment -name EDA_BOARD_DESIGN_TOOL "<NONE>"
 set_global_assignment -name EDA_FORMAL_VERIFICATION_TOOL "<None>"
@@ -339,9 +339,9 @@ set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF
 
 	# Timing Assignments
 	# ==================
-set_global_assignment -name DUTY_CYCLE 50 -section_id io_rx_a[15]
-set_global_assignment -name FMAX_REQUIREMENT "1 MHz" -section_id io_rx_a[15]
-set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF -section_id io_rx_a[15]
+#set_global_assignment -name DUTY_CYCLE 50 -section_id io_rx_a[15]
+#set_global_assignment -name FMAX_REQUIREMENT "1 MHz" -section_id io_rx_a[15]
+#set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF -section_id io_rx_a[15]
 
 # end CLOCK(io_rx_a[15])
 # ---------------
@@ -351,9 +351,9 @@ set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF
 
 	# Timing Assignments
 	# ==================
-set_global_assignment -name DUTY_CYCLE 50 -section_id master_clk
-set_global_assignment -name FMAX_REQUIREMENT "64 MHz" -section_id master_clk
-set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF -section_id master_clk
+#set_global_assignment -name DUTY_CYCLE 50 -section_id master_clk
+#set_global_assignment -name FMAX_REQUIREMENT "64 MHz" -section_id master_clk
+#set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF -section_id master_clk
 
 # end CLOCK(master_clk)
 # ---------------------
@@ -363,9 +363,9 @@ set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF
 
 	# Timing Assignments
 	# ==================
-set_global_assignment -name DUTY_CYCLE 50 -section_id usbclk
-set_global_assignment -name FMAX_REQUIREMENT "48 MHz" -section_id usbclk
-set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF -section_id usbclk
+#set_global_assignment -name DUTY_CYCLE 50 -section_id usbclk
+#set_global_assignment -name FMAX_REQUIREMENT "48 MHz" -section_id usbclk
+#set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF -section_id usbclk
 
 # end CLOCK(usbclk)
 # -----------------
@@ -375,23 +375,55 @@ set_global_assignment -name INCLUDE_EXTERNAL_PIN_DELAYS_IN_FMAX_CALCULATIONS OFF
 
 	# Timing Assignments
 	# ==================
-set_instance_assignment -name CLOCK_SETTINGS SCLK -to SCLK
-set_instance_assignment -name CLOCK_SETTINGS usbclk -to usbclk
-set_instance_assignment -name CLOCK_SETTINGS master_clk -to master_clk
-set_instance_assignment -name CLOCK_SETTINGS rx_io_a[15] -to rx_io_a[15]
+#set_instance_assignment -name CLOCK_SETTINGS SCLK -to SCLK
+#set_instance_assignment -name CLOCK_SETTINGS usbclk -to usbclk
+#set_instance_assignment -name CLOCK_SETTINGS master_clk -to master_clk
+#set_instance_assignment -name CLOCK_SETTINGS rx_io_a[15] -to rx_io_a[15]
 # end ENTITY(usrp_trigger)
 # --------------------
 
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+
+set_global_assignment -name PARTITION_COLOR 14622752 -section_id Top
+set_global_assignment -name LL_ROOT_REGION ON -section_id "Root Region"
+set_global_assignment -name LL_MEMBER_STATE LOCKED -section_id "Root Region"
+set_global_assignment -name EDA_INPUT_VCC_NAME VCC -section_id eda_design_synthesis
+set_global_assignment -name EDA_INPUT_DATA_FORMAT EDIF -section_id eda_design_synthesis
+set_global_assignment -name EDA_TIME_SCALE "100 ps" -section_id eda_simulation
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT NONE -section_id eda_simulation
+set_global_assignment -name EDA_TIME_SCALE "100 ps" -section_id eda_timing_analysis
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT NONE -section_id eda_timing_analysis
+set_global_assignment -name STATE_MACHINE_PROCESSING ONE_HOT
+set_global_assignment -name EXTRACT_VERILOG_STATE_MACHINES ON
+set_global_assignment -name ADV_NETLIST_OPT_SYNTH_GATE_RETIME ON
+set_global_assignment -name FMAX_REQUIREMENT "64 MHz"
+
+set_global_assignment -name FLOW_ENABLE_RTL_VIEWER ON
+set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS OFF
+set_global_assignment -name ADV_NETLIST_OPT_SYNTH_WYSIWYG_REMAP ON
+set_global_assignment -name OPTIMIZE_POWER_DURING_SYNTHESIS "EXTRA EFFORT"
+set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
+set_global_assignment -name FITTER_EFFORT "AUTO FIT"
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PHYSICAL_SYNTHESIS_ASYNCHRONOUS_SIGNAL_PIPELINING ON
+set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC_FOR_AREA ON
+set_global_assignment -name PHYSICAL_SYNTHESIS_MAP_LOGIC_TO_MEMORY_FOR_AREA ON
+set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
+set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
+set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
+set_global_assignment -name ENABLE_DRC_SETTINGS ON
+
+set_global_assignment -name SDC_FILE usrp_trigger.sdc
 set_global_assignment -name VERILOG_FILE ../src/atr_delay.v
-set_global_assignment -name VERILOG_FILE ../src/cic_dec_shifter.v
-set_global_assignment -name VERILOG_FILE ../src/rssi.v
+#set_global_assignment -name VERILOG_FILE ../src/rssi.v
 set_global_assignment -name VERILOG_FILE ../src/ram16.v
 set_global_assignment -name VERILOG_FILE ../src/acc.v
 set_global_assignment -name VERILOG_FILE ../src/mult.v
 set_global_assignment -name VERILOG_FILE ../src/ram16_2sum.v
-set_global_assignment -name VERILOG_FILE ../src/coeff_rom.v
-set_global_assignment -name VERILOG_FILE ../src/halfband_decim.v
+#set_global_assignment -name VERILOG_FILE ../src/coeff_rom.v
+#set_global_assignment -name VERILOG_FILE ../src/halfband_decim.v
+set_global_assignment -name VERILOG_FILE ../src/hbf_new.v
+set_global_assignment -name VERILOG_FILE ../src/coeff_F9_rom.v
 set_global_assignment -name VERILOG_FILE ../src/rx_dcoffset.v
 set_global_assignment -name VERILOG_FILE ../src/adc_interface.v
 set_global_assignment -name VERILOG_FILE ../src/setting_reg.v
@@ -399,9 +431,26 @@ set_global_assignment -name VERILOG_FILE ../src/bidir_reg.v
 set_global_assignment -name VERILOG_FILE ../src/rx_chain.v
 set_global_assignment -name VERILOG_FILE ../src/megacells/bustri.v
 set_global_assignment -name VERILOG_FILE ../src/phase_acc.v
-set_global_assignment -name VERILOG_FILE ../src/cic_decim.v
+set_global_assignment -name VERILOG_FILE ../src/synchronizer.v
+
+#set_global_assignment -name VERILOG_FILE ../src/cic_decim.v
+#set_global_assignment -name VERILOG_FILE ../src/cic_dec_shifter.v
+
+#CIC files
+set_global_assignment -name VERILOG_FILE ../src/cic_5stage.v
+set_global_assignment -name VERILOG_FILE ../src/cic_integrator.v
+set_global_assignment -name VERILOG_FILE ../src/cic_differentiator.v
+set_global_assignment -name VERILOG_FILE ../src/cic_msb_adjust.v
+
+# CORDIC MODULES
 set_global_assignment -name VERILOG_FILE ../src/cordic_stage.v
 set_global_assignment -name VERILOG_FILE ../src/cordic.v
+#
+set_global_assignment -name VERILOG_FILE ../src/cordic_12stage.v
+set_global_assignment -name VERILOG_FILE ../src/cordic_new_stage.v
+set_global_assignment -name VERILOG_FILE ../src/cordic_shift_adder.v
+set_global_assignment -name VERILOG_FILE ../src/cordic_theta_map.v
+#
 set_global_assignment -name VERILOG_FILE usrp_trigger.v
 set_global_assignment -name VERILOG_FILE ../src/clk_divider.v
 set_global_assignment -name VERILOG_FILE ../src/serial_io.v
@@ -412,30 +461,68 @@ set_global_assignment -name VERILOG_FILE ../src/fifo_cntrl.v
 set_global_assignment -name VERILOG_FILE ../src/fifo_monitor.v
 set_global_assignment -name VERILOG_FILE ../src/ch_sel.v
 set_global_assignment -name VERILOG_FILE ../src/ch_mux.v
+set_global_assignment -name VERILOG_FILE ../src/data_tag.v
 set_global_assignment -name VERILOG_FILE ../src/master_cntrl.v
+#set_global_assignment -name VERILOG_FILE ../src/3rdParty/generic_fifos/src/generic_fifo_dc_gray.v
 set_global_assignment -name VERILOG_FILE ../src/megacells/alt_fifo.v
 set_global_assignment -name VERILOG_FILE ../src/megacells/pll48.v
 set_global_assignment -name VERILOG_FILE ../src/megacells/pll64.v
-
-set_global_assignment -name PARTITION_COLOR 14622752 -section_id Top
-set_global_assignment -name LL_ROOT_REGION ON -section_id "Root Region"
-set_global_assignment -name LL_MEMBER_STATE LOCKED -section_id "Root Region"
-set_global_assignment -name EDA_INPUT_VCC_NAME VDD -section_id eda_design_synthesis
-set_global_assignment -name EDA_INPUT_DATA_FORMAT EDIF -section_id eda_design_synthesis
-set_global_assignment -name EDA_TIME_SCALE "100 ps" -section_id eda_simulation
-set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_simulation
-set_global_assignment -name EDA_TIME_SCALE "100 ps" -section_id eda_timing_analysis
-set_global_assignment -name EDA_OUTPUT_DATA_FORMAT NONE -section_id eda_timing_analysis
-set_global_assignment -name STATE_MACHINE_PROCESSING ONE_HOT
-set_global_assignment -name EXTRACT_VERILOG_STATE_MACHINES ON
-set_global_assignment -name ADV_NETLIST_OPT_SYNTH_GATE_RETIME ON
 set_global_assignment -name SOURCE_FILE usrp_trigger.v
-set_global_assignment -name FMAX_REQUIREMENT "64 MHz"
+set_global_assignment -name QIP_FILE ../src/megacells/pll48.qip
+set_global_assignment -name QIP_FILE ../src/megacells/pll64.qip
+set_global_assignment -name AUTO_MERGE_PLLS OFF
+set_global_assignment -name ROUTER_TIMING_OPTIMIZATION_LEVEL MAXIMUM
+set_global_assignment -name PLACEMENT_EFFORT_MULTIPLIER 4.0
+set_global_assignment -name ROUTER_EFFORT_MULTIPLIER 3.0
+set_global_assignment -name ECO_OPTIMIZE_TIMING ON
+set_global_assignment -name OPTIMIZE_IOC_REGISTER_PLACEMENT_FOR_TIMING "PACK ALL IO REGISTERS"
+set_global_assignment -name FINAL_PLACEMENT_OPTIMIZATION ALWAYS
+set_global_assignment -name FITTER_AGGRESSIVE_ROUTABILITY_OPTIMIZATION NEVER
+set_global_assignment -name AUTO_GLOBAL_MEMORY_CONTROLS ON
+set_global_assignment -name FITTER_EARLY_TIMING_ESTIMATE_MODE REALISTIC
 
-set_global_assignment -name FLOW_ENABLE_RTL_VIEWER ON
-set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS OFF
-set_global_assignment -name ADV_NETLIST_OPT_SYNTH_WYSIWYG_REMAP ON
-set_global_assignment -name OPTIMIZE_POWER_DURING_SYNTHESIS "EXTRA EFFORT"
-set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING ON
-set_global_assignment -name FITTER_EFFORT "STANDARD FIT"
+
+
+
+set_global_assignment -name QIP_FILE ../src/megacells/mac.qip
+
+
+set_global_assignment -name QIP_FILE ../src/megacells/ram_3port.qip
+
+set_global_assignment -name SMART_RECOMPILE ON
+
+set_global_assignment -name ENABLE_DA_RULE "C103, R101, R102, R103, R104, R105, T101, T102, A101, A102, A103, A104, A105, A106, A107, A108, S101, S102, S103, S104, D101, D102, D103, M101, M102, M103, M104, M105"
+set_global_assignment -name DISABLE_DA_RULE "C101, C102, C104, C105, C106, A109, A110"
+
+set_global_assignment -name EDA_USER_COMPILED_SIMULATION_LIBRARY_DIRECTORY /home/rseal/Sandbox/gnuradar/fpga/models -section_id eda_simulation
+set_global_assignment -name EDA_GENERATE_RTL_SIMULATION_COMMAND_SCRIPT ON -section_id eda_simulation
+set_global_assignment -name EDA_GENERATE_GATE_LEVEL_SIMULATION_COMMAND_SCRIPT ON -section_id eda_simulation
+
+
+
+
+
+
+
+
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name IP_TOOL_NAME ALTPLL -qip ../src/megacells/pll48.qip
+set_global_assignment -name IP_TOOL_NAME ALTPLL -qip ../src/megacells/pll64.qip
+set_global_assignment -name IP_TOOL_NAME "ALTMULT_ACCUM (MAC)" -qip ../src/megacells/mac.qip
+set_global_assignment -name IP_TOOL_NAME "RAM: 3-PORT" -qip ../src/megacells/ram_3port.qip
+set_global_assignment -name IP_TOOL_VERSION 10.1 -qip ../src/megacells/pll48.qip
+set_global_assignment -name IP_TOOL_VERSION 10.1 -qip ../src/megacells/pll64.qip
+set_global_assignment -name IP_TOOL_VERSION 10.1 -qip ../src/megacells/mac.qip
+set_global_assignment -name IP_TOOL_VERSION 10.1 -qip ../src/megacells/ram_3port.qip
+set_global_assignment -name MISC_FILE ../src/megacells/pll48_bb.v -qip ../src/megacells/pll48.qip
+set_global_assignment -name MISC_FILE ../src/megacells/pll48.ppf -qip ../src/megacells/pll48.qip
+set_global_assignment -name MISC_FILE ../src/megacells/pll48_syn.v -qip ../src/megacells/pll48.qip
+set_global_assignment -name MISC_FILE ../src/megacells/pll64_bb.v -qip ../src/megacells/pll64.qip
+set_global_assignment -name MISC_FILE ../src/megacells/pll64.ppf -qip ../src/megacells/pll64.qip
+set_global_assignment -name MISC_FILE ../src/megacells/pll64_syn.v -qip ../src/megacells/pll64.qip
+set_global_assignment -name MISC_FILE ../src/megacells/mac_bb.v -qip ../src/megacells/mac.qip
+set_global_assignment -name MISC_FILE ../src/megacells/ram_3port_bb.v -qip ../src/megacells/ram_3port.qip
+set_global_assignment -name VERILOG_FILE ../src/megacells/pll48.v -qip ../src/megacells/pll48.qip
+set_global_assignment -name VERILOG_FILE ../src/megacells/pll64.v -qip ../src/megacells/pll64.qip
+set_global_assignment -name VERILOG_FILE ../src/megacells/mac.v -qip ../src/megacells/mac.qip
+set_global_assignment -name VERILOG_FILE ../src/megacells/ram_3port.v -qip ../src/megacells/ram_3port.qip

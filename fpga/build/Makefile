@@ -6,12 +6,13 @@ REV=1
 PROJECT=usrp_trigger
 INC=../src
 SOURCE_FILES=$(INC)/acc.v $(INC)/adc_interface.v $(INC)/atr_delay.v $(INC)/bidir_reg.v  \
-		$(INC)/cic_decim.v $(INC)/cic_dec_shifter.v $(INC)/clk_divider.v $(INC)/coeff_rom.v \
-		$(INC)/cordic_stage.v $(INC)/cordic.v $(INC)/ddc.v \
-		$(INC)/fifo.v $(INC)/halfband_decim.v $(INC)/master_cntrl.v \
+		$(INC)/cic_5stage.v $(INC)/cic_msb_adjust.v $(INC)/cic_integrator.v $(INC)/cic_differentiator.v \
+		$(INC)/clk_divider.v $(INC)/coeff_rom.v \
+		$(INC)/cordic_12stage.v $(INC)/cordic_new_stage.v $(INC)/cordic_shift_adder.v $(INC)/ddc.v \
+		$(INC)/fifo.v $(INC)/master_cntrl.v \
 		$(INC)/mult.v $(INC)/phase_acc.v $(INC)/ram16_2sum.v $(INC)/ram16.v \
-		$(INC)/rssi.v $(INC)/rx_chain.v $(INC)/rx_dcoffset.v \
-		$(INC)/serial_io.v $(INC)/setting_reg.v \
+		$(INC)/rx_chain.v $(INC)/rx_dcoffset.v \
+		$(INC)/serial_io.v $(INC)/setting_reg.v $(INC)/data_tag.v \
 		$(INC)/sign_extend.v $(INC)/strobe_gen.v  
 
 ###################################################################
@@ -41,7 +42,7 @@ clean:
 map: smart.log $(PROJECT).map.rpt
 fit: smart.log $(PROJECT).fit.rpt
 asm: smart.log $(PROJECT).asm.rpt
-tan: smart.log $(PROJECT).tan.rpt
+#tan: smart.log $(PROJECT).tan.rpt
 smart: smart.log
 
 ###################################################################

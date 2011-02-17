@@ -6,10 +6,6 @@ module acc (input clock, input reset, input clear, input enable_in, output reg e
    always @(posedge clock)
      if(reset)
        sum <= #1 34'd0;
-     //else if(clear & enable_in)
-     //  sum <= #1 addend;
-     //else if(clear)
-     //  sum <= #1 34'd0;
      else if(clear)
        sum <= #1 addend;
      else if(enable_in)

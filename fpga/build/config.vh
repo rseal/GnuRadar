@@ -45,12 +45,12 @@
 // to respectively define 1, 2 or 4 receive channels.
 
 //`define RX_SINGLE
-`define RX_DUAL
-//`define RX_QUAD
+//`define RX_DUAL
+`define RX_QUAD
 
 // ------------------------------------------------------------
 // Define RX_HB_ON to enable the receive halfband filter
-`define RX_HB_ON
+//`define RX_HB_ON
 
 // ------------------------------------------------------------
 // Define RX_NCO_ON to enable the receive Numerical Controlled Osc

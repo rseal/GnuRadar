@@ -1,17 +1,29 @@
 
 
-module ram16 (input clock, input write, 
-	      input [3:0] wr_addr, input [15:0] wr_data,
-	      input [3:0] rd_addr, output reg [15:0] rd_data);
+module ram16 ( clock, reset, we, wr_addr, wr_data, rd_addr, rd_data );
 
-   reg [15:0] 		  ram_array [0:15];
-   
-   always @(posedge clock)
-       rd_data <= #1 ram_array[rd_addr];
+input clock;
+input reset;
+input we; 
+input [3:0] wr_addr; 
+input [15:0] wr_data;
+input [3:0] rd_addr; 
+output reg [15:0] rd_data;
 
-   always @(posedge clock)
-     if(write)
-       ram_array[wr_addr] <= #1 wr_data;
+reg [15:0] ram_array [0:9];
    
+always @(posedge clock)
+begin
+	rd_data <= ram_array[ rd_addr ];
+end
+
+always @(posedge clock)
+begin
+	if( we )
+	begin
+		ram_array[ wr_addr ] <= #1 wr_data;
+	end
+end
+
 endmodule // ram16
 

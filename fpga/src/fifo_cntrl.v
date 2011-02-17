@@ -4,6 +4,7 @@ module fifo_cntrl
    input reset,
    input strobe,
    input clk,
+	input en,
    input [2:0] channels,
    input [15:0] d0,
    input [15:0] d1,
@@ -14,7 +15,7 @@ module fifo_cntrl
    input [15:0] d6,
    input [15:0] d7,
    output [15:0] dout,
-   output en,
+   output req_data,
    output [7:0] debug
    );
 
@@ -24,6 +25,7 @@ module fifo_cntrl
      (
       .clk(clk),
       .reset(reset),
+		.req_data( req_data ),
       .strobe(strobe),
       .en(en),
       .sel(sel),

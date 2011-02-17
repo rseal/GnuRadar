@@ -17,10 +17,6 @@ module adc_interface
    input wire [11:0] rx_b_a, 
    input wire [11:0] rx_a_b, 
    input wire [11:0] rx_b_b,
-   output wire [31:0] rssi_0, 
-   output wire [31:0] rssi_1, 
-   output wire [31:0] rssi_2, 
-   output wire [31:0] rssi_3,
    output reg [15:0] ddc0_in_i, 
    output reg [15:0] ddc0_in_q, 
    output reg [15:0] ddc1_in_i, 
@@ -69,16 +65,6 @@ rx_dcoffset #(`FR_ADC_OFFSET_3) rx_dcoffset3(.clock(clock),
    .enable(dco_en[3]),.reset(reset),.adc_in({adc3[11],adc3,3'b0}),
    .adc_out(adc3_corr),.serial_addr(serial_addr),
    .serial_data(serial_data),.serial_strobe(serial_strobe));
-
-// Level sensing for AGC
-rssi rssi_block_0 (.clock(clock),.reset(reset),.enable(enable),
-   .adc(adc0),.rssi(rssi_0[15:0]),.over_count(rssi_0[31:16]));
-rssi rssi_block_1 (.clock(clock),.reset(reset),.enable(enable),
-   .adc(adc1),.rssi(rssi_1[15:0]),.over_count(rssi_1[31:16]));
-rssi rssi_block_2 (.clock(clock),.reset(reset),.enable(enable),
-   .adc(adc2),.rssi(rssi_2[15:0]),.over_count(rssi_2[31:16]));
-rssi rssi_block_3 (.clock(clock),.reset(reset),.enable(enable),
-   .adc(adc3),.rssi(rssi_3[15:0]),.over_count(rssi_3[31:16]));
 
 // And mux to the appropriate outputs
 wire [3:0] 	ddc3mux,ddc2mux,ddc1mux,ddc0mux;

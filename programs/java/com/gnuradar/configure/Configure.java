@@ -312,8 +312,7 @@ public class Configure implements ActionListener {
             // the user has changed anything since their last
             // save. If so, give them a chance to save
             // modifications.
-            if ( !map.equals ( settingsMap ) &&
-                    !settingsMap.isEmpty() ) {
+            if ( !map.entrySet().equals ( settingsMap.entrySet() ) && !settingsMap.isEmpty() ) {
                 System.out.println ( " Settings do not match " );
                 int saveChanges =
                     JOptionPane.showConfirmDialog (

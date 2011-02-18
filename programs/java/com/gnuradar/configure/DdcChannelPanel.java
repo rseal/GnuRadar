@@ -19,6 +19,7 @@ package com.gnuradar.configure;
 import java.awt.Dimension;
 import java.util.HashMap;
 
+import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -67,6 +68,7 @@ public class DdcChannelPanel extends JPanel
         frequencyPanel.add ( frequencyLabel );
         frequencyPanel.add ( frequencyTextField );
         frequencyPanel.add ( frequencyComboBox );
+        frequencyPanel.add ( Box.createRigidArea( new Dimension( 200, 20 )));
         this.add ( frequencyPanel );
 
         phasePanel = new JPanel();
@@ -79,6 +81,7 @@ public class DdcChannelPanel extends JPanel
         phasePanel.add ( phaseLabel );
         phasePanel.add ( phaseTextField );
         phasePanel.add ( phaseComboBox );
+        phasePanel.add ( Box.createRigidArea( new Dimension( 200,20 )));
         this.add ( phasePanel );
 
     }

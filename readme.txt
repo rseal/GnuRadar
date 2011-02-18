@@ -65,10 +65,9 @@ GNURadar:
    root project directory, login in as root, and type 'scons install-headers'.
 
 3. From the root project directory:
-   a. git submodule init
-   b. git submodule update
-   c. cd deps/hdf5r, login as root, run "scons install-headers".
-   d. cd deps/clp, login as root, run "scons install-headers".
+   a. git submodule update
+   b. cd deps/hdf5r, login as root, run "scons install-headers".
+   c. cd deps/clp, login as root, run "scons install-headers".
 
 4. The tinyxml project is included under the deps directory. CD to this
    directory, run "scons", login as root, run "scons install". This will

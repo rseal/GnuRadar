@@ -24,11 +24,11 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -43,11 +43,7 @@ public class SettingsPanel extends JPanel
 
     private static final int LABEL_WIDTH = 100;
     private static final int LABEL_HEIGHT = 20;
-
-    private static final int DECIMATION_MIN = 8;
-    private static final int DECIMATION_MAX = 256;
     private static final int DECIMATION_INIT = 128;
-    private static final int DECIMATION_STEP = 2;
 
     private static final double SAMPLE_RATE_MIN = 1.0;
     private static final double SAMPLE_RATE_MAX = 64.0;
@@ -72,8 +68,10 @@ public class SettingsPanel extends JPanel
     private JPanel sampleRatePanel;
 
     private JLabel decimationLabel;
-    private JTextField decimationTextField;
-    private JSlider decimationSlider;
+    //private JTextField decimationTextField;
+    private JComboBox decimationComboBox;
+    private String[] decimationValues = { "8", "16", "32", "64", "128" };
+    //private JSlider decimationSlider;
     private JPanel decimationPanel;
 
     private JLabel channelsLabel;
@@ -116,23 +114,16 @@ public class SettingsPanel extends JPanel
         setComponentSize ( sampleRateTextField, new Dimension ( 80, 20 ) );
         this.add ( sampleRatePanel, new GBC ( 0, 0, 100, 100 ).setIpad ( 5, 5 ) );
 
-        decimationLabel = new JLabel ( "Decimation", JLabel.RIGHT );
-        decimationTextField =
-            new JTextField ( Integer.toString ( DECIMATION_INIT ) );
-        decimationTextField.setEditable ( false );
-        decimationSlider = new JSlider (
-            JSlider.HORIZONTAL,
-            DECIMATION_MIN,
-            DECIMATION_MAX,
-            DECIMATION_INIT
-        );
-        decimationSlider.addChangeListener ( this );
-        setComponentSize ( decimationTextField, new Dimension ( 30, 20 ) );
-        setComponentSize ( decimationSlider, new Dimension ( 100, 20 ) );
+        decimationLabel = new JLabel ( "Decimation", JLabel.RIGHT );        
+        decimationComboBox = new JComboBox( decimationValues );
+        decimationComboBox.addActionListener( this );
+
+        setComponentSize ( decimationComboBox, new Dimension ( 80,20 ));
         decimationPanel = new JPanel();
         decimationPanel.add ( decimationLabel );
-        decimationPanel.add ( decimationTextField );
-        decimationPanel.add ( decimationSlider );
+        decimationPanel.add ( decimationComboBox );
+        decimationPanel.add( Box.createRigidArea(new Dimension( 50,20 )));
+        
         this.add ( decimationPanel, new GBC ( 0, 1, 100, 100 ).setIpad ( 5, 5 ) );
 
         channelsPanel = new JPanel();
@@ -217,19 +208,8 @@ public class SettingsPanel extends JPanel
     }
 
     private void updateSettings()
-    {
-        int decimationValue = decimationSlider.getValue();
-        int stepRemainder = decimationValue % DECIMATION_STEP;
-        int offset = ( decimationValue - decimation > 0 ) ? DECIMATION_STEP : 0;
-
-        // adjust output to the selected step size
-        decimation = stepRemainder != 0 ?
-                     decimationValue + offset - stepRemainder :
-                     decimationValue;
-
-        decimationTextField.setText ( Integer.toString ( decimation ) );
-        decimationSlider.setValue ( decimation );
-
+    {    
+    	decimation = Integer.valueOf( (String)decimationComboBox.getSelectedItem()); 
         validateSampleRate();
         setBandwidth();
     }
@@ -247,7 +227,6 @@ public class SettingsPanel extends JPanel
     @Override
     public HashMap<String, String> getSettings()
     {
-
         HashMap<String, String> settings = new HashMap<String, String> ( 5 );
         //update settings
 
@@ -255,7 +234,7 @@ public class SettingsPanel extends JPanel
         settings.put ( "num_channels", Integer.toString ( numChannels ) );
         settings.put ( "bandwidth", bandwidthTextField.getText() );
         settings.put ( "bandwidth_units", bandwidthUnitsLabel.getText() );
-        settings.put ( "decimation" , decimationTextField.getText() );
+        settings.put ( "decimation" , Integer.toString(decimation ));
 
         return settings;
     }
@@ -263,12 +242,11 @@ public class SettingsPanel extends JPanel
     @Override
     public void pushSettings ( HashMap<String, String> map )
     {
-
         sampleRateTextField.setText ( map.get ( "sample_rate" ) );
         channelsComboBox.setSelectedItem ( map.get ( "num_channels" ) );
         bandwidthTextField.setText ( map.get ( "bandwidth" ) );
         bandwidthUnitsLabel.setText ( map.get ( "bandwidth_units" ) );
-        decimationSlider.setValue ( Integer.valueOf ( map.get ( "decimation" ) ) );
+        decimationComboBox.setSelectedItem(map.get("decimation" )); 
 
     }
 }

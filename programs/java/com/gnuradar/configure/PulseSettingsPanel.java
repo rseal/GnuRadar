@@ -21,6 +21,7 @@ import java.awt.FlowLayout;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -94,9 +95,11 @@ public class PulseSettingsPanel extends JPanel
 
         buttonPanel = new JPanel();
         addDataWindowButton = new JButton ( "Add" );
-        setComponentSize ( addDataWindowButton, new Dimension ( 60, 20 ) );
+        setComponentSize ( addDataWindowButton, new Dimension ( 90, 20 ) );
         removeDataWindowButton = new JButton ( "Remove" );
-        setComponentSize ( removeDataWindowButton, new Dimension ( 100, 20 ) );
+        setComponentSize ( removeDataWindowButton, new Dimension ( 90, 20 ) );
+        
+        buttonPanel.add ( Box.createRigidArea( new Dimension( 70,20 )));
         buttonPanel.add ( addDataWindowButton );
         buttonPanel.add ( removeDataWindowButton );
 

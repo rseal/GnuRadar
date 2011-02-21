@@ -15,7 +15,7 @@ module ch_sel
 
 wire data_enable = strobe && en;
 
-always @(negedge clk) begin
+always @(posedge clk) begin
 	if(reset)
 	begin
 		sel <= channels;

@@ -216,7 +216,7 @@ set_global_assignment -name SAVE_DISK_SPACE OFF
 set_global_assignment -name DEVICE_FILTER_PACKAGE "ANY QFP"
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 240
 set_global_assignment -name EDA_DESIGN_ENTRY_SYNTHESIS_TOOL "<None>"
-set_global_assignment -name FAMILY CYCLONE
+set_global_assignment -name FAMILY Cyclone
 set_global_assignment -name CYCLONE_OPTIMIZATION_TECHNIQUE BALANCED
 set_global_assignment -name STRATIX_OPTIMIZATION_TECHNIQUE SPEED
 set_global_assignment -name APEX20K_OPTIMIZATION_TECHNIQUE SPEED
@@ -413,63 +413,20 @@ set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
 set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name ENABLE_DRC_SETTINGS ON
 
-set_global_assignment -name SDC_FILE usrp_trigger.sdc
-set_global_assignment -name VERILOG_FILE ../src/atr_delay.v
 #set_global_assignment -name VERILOG_FILE ../src/rssi.v
-set_global_assignment -name VERILOG_FILE ../src/ram16.v
-set_global_assignment -name VERILOG_FILE ../src/acc.v
-set_global_assignment -name VERILOG_FILE ../src/mult.v
-set_global_assignment -name VERILOG_FILE ../src/ram16_2sum.v
+#set_global_assignment -name VERILOG_FILE ../src/acc.v
 #set_global_assignment -name VERILOG_FILE ../src/coeff_rom.v
 #set_global_assignment -name VERILOG_FILE ../src/halfband_decim.v
-set_global_assignment -name VERILOG_FILE ../src/hbf_new.v
-set_global_assignment -name VERILOG_FILE ../src/coeff_F9_rom.v
-set_global_assignment -name VERILOG_FILE ../src/rx_dcoffset.v
-set_global_assignment -name VERILOG_FILE ../src/adc_interface.v
-set_global_assignment -name VERILOG_FILE ../src/setting_reg.v
-set_global_assignment -name VERILOG_FILE ../src/bidir_reg.v
-set_global_assignment -name VERILOG_FILE ../src/rx_chain.v
-set_global_assignment -name VERILOG_FILE ../src/megacells/bustri.v
-set_global_assignment -name VERILOG_FILE ../src/phase_acc.v
-set_global_assignment -name VERILOG_FILE ../src/synchronizer.v
 
 #set_global_assignment -name VERILOG_FILE ../src/cic_decim.v
 #set_global_assignment -name VERILOG_FILE ../src/cic_dec_shifter.v
 
 #CIC files
-set_global_assignment -name VERILOG_FILE ../src/cic_5stage.v
-set_global_assignment -name VERILOG_FILE ../src/cic_integrator.v
-set_global_assignment -name VERILOG_FILE ../src/cic_differentiator.v
-set_global_assignment -name VERILOG_FILE ../src/cic_msb_adjust.v
 
 # CORDIC MODULES
-set_global_assignment -name VERILOG_FILE ../src/cordic_stage.v
-set_global_assignment -name VERILOG_FILE ../src/cordic.v
 #
-set_global_assignment -name VERILOG_FILE ../src/cordic_12stage.v
-set_global_assignment -name VERILOG_FILE ../src/cordic_new_stage.v
-set_global_assignment -name VERILOG_FILE ../src/cordic_shift_adder.v
-set_global_assignment -name VERILOG_FILE ../src/cordic_theta_map.v
 #
-set_global_assignment -name VERILOG_FILE usrp_trigger.v
-set_global_assignment -name VERILOG_FILE ../src/clk_divider.v
-set_global_assignment -name VERILOG_FILE ../src/serial_io.v
-set_global_assignment -name VERILOG_FILE ../src/strobe_gen.v
-set_global_assignment -name VERILOG_FILE ../src/sign_extend.v
-set_global_assignment -name VERILOG_FILE ../src/fifo.v
-set_global_assignment -name VERILOG_FILE ../src/fifo_cntrl.v
-set_global_assignment -name VERILOG_FILE ../src/fifo_monitor.v
-set_global_assignment -name VERILOG_FILE ../src/ch_sel.v
-set_global_assignment -name VERILOG_FILE ../src/ch_mux.v
-set_global_assignment -name VERILOG_FILE ../src/data_tag.v
-set_global_assignment -name VERILOG_FILE ../src/master_cntrl.v
 #set_global_assignment -name VERILOG_FILE ../src/3rdParty/generic_fifos/src/generic_fifo_dc_gray.v
-set_global_assignment -name VERILOG_FILE ../src/megacells/alt_fifo.v
-set_global_assignment -name VERILOG_FILE ../src/megacells/pll48.v
-set_global_assignment -name VERILOG_FILE ../src/megacells/pll64.v
-set_global_assignment -name SOURCE_FILE usrp_trigger.v
-set_global_assignment -name QIP_FILE ../src/megacells/pll48.qip
-set_global_assignment -name QIP_FILE ../src/megacells/pll64.qip
 set_global_assignment -name AUTO_MERGE_PLLS OFF
 set_global_assignment -name ROUTER_TIMING_OPTIMIZATION_LEVEL MAXIMUM
 set_global_assignment -name PLACEMENT_EFFORT_MULTIPLIER 4.0
@@ -484,10 +441,8 @@ set_global_assignment -name FITTER_EARLY_TIMING_ESTIMATE_MODE REALISTIC
 
 
 
-set_global_assignment -name QIP_FILE ../src/megacells/mac.qip
 
 
-set_global_assignment -name QIP_FILE ../src/megacells/ram_3port.qip
 
 set_global_assignment -name SMART_RECOMPILE ON
 
@@ -505,7 +460,6 @@ set_global_assignment -name EDA_GENERATE_GATE_LEVEL_SIMULATION_COMMAND_SCRIPT ON
 
 
 
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name IP_TOOL_NAME ALTPLL -qip ../src/megacells/pll48.qip
 set_global_assignment -name IP_TOOL_NAME ALTPLL -qip ../src/megacells/pll64.qip
 set_global_assignment -name IP_TOOL_NAME "ALTMULT_ACCUM (MAC)" -qip ../src/megacells/mac.qip
@@ -522,7 +476,37 @@ set_global_assignment -name MISC_FILE ../src/megacells/pll64.ppf -qip ../src/meg
 set_global_assignment -name MISC_FILE ../src/megacells/pll64_syn.v -qip ../src/megacells/pll64.qip
 set_global_assignment -name MISC_FILE ../src/megacells/mac_bb.v -qip ../src/megacells/mac.qip
 set_global_assignment -name MISC_FILE ../src/megacells/ram_3port_bb.v -qip ../src/megacells/ram_3port.qip
-set_global_assignment -name VERILOG_FILE ../src/megacells/pll48.v -qip ../src/megacells/pll48.qip
-set_global_assignment -name VERILOG_FILE ../src/megacells/pll64.v -qip ../src/megacells/pll64.qip
-set_global_assignment -name VERILOG_FILE ../src/megacells/mac.v -qip ../src/megacells/mac.qip
-set_global_assignment -name VERILOG_FILE ../src/megacells/ram_3port.v -qip ../src/megacells/ram_3port.qip
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
+set_global_assignment -name SDC_FILE usrp_trigger.sdc
+set_global_assignment -name VERILOG_FILE ../src/mult.v
+set_global_assignment -name VERILOG_FILE ../src/rx_dcoffset.v
+set_global_assignment -name VERILOG_FILE ../src/adc_interface.v
+set_global_assignment -name VERILOG_FILE ../src/setting_reg.v
+set_global_assignment -name VERILOG_FILE ../src/bidir_reg.v
+set_global_assignment -name VERILOG_FILE ../src/rx_chain.v
+set_global_assignment -name VERILOG_FILE ../src/megacells/bustri.v
+set_global_assignment -name VERILOG_FILE ../src/phase_acc.v
+set_global_assignment -name VERILOG_FILE ../src/synchronizer.v
+set_global_assignment -name VERILOG_FILE ../src/cic_5stage.v
+set_global_assignment -name VERILOG_FILE ../src/cic_integrator.v
+set_global_assignment -name VERILOG_FILE ../src/cic_differentiator.v
+set_global_assignment -name VERILOG_FILE ../src/cic_msb_adjust.v
+set_global_assignment -name VERILOG_FILE ../src/cordic_12stage.v
+set_global_assignment -name VERILOG_FILE ../src/cordic_new_stage.v
+set_global_assignment -name VERILOG_FILE ../src/cordic_shift_adder.v
+set_global_assignment -name VERILOG_FILE ../src/cordic_theta_map.v
+set_global_assignment -name VERILOG_FILE usrp_trigger.v
+set_global_assignment -name VERILOG_FILE ../src/clk_divider.v
+set_global_assignment -name VERILOG_FILE ../src/serial_io.v
+set_global_assignment -name VERILOG_FILE ../src/strobe_gen.v
+set_global_assignment -name VERILOG_FILE ../src/fifo.v
+set_global_assignment -name VERILOG_FILE ../src/fifo_cntrl.v
+set_global_assignment -name VERILOG_FILE ../src/fifo_monitor.v
+set_global_assignment -name VERILOG_FILE ../src/ch_sel.v
+set_global_assignment -name VERILOG_FILE ../src/ch_mux.v
+set_global_assignment -name VERILOG_FILE ../src/data_tag.v
+set_global_assignment -name VERILOG_FILE ../src/master_cntrl.v
+set_global_assignment -name VERILOG_FILE ../src/megacells/alt_fifo.v
+set_global_assignment -name VERILOG_FILE ../src/megacells/pll48.v
+set_global_assignment -name VERILOG_FILE ../src/megacells/pll64.v
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

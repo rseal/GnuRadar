@@ -37,7 +37,7 @@ clean:
 	rm -rf *.rpt *.chg smart.log *.htm *.eqn \
 	*.pin *.sof *.pof db *.summary *.smsg *~ \
 	*.done greybox_tmp incremental_db simulation \
-	*.qpf *.rbf 
+	*.rbf 
 
 map: smart.log $(PROJECT).map.rpt
 fit: smart.log $(PROJECT).fit.rpt

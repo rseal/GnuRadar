@@ -5,7 +5,7 @@ module fifo_tb;
 //test vector to load data from file
 localparam TEST_VECTOR_LENGTH = 1024;
 localparam SIMULATION_TIME    = 500000;
-localparam CHANNELS = 4'd1;
+localparam CHANNELS = 4'd2;
 
 reg [15:0] dataVec [0:TEST_VECTOR_LENGTH-1];
 reg [10:0]  iter;
@@ -131,27 +131,25 @@ end
 
 //Load data from vector into channels 
 always @ (posedge rx_strobe) begin
-   if( reset )
-   begin
-      ch0 <=  16'd0;
-      ch1 <=  16'd0;
-      ch2 <=  16'd0;
-      ch3 <=  16'd0;
-      ch4 <=  16'd0;
-      ch5 <=  16'd0;
-      ch6 <=  16'd0;
-      ch7 <=  16'd0;
+   if( reset ) begin
+      ch0 <= 16'd0;
+      ch1 <= 16'd0;
+      ch2 <= 16'd0;
+      ch3 <= 16'd0;
+      ch4 <= 16'd0;
+      ch5 <= 16'd0;
+      ch6 <= 16'd0;
+      ch7 <= 16'd0;
    end
-   else
-   begin
-      ch0 <=  dataVec[iter];
-      ch1 <=  dataVec[iter+1];
-      ch2 <=  dataVec[iter+2];
-      ch3 <=  dataVec[iter+3];
-      ch4 <=  16'd0;
-      ch5 <=  16'd0;
-      ch6 <=  16'd0;
-      ch7 <=  16'd0;
+   else begin
+      ch0 <= 8*iter;
+      ch1 <= 8*iter+1;
+      ch2 <= 8*iter+2;
+      ch3 <= 8*iter+3;
+      ch4 <= 8*iter+4;
+      ch5 <= 8*iter+5;
+      ch6 <= 8*iter+6;
+      ch7 <= 8*iter+7;
    end
 end
 

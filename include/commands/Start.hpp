@@ -116,7 +116,7 @@ class Start : public GnuRadarCommand {
        //change these as needed
        settings->fUsbBlockSize  = 0;
        settings->fUsbNblocks    = 0;
-       settings->mux            = 0xf0f0f1f0;
+       settings->mux            = 0xf3f2f1f0;
 
        return settings;
     }
@@ -215,9 +215,9 @@ class Start : public GnuRadarCommand {
        ConfigFile configFile( fileName );
 
        // create constants
-       const int BUFFER_SIZE = configFile.BytesPerSecond();
+       const int BUFFER_SIZE    = configFile.BytesPerSecond();
        const double SAMPLE_RATE = configFile.SampleRate();
-       const int NUM_CHANNELS = configFile.NumChannels();
+       const int NUM_CHANNELS   = configFile.NumChannels();
 
        const int IPPS_PER_BUFFER = 
           static_cast<int>( ceil(1.0/configFile.IPP()));

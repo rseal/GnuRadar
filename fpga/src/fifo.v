@@ -24,8 +24,9 @@ module fifo
    output [15:0] debugbus
 );
 
+localparam DATA_TAG = 16'h4000;
+
 reg  [15:0] d_reg0,d_reg1,d_reg2,d_reg3, d_reg4,d_reg5,d_reg6,d_reg7;
-reg  [15:0] d_mux;
 wire [15:0] fifo_data_out;
 
 wire [11:0] fifo_level;
@@ -102,16 +103,19 @@ end
 always @(posedge rd_clk)
 	rd_gate <= (rd_req && ~read_count[8]) ? 1'b1 : 1'b0;
 
-
-// Insert the data tag when "tag" is enabled.
-always @(negedge wr_clk)
-	d_mux <= tag ? 16'h4000 : fifo_data_out;
-
-// Register incoming data.
-always @(posedge wr_clk)
-begin
-	if( strobe )
-	begin
+// Register incoming data. Insert data tag for first sample in window.
+always @(posedge wr_clk) begin
+	if( tag ) begin
+		d_reg0 <= DATA_TAG;
+		d_reg1 <= DATA_TAG;
+		d_reg2 <= DATA_TAG;
+		d_reg3 <= DATA_TAG;
+		d_reg4 <= DATA_TAG;
+		d_reg5 <= DATA_TAG;
+		d_reg6 <= DATA_TAG;
+		d_reg7 <= DATA_TAG;
+	end
+	else if( strobe ) begin 
 		d_reg0 <= din0;
 		d_reg1 <= din1;
 		d_reg2 <= din2;
@@ -129,7 +133,7 @@ alt_fifo rxfifo
 (
 	.rdclk ( ~rd_clk ),
 	.wrclk ( wr_clk ),
-	.data (d_mux),
+	.data (fifo_data_out),
 	.wrreq(~wr_full & wr_req),
 	.rdreq (rd_gate ), 
 	.wrfull ( wr_full ),
@@ -155,17 +159,17 @@ fifo_monitor fm
 
 assign overflow = wr_overflow;
 
-assign debugbus = {
-	{7'b0},   // 9-15
-	wr_full,     // 8
-	wr_req,      // 7
-	overflow,    // 6
-	tag,         // 5 
-	packet_rdy,  // 4
-	gate_enable, // 3 
-	strobe,      // 2
-	rd_reset,    // 1 
-	reset        // 0
-	};
+//assign debugbus = {
+	//{7'b0},   // 9-15
+	//wr_full,     // 8
+	//wr_req,      // 7
+	//overflow,    // 6
+	//tag,         // 5 
+	//packet_rdy,  // 4
+	//gate_enable, // 3 
+	//strobe,      // 2
+	//rd_reset,    // 1 
+	//reset        // 0
+	//};
 
 	endmodule

@@ -39,17 +39,17 @@ int main ( )
     // object until ready
     PCModelPtr pcModel( new gnuradar::ProducerConsumerModel() );
 
-    CommandPtr startCommand = command::CommandPtr ( 
-          new command::Start ( pcModel ) );
-    CommandPtr stopCommand = command::CommandPtr (
-                                 new command::Stop ( pcModel ) );
-    CommandPtr statusCommand = command::CommandPtr (
-                                   new command::Status ( pcModel ) );
+    // Create various command objects.
+    CommandPtr startCommand  = command::CommandPtr ( new command::Start ( pcModel ) );
+    CommandPtr stopCommand   = command::CommandPtr ( new command::Stop ( pcModel ) );
+    CommandPtr statusCommand = command::CommandPtr ( new command::Status ( pcModel ) );
 
+    // Add commands to the command list.
     commandList.Add ( startCommand );
     commandList.Add ( stopCommand );
     commandList.Add ( statusCommand );
 
+    // Setup a network socket to listen for commands.
     network::TcpRequestServer server ( ioService, commandList );
     ioService.run();
 

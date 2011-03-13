@@ -67,7 +67,7 @@ public class XmlPacket {
         try {
             XmlPacket packet = new XmlPacket ( map );
             Builder builder = new Builder();
-            nu.xom.Document doc = builder.build ( xmlPacket,null );
+            nu.xom.Document doc = builder.build ( xmlPacket.trim(),null );
 
             // step into the second level to access the children
             Element root = ( Element ) doc.getChild ( 0 );

@@ -52,17 +52,15 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
 
-import com.corejava.GBC;
 import com.gnuradar.common.FixedFrame;
 import com.gnuradar.run.ButtonPanel.State;
+import com.corejava.GBC;
 
 public class Run implements ActionListener, PropertyChangeListener {
 
     // define constants
     private static final int DEFAULT_WIDTH = 575;
     private static final int DEFAULT_HEIGHT = 560;
-    private static final int LEFT_WIDTH = 420;
-    private static final int RIGHT_WIDTH = 200;
     private static final String TITLE = "GnuRadarRun";
     private static final String VERSION = "Version: 1.0.0";
     private static final String BUILD = "Build: September 01, 2010";
@@ -70,6 +68,7 @@ public class Run implements ActionListener, PropertyChangeListener {
     private static final String AUTHOR = "Author: Ryan Seal";
     private static final String RC_FILE=".gradarrc";
     
+    // TODO: Make this xml-configurable
     public final int PORT = 54321;
     
     public static InetAddress ipAddress;
@@ -330,7 +329,7 @@ public class Run implements ActionListener, PropertyChangeListener {
 
           if( state == State.RUNNING )
           {
-             statusThread = new StatusThread(ipAddress, PORT);
+             statusThread = new StatusThread(PORT);
              thread = new Thread(statusThread);
              thread.start();
 

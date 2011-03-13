@@ -80,6 +80,7 @@ public class ButtonPanel extends JPanel
     private JButton runButton;
     private File configurationFile = null;
     private String xmlResponsePacket;
+    private InetAddress ipAddress;
 
     private Dimension buttonSize = new Dimension ( 100, 25 );
 
@@ -95,11 +96,7 @@ public class ButtonPanel extends JPanel
     {
         xmlResponsePacket = null;
         
-        // TODO: IP and port should be read from an
-        // xml-based setup file during Construction.
-
-        InetAddress address = InetAddress.getByName ( "localhost" );
-        Socket socket = new Socket ( address, 54321 );
+        Socket socket = new Socket ( ipAddress, 54321 );
 
         if ( socket.isConnected() ) {
             OutputStreamWriter writer = new OutputStreamWriter (
@@ -299,6 +296,11 @@ public class ButtonPanel extends JPanel
     public void clickLoadButton()
     {
         loadButton.doClick();
+    }
+
+    public void setIpAddress( InetAddress address )
+    {
+       ipAddress = address;
     }
 
 }

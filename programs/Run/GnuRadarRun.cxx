@@ -23,7 +23,6 @@
 #include <gnuradar/CommandList.hpp>
 #include <gnuradar/commands/Start.hpp>
 #include <gnuradar/commands/Stop.hpp>
-#include <gnuradar/commands/Status.hpp>
 
 using namespace boost;
 using namespace gnuradar;
@@ -40,17 +39,15 @@ int main ( )
     PCModelPtr pcModel( new gnuradar::ProducerConsumerModel() );
 
     // Create various command objects.
-    CommandPtr startCommand  = command::CommandPtr ( new command::Start ( pcModel ) );
+    CommandPtr startCommand  = command::CommandPtr ( new command::Start ( ioService, pcModel ) );
     CommandPtr stopCommand   = command::CommandPtr ( new command::Stop ( pcModel ) );
-    CommandPtr statusCommand = command::CommandPtr ( new command::Status ( pcModel ) );
 
     // Add commands to the command list.
     commandList.Add ( startCommand );
     commandList.Add ( stopCommand );
-    commandList.Add ( statusCommand );
 
     // Setup a network socket to listen for commands.
-    network::TcpRequestServer server ( ioService, commandList );
+    network::TcpRequestServer tcp_server ( ioService, commandList );
     ioService.run();
 
     return EXIT_SUCCESS;

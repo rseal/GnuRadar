@@ -20,6 +20,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashMap;
@@ -29,6 +31,8 @@ import javax.swing.event.EventListenerList;
 public class StatusThread implements Runnable {
 
 	private static final long serialVersionUID = 1L;
+
+	private static final int MAX_PACKET_SIZE_BYTES = 512;
 
 	private final InetAddress SERVER_IP;
 	private final int SERVER_PORT;
@@ -60,21 +64,33 @@ public class StatusThread implements Runnable {
 		return xmlResponsePacket;
 	}
 
-	public StatusThread ( InetAddress ip, int port )
-	{    	    	
-		SERVER_IP = ip;
-		SERVER_PORT = port;
-
+	private String createRegistrationPacket()
+	{
 		// create an xml status packet on construction.
 		map = new HashMap<String, String>();
-		map.put ( "type", "status" );
+		map.put ( "type", "register" );
 		map.put ( "source", "gradar_run_java" );
 		map.put ( "destination", "gradar_server" );
 		map.put ( "name", "status" );
 
-		xmlStatusPacket = XmlPacket.format ( map );
-		map = null;
-
+		return XmlPacket.format(map);		
+	}
+	
+	private String createUnregistrationPacket()
+	{		
+		map = new HashMap<String, String>();
+		map.put ( "type", "unregister" );
+		map.put ( "source", "gradar_run_java" );
+		map.put ( "destination", "gradar_server" );
+		map.put ( "name", "status" );
+		
+		return XmlPacket.format( map );
+	}
+	
+	public StatusThread ( InetAddress ip, int port )
+	{    	    	
+		SERVER_IP = ip;
+		SERVER_PORT = port;
 		eventListeners = new EventListenerList();
 	}
 
@@ -83,7 +99,11 @@ public class StatusThread implements Runnable {
 		Socket socket = null;
 		PrintWriter writer = null;
 		BufferedReader reader = null;
+		DatagramPacket packet = null;
+		DatagramSocket dSocket = null;
 		running = true;
+
+		xmlStatusPacket = createRegistrationPacket();
 
 		try
 		{
@@ -92,6 +112,29 @@ public class StatusThread implements Runnable {
 			reader = new BufferedReader( 
 					new InputStreamReader( socket.getInputStream() )
 			);
+			
+			// register to receive status packets, flush, and close stream.
+			writer.write( xmlStatusPacket );
+			writer.close();
+			
+			// read response and parse into HashMap
+			HashMap<String, String> map = XmlPacket.parse( reader.readLine() );
+			
+			reader.close();			
+			socket.close();
+			
+			if( map.get("response") != "success")
+			{
+				// TODO: throw exception if registration fails.
+			}
+			
+			byte[] buffer = new byte[MAX_PACKET_SIZE_BYTES];
+			packet = new DatagramPacket(
+					buffer,
+					buffer.length,
+					SERVER_IP,
+					SERVER_PORT);
+			dSocket = new DatagramSocket();
 		}
 		catch ( IOException e ) {
 			// TODO Auto-generated catch block
@@ -99,39 +142,69 @@ public class StatusThread implements Runnable {
 			running = false;
 		} 
 
-		while ( running ) {
-			// form request, send, wait for response
-
-			writer.write ( xmlStatusPacket );
-			writer.flush();
-			//writer.close();
-
-			try {
-				xmlResponsePacket = reader.readLine();
-
-				//System.out.println ( "status response = " + xmlResponsePacket );
-
-				Thread.sleep ( 1000 );
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			catch (InterruptedException e) {
+		
+		
+		while ( running ) 
+		{
+			try 
+			{
+				// receive udp packet and assign.
+				dSocket.receive(packet);
+				xmlResponsePacket = packet.getData().toString();
+				System.out.println ( "status response = " + xmlResponsePacket );
+			} catch (IOException e)
+			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			if ( xmlResponsePacket != null ) {
+			if ( xmlResponsePacket != null )
+			{
 				processEvent( new StatusEvent(this) );
 				//this.processEvent ( action );
-
 			}
-
 		}
+		
+		dSocket.close();
 	}
 
 	public void stopStatus()
 	{
+		Socket socket = null;
+		PrintWriter writer = null;
+		BufferedReader reader = null;
+		
+		// unregister with the server to properly shutdown status packet stream.
+		xmlStatusPacket = createUnregistrationPacket();
+		
+		try
+		{
+			socket = new Socket ( SERVER_IP, SERVER_PORT );
+			writer = new PrintWriter( socket.getOutputStream() );
+			reader = new BufferedReader( 
+					new InputStreamReader( socket.getInputStream() )
+			);
+			
+			// register to receive status packets, flush, and close stream.
+			writer.write( xmlStatusPacket );
+			writer.close();
+			
+			// read response and parse into HashMap
+			HashMap<String, String> map = XmlPacket.parse( reader.readLine() );
+			
+			reader.close();			
+			socket.close();
+			
+			if( map.get("response") != "success")
+			{
+				// TODO: throw exception if unregistration fails.
+			}
+		}
+		catch ( IOException e ) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();			
+		} 
+		
 		System.out.println ( "Stop status called" );
 		running = false;
 	}

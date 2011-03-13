@@ -3,4 +3,6 @@
 <gnu_radar>
    <!-- modify to match server's location -->
    <server_location>localhost</server_location>
+   <status_address>10.0.0.226</status_address>
+   <status_port>54321</status_port>
 </gnu_radar>

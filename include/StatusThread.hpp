@@ -21,6 +21,7 @@ namespace gnuradar
 class StatusThread: public thread::SThread
 	{
 		static const int REFRESH_RATE_MSEC = 1000;
+      static const int MAX_MESSAGE_LENGTH = 512;
 		bool running_;
 
 		typedef boost::shared_ptr< ProducerConsumerModel > PcModelPtr;
@@ -56,7 +57,8 @@ class StatusThread: public thread::SThread
 			gnuradar::xml::XmlPacket packet("gnuradar_server");
 
 			// Format the arguments into xml and return the entire message as a string.
-			const std::string response = packet.Format( args );
+			std::string response = packet.Format( args );
+         response.resize( MAX_MESSAGE_LENGTH );
 
 			return response;
 		}
@@ -76,8 +78,11 @@ class StatusThread: public thread::SThread
 				int port = boost::lexical_cast<int>( port_str );
 
 				// parse multicast ip address from file.
-				std::string ip_str = doc.FirstChildElement("multicast_address")->GetText();
+				std::string ip_str = doc.FirstChildElement("multicast_ip")->GetText();
 				IpAddress ip_address = IpAddress::from_string( ip_str );
+
+            std::cout << "Using multicast ip " << ip_str << std::endl;
+            std::cout << "Using multicast port " << port_str << std::endl;
 
 				// create socket endpoint.
 				endPoint_ = EndPoint( ip_address, port );
@@ -98,6 +103,8 @@ class StatusThread: public thread::SThread
 			ReadConfigurationFile();
 
 			socket_ = UdpSocketPtr( new UdpSocket( ioService, endPoint_.protocol() ) );
+         boost::asio::socket_base::broadcast option(true);
+         socket_->set_option(option);
 
 		}
 
@@ -111,16 +118,19 @@ class StatusThread: public thread::SThread
 				std::string message = CreateStatusPacket();
 
 				// Send UDP packet to multicast endpoint.
-				socket_->send_to( boost::asio::buffer( message ), endPoint_ );
+				socket_->send_to( boost::asio::buffer( message,MAX_MESSAGE_LENGTH ), endPoint_ );
+
+            // REMOVE ME:
+            std::cout << "Status message sent : " << message << std::endl;
 
 				// sleep and repeat.
-				this->Sleep( REFRESH_RATE_MSEC );
+				this->Sleep( thread::MSEC, REFRESH_RATE_MSEC );
 			}
 		}
 
 		void Stop()
 		{
-			if( !running ) return;
+			if( !running_ ) return;
 
 			running_ = false;
 			this->Wait();

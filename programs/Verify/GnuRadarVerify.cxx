@@ -59,7 +59,7 @@ int main ( int argc, char** argv )
     settings.fpgaFileName   = cf.FPGAImage();
     settings.fUsbBlockSize  = 0;
     settings.fUsbNblocks    = 0;
-    settings.mux            = 0xf0f0f1f0;
+    settings.mux            = 0xf3f2f1f0;
 
     // create a USRP object.
     usrp_standard_rx_sptr usrp = usrp_standard_rx::make (

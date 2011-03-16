@@ -59,24 +59,32 @@ GNURadar:
 
 1. First install the rc-file to your home directory by running "scons
    install-rc" as a regular user. Every user that will run the radar software
-   will need this file ( .gradarrc ) installed in their home directory.
+   will need this file ( .gradarrc ) installed in their home directory. If you 
+   are running a networked setup ( separate machines for client and server ),
+   this file will be modified to point to the location of the server.
 
-2. First you will have to install the gnuradar development headers. Go to the
-   root project directory, login in as root, and type 'scons install-headers'.
+2. As the root user, run "scons install-config" to install the configuration 
+   file at /usr/local/gnuradar. The server will broadcast it's status to an
+   address/port configured from this location. Please leave the port setting
+   at port=54321 as the system is designed to operate specifically on this
+   port. Make sure that the configured address is the network's broadcast IP.
 
-3. From the root project directory:
+3. Go to the root project directory, login in as root, and type 'scons
+   install-headers' to install the system's development headers.
+
+4. From the root project directory:
    a. git submodule update
    b. cd deps/hdf5r, login as root, run "scons install-headers".
    c. cd deps/clp, login as root, run "scons install-headers".
 
-4. The tinyxml project is included under the deps directory. CD to this
+5. The tinyxml project is included under the deps directory. CD to this
    directory, run "scons", login as root, run "scons install". This will
    install the necessary headers and the compiled library. 
 
-5. To install the real-time plotter, go to <root>/programs/Plotter and type:
+6. To install the real-time plotter, go to <root>/programs/Plotter and type:
    python setup.py install as root.
 
-6. After successfully installing gnuradio and all other dependencies, simply
+7. After successfully installing gnuradio and all other dependencies, simply
    go to the root project directory and run "scons", login as root and run
    "scons install". This will install all binaries in /usr/local/bin by
    default ( edit the SConstruct file if you're not happy with that ). All
@@ -86,7 +94,8 @@ GNURadar:
 Uninstalling:
 
 1. Run scons -c from the root project directory.
-2. Login as root and run "rm -rf /usr/local/include/gnuradar
+2. Login as root and run "rm -rf /usr/local/include/gnuradar."
+3. Again, using the root account, run "rm -rf /usr/local/gnuradar."
 
 Developer Notes:
 

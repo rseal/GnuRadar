@@ -1,2 +1,2 @@
-<multicast_ip>10.0.0.226</multicast_ip>
-<multicast_port>54321</multicast_port>
+<broadcast_ip>10.0.0.226</broadcast_ip>
+<broadcast_port>54321</broadcast_port>

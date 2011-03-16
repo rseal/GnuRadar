@@ -73,16 +73,16 @@ class StatusThread: public thread::SThread
 				// parse file.
 				doc.LoadFile();
 
-				// parse multicast port from file.
-				std::string port_str = doc.FirstChildElement("multicast_port")->GetText();
+				// parse broadcast port from file.
+				std::string port_str = doc.FirstChildElement("broadcast_port")->GetText();
 				int port = boost::lexical_cast<int>( port_str );
 
-				// parse multicast ip address from file.
-				std::string ip_str = doc.FirstChildElement("multicast_ip")->GetText();
+				// parse broadcast ip address from file.
+				std::string ip_str = doc.FirstChildElement("broadcast_ip")->GetText();
 				IpAddress ip_address = IpAddress::from_string( ip_str );
 
-            std::cout << "Using multicast ip " << ip_str << std::endl;
-            std::cout << "Using multicast port " << port_str << std::endl;
+            std::cout << "Using broadcast ip " << ip_str << std::endl;
+            std::cout << "Using broadcast port " << port_str << std::endl;
 
 				// create socket endpoint.
 				endPoint_ = EndPoint( ip_address, port );
@@ -99,7 +99,7 @@ class StatusThread: public thread::SThread
 		/// Constructor
 		StatusThread ( IoService& ioService, PcModelPtr pcModel ) : pcModel_( pcModel )
 		{
-			// Configure multicast address and port to send udp packets.
+			// Configure broadcast address and port to send udp packets.
 			ReadConfigurationFile();
 
 			socket_ = UdpSocketPtr( new UdpSocket( ioService, endPoint_.protocol() ) );
@@ -117,7 +117,7 @@ class StatusThread: public thread::SThread
 				// generate status message.
 				std::string message = CreateStatusPacket();
 
-				// Send UDP packet to multicast endpoint.
+				// Send UDP packet to broadcast endpoint.
 				socket_->send_to( boost::asio::buffer( message,MAX_MESSAGE_LENGTH ), endPoint_ );
 
             // REMOVE ME:

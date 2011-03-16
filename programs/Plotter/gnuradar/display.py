@@ -1,7 +1,7 @@
 import  wx
 from threading import Thread
 from enthought.chaco.api import *
-from enthought.enable.wx_backend.api import Window
+from enthought.enable.wx.base_window import BaseWindow
 from time import sleep
 from gnuradar.hdf5r import Reader 
 from gnuradar.plot import IQPlot, RTIPlot
@@ -165,7 +165,7 @@ class Frame(wx.Frame):
       self.plot = Plot( self.plotData )
 
       # encapsulate plot object in a window so we can add it to the application.
-      window = Window( mainPanel, component=self.plot)
+      window = BaseWindow( mainPanel, component=self.plot)
 
       hSizer.Add( window.control,1, wx.EXPAND)
       

@@ -1,5 +1,4 @@
 from gnuradar.hdf5r import Reader
-from enthought.enable.wx_backend.api import Window
 from enthought.chaco.api import ArrayPlotData, Plot, ColorBar
 from enthought.chaco.api import HPlotContainer, LinearMapper
 from enthought.chaco.tools.api import RangeSelection, RangeSelectionOverlay

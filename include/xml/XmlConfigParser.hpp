@@ -28,14 +28,23 @@ class XmlConfigParser
 
    public:
 
-      XmlConfigParser( const std::string& fileName ) {
+      XmlConfigParser( const std::string& file, const bool isXml=true ) {
 
-         ticpp::Document doc( fileName );
+         ticpp::Document doc( file );
          ticpp::Element* elementPtr;
          
          try{
 
-            doc.LoadFile();
+            if( isXml )
+            {
+               doc.Parse( file );
+            }
+            else
+            {
+               doc.LoadFile( file );
+            }
+
+            //doc.LoadFile();
             elementPtr = doc.FirstChildElement()->FirstChildElement();
 
             ticpp::Iterator< ticpp::Element > iter = 

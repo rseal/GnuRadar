@@ -217,10 +217,13 @@ class Start : public GnuRadarCommand {
       array_.clear();
 
       std::string response;
-      std::string fileName = command::ParseArg( "file_name", args );
+      std::string xml_data = command::ParseArg( "file", args );
+
+      // incoming "file" is self-contained xml data.
+      bool data_is_xml = true;
 
       // parse configuration file
-      ConfigFile configFile( fileName );
+      ConfigFile configFile( xml_data, data_is_xml );
 
       // create constants
       const int BUFFER_SIZE        = configFile.BytesPerSecond();

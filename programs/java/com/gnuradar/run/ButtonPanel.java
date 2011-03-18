@@ -177,91 +177,91 @@ public class ButtonPanel extends JPanel
     @Override
     public void actionPerformed ( ActionEvent e )
     {
-        if ( e.getSource() == runButton ) {
-        	System.out.println("Run button pressed");
-        	
-            HashMap<String, String> map = new HashMap<String, String>();
-            map.put ( "type", "control" );
-            map.put ( "source", "gradar_run_java" );
-            map.put ( "destination", "gradar_server" );
+    	HashMap<String, String> map = new HashMap<String, String>();
+        map.put ( "type", "control" );
+        map.put ( "source", "gradar_run_java" );
+        map.put ( "destination", "gradar_server" );
+        
+		if (e.getSource() == runButton) {
+			System.out.println("Run button pressed");
 
-            if ( state == State.RUNNING ) {
+			if (state == State.RUNNING) {
 
-            	System.out.println("Stop button pressed");
-            	
-                // create xml packet and send to server
-                map.put ( "name", "stop" );
-                String xmlPacket = XmlPacket.format ( map );
+				System.out.println("Stop button pressed");
 
-                try {
-                	
-                	WriteToServer ( xmlPacket );
-                	map.clear();
-                	map = XmlPacket.parse(xmlResponsePacket);
-                	String response = map.get("value");
-                	
-                	if( response.contains("OK")){
+				// create xml packet and send to server
+				map.put("name", "stop");
+				String xmlPacket = XmlPacket.format(map);
 
-                    // set button states
-                    setState ( State.STOPPED );
-                    runButton.setText ( "Run" );
-                    loadButton.setEnabled ( true );
-                	}
-                	else{
-                		setState( State.ERROR );
-                	}
+				try {
+					WriteToServer(xmlPacket);
+					map.clear();
+					map = XmlPacket.parse(xmlResponsePacket);
+					String response = map.get("value");
 
-                } catch ( IOException e2 ) {
-                    setState ( State.CONNECTION_ERROR );
-                    e2.printStackTrace();
-                }
-            } else {
-            	try {
+					if (response.contains("OK")) {
 
-            		// create xml packet and send to server
-                    map.put ( "name", "start" );
-                    map.put ( "file_name", configurationFile.getAbsolutePath() );
-                    String xmlPacket = XmlPacket.format ( map );
+						// set button states
+						setState(State.STOPPED);
+						runButton.setText("Run");
+						loadButton.setEnabled(true);
+					} else {
+						setState(State.ERROR);
+					}
 
-                    WriteToServer ( xmlPacket );
+				} catch (IOException e2) {
+					setState(State.CONNECTION_ERROR);
+					e2.printStackTrace();
+				}
+			} else {
+				try {
+					
+					// TODO: Testing. This command has been modified to read the 
+					// configuration file from the local machine, convert the 
+					// entire file to a string of xml data, and pass to the 
+					// server.
+					map.put("name", "start");
+					map.put("file", configurationFile.toString());
+					String xmlPacket = XmlPacket.format(map);
 
-                    map.clear();
-                    map = XmlPacket.parse( xmlResponsePacket );
-                    String response = map.get("value");
-                 
-                    if( response.contains("OK") )
-                    {
-                    	//System.out.println("Setting state to Run");
-                       // set button states
-                       setState ( State.RUNNING );
-                       runButton.setText ( "Stop" );
-                       loadButton.setEnabled ( false );
-                    }
-                    else
-                    {                    	
-                    	setState( State.ERROR);                    	
-                    }
+					WriteToServer(xmlPacket);
 
-                } catch ( IOException e1 ) {
-                    setState ( State.CONNECTION_ERROR );
-                    e1.printStackTrace();
-                }
-            }
-        }
+					map.clear();
+					map = XmlPacket.parse(xmlResponsePacket);
+					String response = map.get("value");
 
-        if ( e.getSource() == loadButton ) {
+					if (response.contains("OK")) {
+						// System.out.println("Setting state to Run");
+						// set button states
+						setState(State.RUNNING);
+						runButton.setText("Stop");
+						loadButton.setEnabled(false);
+					} else {
+						setState(State.ERROR);
+					}
 
-            verifyButton.setEnabled ( false );
-            runButton.setEnabled ( false );
-            if ( loadFile() ) {
-                setState ( State.CONFIGURED );
-                verifyButton.setEnabled ( true );
-            }
-        }
+				} catch (IOException e1) {
+					setState(State.CONNECTION_ERROR);
+					e1.printStackTrace();
+				}
+			}
+		}
+
+		if (e.getSource() == loadButton) {
+			
+			verifyButton.setEnabled(false);
+			runButton.setEnabled(false);
+
+			if (loadFile()) {
+				setState(State.CONFIGURED);
+				verifyButton.setEnabled(true);
+			}
+		}
 
         if ( e.getSource() == verifyButton ) {
 
             boolean verified = false;
+            
             // TODO: Send Verification Message and get response
             // if successful set verified = true
             setState ( State.VERIFIED );

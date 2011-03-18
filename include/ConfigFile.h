@@ -53,8 +53,8 @@ struct ConfigFile {
 
 public:
 
-    explicit ConfigFile ( const std::string& fileName ) :
-            samplesPerIpp_ ( 0 ), parser_ ( fileName ) {
+    explicit ConfigFile ( const std::string& fileName, bool isXml=false ) :
+            samplesPerIpp_ ( 0 ), parser_ ( fileName,isXml ) {
 
         Units units;
 

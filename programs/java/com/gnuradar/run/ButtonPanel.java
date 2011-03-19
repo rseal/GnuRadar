@@ -20,7 +20,9 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -99,13 +101,13 @@ public class ButtonPanel extends JPanel
         Socket socket = new Socket ( ipAddress, 54321 );
 
         if ( socket.isConnected() ) {
-            OutputStreamWriter writer = new OutputStreamWriter (
-                socket.getOutputStream()
+            BufferedWriter writer = new BufferedWriter( new OutputStreamWriter (
+                socket.getOutputStream())
             );
             BufferedReader reader = new BufferedReader (
                 new InputStreamReader ( socket.getInputStream() )
             );
-
+            
             writer.write ( packet );
             writer.flush();
             
@@ -216,16 +218,23 @@ public class ButtonPanel extends JPanel
 			} else {
 				try {
 					
+					FileInputStream fileStream = new FileInputStream( configurationFile );					
+					byte[] bytes = new byte[ fileStream.available()];
+					fileStream.read(bytes);
+					fileStream.close();
+					
+					int size = 0;
+					
 					// TODO: Testing. This command has been modified to read the 
 					// configuration file from the local machine, convert the 
 					// entire file to a string of xml data, and pass to the 
 					// server.
-					map.put("name", "start");
-					map.put("file", configurationFile.toString());
-					String xmlPacket = XmlPacket.format(map);
-
+					
+					map.put("name", "start");	
+					map.put("file", new String(bytes, "ISO-8859-1"));
+					String xmlPacket = XmlPacket.format( map );
 					WriteToServer(xmlPacket);
-
+					
 					map.clear();
 					map = XmlPacket.parse(xmlResponsePacket);
 					String response = map.get("value");

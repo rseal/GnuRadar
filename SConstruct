@@ -54,5 +54,5 @@ env.Command('bin/gradar-run','scripts/gradar-run-default',
 		 ])
 
 #call all sub-build scripts
-build = env.SConscript('programs/SConstruct', CPPPATH=headers)
+build = env.SConscript('programs/SConstruct', CPPPATH=Glob('/usr/local/include/gnuradar'))
 

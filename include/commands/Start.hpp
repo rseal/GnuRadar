@@ -222,6 +222,8 @@ class Start : public GnuRadarCommand {
       // incoming "file" is self-contained xml data.
       bool data_is_xml = true;
 
+      xml_data = xml::XmlPacket::DecodeXml( xml_data );
+
       // parse configuration file
       ConfigFile configFile( xml_data, data_is_xml );
 

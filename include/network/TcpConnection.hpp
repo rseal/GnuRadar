@@ -32,13 +32,15 @@ using boost::asio::ip::tcp;
 namespace gnuradar {
 namespace network {
 
-static const int MESSAGE_SIZE_BYTES = 512;
+// Data buffer must be large enough to transfer a complete configuration file, which 
+// is approximately 1869 bytes + encoding at the time of this comment.
+static const int MAX_MESSAGE_SIZE_BYTES = 4096;
 
 class TcpConnection : public boost::enable_shared_from_this<TcpConnection> {
 
 public:
     typedef boost::shared_ptr<TcpConnection> pointer;
-    typedef boost::array< char, MESSAGE_SIZE_BYTES > Message;
+    typedef boost::array< char, MAX_MESSAGE_SIZE_BYTES > Message;
 
     // create and return a shared pointer to this
     static pointer create ( boost::asio::io_service& io_service,
@@ -53,32 +55,41 @@ public:
 
     // run thread
     void start() {
-        Message readMessage;
-        std::string result;
 
-        // read incoming message
-        size_t readSize = socket_.read_some (
-                              boost::asio::buffer ( readMessage ),
-                              error_
-                          );
+       const std::string END_OF_TRANSMISSION_TOKEN = "</command>";
+       Message readMessage;
+       std::string result;
+       bool end_of_transmission = false;
+       int read_size = 0;
 
-        // resize to match actual received message length
-        result = readMessage.data();
-        result = result.substr ( 0, readSize );
+       // listen for incoming data until we receive the end-of-transmission 
+       // tokent
+       while( !end_of_transmission )
+       {
+          read_size += socket_.read_some ( boost::asio::buffer ( readMessage ), error_);
+          result   += readMessage.data();
+          end_of_transmission = result.find(END_OF_TRANSMISSION_TOKEN) != std::string::npos;
+       }
 
-        // run requested command
-        ExecuteRequest ( result );
+       // find the end of the packet and resize the string to truncate 
+       // any floating garbage in the message buffer.
+       int idx = result.find("</command>");
+       result = result.substr ( 0, idx+10 );
 
-        boost::asio::async_write (
-            socket_,
-            boost::asio::buffer ( message_ + "\n" ),
-            boost::bind (
+       // run requested command
+       ExecuteRequest ( result );
+
+       // send a response message back to the client.
+       boost::asio::async_write (
+             socket_,
+             boost::asio::buffer ( message_ + "\n" ),
+             boost::bind (
                 &TcpConnection::handle_write,
                 shared_from_this(),
                 boost::asio::placeholders::error,
                 boost::asio::placeholders::bytes_transferred
-            )
-        );
+                )
+             );
     }
 
 private:
@@ -89,35 +100,40 @@ private:
 
     void ExecuteRequest ( const std::string& message ) {
 
-        try {
+       try {
 
-           // parse the received xml packet
-           const xml::XmlPacketArgs args = xml::XmlPacket::Parse( message );
+          // parse the received xml packet
+          const xml::XmlPacketArgs args = xml::XmlPacket::Parse( message );
 
-           xml::XmlPacketArgs::const_iterator iter = args.find( "name" );
+          xml::XmlPacketArgs::const_iterator iter = args.find( "name" );
 
-           if( iter == args.end() )
-           {
-              throw std::runtime_error( 
-                    "TcpConnection command name was not found");
-           }
-           
-           const std::string commandName = iter->second;
-           command::CommandPtr commandPtr = commands_.Find ( commandName );
-           message_ = commandPtr->Execute ( args );
+          if( iter == args.end() )
+          {
+             throw std::runtime_error( 
+                   "TcpConnection command name was not found");
+          }
 
-        } catch ( std::exception& e ) {
-            std::cerr
-                << "Invalid command " << e.what() 
-                << std::endl;
-        }
+          const std::string commandName = iter->second;
+          command::CommandPtr commandPtr = commands_.Find ( commandName );
+
+          std::cout << "EXECUTE COMMAND: " << commandName << std::endl;
+
+          // Execute the parsed command, passing in arguments, and 
+          // receive response message on return.
+          // These commands are all derived from GnuRadarCommand.
+          message_ = commandPtr->Execute ( args );
+
+       } catch ( std::exception& e ) {
+          std::cerr << "Invalid command " << e.what() << std::endl;
+       }
 
     }
 
-
     TcpConnection ( boost::asio::io_service& io_service,
-                    gnuradar::command::CommandList& commands ) :
-            socket_ ( io_service ), commands_ ( commands ) { }
+          gnuradar::command::CommandList& commands ) :
+       socket_ ( io_service ), commands_ ( commands ) {
+
+       }
 
     void handle_write ( const boost::system::error_code&, size_t size ) { }
 };

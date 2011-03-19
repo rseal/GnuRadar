@@ -23,6 +23,7 @@
 #include <ticpp/ticpp.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/any.hpp>
+#include <boost/algorithm/string.hpp>
 
 namespace gnuradar{
    namespace xml{
@@ -56,7 +57,7 @@ namespace gnuradar{
 
             XmlPacketArgs map;
             ticpp::Document document;
-            document.Parse( xmlPacket );
+            document.Parse( xmlPacket,true );
 
             ticpp::Iterator< ticpp::Node > iter = 
                document.FirstChildElement("command")->FirstChildElement();
@@ -68,11 +69,32 @@ namespace gnuradar{
                      std::make_pair< std::string, std::string >( 
                         element->Value(), element->GetText()
                         ));
-               //ParseXmlNode( iter.Get() ) );
                ++iter;
             }
 
             return map;
+         }
+
+         /// Removes encoding use to transfer xml data inside an xml element.
+         ///
+         /// The networked gnuradarrun transmits an xml file embedded inside of 
+         /// an xml element, and certain characters are not allowed in the element
+         /// to avoid parser confusion. In our case, after we receive the file, 
+         /// we need to decode the file back into its original xml format so that 
+         /// the contents can be parsed to determine system configuration.
+         static const std::string DecodeXml( const std::string& xmlPacket )
+         {
+            string result = xmlPacket;
+
+            // these are all of the special characters defined by the 
+            // XML standard.
+            boost::replace_all( result, "&lt;", "<" );
+            boost::replace_all( result, "&gt;", ">" );
+            boost::replace_all( result, "&qout;", "\"" );
+            boost::replace_all( result, "&apos;", "'" );
+            boost::replace_all( result, "&amp;", "&" );
+
+            return result;
          }
 
          const std::string Format( XmlPacketArgs map ){

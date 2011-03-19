@@ -62,6 +62,7 @@ class ConsumerThread: public BaseThread, public thread::SThread {
    virtual void Stop() {
       running_ = false;
       this->Wake( *BaseThread::condition_, *BaseThread::mutex_ );
+      this->Wait();
    }
 
    virtual void RequestData ( void* address ) {}

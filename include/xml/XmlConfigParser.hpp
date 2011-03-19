@@ -22,19 +22,29 @@
 #include <ticpp/ticpp.h>
 #include <map>
 #include <boost/lexical_cast.hpp>
+#include <boost/shared_ptr.hpp>
 
 class XmlConfigParser
 {
 
    public:
 
-      XmlConfigParser( const std::string& file, const bool isXml=true ) {
+      /// The config parser can accept either a file name from the local machine, or 
+      /// an xml-formatted string containing the contents of the file. The former 
+      /// is used for the local command-line version of gnuradarrun and the latter 
+      /// is used for the networked version, in which the entire file is transmitted 
+      /// via TCP/IP from client to server.
+      XmlConfigParser( const std::string& file, const bool isXml=false ) {
 
-         ticpp::Document doc( file );
+         typedef boost::shared_ptr<ticpp::Node> DocumentPtr;
+
+         ticpp::Document doc;
          ticpp::Element* elementPtr;
          
          try{
 
+            // if the string is an xml packet, just parse, else we are given 
+            // a file name and need to load the file from disk.
             if( isXml )
             {
                doc.Parse( file );
@@ -44,7 +54,6 @@ class XmlConfigParser
                doc.LoadFile( file );
             }
 
-            //doc.LoadFile();
             elementPtr = doc.FirstChildElement()->FirstChildElement();
 
             ticpp::Iterator< ticpp::Element > iter = 

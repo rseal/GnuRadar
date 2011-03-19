@@ -120,9 +120,6 @@ class StatusThread: public thread::SThread
 				// Send UDP packet to broadcast endpoint.
 				socket_->send_to( boost::asio::buffer( message,MAX_MESSAGE_LENGTH ), endPoint_ );
 
-            // REMOVE ME:
-            std::cout << "Status message sent : " << message << std::endl;
-
 				// sleep and repeat.
 				this->Sleep( thread::MSEC, REFRESH_RATE_MSEC );
 			}

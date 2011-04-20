@@ -25,7 +25,7 @@
 #ifndef _FUSB_LINUX_H_
 #define _FUSB_LINUX_H_
 
-#include <gnuradar/fusb.h>
+#include "fusb.h"
 #include <list>
 
 struct  usbdevfs_urb;

@@ -1,24 +1,43 @@
-/* -*- c++ -*- */
+/*  -*- c++ -*- */
 /*
- * Copyright 2003,2004,2008 Free Software Foundation, Inc.
- * 
+ * Copyright 2005,2009 Free Software Foundation, Inc.
+ *
  * This file is part of GNU Radio
- * 
+ *
  * GNU Radio is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
- * 
+ *
  * GNU Radio is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with GNU Radio; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
+
+#ifndef INCLUDED_USRP_BASIC_H
+#define INCLUDED_USRP_BASIC_H
+
+#include "db_base.h"
+#include "usrp_slots.h"
+#include "usrp_subdev_spec.h"
+#include "libusb_types.h"
+#include <string>
+#include <vector>
+#include <boost/utility.hpp>
+
+class  fusb_devhandle;
+class  fusb_ephandle;
+
+enum txrx_t {
+  C_RX = 0,
+  C_TX = 1
+};
 
 /*
  * ----------------------------------------------------------------------
@@ -36,27 +55,10 @@
  * ----------------------------------------------------------------------
  */
 
-#ifndef INCLUDED_USRP_BASIC_H
-#define INCLUDED_USRP_BASIC_H
-
-#include <gnuradar/db_base.h>
-#include <gnuradar/usrp_slots.h>
-#include <string>
-#include <vector>
-#include <boost/utility.hpp>
-#include <gnuradar/usrp_subdev_spec.h>
-
-struct usb_dev_handle;
-class  fusb_devhandle;
-class  fusb_ephandle;
-
-enum txrx_t {
-  C_RX = 0,
-  C_TX = 1
-};
 
 /*!
  * \brief abstract base class for usrp operations
+ * \ingroup usrp
  */
 class usrp_basic : boost::noncopyable
 {
@@ -64,16 +66,17 @@ protected:
   void shutdown_daughterboards();
 
 protected:
-  struct usb_dev_handle	*d_udh;
-  int			 d_usb_data_rate;	// bytes/sec
-  int			 d_bytes_per_poll;	// how often to poll for overruns
-  bool			 d_verbose;
-  long                   d_fpga_master_clock_freq;
+  libusb_device_handle		*d_udh;
+  struct libusb_context		*d_ctx;
+  int				 d_usb_data_rate;	// bytes/sec
+  int				 d_bytes_per_poll;	// how often to poll for overruns
+  bool				 d_verbose;
+  long   			 d_fpga_master_clock_freq;
 
-  static const int	 MAX_REGS = 128;
-  unsigned int		 d_fpga_shadows[MAX_REGS];
+  static const int		 MAX_REGS = 128;
+  unsigned int			 d_fpga_shadows[MAX_REGS];
 
-  int			 d_dbid[2];		// daughterboard ID's (side A, side B)
+  int				 d_dbid[2];		// daughterboard ID's (side A, side B)
 
   /*!
    * Shared pointers to subclasses of db_base.
@@ -90,7 +93,7 @@ protected:
 
 
   usrp_basic (int which_board,
-	      struct usb_dev_handle *open_interface (struct usb_device *dev),
+	      libusb_device_handle *open_interface (libusb_device *dev),
 	      const std::string fpga_filename = "",
 	      const std::string firmware_filename = "");
 
@@ -236,14 +239,14 @@ public:
 
   /*!
    * \brief Set ADC offset correction
-   * \param which	which ADC[0,3]: 0 = RX_A I, 1 = RX_A Q...
+   * \param which_adc	which ADC[0,3]: 0 = RX_A I, 1 = RX_A Q...
    * \param offset	16-bit value to subtract from raw ADC input.
    */
   bool set_adc_offset (int which_adc, int offset);
 
   /*!
    * \brief Set DAC offset correction
-   * \param which	which DAC[0,3]: 0 = TX_A I, 1 = TX_A Q...
+   * \param which_dac	which DAC[0,3]: 0 = TX_A I, 1 = TX_A Q...
    * \param offset	10-bit offset value (ambiguous format:  See AD9862 datasheet).
    * \param offset_pin	1-bit value.  If 0 offset applied to -ve differential pin;
    *                                  If 1 offset applied to +ve differential pin.
@@ -764,6 +767,7 @@ public:
 
 /*!
  * \brief class for accessing the receive side of the USRP
+ * \ingroup usrp
  */
 class usrp_basic_rx : public usrp_basic 
 {
@@ -780,6 +784,8 @@ protected:
    * \param fusb_block_size  fast usb xfer block size.  Must be a multiple of 512. 
    *                         Use zero for a reasonable default.
    * \param fusb_nblocks     number of fast usb URBs to allocate.  Use zero for a reasonable default. 
+   * \param fpga_filename    name of the rbf file to load
+   * \param firmware_filename name of ihx file to load
    */
   usrp_basic_rx (int which_board,
 		 int fusb_block_size=0,
@@ -869,5 +875,119 @@ public:
   bool stop ();
 };
 
+/*!
+ * \brief class for accessing the transmit side of the USRP
+ * \ingroup usrp
+ */
+class usrp_basic_tx : public usrp_basic 
+{
+private:
+  fusb_devhandle	*d_devhandle;
+  fusb_ephandle		*d_ephandle;
+  int			 d_bytes_seen;		// how many bytes we've seen
+  bool			 d_first_write;
+  bool			 d_tx_enable;
 
-#endif
+ protected:
+  /*!
+   * \param which_board	     Which USRP board on usb (not particularly useful; use 0)
+   * \param fusb_block_size  fast usb xfer block size.  Must be a multiple of 512.
+   *                         Use zero for a reasonable default.
+   * \param fusb_nblocks     number of fast usb URBs to allocate.  Use zero for a reasonable default.
+   * \param fpga_filename    name of file that contains image to load into FPGA
+   * \param firmware_filename	name of file that contains image to load into FX2
+   */
+  usrp_basic_tx (int which_board,
+		 int fusb_block_size=0,
+		 int fusb_nblocks=0,
+		 const std::string fpga_filename = "",
+		 const std::string firmware_filename = ""
+		 );		// throws if trouble
+
+  bool set_tx_enable (bool on);
+  bool tx_enable () const { return d_tx_enable; }
+
+  bool disable_tx ();		// conditional disable, return prev state
+  void restore_tx (bool on);	// conditional set
+
+  void probe_tx_slots (bool verbose);
+
+public:
+
+  ~usrp_basic_tx ();
+
+  /*!
+   * \brief invokes constructor, returns instance or 0 if trouble
+   *
+   * \param which_board	     Which USRP board on usb (not particularly useful; use 0)
+   * \param fusb_block_size  fast usb xfer block size.  Must be a multiple of 512. 
+   *                         Use zero for a reasonable default.
+   * \param fusb_nblocks     number of fast usb URBs to allocate.  Use zero for a reasonable default. 
+   * \param fpga_filename    name of file that contains image to load into FPGA
+   * \param firmware_filename	name of file that contains image to load into FX2
+   */
+  static usrp_basic_tx *make (int which_board, int fusb_block_size=0, int fusb_nblocks=0,
+			      const std::string fpga_filename = "",
+			      const std::string firmware_filename = ""
+			      );
+
+  /*!
+   * \brief tell the fpga the rate tx samples are going to the D/A's
+   *
+   * div = fpga_master_clock_freq () * 2
+   *
+   * sample_rate is determined by a myriad of registers
+   * in the 9862.  That's why you have to tell us, so
+   * we can tell the fpga.
+   */
+  bool set_fpga_tx_sample_rate_divisor (unsigned int div);
+
+  /*!
+   * \brief Write data to the A/D's via the FPGA.
+   *
+   * \p len must be a multiple of 512 bytes.
+   * \returns number of bytes written or -1 on error.
+   *
+   * if \p underrun is non-NULL, it will be set to true iff
+   * a transmit underrun condition is detected.
+   */
+  int write (const void *buf, int len, bool *underrun);
+
+  /*
+   * Block until all outstanding writes have completed.
+   * This is typically used to assist with benchmarking
+   */
+  void wait_for_completion ();
+
+  //! sampling rate of D/A converter
+  virtual long converter_rate() const { return fpga_master_clock_freq () * 2; } // 128M
+  long dac_rate() const { return converter_rate(); }
+  int daughterboard_id (int which_side) const { return d_dbid[which_side & 0x1]; }
+
+  bool set_pga (int which_amp, double gain_in_db);
+  double pga (int which_amp) const;
+  double pga_min () const;
+  double pga_max () const;
+  double pga_db_per_step () const;
+
+  bool _write_oe (int which_side, int value, int mask);
+  bool write_io (int which_side, int value, int mask);
+  bool read_io (int which_side, int *value);
+  int read_io (int which_side);
+  bool write_refclk(int which_side, int value);
+  bool write_atr_mask(int which_side, int value);
+  bool write_atr_txval(int which_side, int value);
+  bool write_atr_rxval(int which_side, int value);
+
+  bool write_aux_dac (int which_side, int which_dac, int value);
+  bool read_aux_adc (int which_side, int which_adc, int *value);
+  int read_aux_adc (int which_side, int which_adc);
+
+  int block_size() const;
+
+  // called in base class to derived class order
+  bool start ();
+  bool stop ();
+};
+
+#endif /* INCLUDED_USRP_BASIC_H */

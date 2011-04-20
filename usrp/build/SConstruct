@@ -1,0 +1,22 @@
+#library name
+library_name='usrp'
+
+
+#custom build flags
+flags = ['-std=gnu++0x', '-Wall', '-W']
+
+#setup libraries to link and paths
+libs=['']
+libPath=['','']
+
+
+source_files = Glob('../src/*');
+include_files = Glob('../include/*');
+
+#define build environment
+env = Environment(CXXFLAGS=flags)
+env['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME']=1
+
+lib = env.SharedLibrary( library_name, source_files );
+
+

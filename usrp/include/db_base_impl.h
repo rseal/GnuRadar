@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2008 Free Software Foundation, Inc.
+ * Copyright 2008,2009 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -21,13 +21,13 @@
 #ifndef INCLUDED_DB_BASE_IMPL_H
 #define INCLUDED_DB_BASE_IMPL_H
 
-#include <gnuradar/db_base.h>
-#include <gnuradar/db_util.h>
-#include <gnuradar/usrp_basic.h>
-#include <gnuradar/fpga_regs_standard.h>
-#include <gnuradar/fpga_regs_common.h>
-#include <gnuradar/usrp_prims.h>
-#include <gnuradar/usrp_spi_defs.h>
+#include "db_base.h"
+#include "db_util.h"
+#include "usrp_basic.h"
+#include "../firmware/include/fpga_regs_standard.h"
+#include "../firmware/include/fpga_regs_common.h"
+#include "usrp_prims.h"
+#include "../firmware/include/usrp_spi_defs.h"
 #include <stdexcept>
 
 #endif /* INCLUDED_DB_BASE_IMPL_H */

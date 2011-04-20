@@ -217,24 +217,20 @@ public class ButtonPanel extends JPanel
 				}
 			} else {
 				try {
-					
+				
+					// read selected configuration file into byte stream for transport.
 					FileInputStream fileStream = new FileInputStream( configurationFile );					
 					byte[] bytes = new byte[ fileStream.available()];
 					fileStream.read(bytes);
 					fileStream.close();
-					
-					int size = 0;
-					
-					// TODO: Testing. This command has been modified to read the 
-					// configuration file from the local machine, convert the 
-					// entire file to a string of xml data, and pass to the 
-					// server.
-					
+									
+					// package start command. Embed xml file into map.
 					map.put("name", "start");	
 					map.put("file", new String(bytes, "ISO-8859-1"));
 					String xmlPacket = XmlPacket.format( map );
 					WriteToServer(xmlPacket);
 					
+					// clear map and read response packet after transmission.
 					map.clear();
 					map = XmlPacket.parse(xmlResponsePacket);
 					String response = map.get("value");

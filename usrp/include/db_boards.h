@@ -23,8 +23,8 @@
 #ifndef DB_BOARDS_H
 #define DB_BOARDS_H
 
-#include <gnuradar/db_base.h>
-#include <gnuradar/usrp_basic.h>
+#include <usrp/db_base.h>
+#include <usrp/usrp_basic.h>
 
 std::vector<db_base_sptr> instantiate_dbs(int dbid, usrp_basic_sptr usrp, int which_side);
 

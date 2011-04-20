@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 //
-// Copyright 2008 Free Software Foundation, Inc.
+// Copyright 2008,2009 Free Software Foundation, Inc.
 // 
 // This file is part of GNU Radio
 // 
@@ -22,7 +22,31 @@
 #ifndef DB_BASIC_H
 #define DB_BASIC_H
 
-#include <gnuradar/db_base.h>
+#include "db_base.h"
+
+
+/******************************************************************************/
+
+
+class db_basic_tx : public db_base
+{
+public:
+  db_basic_tx(usrp_basic_sptr usrp, int which);
+  ~db_basic_tx();
+  
+  float gain_min();
+  float gain_max();
+  float gain_db_per_step();
+  double freq_min();
+  double freq_max();
+  struct freq_result_t set_freq(double target_freq);
+  bool  set_gain(float gain);
+  bool  is_quadrature();
+};
+
+
+/******************************************************************************/
+
 
 class db_basic_rx : public db_base
 {
@@ -42,5 +66,34 @@ class db_basic_rx : public db_base
 private:
   int d_subdev;
 };
+
+
+/******************************************************************************/
+
+
+class db_lf_rx : public db_basic_rx
+{
+ public:
+  db_lf_rx(usrp_basic_sptr usrp, int which, int subdev);
+  ~db_lf_rx();
+  
+  double freq_min();
+  double freq_max();
+};
+
+
+/******************************************************************************/
+
+
+class db_lf_tx : public db_basic_tx
+{ 
+ public:
+  db_lf_tx(usrp_basic_sptr usrp, int which);
+  ~db_lf_tx();
+  
+  double freq_min();
+  double freq_max();
+};
+
 
 #endif

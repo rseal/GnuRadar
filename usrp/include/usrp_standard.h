@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2004,2008 Free Software Foundation, Inc.
+ * Copyright 2004,2008,2009 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -23,16 +23,19 @@
 #ifndef INCLUDED_USRP_STANDARD_H
 #define INCLUDED_USRP_STANDARD_H
 
-#include <gnuradar/usrp_basic.h>
+#include "usrp_basic.h"
 #include <boost/shared_ptr.hpp>
-#include <gnuradar/usrp_tune_result.h>
+#include "usrp_tune_result.h"
 
-//class usrp_standard_tx;
+class usrp_standard_tx;
 class usrp_standard_rx;
 
-//typedef boost::shared_ptr<usrp_standard_tx> usrp_standard_tx_sptr;
+typedef boost::shared_ptr<usrp_standard_tx> usrp_standard_tx_sptr;
 typedef boost::shared_ptr<usrp_standard_rx> usrp_standard_rx_sptr;
 
+/*!
+ * \ingroup usrp
+ */
 class usrp_standard_common
 {
   int	d_fpga_caps;		// capability register val
@@ -79,9 +82,11 @@ public:
 };
 
 /*!
- * \brief standard usrp RX class.  
+ * \brief The C++ interface the receive side of the USRP
+ * \ingroup usrp
  *
- * Assumes digital down converter in FPGA
+ * This is the recommended interface to USRP receive functionality
+ * for applications that use the USRP but not GNU Radio.
  */
 class usrp_standard_rx : public usrp_basic_rx, public usrp_standard_common
 {
@@ -122,9 +127,15 @@ class usrp_standard_rx : public usrp_basic_rx, public usrp_standard_common
    * \brief invokes constructor, returns shared_ptr or shared_ptr equivalent of 0 if trouble
    *
    * \param which_board	     Which USRP board on usb (not particularly useful; use 0)
+   * \param decim_rate	     decimation factor
+   * \param nchan	     number of channels
+   * \param mux		     Rx mux setting, \sa set_mux
+   * \param mode	     mode
    * \param fusb_block_size  fast usb xfer block size.  Must be a multiple of 512. 
    *                         Use zero for a reasonable default.
    * \param fusb_nblocks     number of fast usb URBs to allocate.  Use zero for a reasonable default. 
+   * \param fpga_filename    Name of rbf file to load
+   * \param firmware_filename Name of ihx file to load
    */
   static usrp_standard_rx_sptr make(int which_board,
 				    unsigned int decim_rate,
@@ -250,7 +261,7 @@ class usrp_standard_rx : public usrp_basic_rx, public usrp_standard_common
    * \param chan  which DDC channel we're controlling (almost always 0).
    * \param db    the daughterboard we're controlling.
    * \param target_freq the RF frequency we want at DC in the complex baseband.
-   * \param[out] tune_result details how the hardware was configured.
+   * \param[out] result details how the hardware was configured.
    *
    * \returns true iff everything was successful.
    */
@@ -269,5 +280,173 @@ class usrp_standard_rx : public usrp_basic_rx, public usrp_standard_common
   bool stop ();
 };
 
+// ----------------------------------------------------------------
+
+/*!
+ * \brief The C++ interface the transmit side of the USRP
+ * \ingroup usrp
+ *
+ * This is the recommended interface to USRP transmit functionality
+ * for applications that use the USRP but not GNU Radio.
+ *
+ * Uses digital upconverter (coarse & fine modulators) in AD9862...
+ */
+class usrp_standard_tx : public usrp_basic_tx, public usrp_standard_common
+{
+ public:
+  enum coarse_mod_t {
+    CM_NEG_FDAC_OVER_4,		// -32 MHz
+    CM_NEG_FDAC_OVER_8,		// -16 MHz
+    CM_OFF,
+    CM_POS_FDAC_OVER_8,		// +16 MHz
+    CM_POS_FDAC_OVER_4		// +32 MHz
+  };
+
+ protected:
+  static const int	MAX_CHAN = 2;
+  unsigned int		d_interp_rate;
+  int			d_nchan;
+  int			d_sw_mux;
+  int			d_hw_mux;
+  double		d_tx_freq[MAX_CHAN];
+  coarse_mod_t		d_coarse_mod[MAX_CHAN];
+  unsigned char		d_tx_modulator_shadow[MAX_CHAN];
+
+  virtual bool set_coarse_modulator (int channel, coarse_mod_t cm);
+  usrp_standard_tx::coarse_mod_t coarse_modulator (int channel) const;
+
+ protected:
+  usrp_standard_tx (int which_board,
+		    unsigned int interp_rate,
+		    int nchan = 1,
+		    int	mux = -1,
+		    int fusb_block_size = 0,
+		    int fusb_nblocks = 0,
+		    const std::string fpga_filename = "",
+		    const std::string firmware_filename = ""
+		    );	// throws if trouble
+
+  bool write_hw_mux_reg ();
+
+ public:
+  ~usrp_standard_tx ();
+
+  /*!
+   * \brief invokes constructor, returns shared_ptr or shared_ptr equivalent of 0 if trouble
+   *
+   * \param which_board	     Which USRP board on usb (not particularly useful; use 0)
+   * \param interp_rate	     interpolation factor
+   * \param nchan	     number of channels
+   * \param mux		     Tx mux setting, \sa set_mux
+   * \param fusb_block_size  fast usb xfer block size.  Must be a multiple of 512. 
+   *                         Use zero for a reasonable default.
+   * \param fusb_nblocks     number of fast usb URBs to allocate.  Use zero for a reasonable default. 
+   * \param fpga_filename    Name of rbf file to load
+   * \param firmware_filename Name of ihx file to load
+   */
+  static usrp_standard_tx_sptr make(int which_board,
+				    unsigned int interp_rate,
+				    int nchan = 1,
+				    int mux = -1,
+				    int fusb_block_size = 0,
+				    int fusb_nblocks = 0,
+				    const std::string fpga_filename = "",
+				    const std::string firmware_filename = ""
+				    );
+
+  /*!
+   * \brief Set interpolator rate.  \p rate must be in [4, 512] and a multiple of 4.
+   *
+   * The final complex sample rate across the USB is
+   *   dac_freq () / interp_rate () * nchannels ()
+   */
+  virtual bool set_interp_rate (unsigned int rate);
+
+  /*!
+   * \brief Set number of active channels.  \p nchannels must be 1 or 2.
+   *
+   * The final complex sample rate across the USB is
+   *   dac_freq () / decim_rate () * nchannels ()
+   */
+  bool set_nchannels  (int nchannels);
+
+  /*!
+   * \brief Set output mux configuration.
+   *
+   * <pre>
+   *     3                   2                   1                       
+   *   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
+   *  +-------------------------------+-------+-------+-------+-------+
+   *  |                               | DAC3  | DAC2  | DAC1  |  DAC0 |
+   *  +-------------------------------+-------+-------+-------+-------+
+   * 
+   *  There are two interpolators with complex inputs and outputs.
+   *  There are four DACs.
+   * 
+   *  Each 4-bit DACx field specifies the source for the DAC and
+   *  whether or not that DAC is enabled.  Each subfield is coded
+   *  like this: 
+   * 
+   *     3 2 1 0
+   *    +-+-----+
+   *    |E|  N  |
+   *    +-+-----+
+   * 
+   *  Where E is set if the DAC is enabled, and N specifies which
+   *  interpolator output is connected to this DAC.
+   * 
+   *   N   which interp output
+   *  ---  -------------------
+   *   0   chan 0 I
+   *   1   chan 0 Q
+   *   2   chan 1 I
+   *   3   chan 1 Q
+   * </pre>
+   */
+  bool set_mux  (int mux);
+
+  /*!
+   * Determine the appropriate Tx mux value as a function of the subdevice choosen
+   * and the characteristics of the respective daughterboard.
+   */
+  int determine_tx_mux_value(const usrp_subdev_spec &ss);
+  int determine_tx_mux_value(const usrp_subdev_spec &ss_a, const usrp_subdev_spec &ss_b);
+
+  /*!
+   * \brief set the frequency of the digital up converter.
+   *
+   * \p channel must be in the range [0,1].  \p freq is the center
+   * frequency in Hz.  It must be in the range [-44M, 44M].
+   * The frequency specified is quantized.  Use tx_freq to retrieve
+   * the actual value used.
+   */
+  virtual bool set_tx_freq (int channel, double freq);  // chan: [0,1]
+
+  // ACCESSORS
+  unsigned int interp_rate () const;
+  double tx_freq (int channel) const;
+  int nchannels () const;
+  int mux () const;
+
+  /*!
+   * \brief High-level "tune" method.  Works for the single channel case.
+   *
+   * This method adjusts both the daughterboard LO and the DUC so that
+   * DC in the complex baseband samples ends up at RF target_freq.
+   *
+   * \param chan  which DUC channel we're controlling (usually == which_side).
+   * \param db    the daughterboard we're controlling.
+   * \param target_freq the RF frequency we want our baseband translated to.
+   * \param[out] result details how the hardware was configured.
+   *
+   * \returns true iff everything was successful.
+   */
+  bool tune(int chan, db_base_sptr db, double target_freq, usrp_tune_result *result);
+
+
+  // called in base class to derived class order
+  bool start ();
+  bool stop ();
+};
 
 #endif /* INCLUDED_USRP_STANDARD_H */

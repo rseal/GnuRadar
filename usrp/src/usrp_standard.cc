@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2004,2008 Free Software Foundation, Inc.
+ * Copyright 2004,2008,2009 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -20,15 +20,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <gnuradar/usrp_standard.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <gnuradar/usrp_prims.h>
-#include <gnuradar/fpga_regs_common.h>
-#include <gnuradar/fpga_regs_standard.h>
+#include "../include/usrp_standard.h"
+#include "../include/usrp_prims.h"
+#include "../firmware/include/fpga_regs_common.h"
+#include "../firmware/include/fpga_regs_standard.h"
+#include "../include/ad9862.h"
+
 #include <stdexcept>
 #include <assert.h>
 #include <math.h>
-#include <gnuradar/ad9862.h>
+#include <cstdio>
 
 
 static const int OLD_CAPS_VAL = 0xaa55ff77;
@@ -125,6 +130,20 @@ public:
   bool set_dxc_freq(double dxc_freq){ return d_u->set_rx_freq(d_chan, dxc_freq); }
   double dxc_freq(){ return d_u->rx_freq(d_chan); }
 };
+
+class duc_control : public dxc_control {
+  usrp_standard_tx     *d_u;
+  int			d_chan;
+
+public:
+  duc_control(usrp_standard_tx *u, int chan)
+    : d_u(u), d_chan(chan) {}
+  
+  bool is_tx(){ return true; }
+  bool set_dxc_freq(double dxc_freq){ return d_u->set_tx_freq(d_chan, dxc_freq); }
+  double dxc_freq() { return d_u->tx_freq(d_chan); }
+};
+
 
 /*!
  * \brief Tune such that target_frequency ends up at DC in the complex baseband
@@ -756,3 +775,401 @@ usrp_standard_rx::tune(int chan, db_base_sptr db, double target_freq, usrp_tune_
 }
 
 
+//////////////////////////////////////////////////////////////////
+
+
+// tx data is timed to CLKOUT1 (64 MHz)
+// interpolate 4x
+// fine modulator enabled
+
+
+static unsigned char tx_regs_use_nco[] = {
+  REG_TX_IF,		(TX_IF_USE_CLKOUT1
+			 | TX_IF_I_FIRST
+			 | TX_IF_2S_COMP
+			 | TX_IF_INTERLEAVED),
+  REG_TX_DIGITAL,	(TX_DIGITAL_2_DATA_PATHS
+			 | TX_DIGITAL_INTERPOLATE_4X)
+};
+
+
+static int
+real_tx_mux_value (int mux, int nchan)
+{
+  if (mux != -1)
+    return mux;
+
+  switch (nchan){
+  case 1:
+    return 0x0098;
+  case 2:
+    return 0xba98;
+  default:
+    assert (0);
+  }
+}
+
+usrp_standard_tx::usrp_standard_tx (int which_board,
+				    unsigned int interp_rate,
+				    int nchan, int mux,
+				    int fusb_block_size, int fusb_nblocks,
+				    const std::string fpga_filename,
+				    const std::string firmware_filename
+				    )
+  : usrp_basic_tx (which_board, fusb_block_size, fusb_nblocks, fpga_filename, firmware_filename),
+    usrp_standard_common(this),
+    d_sw_mux (0x8), d_hw_mux (0x81)
+{
+  if (!usrp_9862_write_many_all (d_udh, tx_regs_use_nco, sizeof (tx_regs_use_nco))){
+    fprintf (stderr, "usrp_standard_tx: failed to init AD9862 TX regs\n");
+    throw std::runtime_error ("usrp_standard_tx::ctor");
+  }
+  if (!set_nchannels (nchan)){
+    fprintf (stderr, "usrp_standard_tx: set_nchannels failed\n");
+    throw std::runtime_error ("usrp_standard_tx::ctor");
+  }
+  if (!set_interp_rate (interp_rate)){
+    fprintf (stderr, "usrp_standard_tx: set_interp_rate failed\n");
+    throw std::runtime_error ("usrp_standard_tx::ctor");
+  }
+  if (!set_mux (real_tx_mux_value (mux, nchan))){
+    fprintf (stderr, "usrp_standard_tx: set_mux failed\n");
+    throw std::runtime_error ("usrp_standard_tx::ctor");
+  }
+
+  for (int i = 0; i < MAX_CHAN; i++){
+    d_tx_modulator_shadow[i] = (TX_MODULATOR_DISABLE_NCO
+				| TX_MODULATOR_COARSE_MODULATION_NONE);
+    d_coarse_mod[i] = CM_OFF;
+    set_tx_freq (i, 0);
+  }
+}
+
+usrp_standard_tx::~usrp_standard_tx ()
+{
+  // fprintf(stderr, "\nusrp_standard_tx: dtor\n");
+}
+
+bool
+usrp_standard_tx::start ()
+{
+  if (!usrp_basic_tx::start ())
+    return false;
+
+  // add our code here
+
+  return true;
+}
+
+bool
+usrp_standard_tx::stop ()
+{
+  bool ok = usrp_basic_tx::stop ();
+
+  // add our code here
+
+  return ok;
+}
+
+usrp_standard_tx_sptr
+usrp_standard_tx::make (int which_board,
+			unsigned int interp_rate,
+			int nchan, int mux,
+			int fusb_block_size, int fusb_nblocks,
+			const std::string fpga_filename,
+			const std::string firmware_filename
+			)
+{
+  try {
+    usrp_standard_tx_sptr u  = 
+      usrp_standard_tx_sptr(new usrp_standard_tx(which_board, interp_rate, nchan, mux,
+						 fusb_block_size, fusb_nblocks,
+						 fpga_filename, firmware_filename));
+    u->init_db(u);
+    return u;
+  }
+  catch (...){
+    return usrp_standard_tx_sptr();
+  }
+}
+
+bool
+usrp_standard_tx::set_interp_rate (unsigned int rate)
+{
+  // fprintf (stderr, "usrp_standard_tx::set_interp_rate\n");
+
+  if ((rate & 0x3) || rate < 4 || rate > 512){
+    fprintf (stderr, "usrp_standard_tx::set_interp_rate: rate must be in [4, 512] and a multiple of 4.\n");
+    return false;
+  }
+
+  d_interp_rate = rate;
+  set_usb_data_rate ((dac_rate () / rate * nchannels ())
+		     * (2 * sizeof (short)));
+
+  // We're using the interp by 4 feature of the 9862 so that we can
+  // use its fine modulator.  Thus, we reduce the FPGA's interpolation rate
+  // by a factor of 4.
+
+  bool s = disable_tx ();
+  bool ok = _write_fpga_reg (FR_INTERP_RATE, d_interp_rate/4 - 1);
+  restore_tx (s);
+  return ok;
+}
+
+bool
+usrp_standard_tx::set_nchannels (int nchan)
+{
+  if (!(nchan == 1 || nchan == 2))
+    return false;
+
+  if (nchan > nducs())
+    return false;
+
+  d_nchan = nchan;
+  return write_hw_mux_reg ();
+}
+
+bool
+usrp_standard_tx::set_mux (int mux)
+{
+  d_sw_mux = mux;
+  d_hw_mux = mux << 4;
+  return write_hw_mux_reg ();
+}
+
+bool
+usrp_standard_tx::write_hw_mux_reg ()
+{
+  bool s = disable_tx ();
+  bool ok = _write_fpga_reg (FR_TX_MUX, d_hw_mux | d_nchan);
+  restore_tx (s);
+  return ok;
+}
+
+int
+usrp_standard_tx::determine_tx_mux_value(const usrp_subdev_spec &ss)
+{
+  /*
+    Determine appropriate Tx mux value as a function of the subdevice choosen.
+
+    @param u:           instance of USRP source
+    @param subdev_spec: return value from subdev option parser.  
+    @type  subdev_spec: (side, subdev), where side is 0 or 1 and subdev is 0
+    @returns:           the Rx mux value
+  
+    This is simpler than the rx case.  Either you want to talk
+    to side A or side B.  If you want to talk to both sides at once,
+    determine the value manually.
+  */
+
+  if (!is_valid(ss))
+    throw std::invalid_argument("subdev_spec");
+
+  std::vector<db_base_sptr> db = this->db(ss.side);
+  
+  if(db[ss.subdev]->i_and_q_swapped()) {
+    unsigned int mask[2] = {0x0089, 0x8900};
+    return mask[ss.side];
+  }
+  else {
+    unsigned int mask[2] = {0x0098, 0x9800};
+    return mask[ss.side];
+  }
+}
+
+int
+usrp_standard_tx::determine_tx_mux_value(const usrp_subdev_spec &ss_a, const usrp_subdev_spec &ss_b)
+{
+  if (ss_a.side == ss_b.side && ss_a.subdev == ss_b.subdev){
+    throw std::runtime_error("Cannot compute dual mux, repeated subdevice");
+  }
+  int mux_a = determine_tx_mux_value(ss_a);
+  //Get the mux b:
+  //	DAC0 becomes DAC2
+  //	DAC1 becomes DAC3
+  unsigned int mask[2] = {0x0022, 0x2200};
+  int mux_b = determine_tx_mux_value(ss_b) + mask[ss_b.side];
+  return mux_b | mux_a;
+}
+
+#ifdef USE_FPGA_TX_CORDIC
+
+bool
+usrp_standard_tx::set_tx_freq (int channel, double freq)
+{
+  if (channel < 0 || channel >= MAX_CHAN)
+    return false;
+
+  // This assumes we're running the 4x on-chip interpolator.
+
+  unsigned int v =
+    compute_freq_control_word_fpga (dac_rate () / 4,
+				    freq, &d_tx_freq[channel],
+				    d_verbose);
+
+  return _write_fpga_reg (FR_TX_FREQ_0 + channel, v);
+}
+
+
+#else
+
+bool
+usrp_standard_tx::set_tx_freq (int channel, double freq)
+{
+  if (channel < 0 || channel >= MAX_CHAN)
+    return false;
+
+  // split freq into fine and coarse components
+
+  coarse_mod_t	cm;
+  double	coarse;
+
+  double coarse_freq_1 = dac_rate () / 8; // First coarse frequency
+  double coarse_freq_2 = dac_rate () / 4; // Second coarse frequency
+  double coarse_limit_1 = coarse_freq_1 / 2; // Midpoint of [0 , freq1] range
+  double coarse_limit_2 = (coarse_freq_1 + coarse_freq_2) / 2; // Midpoint of [freq1 , freq2] range
+  double high_limit = (double)44e6/128e6*dac_rate (); // Highest meaningful frequency
+
+  if (freq < -high_limit)		// too low
+    return false;
+  else if (freq < -coarse_limit_2){	// For 64MHz: [-44, -24)
+    cm = CM_NEG_FDAC_OVER_4;
+    coarse = -coarse_freq_2;
+  }
+  else if (freq < -coarse_limit_1){	// For 64MHz: [-24, -8)
+    cm = CM_NEG_FDAC_OVER_8;
+    coarse = -coarse_freq_1;
+  }
+  else if (freq < coarse_limit_1){		// For 64MHz: [-8, 8)
+    cm = CM_OFF;
+    coarse = 0;
+  }
+  else if (freq < coarse_limit_2){	// For 64MHz: [8, 24)
+    cm = CM_POS_FDAC_OVER_8;
+    coarse = coarse_freq_1;
+  }
+  else if (freq <= high_limit){	// For 64MHz: [24, 44]
+    cm = CM_POS_FDAC_OVER_4;
+    coarse = coarse_freq_2;
+  }
+  else				// too high
+    return false;
+
+
+  set_coarse_modulator (channel, cm);	// set bits in d_tx_modulator_shadow
+
+  double fine = freq - coarse;
+
+
+  // Compute fine tuning word...
+  // This assumes we're running the 4x on-chip interpolator.
+  // (This is required to use the fine modulator.)
+
+  unsigned int v =
+    compute_freq_control_word_9862 (dac_rate () / 4,
+				    fine, &d_tx_freq[channel], d_verbose);
+
+  d_tx_freq[channel] += coarse;		// adjust actual
+  
+  unsigned char high, mid, low;
+
+  high = (v >> 16) & 0xff;
+  mid =  (v >>  8) & 0xff;
+  low =  (v >>  0) & 0xff;
+
+  bool ok = true;
+
+  // write the fine tuning word
+  ok &= _write_9862 (channel, REG_TX_NCO_FTW_23_16, high);
+  ok &= _write_9862 (channel, REG_TX_NCO_FTW_15_8,  mid);
+  ok &= _write_9862 (channel, REG_TX_NCO_FTW_7_0,   low);
+
+
+  d_tx_modulator_shadow[channel] |= TX_MODULATOR_ENABLE_NCO;
+
+  if (fine < 0)
+    d_tx_modulator_shadow[channel] |= TX_MODULATOR_NEG_FINE_TUNE;
+  else
+    d_tx_modulator_shadow[channel] &= ~TX_MODULATOR_NEG_FINE_TUNE;
+
+  ok &=_write_9862 (channel, REG_TX_MODULATOR, d_tx_modulator_shadow[channel]);
+
+  return ok;
+}
+#endif
+
+bool
+usrp_standard_tx::set_coarse_modulator (int channel, coarse_mod_t cm)
+{
+  if (channel < 0 || channel >= MAX_CHAN)
+    return false;
+
+  switch (cm){
+  case CM_NEG_FDAC_OVER_4:
+    d_tx_modulator_shadow[channel] &= ~TX_MODULATOR_CM_MASK;
+    d_tx_modulator_shadow[channel] |= TX_MODULATOR_COARSE_MODULATION_F_OVER_4;
+    d_tx_modulator_shadow[channel] |= TX_MODULATOR_NEG_COARSE_TUNE;
+    break;
+
+  case CM_NEG_FDAC_OVER_8:
+    d_tx_modulator_shadow[channel] &= ~TX_MODULATOR_CM_MASK;
+    d_tx_modulator_shadow[channel] |= TX_MODULATOR_COARSE_MODULATION_F_OVER_8;
+    d_tx_modulator_shadow[channel] |= TX_MODULATOR_NEG_COARSE_TUNE;
+    break;
+
+  case CM_OFF:
+    d_tx_modulator_shadow[channel] &= ~TX_MODULATOR_CM_MASK;
+    break;
+
+  case CM_POS_FDAC_OVER_8:
+    d_tx_modulator_shadow[channel] &= ~TX_MODULATOR_CM_MASK;
+    d_tx_modulator_shadow[channel] |= TX_MODULATOR_COARSE_MODULATION_F_OVER_8;
+    break;
+
+  case CM_POS_FDAC_OVER_4:
+    d_tx_modulator_shadow[channel] &= ~TX_MODULATOR_CM_MASK;
+    d_tx_modulator_shadow[channel] |= TX_MODULATOR_COARSE_MODULATION_F_OVER_4;
+    break;
+
+  default:
+    return false;
+  }
+
+  d_coarse_mod[channel] = cm;
+  return true;
+}
+
+unsigned int
+usrp_standard_tx::interp_rate () const { return d_interp_rate; }
+
+int
+usrp_standard_tx::nchannels () const { return d_nchan; }
+
+int
+usrp_standard_tx::mux () const { return d_sw_mux; }
+
+double
+usrp_standard_tx::tx_freq (int channel) const
+{
+  if (channel < 0 || channel >= MAX_CHAN)
+    return 0;
+
+  return d_tx_freq[channel];
+}
+
+usrp_standard_tx::coarse_mod_t
+usrp_standard_tx::coarse_modulator (int channel) const
+{
+  if (channel < 0 || channel >= MAX_CHAN)
+    return CM_OFF;
+
+  return d_coarse_mod[channel];
+}
+
+bool
+usrp_standard_tx::tune(int chan, db_base_sptr db, double target_freq, usrp_tune_result *result)
+{
+  duc_control dxc(this, chan);
+  return tune_a_helper(db, target_freq, converter_rate(), dxc, result);
+}

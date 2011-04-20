@@ -21,11 +21,11 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <gnuradar/config.h>
+#include "config.h"
 #endif
 
-#include <gnuradar/fusb_linux.h>
-#include <usb.h>		// libusb header
+#include "../include/fusb_linux.h"
+#include "../include/usb.h"		// libusb header
 #include <stdexcept>
 #ifdef HAVE_LINUX_COMPILER_H
 #include <linux/compiler.h>
@@ -37,6 +37,7 @@
 #include <algorithm>
 #include <errno.h>
 #include <string.h>
+#include <cstdio>
 
 #define MINIMIZE_TX_BUFFERING 1		// must be defined to 0 or 1
 
@@ -293,7 +294,7 @@ fusb_devhandle_linux::_wait_for_completion ()
     if (!_reap(true))
       break;
 }
-// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // 			     end point handle
 // ------------------------------------------------------------------------
 

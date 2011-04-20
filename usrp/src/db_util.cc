@@ -20,9 +20,9 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <gnuradar/config.h>
+#include <config.h>
 #endif
-#include <gnuradar/db_util.h>
+#include "../include/db_util.h"
 #include <sstream>
 
 std::string

@@ -1,5 +1,5 @@
 //
-// Copyright 2008 Free Software Foundation, Inc.
+// Copyright 2008,2009 Free Software Foundation, Inc.
 // 
 // This file is part of GNU Radio
 // 
@@ -19,8 +19,12 @@
 // Boston, MA 02110-1301, USA.
 //
 
-#include <gnuradar/db_base.h>
-#include <gnuradar/db_base_impl.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../include/db_base.h"
+#include "../include/db_base_impl.h"
 
 #if 0
 tune_result::tune_result(double baseband, double dxc, double residual, bool inv)
@@ -234,7 +238,7 @@ int
 db_base::_refclk_divisor()
 {
   // Return value to stick in REFCLK_DIVISOR register
-  throw std::runtime_error("_reflck_divisor() called from base class\n");;
+  throw std::runtime_error("_refclk_divisor() called from base class\n");;
 }
 
 bool

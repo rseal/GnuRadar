@@ -1,5 +1,5 @@
 //
-// Copyright 2008 Free Software Foundation, Inc.
+// Copyright 2008,2009 Free Software Foundation, Inc.
 // 
 // This file is part of GNU Radio
 // 
@@ -18,8 +18,99 @@
 // the Free Software Foundation, Inc., 51 Franklin Street,
 // Boston, MA 02110-1301, USA.
 
-#include <gnuradar/db_basic.h>
-#include <gnuradar/db_base_impl.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "../include/db_basic.h"
+#include "../include/db_base_impl.h"
+
+db_basic_tx::db_basic_tx(boost::shared_ptr<usrp_basic> usrp, int which)
+  : db_base(usrp, which)
+{
+  // Handler for Basic Tx daughterboards.
+  // 
+  // @param usrp: instance of usrp.source_c
+  // @param which: which side: 0 or 1 corresponding to TX_A or TX_B respectively
+
+  set_gain((gain_min() + gain_max()) / 2);         // initialize gain
+}
+
+db_basic_tx::~db_basic_tx()
+{
+}
+
+double 
+db_basic_tx::freq_min() 
+{
+  return -90e9;
+}
+
+double 
+db_basic_tx::freq_max() 
+{
+  return 90e9;
+}
+
+struct freq_result_t 
+db_basic_tx::set_freq(double target_freq)
+{
+  // Set the frequency.
+  // 
+  // @param freq:  target RF frequency in Hz
+  // @type freq:   double
+  // 
+  // @returns (ok, actual_baseband_freq) where:
+  //   ok is True or False and indicates success or failure,
+  //   actual_baseband_freq is the RF frequency that corresponds to DC in the IF.
+  
+  struct freq_result_t args = {false, 0};
+  args.ok = true;
+  args.baseband_freq = 0.0;
+  return args;
+}
+
+float
+db_basic_tx::gain_min()
+{
+  return usrp()->pga_min();
+}
+
+float
+db_basic_tx::gain_max()
+{
+  return usrp()->pga_max();
+}
+
+float
+db_basic_tx::gain_db_per_step()
+{
+  return usrp()->pga_db_per_step();
+}
+
+bool 
+db_basic_tx::set_gain(float gain)
+{
+  // Set the gain.
+  // 
+  // @param gain:  gain in decibels
+  // @returns True/False
+
+  bool ok = usrp()->set_pga(d_which * 2 + 0, gain);
+  ok = ok && usrp()->set_pga(d_which * 2 + 1, gain);
+  return ok;
+}
+
+bool 
+db_basic_tx::is_quadrature()
+{
+  // Return True if this board requires both I & Q analog channels.
+  
+  return true;
+}
+
+
+/******************************************************************************/
 
 
 db_basic_rx::db_basic_rx(usrp_basic_sptr usrp, int which, int subdev)
@@ -114,5 +205,62 @@ db_basic_rx::is_quadrature()
 
 
 
+/******************************************************************************/
+
+
+db_lf_tx::db_lf_tx(usrp_basic_sptr usrp, int which)
+  : db_basic_tx(usrp, which)
+{
+  // Handler for Low Freq Tx daughterboards.
+  //
+  // @param usrp: instance of usrp.source_c
+  // @param which: which side: 0 or 1 corresponding to RX_A or RX_B respectively
+}
+
+db_lf_tx::~db_lf_tx()
+{
+}
+
+double 
+db_lf_tx::freq_min() 
+{
+  return -32e6;
+}
+
+double 
+db_lf_tx::freq_max()
+{
+  return 32e6;
+}
+
+/******************************************************************************/
+
+
+db_lf_rx::db_lf_rx(usrp_basic_sptr usrp, int which, int subdev)
+  : db_basic_rx(usrp, which, subdev)
+{
+  // Handler for Low Freq Rx daughterboards.
+  //
+  // @param usrp: instance of usrp.source_c
+  // @param which: which side: 0 or 1 corresponding to RX_A or RX_B respectively
+  // @param subdev: which analog i/o channel: 0 or 1
+  // @type subdev: int
+}
+
+db_lf_rx::~db_lf_rx()
+{
+}
+
+double
+db_lf_rx::freq_min() 
+{
+  return 0.0;
+}
+
+double
+db_lf_rx::freq_max() 
+{
+  return 32e6;
+}
 
 

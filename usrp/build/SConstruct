@@ -1,5 +1,5 @@
 #library name
-library_name='usrp'
+library_name='gnuradar_usrp'
 
 
 #custom build flags

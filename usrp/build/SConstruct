@@ -6,17 +6,17 @@ library_name='gnuradar_usrp'
 flags = ['-std=gnu++0x', '-Wall', '-W']
 
 #setup libraries to link and paths
-libs=['']
-libPath=['','']
+libs=['usb']
+libPath=['/usr/lib','/usr/local/lib']
 
 
 source_files = Glob('../src/*');
-include_files = Glob('../include/*');
+include_files = [ Glob('../include/*'), Glob('../firmware/include/*') ]
 
 #define build environment
-env = Environment(CXXFLAGS=flags)
+env = Environment(CXXFLAGS=flags )
 env['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME']=1
 
-lib = env.SharedLibrary( library_name, source_files );
+lib = env.SharedLibrary( library_name, source_files, LIBPATH=libPath, LIBS=libs )
 
 

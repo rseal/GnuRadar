@@ -1,0 +1,142 @@
+diff --git a/deps/clp b/deps/clp
+--- a/deps/clp
++++ b/deps/clp
+@@ -1 +1 @@
+-Subproject commit 21e4c97d99a6d35664c3169822187f9d5012b166
++Subproject commit 21e4c97d99a6d35664c3169822187f9d5012b166-dirty
+diff --git a/include/GnuRadarDevice.h b/include/GnuRadarDevice.h
+index 9257100..994c12c 100644
+--- a/include/GnuRadarDevice.h
++++ b/include/GnuRadarDevice.h
+@@ -17,7 +17,7 @@
+ #ifndef GNURADARDEVICE_H
+ #define GNURADARDEVICE_H
+ 
+-#include<gnuradar/GnuRadarSettings.h>
++#include <gnuradar/GnuRadarSettings.h>
+ #include <gnuradar/Device.h>
+ #include <gnuradar/StreamBuffer.hpp>
+ 
+diff --git a/programs/Replay/SConscript b/programs/Replay/SConscript
+index 3392f8c..48ef6b3 100644
+--- a/programs/Replay/SConscript
++++ b/programs/Replay/SConscript
+@@ -8,6 +8,6 @@ libPath=['/usr/lib','/usr/local/lib']
+ env = Environment(LIBPATH=libPath);
+ warnEnv = env.Clone(CXXFLAGS=warnFlags);
+ 
+-libs=['rt', 'pthread','hdf5_hl_cpp','hdf5_cpp', 'tinyxmlcpp'];
++libs=['rt', 'pthread','hdf5_hl_cpp','hdf5_cpp', 'hdf5', 'hdf5_hl', 'tinyxmlcpp'];
+ warnEnv.Program(target='../../bin/gradar-replay', source='GnuRadarReplay.cxx', LIBS=libs);
+ 
+diff --git a/programs/Run/SConscript b/programs/Run/SConscript
+index 99b1faa..44ae0e6 100644
+--- a/programs/Run/SConscript
++++ b/programs/Run/SConscript
+@@ -2,7 +2,7 @@
+ flags = ['-g', '-Wall', '-W', '-DTIXML_USE_TICPP']
+ 
+ #setup libraries to link and paths
+-libs=['boost_system','boost_filesystem','tinyxmlcpp','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp']
++libs=['boost_system','boost_filesystem','tinyxmlcpp','pthread','usrp','usb','hdf5_hl_cpp','hdf5_cpp', 'hdf5_hl', 'hdf5']
+ libPath=['/usr/lib','/usr/local/lib']
+ 
+ #define build environment
+diff --git a/programs/Verify/GnuRadarVerify.hpp b/programs/Verify/GnuRadarVerify.hpp
+index 0757457..0bc873e 100644
+--- a/programs/Verify/GnuRadarVerify.hpp
++++ b/programs/Verify/GnuRadarVerify.hpp
+@@ -17,7 +17,7 @@
+ #ifndef GNURADAR_VERIFY_HPP
+ #define GNURADAR_VERIFY_HPP
+ 
+-#include<usrp/usrp_standard.h>
++#include <usrp/usrp_standard.h>
+ #include <gnuradar/GnuRadarSettings.h>
+ #include <gnuradar/ConfigFile.h>
+ #include <gnuradar/GnuRadarTypes.hpp>
+diff --git a/usrp/include/db_basic.h b/usrp/include/db_basic.h
+index 2adb30e..7f81733 100644
+--- a/usrp/include/db_basic.h
++++ b/usrp/include/db_basic.h
+@@ -22,7 +22,7 @@
+ #ifndef DB_BASIC_H
+ #define DB_BASIC_H
+ 
+-#include "db_base.h"
++#include <usrp/db_base.h>
+ 
+ 
+ /******************************************************************************/
+diff --git a/usrp/include/usrp_basic.h b/usrp/include/usrp_basic.h
+index 9281487..b76493e 100644
+--- a/usrp/include/usrp_basic.h
++++ b/usrp/include/usrp_basic.h
+@@ -23,10 +23,10 @@
+ #ifndef INCLUDED_USRP_BASIC_H
+ #define INCLUDED_USRP_BASIC_H
+ 
+-#include "db_base.h"
+-#include "usrp_slots.h"
+-#include "usrp_subdev_spec.h"
+-#include "libusb_types.h"
++#include <usrp/db_base.h>
++#include <usrp/usrp_slots.h>
++#include <usrp/usrp_subdev_spec.h>
++#include <usrp/libusb_types.h>
+ #include <string>
+ #include <vector>
+ #include <boost/utility.hpp>
+@@ -88,7 +88,7 @@ protected:
+    */
+   std::vector< std::vector<db_base_sptr> > d_db;
+ 
+-  //! One time call, made only only from usrp_standard_*::make after shared_ptr is created.
++  // One time call, made only only from usrp_standard_*::make after shared_ptr is created.
+   void init_db(usrp_basic_sptr u);
+ 
+ 
+diff --git a/usrp/include/usrp_prims.h b/usrp/include/usrp_prims.h
+index 807fbab..4780d00 100644
+--- a/usrp/include/usrp_prims.h
++++ b/usrp/include/usrp_prims.h
+@@ -23,11 +23,10 @@
+ #ifndef INCLUDED_USRP_PRIMS_H
+ #define INCLUDED_USRP_PRIMS_H
+ 
+-#include "usrp_slots.h"
+-#include "libusb_types.h"
++#include <usrp/usrp_slots.h>
++#include <usrp/libusb_types.h>
+ #include <string>
+ 
+-
+ struct libusb_context;
+ 
+ static const int USRP_HASH_SIZE = 16;
+@@ -131,7 +130,8 @@ usrp_load_firmware (libusb_device_handle *udh, const char *filename, bool force)
+  * If the result is ULS_OK, usrp_load_firmware_nth delays 1 second
+  * then rescans the busses and devices.
+  */
+-usrp_load_status_t usrp_load_firmware_nth (int nth, const char *filename, bool force, libusb_context* ctx = NULL );
++usrp_load_status_t
++usrp_load_firmware_nth (int nth, const char *filename, bool force, libusb_context *ctx = NULL);
+ 
+ /*!
+  * \brief load fpga configuration bitstream
+diff --git a/usrp/include/usrp_standard.h b/usrp/include/usrp_standard.h
+index c65e447..a631f8b 100644
+--- a/usrp/include/usrp_standard.h
++++ b/usrp/include/usrp_standard.h
+@@ -23,9 +23,9 @@
+ #ifndef INCLUDED_USRP_STANDARD_H
+ #define INCLUDED_USRP_STANDARD_H
+ 
+-#include "usrp_basic.h"
++#include <usrp/usrp_basic.h>
+ #include <boost/shared_ptr.hpp>
+-#include "usrp_tune_result.h"
++#include <usrp/usrp_tune_result.h>
+ 
+ class usrp_standard_tx;
+ class usrp_standard_rx;

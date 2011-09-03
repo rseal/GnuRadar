@@ -56,6 +56,7 @@ public:
 
     void Phase ( int channel, double phase ) {
         if ( ValidChannel ( channel ) ) ddcPhase[channel] = phase;
+        else std::cout << "GnuRadarSettings: Phase Error - invalid channel number " << std::endl;
     }
 
     const double& Tune ( int channel ) {

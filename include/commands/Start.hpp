@@ -109,14 +109,15 @@ class Start : public GnuRadarCommand {
 
       GnuRadarSettingsPtr settings( new GnuRadarSettings() );
 
-      //Program GNURadio
-      for ( int i = 0; i < configuration.NumChannels(); ++i ) {
-         settings->Tune ( i, configuration.DDC ( i ) );
-      }
-
       settings->numChannels    = configuration.NumChannels();
       settings->decimationRate = configuration.Decimation();
       settings->fpgaFileName   = configuration.FPGAImage();
+
+      //Program GNURadio
+      for ( int i = 0; i < configuration.NumChannels(); ++i ) {
+         settings->Tune ( i, configuration.DDC ( i ) );
+         settings->Phase( i, configuration.Phase( i ) );
+      }
 
       //change these as needed
       settings->fUsbBlockSize  = 0;

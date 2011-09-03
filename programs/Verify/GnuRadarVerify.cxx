@@ -53,7 +53,7 @@ int main ( int argc, char** argv )
 
     // set require gnuradar settings.
     GnuRadarSettings settings;
-    for ( int i = 0; i < cf.NumChannels(); ++i ) settings.Tune ( i, cf.DDC ( i ) );
+
     settings.numChannels    = cf.NumChannels();
     settings.decimationRate = cf.Decimation();
     settings.fpgaFileName   = cf.FPGAImage();
@@ -61,6 +61,12 @@ int main ( int argc, char** argv )
     settings.fUsbNblocks    = 0;
     settings.mux            = 0xf3f2f1f0;
 
+    for ( int i = 0; i < cf.NumChannels(); ++i ) {
+       settings.Tune ( i, cf.DDC ( i ) );
+       settings.Phase ( i, cf.Phase ( i ) );
+    }
+
+    cout << "NumChannels = " << settings.numChannels << endl;
     // create a USRP object.
     usrp_standard_rx_sptr usrp = usrp_standard_rx::make (
                                      settings.whichBoard,

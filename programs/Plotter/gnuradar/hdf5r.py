@@ -24,7 +24,7 @@ class Reader:
       samples = self.__getElement(root, 'samples')
       self.windows = self.__getElements(root, 'rx_win')
       self.dType = np.dtype([('real', np.int16), ('imag', np.int16)])
-      self.shape = (ipps*self.channels, samples*self.channels)
+      self.shape = (ipps, samples)
 
    def getBuffer(self):
 

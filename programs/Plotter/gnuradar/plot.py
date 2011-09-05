@@ -1,7 +1,7 @@
 from gnuradar.hdf5r import Reader
-from enthought.chaco.api import ArrayPlotData, Plot, ColorBar
-from enthought.chaco.api import HPlotContainer, LinearMapper
-from enthought.chaco.tools.api import RangeSelection, RangeSelectionOverlay
+from chaco.api import ArrayPlotData, Plot, ColorBar
+from chaco.api import HPlotContainer, LinearMapper
+from chaco.tools.api import RangeSelection, RangeSelectionOverlay
 from numpy import ndarray, arange, zeros, log10, clip
 import sys
 

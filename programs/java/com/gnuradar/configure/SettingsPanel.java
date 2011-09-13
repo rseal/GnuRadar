@@ -146,6 +146,8 @@ public class SettingsPanel extends JPanel
         bandwidthPanel.add ( bandwidthTextField );
         bandwidthPanel.add ( bandwidthUnitsLabel );
         this.add ( bandwidthPanel, new GBC ( 1, 1, 100, 100 ).setIpad ( 5, 5 ) );
+        
+        this.updateSettings();
 
     }
 
@@ -173,10 +175,31 @@ public class SettingsPanel extends JPanel
     private void setBandwidth()
     {
         numChannels = Integer.valueOf ( ( String ) channelsComboBox.getSelectedItem() );
-        bandwidth = sampleRate / ( decimation * numChannels );
+        bandwidth = sampleRate / decimation;
         double value;
         DecimalFormat formatter = new DecimalFormat ( "#0.00" );
 
+        double totalBandwidth = bandwidth * numChannels;
+        
+        if( totalBandwidth > 8e0 ) {
+        	
+        	bandwidth = 8e0/numChannels;
+        	
+        	switch( numChannels)
+        	{
+        	case 1:
+        		decimationComboBox.setSelectedIndex(0);       		
+        		break;
+        	case 2:
+        		decimationComboBox.setSelectedIndex(1);
+        		break;
+        	case 4:
+        		decimationComboBox.setSelectedIndex(2);
+        		break;
+        	}
+        	
+        }
+        
         if ( bandwidth >= 1e0 ) {
             value = bandwidth ;
             bandwidthUnitsLabel.setText ( "MHz" );

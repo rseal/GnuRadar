@@ -1,49 +1,47 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2003,2009 Free Software Foundation, Inc.
- *
+ * Copyright 2003 Free Software Foundation, Inc.
+ * 
  * This file is part of GNU Radio
- *
+ * 
  * GNU Radio is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3, or (at your option)
  * any later version.
- *
+ * 
  * GNU Radio is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
  * along with GNU Radio; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
 
-#include <usrp/usb/fusb.h>
-#include <usrp/usb/fusb_linux.h>
+#ifndef _USRP_INTERFACES_H_
+#define _USRP_INTERFACES_H_
 
-static const int MAX_BLOCK_SIZE     =  16 * 1024;	// hard limit
-static const int DEFAULT_BLOCK_SIZE =   4 * 1024;	// fewer kernel memory problems
-static const int FUSB_BUFFER_SIZE   =   1 * (1L << 20); // 1MB
+/*
+ * We've now split the USRP into 3 separate interfaces.
+ *
+ * Interface 0 contains only ep0 and is used for command and status.
+ * Interface 1 is the Tx path and it uses ep2 OUT BULK.
+ * Interface 2 is the Rx path and it uses ep6 IN BULK.
+ */
+ 
+#define	USRP_CMD_INTERFACE		0
+#define	USRP_CMD_ALTINTERFACE		0
+#define	USRP_CMD_ENDPOINT		0
 
-fusb_devhandle *
-fusb_sysconfig::make_devhandle (usb_dev_handle *udh, libusb_context *ctx)
-{
-  return new fusb_devhandle_linux (udh);
-}
+#define	USRP_TX_INTERFACE		1
+#define	USRP_TX_ALTINTERFACE		0
+#define	USRP_TX_ENDPOINT		2	// streaming data from host to FPGA
 
-int fusb_sysconfig::max_block_size ()
-{
-  return MAX_BLOCK_SIZE;
-}
+#define	USRP_RX_INTERFACE		2
+#define	USRP_RX_ALTINTERFACE		0
+#define	USRP_RX_ENDPOINT		6	// streaming data from FPGA to host
 
-int fusb_sysconfig::default_block_size ()
-{
-  return DEFAULT_BLOCK_SIZE;
-}
 
-int fusb_sysconfig::default_buffer_size ()
-{
-  return FUSB_BUFFER_SIZE;
-}
+#endif /* _USRP_INTERFACES_H_ */

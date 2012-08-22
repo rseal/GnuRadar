@@ -24,8 +24,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "../include/usrp_prims.h"
-#include "../include/usrp_dbid.h"
+#include <usrp/usrp/prims.h>
+#include <usrp/usrp/dbid.h>
 #include <stdio.h>
 
 #define NELEM(x) sizeof(x)/sizeof(x[0])

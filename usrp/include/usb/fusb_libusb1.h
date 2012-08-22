@@ -23,8 +23,8 @@
 #ifndef _FUSB_LIBUSB1_H_
 #define _FUSB_LIBUSB1_H_
 
-#include "fusb.h"
 #include <list>
+#include <usrp/usb/fusb.h>
 
 struct libusb_transfer;
 struct libusb_context;

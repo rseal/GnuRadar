@@ -20,24 +20,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "../include/usrp_basic.h"
-#include "../include/usrp_prims.h"
-#include "../firmware/include/usrp_interfaces.h"
-#include "../firmware/include/fpga_regs_common.h"
-#include "../firmware/include/fpga_regs_standard.h"
-#include "../include/fusb.h"
-#include "../include/db_boards.h"
-#include "../include/ad9862.h"
-
 #include <stdexcept>
 #include <assert.h>
 #include <math.h>
 #include <string.h>
 #include <cstdio>
+
+#include <usrp/usrp/basic.h>
+#include <usrp/usrp/prims.h>
+#include <usrp/usrp/interfaces.h>
+#include <usrp/fpga/fpga_regs_common.h>
+#include <usrp/fpga/fpga_regs_standard.h>
+#include <usrp/usb/fusb.h>
+#include <usrp/boards/db_boards.h>
+#include <usrp/adc/ad9862.h>
 
 using namespace ad9862;
 

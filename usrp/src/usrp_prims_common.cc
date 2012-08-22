@@ -20,39 +20,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "../include/UsrpDefinitions.h"
-#include "../include/Helper.hpp"
-
-#include "../include/usrp_prims.h"
-#include "../include/usrp_primsi.h"
-
-#include "../firmware/include/usrp_commands.h"
-#include "../firmware/include/usrp_ids.h"
-#include "../firmware/include/usrp_i2c_addr.h"
-#include "../firmware/include/fpga_regs_common.h"
-#include "../firmware/include/fpga_regs_standard.h"
-#include "../include/ad9862.h"
-
-#include <cerrno>
-#include <cstdio>
+#include <errno.h>
+#include <stdio.h>
 #include <unistd.h>
-#include <cstdlib>
-#include <cstring>
+#include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
 #include <time.h>		// FIXME should check with autoconf (nanosleep)
 #include <algorithm>
-#include <string>
-#include <iostream>
 #include <assert.h>
 
+#include <usrp/usrp/primsi.h>
+#include <usrp/usrp/commands.h>
+#include <usrp/usrp/ids.h>
+#include <usrp/usrp/i2c_addr.h>
+#include <usrp/fpga/fpga_regs_common.h>
+#include <usrp/fpga/fpga_regs_standard.h>
+#include <usrp/adc/ad9862.h>
+#include <usrp/utils/std_paths.h>
+
 extern "C" {
-#include "../include/md5.h"
+#include <usrp/utils/md5.h>
 };
 
+#define NELEM(x) sizeof(x)/sizeof(x[0])
 #define VERBOSE 0
 
 using namespace ad9862;
@@ -64,6 +55,45 @@ static const int hash_slot_addr[2] = {
   USRP_HASH_SLOT_0_ADDR,
   USRP_HASH_SLOT_1_ADDR
 };
+
+static const char *default_firmware_filename = "std.ihx";
+static const char *default_fpga_filename     = "std_2rxhb_2tx.rbf";
+
+static char *
+find_file (const char *filename, int hw_rev)
+{
+  const char **sp = std_paths;
+  static char path[1000];
+  char *s;
+
+  s = getenv("USRP_PATH");
+  if (s) {
+    snprintf (path, sizeof (path), "%s/rev%d/%s", s, hw_rev, filename);
+    if (access (path, R_OK) == 0)
+      return path;
+  }
+
+  while (*sp){
+    snprintf (path, sizeof (path), "%s/rev%d/%s", *sp, hw_rev, filename);
+    if (access (path, R_OK) == 0)
+      return path;
+    sp++;
+  }
+  return 0;
+}
+
+static const char *
+get_proto_filename(const std::string user_filename, const char *env_var, const char *def)
+{
+  if (user_filename.length() != 0)
+    return user_filename.c_str();
+
+  char *s = getenv(env_var);
+  if (s && *s)
+    return s;
+
+  return def;
+}
 
 
 static void power_down_9862s (libusb_device_handle *udh);
@@ -705,8 +735,8 @@ usrp_load_standard_bits (int nth, bool force,
 			 libusb_context *ctx)
 {
   usrp_load_status_t 	s;
-  std::string fileName;
-  std::string protoFileName;
+  const char		*filename;
+  const char		*proto_filename;
   int hw_rev;
 
   // first, figure out what hardware rev we're dealing with
@@ -721,18 +751,15 @@ usrp_load_standard_bits (int nth, bool force,
 
   // start by loading the firmware
 
-  protoFileName = usrp::Helper::GetProtoFileName(
-		  firmware_filename, "USRP_FIRMWARE", usrp::DEFAULT_FIRMWARE_FILENAME);
-  fileName = usrp::Helper::FindFile(protoFileName, hw_rev);
-
-  if ( fileName.empty() )
-  {
-	  std::cerr << "Can't find firmware: " << protoFileName << std::endl;
+  proto_filename = get_proto_filename(firmware_filename, "USRP_FIRMWARE",
+				      default_firmware_filename);
+  filename = find_file(proto_filename, hw_rev);
+  if (filename == 0){
+    fprintf (stderr, "Can't find firmware: %s\n", proto_filename);
     return false;
   }
-
-  s = usrp_load_firmware_nth (nth, fileName.c_str() , force, ctx);
-  load_status_msg (s, "firmware", fileName.c_str() );
+  s = usrp_load_firmware_nth (nth, filename, force, ctx);
+  load_status_msg (s, "firmware", filename);
 
   if (s == ULS_ERROR)
     return false;
@@ -743,23 +770,20 @@ usrp_load_standard_bits (int nth, bool force,
 
   // now move on to the fpga configuration bitstream
 
-  protoFileName = usrp::Helper::GetProtoFileName(fpga_filename, "USRP_FPGA",
-				      usrp::DEFAULT_FPGA_FILENAME);
-  fileName = usrp::Helper::FindFile(protoFileName, hw_rev);
-
-  if ( fileName.empty() )
-  {
-	  std::cerr << "Can't find fpga bitstream: " << protoFileName << std::endl;
+  proto_filename = get_proto_filename(fpga_filename, "USRP_FPGA",
+				      default_fpga_filename);
+  filename = find_file (proto_filename, hw_rev);
+  if (filename == 0){
+    fprintf (stderr, "Can't find fpga bitstream: %s\n", proto_filename);
     return false;
   }
-
   libusb_device_handle *udh = open_nth_cmd_interface (nth, ctx);
   if (udh == 0)
     return false;
 
-  s = usrp_load_fpga (udh, fileName.c_str() , force);
+  s = usrp_load_fpga (udh, filename, force);
   usrp_close_interface (udh);
-  load_status_msg (s, "fpga bitstream", fileName.c_str() );
+  load_status_msg (s, "fpga bitstream", filename);
 
   if (s == ULS_ERROR)
     return false;
@@ -1209,7 +1233,4 @@ usrp_serial_number(libusb_device_handle *udh)
 
   return (char*) buf;
 }
-
-
-
 

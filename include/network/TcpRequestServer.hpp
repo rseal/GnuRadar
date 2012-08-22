@@ -50,7 +50,7 @@ namespace gnuradar {
             void start_accept() {
                // create a new tcp connection
                TcpConnection::pointer new_connection =
-                  TcpConnection::create ( acceptor_.io_service(), commands_ );
+                  TcpConnection::create ( acceptor_.get_io_service(), commands_ );
 
                // wait for incoming requests
                acceptor_.async_accept (

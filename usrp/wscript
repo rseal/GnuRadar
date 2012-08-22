@@ -1,0 +1,87 @@
+import os
+import sys
+import shutil
+import glob
+
+
+################################################################################
+################################################################################
+def options(opt):
+   opt.load('compiler_cxx')
+   opt.load('compiler_c')
+
+
+################################################################################
+################################################################################
+def configure(conf):
+   conf.load('compiler_cxx')
+   conf.load('compiler_c')
+
+
+################################################################################
+################################################################################
+def remove_files(d):
+   try:
+      shutil.rmtree(d)
+   except Exception as ex:
+      print(ex)
+
+
+################################################################################
+################################################################################
+def install_symlinks(hdr):
+
+   sym_path =  os.path.abspath('include')
+   
+   print(sym_path)
+
+   if not os.geteuid()==0:
+      sys.exit('\nERROR: Root Acces is required to execute this script.\n')
+
+   dst_dir = '/usr/local/include/usrp'
+   print(dst_dir)
+
+   remove_files(dst_dir)
+
+   try:
+      print('Creating Directory Tree...')
+      os.symlink(sym_path,dst_dir)
+      print('Header installation complete.')
+   except Exception as ex:
+      print(ex)
+
+
+
+################################################################################
+################################################################################
+def install_headers(hdr):
+
+   if not os.geteuid()==0:
+      sys.exit('\nERROR: Root Acces is required to execute this script.\n')
+
+   src_dir = 'include'
+   dst_dir = '/usr/local/include/usrp'
+
+   remove_files(dst_dir)
+
+   try:
+      print('Creating Directory Tree...')
+      shutil.copytree(src_dir,dst_dir,symlinks=True)
+      print('Header installation complete.')
+   except Exception as ex:
+      print(ex)
+
+
+################################################################################
+################################################################################
+def build(bld):
+
+   bld(
+      features = 'cxx cxxstlib',
+      includes = 'src',
+      source   = bld.path.ant_glob('src/*.c*'),
+      cflags   = ['-O2','-fPIC'],
+      cxxflags = ['-O2','-fPIC'],
+      target   = 'gnuradar',
+      vnum     = '1.0.0'
+   )

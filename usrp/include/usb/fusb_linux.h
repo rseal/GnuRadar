@@ -25,8 +25,8 @@
 #ifndef _FUSB_LINUX_H_
 #define _FUSB_LINUX_H_
 
-#include "fusb.h"
 #include <list>
+#include <usrp/usb/fusb.h>
 
 struct  usbdevfs_urb;
 class   fusb_ephandle_linux;

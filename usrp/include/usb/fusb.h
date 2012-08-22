@@ -23,7 +23,7 @@
 #ifndef _FUSB_H_
 #define _FUSB_H_
 
-#include <usrp/libusb_types.h>
+#include <usrp/usb/libusb_types.h>
 
 struct 	libusb_context;
 class   fusb_ephandle;

@@ -24,7 +24,7 @@
 # include <config.h>
 #endif
 
-#include "../include/md5.h"
+#include <usrp/utils/md5.h>
 
 #include <sys/types.h>
 

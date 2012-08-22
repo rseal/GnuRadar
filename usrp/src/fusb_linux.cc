@@ -24,20 +24,21 @@
 #include "config.h"
 #endif
 
-#include "../include/fusb_linux.h"
-#include "../include/usb.h"		// libusb header
-#include <stdexcept>
 #ifdef HAVE_LINUX_COMPILER_H
 #include <linux/compiler.h>
 #endif
+
+#include <usb.h>		// libusb header
+#include <stdexcept>
 #include <linux/usbdevice_fs.h>	// interface to kernel portion of user mode usb driver
 #include <sys/ioctl.h>
 #include <assert.h>
-#include <string.h>
 #include <algorithm>
 #include <errno.h>
 #include <string.h>
 #include <cstdio>
+
+#include <usrp/usb/fusb_linux.h>
 
 #define MINIMIZE_TX_BUFFERING 1		// must be defined to 0 or 1
 

@@ -23,8 +23,8 @@
 #ifndef DB_BOARDS_H
 #define DB_BOARDS_H
 
-#include <usrp/db_base.h>
-#include <usrp/usrp_basic.h>
+#include <usrp/boards/db_base.h>
+#include <usrp/usrp/basic.h>
 
 std::vector<db_base_sptr> instantiate_dbs(int dbid, usrp_basic_sptr usrp, int which_side);
 

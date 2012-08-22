@@ -22,7 +22,7 @@
 #ifndef DB_BASIC_H
 #define DB_BASIC_H
 
-#include "db_base.h"
+#include <usrp/boards/db_base.h>
 
 
 /******************************************************************************/

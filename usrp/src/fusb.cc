@@ -24,7 +24,7 @@
 #include "config.h"
 #endif
 
-#include "../include/fusb.h"
+#include <usrp/usb/fusb.h>
 
 // ------------------------------------------------------------------------
 // 			     device handle

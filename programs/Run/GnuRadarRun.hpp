@@ -19,7 +19,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <usrp/usrp_standard.h>
+#include <usrp/usrp/standard.h>
 
 #include <gnuradar/ProducerConsumerModel.h>
 #include <gnuradar/GnuRadarDevice.h>
@@ -31,9 +31,9 @@
 #include <gnuradar/Units.h>
 #include <gnuradar/Constants.hpp>
 #include <clp/CommandLineParser.hpp>
-#include <HDF5/HDF5.hpp>
-#include <HDF5/Complex.hpp>
-#include <HDF5/Time.hpp>
+#include <hdf5r/HDF5.hpp>
+#include <hdf5r/Complex.hpp>
+#include <hdf5r/Time.hpp>
 
 typedef boost::shared_ptr<HDF5> Hdf5Ptr;
 typedef boost::shared_ptr<gnuradar::GnuRadarDevice> GnuRadarDevicePtr;

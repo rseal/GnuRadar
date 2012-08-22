@@ -20,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "../include/usrp_config.h"
+#include <usrp/usrp/config.h>
 
 int
 usrp_rx_config_stream_count (unsigned int usrp_rx_config)

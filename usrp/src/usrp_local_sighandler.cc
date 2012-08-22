@@ -25,14 +25,11 @@
  * We don't have a common library to put this in, so...
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "../include/usrp_local_sighandler.h"
 #include <stdexcept>
 #include <stdio.h>
 #include <string.h>
+
+#include <usrp/usrp/local_sighandler.h>
 
 usrp_local_sighandler::usrp_local_sighandler (int signum,
 					      void (*new_handler)(int))

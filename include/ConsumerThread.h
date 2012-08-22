@@ -27,9 +27,9 @@
 #include <gnuradar/SThread.h>
 #include <gnuradar/xml/SharedBufferHeader.hpp>
 
-#include<HDF5/HDF5.hpp>
-#include<HDF5/Complex.hpp>
-#include<HDF5/Time.hpp>
+#include<hdf5r/HDF5.hpp>
+#include<hdf5r/Complex.hpp>
+#include<hdf5r/Time.hpp>
 
 #include <fstream>
 

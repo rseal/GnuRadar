@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2003 Free Software Foundation, Inc.
+ * Copyright 2003,2006 Free Software Foundation, Inc.
  * 
  * This file is part of GNU Radio
  * 
@@ -20,20 +20,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _FUSB_GENERIC_H_
-#define _FUSB_GENERIC_H_
+#ifndef _FUSB_RA_WB_H_
+#define _FUSB_RA_WB_H_
 
-#include "fusb.h"
+#include <usrp/usb/fusb.h>
 
 /*!
  * \brief generic implementation of fusb_devhandle using only libusb
  */
-class fusb_devhandle_generic : public fusb_devhandle
+class fusb_devhandle_ra_wb : public fusb_devhandle
 {
 public:
   // CREATORS
-  fusb_devhandle_generic (usb_dev_handle *udh);
-  virtual ~fusb_devhandle_generic ();
+  fusb_devhandle_ra_wb (usb_dev_handle *udh);
+  virtual ~fusb_devhandle_ra_wb ();
 
   // MANIPULATORS
   virtual fusb_ephandle *make_ephandle (int endpoint, bool input_p,
@@ -44,16 +44,17 @@ public:
 /*!
  * \brief generic implementation of fusb_ephandle using only libusb
  */
-class fusb_ephandle_generic : public fusb_ephandle
+class fusb_ephandle_ra_wb : public fusb_ephandle
 {
 private:
-  fusb_devhandle_generic	*d_devhandle;
+  fusb_devhandle_ra_wb	*d_devhandle;
+  bool d_ra_wb_on;
   
 public:
   // CREATORS
-  fusb_ephandle_generic (fusb_devhandle_generic *dh, int endpoint, bool input_p,
-			 int block_size = 0, int nblocks = 0);
-  virtual ~fusb_ephandle_generic ();
+  fusb_ephandle_ra_wb (fusb_devhandle_ra_wb *dh, int endpoint, bool input_p,
+		       int block_size = 0, int nblocks = 0);
+  virtual ~fusb_ephandle_ra_wb ();
 
   // MANIPULATORS
 
@@ -76,8 +77,8 @@ public:
   /*
    * block until all outstanding writes have completed
    */
-  virtual void wait_for_completion () { };
+  virtual void wait_for_completion ();
 };
 
-#endif /* _FUSB_GENERIC_H_ */
+#endif /* _FUSB_RA_WB_H_ */
 

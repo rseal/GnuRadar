@@ -19,17 +19,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "../include/libusb_types.h"
-#include "../include/usrp_primsi.h"
-#include "../include/fusb.h"
-#include "../firmware/include/usrp_commands.h"
-#include "../include/ad9862.h"
-
 #include <usb.h>
 #include <errno.h>
 #include <stdio.h>
@@ -39,8 +28,12 @@
 #include <ctype.h>
 #include <assert.h>
 
+#include <usrp/usrp/primsi.h>
+#include <usrp/usrp/commands.h>
+#include <usrp/adc/ad9862.h>
+
 extern "C" {
-#include "../include/md5.h"
+#include <usrp/utils/md5.h>
 };
 
 using namespace ad9862;

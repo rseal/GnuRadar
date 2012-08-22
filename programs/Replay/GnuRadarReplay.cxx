@@ -20,8 +20,8 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <HDF5/HDF5.hpp>
-#include <HDF5/Complex.hpp>
+#include <hdf5r/HDF5.hpp>
+#include <hdf5r/Complex.hpp>
 
 #include <clp/CommandLineParser.hpp>
 

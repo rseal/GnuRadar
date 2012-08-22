@@ -22,7 +22,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "../include/db_util.h"
+#include <usrp/boards/db_util.h>
 #include <sstream>
 
 std::string

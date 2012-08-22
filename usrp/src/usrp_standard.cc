@@ -19,21 +19,16 @@
  * the Free Software Foundation, Inc., 51 Franklin Street,
  * Boston, MA 02110-1301, USA.
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include "../include/usrp_standard.h"
-#include "../include/usrp_prims.h"
-#include "../firmware/include/fpga_regs_common.h"
-#include "../firmware/include/fpga_regs_standard.h"
-#include "../include/ad9862.h"
-
 #include <stdexcept>
 #include <assert.h>
 #include <math.h>
 #include <cstdio>
+
+#include <usrp/usrp/standard.h>
+#include <usrp/usrp/prims.h>
+#include <usrp/fpga/fpga_regs_common.h>
+#include <usrp/fpga/fpga_regs_standard.h>
+#include <usrp/adc/ad9862.h>
 
 
 static const int OLD_CAPS_VAL = 0xaa55ff77;

@@ -23,7 +23,7 @@
 
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
-#include <usrp/usrp_standard.h>
+#include <usrp/usrp/standard.h>
 
 #include <iostream>
 #include <vector>

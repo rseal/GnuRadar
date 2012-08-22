@@ -34,7 +34,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/asio.hpp>
 
-#include <HDF5/HDF5.hpp>
+#include <hdf5r/HDF5.hpp>
 
 #include <vector>
 

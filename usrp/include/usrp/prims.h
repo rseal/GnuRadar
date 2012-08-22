@@ -23,8 +23,8 @@
 #ifndef INCLUDED_USRP_PRIMS_H
 #define INCLUDED_USRP_PRIMS_H
 
-#include "usrp_slots.h"
-#include "libusb_types.h"
+#include <usrp/usrp/slots.h>
+#include <usrp/usb/libusb_types.h>
 #include <string>
 
 

@@ -1,8 +1,14 @@
 import os
+import stat
 import sys
 import shutil
 
+HOME_DIR = os.environ['HOME']
+PROG_INSTALL_DIR='/usr/local/bin/'
+PROJECT_NAME='gnuradar'
+
 ################################################################################
+# Local method to remove directory tree
 ################################################################################
 def remove_files(d):
    try:
@@ -11,6 +17,7 @@ def remove_files(d):
       print(ex)
 
 ################################################################################
+# Installs symlink to include director for development
 ################################################################################
 def install_symlinks(hdr):
 
@@ -31,6 +38,7 @@ def install_symlinks(hdr):
       print(ex)
 
 ################################################################################
+# Installs a copy of header files in /usr/local/include
 ################################################################################
 def install_headers(hdr):
 
@@ -50,14 +58,18 @@ def install_headers(hdr):
       print(ex)
 
 ################################################################################
+# Loads c++ and java compiler options
 ################################################################################
 def options(ctx):
    ctx.load('compiler_c compiler_cxx')
+   ctx.load('java')
 
 ################################################################################
+# Loads c++ and java compiler options
 ################################################################################
 def configure(ctx):
    ctx.load('compiler_c compiler_cxx')
+   ctx.load('java')
    ctx.check(
       features = 'cxx cxxprogram',
       libpath  = [ctx.path.abspath()+'/build/usrp','/usr/lib/','/usr/local/lib'],
@@ -66,11 +78,13 @@ def configure(ctx):
    )
 
 ################################################################################
+# Builds c++ and java files. Also manages call to install
 ################################################################################
 def build(bld):
 
    ## build the usrp library
    bld.recurse('usrp')
+   bld.recurse('programs/java')
 
    ### build primary program
    bld(
@@ -116,7 +130,7 @@ def build(bld):
                      'usb','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
    )
 
-   ### build Run server
+   ### build Replay
    bld(
          name     = 'replay',
          features = 'cxx cxxprogram',
@@ -130,26 +144,30 @@ def build(bld):
                      'usb','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
    )
 
-   ### build Run server
+   bld.add_group()
    bld(
-         name     = 'replay',
-         features = 'cxx cxxprogram',
-         cxxflags = ['-march=native', '-Wall', '-W'],
-         defines  = {'TIXML_USE_TICPP':1},
-         includes = ['programs/Replay'],
-         source   = ['programs/Replay/GnuRadarReplay.cxx'],
-         target   = 'gradar-replay',
-         lib      = ['boost_system','boost_filesystem',
-                     'tinyxmlcpp','pthread','gnuradar', 
-                     'usb','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
+        rule   = 'cp ${SRC} ${TGT}',
+        source = bld.path.ant_glob('programs/java/com/lib/xom-1.2.6.jar'),
+        target ='programs/java/xom-1.2.6.jar' 
+    )
+
+   bld.add_group()
+   bld.install_files(
+         '${PREFIX}/gnuradar', 
+         bld.path.get_bld().ant_glob('programs/java/*.jar')
    )
 
-   #ctx(
-         #name     = 'read',
-         #features = 'cxx cxxprogram',
-         #cxxflags = ['-march=native', '-Wall', '-W'],
-         #includes = ['.','examples'],
-         #source   = 'examples/read.cpp',
-         #target   = 'read',
-         #lib      = ['hdf5','hdf5_hl_cpp','hdf5_cpp'],
-   #)
+   bld.install_files(
+      PROG_INSTALL_DIR,
+      bld.path.ant_glob('scripts/gradar-*'),
+      chmod=stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
+   )
+
+   bld.add_group()
+
+################################################################################
+# User configuration file for networking.
+################################################################################
+def setup_user(ctx):
+   shutil.copy('scripts/.gradarrc', HOME_DIR);
+

@@ -1,0 +1,86 @@
+top = '.'
+out = 'build'
+
+def options(opt):
+   pass
+
+def configure(conf):
+   conf.load('java')
+
+
+def build(bld):
+
+   LIB=bld.path.abspath()+'/com/lib/xom-1.2.6.jar'
+
+   bld.add_group(
+      bld(
+         features  = 'javac',
+         srcdir    = 'com',
+         outdir    = 'classes',
+         compat    = '1.6',
+         #use       = 'com',
+         classpath = ['.',LIB],
+         name      = 'gradar-src'
+      )
+   )
+
+   bld.add_group(
+      bld(
+         features = 'jar',
+         basedir  = 'classes',
+         destfile = 'gradar-configure.jar',
+         compat   = '1.6',
+         manifest = 'com/CONFIGURE_MANIFEST.MF',
+         use      = 'gradar-src'
+      )
+   )
+
+   bld.add_group(
+      bld(
+         features = 'jar',
+         basedir  = 'classes',
+         destfile = 'gradar-verify.jar',
+         compat   = '1.6',
+         manifest = 'com/VERIFY_MANIFEST.MF',
+         use      = 'gradar-src'
+      )
+   )
+
+   bld.add_group(
+      bld(
+         features = 'jar',
+         basedir  = 'classes',
+         destfile = 'gradar-run.jar',
+         compat   = '1.6',
+         manifest = 'com/RUN_MANIFEST.MF',
+         use      = 'gradar-src'
+      )
+   )
+
+   #bld.recurse('animals cats')
+
+#SCONS build file
+#import os;
+
+# create environment
+#libPath=[os.getcwd()+'/'+lib]
+#env = Environment(JAVACLASSPATH=libPath);
+
+## scons fails to properly pull inner classes into the jar files
+## this seems to work
+#env['JARCHDIR']=os.path.join(env.Dir('.').get_abspath(),'classes')
+
+#jar_configure='../../bin/gradar-configure.jar';
+#jar_verify='../../bin/gradar-verify.jar';
+#jar_run='../../bin/gradar-run.jar';
+
+#env.Java(target = 'classes', source = 'com', JAVAVERSION='1.6')
+
+##place 3rd party lib in bin/lib  directory
+#env.InstallAs('../../bin/xom-1.2.6.jar', lib )
+
+#env.Jar(jar_configure, ['classes', 'com/CONFIGURE_MANIFEST.MF']);
+#env.Jar(jar_verify, ['classes', 'com/VERIFY_MANIFEST.MF']);
+#env.Jar(jar_run, ['classes', 'com/RUN_MANIFEST.MF']);
+
+#env.Clean('.', ['classes','../../bin/lib']);

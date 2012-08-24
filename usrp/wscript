@@ -83,5 +83,6 @@ def build(bld):
       cflags   = ['-O2','-fPIC'],
       cxxflags = ['-O2','-fPIC'],
       target   = 'gnuradar',
-      vnum     = '1.0.0'
+      vnum     = '1.0.0',
+      install_path = '${PREFIX}'
    )

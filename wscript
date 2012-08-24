@@ -5,6 +5,7 @@ import shutil
 
 HOME_DIR = os.environ['HOME']
 PROG_INSTALL_DIR='/usr/local/bin/'
+PROG_LIB_DIR='/usr/local/lib'
 PROJECT_NAME='gnuradar'
 
 ################################################################################
@@ -95,6 +96,7 @@ def build(bld):
          includes = ['programs/Verify'],
          source   = 'programs/Verify/GnuRadarVerify.cxx',
          target   = 'gradar-verify-cli',
+         libpath  = ['usrp'],
          lib      = ['tinyxmlcpp','pthread','gnuradar', 'usb'],
    )
 
@@ -109,6 +111,7 @@ def build(bld):
                      'programs/Run/ProducerThread.cxx',
                      'programs/Run/ConsumerThread.cxx'],
          target   = 'gradar-run-cli',
+         libpath  = ['usrp'],
          lib      = ['boost_system','boost_filesystem',
                      'tinyxmlcpp','pthread','gnuradar', 
                      'usb','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
@@ -125,6 +128,7 @@ def build(bld):
                      'programs/Run/ProducerThread.cxx',
                      'programs/Run/ConsumerThread.cxx'],
          target   = 'gradar-run-server',
+         libpath  = ['usrp'],
          lib      = ['boost_system','boost_filesystem',
                      'tinyxmlcpp','pthread','gnuradar', 
                      'usb','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
@@ -139,6 +143,7 @@ def build(bld):
          includes = ['programs/Replay'],
          source   = ['programs/Replay/GnuRadarReplay.cxx'],
          target   = 'gradar-replay',
+         libpath  = ['usrp'],
          lib      = ['boost_system','boost_filesystem',
                      'tinyxmlcpp','pthread','gnuradar', 
                      'usb','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
@@ -158,8 +163,19 @@ def build(bld):
    )
 
    bld.install_files(
+         '${PREFIX}/gnuradar', 
+         bld.path.ant_glob('scripts/*.xml')
+   )
+
+   bld.install_files(
       PROG_INSTALL_DIR,
       bld.path.ant_glob('scripts/gradar-*'),
+      chmod=stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
+   )
+
+   bld.install_files(
+      PROG_LIB_DIR,
+      bld.path.ant_glob('usrp/*.la'),
       chmod=stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
    )
 

@@ -1,8 +1,0 @@
-env = Environment();
-
-build_dir = 'build';
-env.SConscript('Verify/SConscript');
-env.SConscript('Run/SConscript');
-env.SConscript('Replay/SConscript');
-#env.SConscript('Config/SConscript');
-env.SConscript('java/SConscript')

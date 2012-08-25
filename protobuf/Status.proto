@@ -1,0 +1,8 @@
+package gnuradar;
+
+message StatusMessage{
+	required string name        = 1;
+	required int32 buffer_depth = 2;
+	required int32 write_buffer = 3;
+	required int32 read_buffer  = 4;
+}

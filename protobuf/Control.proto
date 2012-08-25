@@ -1,0 +1,8 @@
+package gnuradar;
+
+message ControlMessage{
+   required string name        = 1;
+   required string source      = 2;
+   required string destination = 3;
+}
+

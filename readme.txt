@@ -34,6 +34,9 @@ Dependencies:
 1. Latest version of the boost libraries ( http://www.boost.org ).
 2. Sun Java Version 1.6
 3. Waf build system.
+4. HDF5 library.
+5. protobuf ( i.e google protocol buffers )
+6. zeromq ( a.k.a 0mq )
 
 Dependency installation:
 

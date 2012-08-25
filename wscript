@@ -5,7 +5,7 @@ import shutil
 
 HOME_DIR = os.environ['HOME']
 PROG_INSTALL_DIR='/usr/local/bin/'
-PROG_LIB_DIR='/usr/local/lib'
+PROG_LIB_DIR='/usr/local/lib/'
 PROJECT_NAME='gnuradar'
 
 ################################################################################
@@ -170,12 +170,6 @@ def build(bld):
    bld.install_files(
       PROG_INSTALL_DIR,
       bld.path.ant_glob('scripts/gradar-*'),
-      chmod=stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
-   )
-
-   bld.install_files(
-      PROG_LIB_DIR,
-      bld.path.ant_glob('usrp/*.la'),
       chmod=stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO
    )
 

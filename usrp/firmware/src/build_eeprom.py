@@ -145,7 +145,7 @@ def build_shell_script (out, ihx_filename, rev, prefix):
     image = build_eeprom_image (ihx_filename, rev)
 
     out.write ('#!/bin/sh\n')
-    out.write ('usrper -x load_firmware ' + prefix + '/share/usrp/rev%d/std.ihx\n' % rev)
+    out.write ('usrper -x load_firmware ' + prefix + '/gnuradar/firmware/std.ihx\n' % rev)
     out.write ('sleep 2\n')
     
     # print "len(image) =", len(image)

@@ -86,3 +86,22 @@ def build(bld):
       vnum     = '1.0.0',
       install_path = '${PREFIX}/lib'
    )
+   
+   bld.add_group()
+
+   bld(
+      features = 'cxx cxxprogram',
+      includes = ['utils'],
+      source   = 'utils/usrper.cc',
+      libpath  = 'usrp',
+      lib      = ['gnuradar','usb-1.0'],
+      cxxflags = ['-O2','-fPIC'],
+      target   = 'usrper',
+   )
+
+   udev_rules = 'utils/10-usrp.rules'
+
+   bld.install_files(
+         '/etc/udev/rules.d',
+         udev_rules
+         )

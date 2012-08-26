@@ -74,7 +74,7 @@ def configure(ctx):
    ctx.check(
       features = 'cxx cxxprogram',
       libpath  = [ctx.path.abspath()+'/build/usrp','/usr/lib/','/usr/local/lib'],
-      libs     = ['hdf5','hdf5_hl_cpp','hdf5_cpp','tinyxmlcpp','pthread','usb'],
+      libs     = ['hdf5','hdf5_hl_cpp','hdf5_cpp','tinyxmlcpp','pthread','usb-1.0'],
       cflags   = ['-march=native','-Wall','-02'],
    )
 
@@ -87,6 +87,8 @@ def build(bld):
    bld.recurse('usrp')
    bld.recurse('programs/java')
 
+   bld.add_group()
+
    ### build primary program
    bld(
          name     = 'verify',
@@ -96,8 +98,8 @@ def build(bld):
          includes = ['programs/Verify'],
          source   = 'programs/Verify/GnuRadarVerify.cxx',
          target   = 'gradar-verify-cli',
-         libpath  = ['usrp'],
-         lib      = ['tinyxmlcpp','pthread','gnuradar', 'usb'],
+         libpath  = ['usrp','/usr/lib','/usr/local/lib'],
+         lib      = ['tinyxmlcpp','pthread','gnuradar', 'usb-1.0'],
    )
 
    ### build Run command-line interface 
@@ -111,10 +113,10 @@ def build(bld):
                      'programs/Run/ProducerThread.cxx',
                      'programs/Run/ConsumerThread.cxx'],
          target   = 'gradar-run-cli',
-         libpath  = ['usrp'],
+         libpath  = ['usrp','/usr/lib','/usr/local/lib'],
          lib      = ['boost_system','boost_filesystem',
                      'tinyxmlcpp','pthread','gnuradar', 
-                     'usb','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
+                     'usb-1.0','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
    )
 
    ### build Run server
@@ -128,10 +130,10 @@ def build(bld):
                      'programs/Run/ProducerThread.cxx',
                      'programs/Run/ConsumerThread.cxx'],
          target   = 'gradar-run-server',
-         libpath  = ['usrp'],
+         libpath  = ['usrp','/usr/lib','/usr/local/lib'],
          lib      = ['boost_system','boost_filesystem',
                      'tinyxmlcpp','pthread','gnuradar', 
-                     'usb','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
+                     'usb-1.0','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
    )
 
    ### build Replay
@@ -143,10 +145,10 @@ def build(bld):
          includes = ['programs/Replay'],
          source   = ['programs/Replay/GnuRadarReplay.cxx'],
          target   = 'gradar-replay',
-         libpath  = ['usrp'],
+         libpath  = ['usrp','/usr/lib','/usr/local/lib'],
          lib      = ['boost_system','boost_filesystem',
                      'tinyxmlcpp','pthread','gnuradar', 
-                     'usb','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
+                     'usb-1.0','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
    )
 
    bld.add_group()

@@ -27,7 +27,6 @@ Currently, there are 4 primary programs of interest:
 3. gradar-run : Data collection tool for the USRP receiver.
 4. gradar-replay: Data replay tool for HDF5 files. Requires rtPlotter for
    display. 
-5. gradar-plot: Real-time data plotter for diagnostic use.
 
 Dependencies:
 
@@ -53,8 +52,10 @@ Primary installation:
 2. "waf setup_user" to copy the .gradarrc file to your home directory.
 3. Login as "root" and run "waf install" to copy executables and scripts to
    /usr/local/bin. Java jar files will be copied to /usr/local/gnuradar.
-4. To install the real-time plotter, go to <root>/programs/Plotter and type:
-   python setup.py install as root.
+4. Add system users by logging in as root and adding each to the "usrp" group.
+   a. groupadd usrp
+   b. gpasswd -a <username> usrp
+
 
 Developer Notes:
 

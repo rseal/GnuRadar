@@ -57,7 +57,7 @@ static const int hash_slot_addr[2] = {
 };
 
 static const char *default_firmware_filename = "std.ihx";
-static const char *default_fpga_filename     = "std_2rxhb_2tx.rbf";
+static const char *default_fpga_filename     = "usrp_trigger.rbf";
 
 static char *
 find_file (const char *filename, int hw_rev)

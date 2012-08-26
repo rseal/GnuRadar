@@ -23,16 +23,16 @@
 #ifndef _LIBUSB_TYPES_H_
 #define _LIBUSB_TYPES_H_
 
-#if 0
+//#if 0
 #include <libusb-1.0/libusb.h>
 struct libusb_device;
 struct libusb_device_handle;
 struct libusb_device_descriptor;
-#else
-#include <usb.h>
-typedef struct usb_device libusb_device;
-typedef struct usb_dev_handle libusb_device_handle;
-typedef struct usb_device_descriptor libusb_device_descriptor;
-#endif
+//#else
+//#include <usb.h>
+//typedef struct usb_device libusb_device;
+//typedef struct usb_dev_handle libusb_device_handle;
+//typedef struct usb_device_descriptor libusb_device_descriptor;
+//#endif
 
 #endif /* _LIBUSB_TYPES_H_ */

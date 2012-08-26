@@ -21,7 +21,7 @@
  */
 
 static const char *std_paths[] = {
-  "/usr/local/share/usrp",
-  "/usr/local/share/usrp",
+  "/usr/local/gnuradar/firmware",
+  "/usr/local/gnuradar/firmware",
   0
 };

@@ -4,14 +4,12 @@ usrpSVN/
 *~
 *.swp
 *.pyc
-.sconsign.dblite
 programs/Analyze/binary.dat
 programs/Run/config
 programs/Config/java
 programs/Plotter/build
 tests/bin
 docs/html
-bin/
 work/
 simulation/
 install-headers

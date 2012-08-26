@@ -76,6 +76,12 @@ def install_headers(hdr):
 ################################################################################
 def build(bld):
 
+   firmware_loc   = '${PREFIX}/gnuradar/firmware/rev4'
+   fx2_firmware   = 'firmware/bin/std.ihx'
+   fpga_image     = 'fpga/image/usrp_trigger.rbf'
+   udev_rules_loc = '/etc/udev/rules.d'
+   udev_rules     = 'utils/10-usrp.rules'
+
    bld(
       features = 'cxx cxxstlib',
       includes = 'src',
@@ -95,13 +101,21 @@ def build(bld):
       source   = 'utils/usrper.cc',
       libpath  = 'usrp',
       lib      = ['gnuradar','usb-1.0'],
-      cxxflags = ['-O2','-fPIC'],
+      cxxflags = ['-O2'],
       target   = 'usrper',
    )
 
-   udev_rules = 'utils/10-usrp.rules'
-
+   ## install udev rules in proper location.
+   ## NOTE: User must become a member of the "usrp"
+   ##       group to use the device.
    bld.install_files(
-         '/etc/udev/rules.d',
+         udev_rules_loc,
          udev_rules
+         )
+
+   # install firmware and fpga image in proper 
+   # location.
+   bld.install_files(
+         firmware_loc,
+         [ fx2_firmware, fpga_image ]
          )

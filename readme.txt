@@ -19,8 +19,6 @@ project by Ettus. This software features the following:
 
 Programs:
 
-Currently, there are 4 primary programs of interest:
-
 1. gradar-configure : Configuration GUI to setup the receiver.
 2. gradar-verify: Validation tool to ensure that both receiver and pulse
    generator are properly synchronized.
@@ -35,9 +33,10 @@ Dependencies:
 3. Waf build system.
 4. HDF5 library.
 5. protobuf ( i.e google protocol buffers )
-6. zeromq ( a.k.a 0mq )
+6. zeromq ( a.k.a 0MQ )
+7. local deps in github repository ( see below ).
 
-Dependency installation:
+Local Dependency installation:
 
 1. From the root project directory:
    a. git submodule init
@@ -48,14 +47,17 @@ Dependency installation:
 
 Primary installation:
 
-1. "waf configure build" from the root project directory to build sources.
-2. "waf setup_user" to copy the .gradarrc file to your home directory.
-3. Login as "root" and run "waf install" to copy executables and scripts to
-   /usr/local/bin. Java jar files will be copied to /usr/local/gnuradar.
-4. Add system users by logging in as root and adding each to the "usrp" group.
+1. Configure build system as <user> : "waf configure"
+2. Install headers as <root>        : "waf install_headers"
+3. Build project as <user>          : "waf build -j<num_threads>"
+4. Install executables as <root>    : "waf install"
+
+The following steps only need to be executed once:
+
+5. Install user configuration file as <user> : "waf setup_user"
+6. Add each user to the "usrp" group for device access permission : 
    a. groupadd usrp
    b. gpasswd -a <username> usrp
-
 
 Developer Notes:
 

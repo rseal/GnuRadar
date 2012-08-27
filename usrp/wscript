@@ -90,7 +90,7 @@ def build(bld):
       cxxflags = ['-O2','-fPIC'],
       target   = 'gnuradar',
       vnum     = '1.0.0',
-      install_path = '${PREFIX}/lib'
+      #install_path = '${PREFIX}/lib'
    )
    
    bld.add_group()

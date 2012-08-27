@@ -1,8 +1,10 @@
 package gnuradar;
 
 message StatusMessage{
-	required string name        = 1;
-	required int32 buffer_depth = 2;
-	required int32 write_buffer = 3;
-	required int32 read_buffer  = 4;
+	required string name            = 1;
+	required int32 head             = 2;
+	required int32 tail             = 3;
+	required int32 depth            = 4;
+	required int32 over_flow        = 5;
+	required int32 bytes_per_buffer = 6;
 }

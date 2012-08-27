@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>9</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>765</x>
+      <y>837</y>
+      <w>261</w>
+      <h>171</h>
+    </coordinates>
+    <panel_attributes>ProducerConsumerModel
+--
++Initialize()
++Start()
++Stop()
++Head()
++Tail()
++Depth()
++NumBuffers()
++BytesPerBuffer()
++Overflow()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>90</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>/AbstractClass/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>846</x>
+      <y>657</y>
+      <w>108</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>/SThread/
+--
++Start()
++Wait()
++Detach()
++Destroy()
++Lock()
++Unlock()
++Pause()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>846</x>
+      <y>495</y>
+      <w>117</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>/BaseThread/
+--
++Status()
++Error()
++Stop()
++RequestData()
++Mutex()
++Condition()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>585</x>
+      <y>603</y>
+      <w>135</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>ProducerThread
+--
++Run()
++Stop()
++RequestData()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1080</x>
+      <y>603</y>
+      <w>135</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>ConsumerThread
+--
++Run()
++Stop()
++RequestData()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>693</x>
+      <y>540</y>
+      <w>170</w>
+      <h>107</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>153;27;81;27;81;90;27;90</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>693</x>
+      <y>630</y>
+      <w>170</w>
+      <h>116</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>153;99;81;99;81;27;27;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>936</x>
+      <y>540</y>
+      <w>161</w>
+      <h>107</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>27;27;90;27;90;90;144;90</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>927</x>
+      <y>630</y>
+      <w>170</w>
+      <h>116</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>27;99;99;99;99;27;153;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>621</x>
+      <y>657</y>
+      <w>161</w>
+      <h>251</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>144;234;27;234;27;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>999</x>
+      <y>657</y>
+      <w>161</w>
+      <h>251</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>27;234;144;234;144;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>585</x>
+      <y>495</y>
+      <w>135</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>/Device/
+--
++Run()
++Stop()
++RequestData()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>621</x>
+      <y>540</y>
+      <w>44</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>27;27;27;63</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>810</x>
+      <y>441</y>
+      <w>198</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>SynchronizedBufferManager</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>810</x>
+      <y>387</y>
+      <w>198</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>SharedBufferHeader</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>693</x>
+      <y>450</y>
+      <w>134</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>27;153;117;27;117;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>981</x>
+      <y>450</y>
+      <w>116</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>99;153;27;27;27;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>981</x>
+      <y>378</y>
+      <w>179</w>
+      <h>242</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>162;225;162;27;27;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>1179</x>
+      <y>486</y>
+      <w>270</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>ConsumerThread reads data from the
+shared buffer, formats, and writes to
+disk.
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1188</x>
+      <y>522</y>
+      <w>125</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>108;27;27;81</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>468</x>
+      <y>414</y>
+      <w>270</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>ProducerThread reads data from the
+device and writes to the synchronized 
+buffer manager.
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>477</x>
+      <y>450</y>
+      <w>125</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>27;27;108;153</additional_attributes>
+  </element>
+</diagram>

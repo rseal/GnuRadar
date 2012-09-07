@@ -1,0 +1,47 @@
+version        : '1.0.0'
+sampleRate     : 64e0
+decimation     : 16 
+bandwidth      : 4e0
+bandwidthUnits : 'mhz'
+pri            : 1e0
+priUnits       : 'msec'
+txCarrier      : 49.8e0
+numChannels    : 1
+organization   : 'GnuRadio Test'
+site           : 'home'
+user           : 'rseal'
+radar          : 'noise generator'
+receiver       : 'usrp-v4.5'
+fpgaImage      : 'usrp_trigger.rbf'
+baseFile       : '/home/rseal/test.h5'
+   
+# receive channel units : Hz , radians
+channels :  
+   -  
+     frequency : -14.2
+     fUnits    : 'mhz'
+     phase     : 0e0
+     pUnits    : 'rad'
+   -  
+     frequency : 0.0e6
+     fUnits    : 'mhz'
+     phase     : 0e0
+     pUnits    : 'rad'
+   -  
+     frequency : 0.0e6
+     fUnits    : 'mhz'
+     phase     : 0e0
+     pUnits    : 'rad'
+   - 
+     frequency : 0.0e6
+     fUnits    : 'mhz'
+     phase     : 0e0
+     pUnits    : 'rad'
+   
+    # receive window units : samples
+windows : 
+   - 
+     name  : RxWin
+     start : 75
+     stop  : 130
+     units : 'km'

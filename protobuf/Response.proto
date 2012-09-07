@@ -1,0 +1,12 @@
+package gnuradar;
+
+message ResponseMessage{
+   enum Result{
+      OK=0;
+      ERROR=1;
+   }
+
+   required  Result value=1;
+   optional  string message=2;
+
+}

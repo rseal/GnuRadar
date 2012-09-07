@@ -1,0 +1,25 @@
+!!com.gnuradar.common.ConfigFile
+bandwidth: 4.0
+bandwidthUnits: mhz
+baseFile: /home/rseal/test.h5
+channels:
+- {fUnits : mhz, frequency : -14.2, pUnits : rad, phase : 0.0}
+- {fUnits : mhz, frequency : 0.0, pUnits   : rad, phase : 0.0}
+- {fUnits : mhz, frequency : 0.0, pUnits   : rad, phase : 0.0}
+- {fUnits : mhz, frequency : 0.0, pUnits   : rad, phase : 0.0}
+decimation: 16
+fpgaImage: usrp_trigger.rbf
+numChannels: 1
+organization: GnuRadio Test
+pri: 1.0
+priUnits: msec
+radar: noise generator
+receiver: usrp-v4.5
+sampleRate: 64.0
+site: home
+txCarrier: 49.8
+user: rseal
+version: 1.0.0
+windows:
+- {name: RxWin, start: 75.0, stop: 130.0, units: km}
+- {name: RxWin, start: 80.0, stop: 150.0, units: km}

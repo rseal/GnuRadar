@@ -17,315 +17,307 @@
 #ifndef START_HPP
 #define START_HPP
 
-#include <gnuradar/ConfigFile.h>
-#include <gnuradar/GnuRadarCommand.hpp>
-#include <gnuradar/ProducerConsumerModel.h>
-#include <gnuradar/Device.h>
-#include <gnuradar/GnuRadarDevice.h>
-#include <gnuradar/xml/XmlPacket.hpp>
-#include <gnuradar/SynchronizedBufferManager.hpp>
-#include <gnuradar/xml/SharedBufferHeader.hpp>
-#include <gnuradar/SharedMemory.h>
-#include <gnuradar/StatusThread.hpp>
-#include <gnuradar/Constants.hpp>
-
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/asio.hpp>
-
-#include <hdf5r/HDF5.hpp>
-
 #include <vector>
 
+#include<boost/shared_ptr.hpp>
+#include<boost/scoped_ptr.hpp>
+#include<boost/filesystem.hpp>
+#include<boost/asio.hpp>
+#include<boost/lexical_cast.hpp>
+
+#include<hdf5r/HDF5.hpp>
+
+#include<gnuradar/GnuRadarCommand.hpp>
+#include<gnuradar/ProducerConsumerModel.h>
+#include<gnuradar/Device.h>
+#include<gnuradar/GnuRadarDevice.h>
+#include<gnuradar/xml/XmlPacket.hpp>
+#include<gnuradar/SynchronizedBufferManager.hpp>
+#include<gnuradar/xml/SharedBufferHeader.hpp>
+#include<gnuradar/SharedMemory.h>
+#include<gnuradar/Constants.hpp>
+#include<gnuradar/DataParameters.hpp>
+#include<gnuradar/network/StatusServer.hpp>
+#include<gnuradar/commands/Response.pb.h>
+#include<gnuradar/commands/Control.pb.h>
+#include<gnuradar/utils/GrHelper.hpp>
+
+
 namespace gnuradar {
-namespace command {
+   namespace command {
 
-class Start : public GnuRadarCommand {
+      class Start : public GnuRadarCommand {
 
-   typedef boost::asio::io_service IoService;
-   typedef boost::shared_ptr<SharedMemory> SharedBufferPtr;
-   typedef std::vector<SharedBufferPtr> SharedArray;
-   typedef boost::shared_ptr<HDF5> Hdf5Ptr;
-   typedef boost::shared_ptr<SynchronizedBufferManager> SynchronizedBufferManagerPtr;
-   typedef boost::shared_ptr< ProducerConsumerModel > PCModelPtr;
-   typedef boost::shared_ptr< ProducerThread > ProducerThreadPtr;
-   typedef boost::shared_ptr< ConsumerThread > ConsumerThreadPtr;
-   typedef boost::shared_ptr< GnuRadarDevice > GnuRadarDevicePtr;
-   typedef boost::shared_ptr< GnuRadarSettings > GnuRadarSettingsPtr;
-   typedef boost::shared_ptr< Device > DevicePtr;
-   typedef boost::shared_ptr< ::xml::SharedBufferHeader > SharedBufferHeaderPtr;
-   typedef boost::shared_ptr< StatusThread > StatusThreadPtr;
+         typedef boost::asio::io_service IoService;
+         typedef boost::shared_ptr<SharedMemory> SharedBufferPtr;
+         typedef std::vector<SharedBufferPtr> SharedArray;
+         typedef boost::shared_ptr<HDF5> Hdf5Ptr;
+         typedef boost::shared_ptr<SynchronizedBufferManager> SynchronizedBufferManagerPtr;
+         typedef boost::shared_ptr< ProducerConsumerModel > PCModelPtr;
+         typedef boost::shared_ptr< ProducerThread > ProducerThreadPtr;
+         typedef boost::shared_ptr< ConsumerThread > ConsumerThreadPtr;
+         typedef boost::shared_ptr< GnuRadarDevice > GnuRadarDevicePtr;
+         typedef boost::shared_ptr< GnuRadarSettings > GnuRadarSettingsPtr;
+         typedef boost::shared_ptr< Device > DevicePtr;
+         typedef boost::shared_ptr< ::xml::SharedBufferHeader > SharedBufferHeaderPtr;
+         typedef boost::shared_ptr< network::StatusServer > StatusServerPtr;
 
 
-   // setup shared pointers to extend life beyond this call
-   PCModelPtr pcModel_;
-   gnuradar::ProducerThreadPtr producer_;
-   gnuradar::ConsumerThreadPtr consumer_;
-   SynchronizedBufferManagerPtr bufferManager_;
-   Hdf5Ptr hdf5_;
-   SharedArray array_;
-   SharedBufferHeaderPtr header_;
-   StatusThreadPtr statusThread_;
+         // setup shared pointers to extend life beyond this call
+         PCModelPtr pcModel_;
+         ProducerThreadPtr producer_;
+         ConsumerThreadPtr consumer_;
+         SynchronizedBufferManagerPtr bufferManager_;
+         Hdf5Ptr hdf5_;
+         SharedArray array_;
+         SharedBufferHeaderPtr header_;
+         StatusServerPtr statusServer_;
 
-   void CheckForExistingFileSet ( const std::string& fileSet ) 
-      throw( std::runtime_error )
-      {
-         std::string fileName = fileSet + "." + hdf5::FILE_EXT;
-         boost::filesystem::path file ( fileName );
+         /////////////////////////////////////////////////////////////////////////////
+         /////////////////////////////////////////////////////////////////////////////
+         void CheckForExistingFileSet ( const std::string& fileSet ) throw( std::runtime_error )
+         {
+            std::string fileName = fileSet + "." + hdf5::FILE_EXT;
+            boost::filesystem::path file ( fileName );
 
-         if ( boost::filesystem::exists ( file ) ) {
-            throw std::runtime_error( "HDF5 File set " + fileName + 
-                  " exists and cannot be overwritten. Change your "
-                  "base file set name and try again");
+            if ( boost::filesystem::exists ( file ) ) {
+               throw std::runtime_error( "HDF5 File set " + fileName + 
+                     " exists and cannot be overwritten. Change your "
+                     "base file set name and try again");
+            }
          }
-      }
 
-   void CreateSharedBuffers( const int bytesPerBuffer ) {
+         /////////////////////////////////////////////////////////////////////////////
+         /////////////////////////////////////////////////////////////////////////////
+         void CreateSharedBuffers( const int bytesPerBuffer ) {
 
-      // setup shared memory buffers
-      for ( int i = 0; i < constants::NUM_BUFFERS; ++i ) {
+            // setup shared memory buffers
+            for ( int i = 0; i < constants::NUM_BUFFERS; ++i ) {
 
-         // create unique buffer file names
-         std::string bufferName = constants::BUFFER_BASE_NAME +
-            boost::lexical_cast<string> ( i ) + ".buf";
+               // create unique buffer file names
+               std::string bufferName = constants::BUFFER_BASE_NAME +
+                  boost::lexical_cast<string> ( i ) + ".buf";
 
-         // create shared buffers
-         SharedBufferPtr bufPtr (
-               new SharedMemory (
-                  bufferName,
-                  bytesPerBuffer,
-                  SHM::CreateShared,
-                  0666 )
-               );
+               // create shared buffers
+               SharedBufferPtr bufPtr (
+                     new SharedMemory (
+                        bufferName,
+                        bytesPerBuffer,
+                        SHM::CreateShared,
+                        0666 )
+                     );
 
-         // store buffer in a vector
-         array_.push_back ( bufPtr );
-      }
-   }
+               // store buffer in a vector
+               array_.push_back ( bufPtr );
+            }
+         }
 
-   // pull settings from the configuration file
-   GnuRadarSettingsPtr GetSettings( ConfigFile& configuration ) {
+         /////////////////////////////////////////////////////////////////////////////
+         // pull settings from the configuration file
+         /////////////////////////////////////////////////////////////////////////////
+         GnuRadarSettingsPtr GetSettings( gnuradar::File* file ) {
 
-      GnuRadarSettingsPtr settings( new GnuRadarSettings() );
+            GnuRadarSettingsPtr settings( new GnuRadarSettings() );
 
-      settings->numChannels    = configuration.NumChannels();
-      settings->decimationRate = configuration.Decimation();
-      settings->fpgaFileName   = configuration.FPGAImage();
+            settings->numChannels    = file->channel_size();
+            settings->decimationRate = file->decimation();
+            settings->fpgaFileName   = file->fpgaimage();
 
-      //Program GNURadio
-      for ( int i = 0; i < configuration.NumChannels(); ++i ) {
-         settings->Tune ( i, configuration.DDC ( i ) );
-         settings->Phase( i, configuration.Phase( i ) );
-      }
+            //Program GNURadio
+            for ( int i = 0; i < file->channel_size(); ++i ) {
+               settings->Tune ( i, file->channel(i).frequency() );
+               settings->Phase( i, file->channel(i).phase() );
+            }
 
-      //change these as needed
-      settings->fUsbBlockSize  = 0;
-      settings->fUsbNblocks    = 0;
-      settings->mux            = 0xf3f2f1f0;
+            //change these as needed
+            settings->fUsbBlockSize  = 0;
+            settings->fUsbNblocks    = 0;
+            settings->mux            = 0xf3f2f1f0;
 
-      return settings;
-   }
+            return settings;
+         }
 
-   Hdf5Ptr SetupHDF5( ConfigFile& configuration ) throw( H5::Exception )
-   {
-      std::string fileSet = configuration.DataFileBaseName();
-      Hdf5Ptr h5File_( new HDF5 ( fileSet , hdf5::WRITE ) );
+         /////////////////////////////////////////////////////////////////////////////
+         /////////////////////////////////////////////////////////////////////////////
+         Hdf5Ptr SetupHDF5( gnuradar::File* file ) throw( H5::Exception )
+         {
 
-      h5File_->Description ( "GnuRadar Software" + configuration.Version() );
-      h5File_->WriteStrAttrib ( "START_TIME", currentTime.GetTime() );
-      h5File_->WriteStrAttrib ( "INSTRUMENT", configuration.Receiver() );
-      h5File_->WriteAttrib<int> ( "CHANNELS", configuration.NumChannels(),
-            H5::PredType::NATIVE_INT, H5::DataSpace() );
-      h5File_->WriteAttrib<double> ( "SAMPLE_RATE", configuration.SampleRate(),
-            H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-      h5File_->WriteAttrib<double> ( "BANDWIDTH", configuration.Bandwidth(),
-            H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-      h5File_->WriteAttrib<int> ( "DECIMATION", configuration.Decimation(),
-            H5::PredType::NATIVE_INT, H5::DataSpace() );
-      h5File_->WriteAttrib<double> ( "OUTPUT_RATE", configuration.OutputRate(),
-            H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-      h5File_->WriteAttrib<double> ( "IPP", configuration.IPP(),
-            H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-      h5File_->WriteAttrib<double> ( "RF", configuration.TxCarrier() , 
-            H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
+            Hdf5Ptr h5File_( new HDF5 ( file->basefilename() , hdf5::WRITE ) );
 
-      for ( int i = 0; i < configuration.NumChannels(); ++i ) {
+            h5File_->Description ( "GnuRadar Software" + file->version() );
+            h5File_->WriteStrAttrib ( "START_TIME", currentTime.GetTime() );
+            h5File_->WriteStrAttrib ( "INSTRUMENT", file->receiver() );
+            h5File_->WriteAttrib<int> ( "CHANNELS", file->channel_size(),
+                  H5::PredType::NATIVE_INT, H5::DataSpace() );
+            h5File_->WriteAttrib<double> ( "SAMPLE_RATE", file->samplerate(),
+                  H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
+            h5File_->WriteAttrib<double> ( "BANDWIDTH", file->bandwidth(),
+                  H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
+            h5File_->WriteAttrib<int> ( "DECIMATION", file->decimation(),
+                  H5::PredType::NATIVE_INT, H5::DataSpace() );
+            h5File_->WriteAttrib<double> ( "OUTPUT_RATE", file->outputrate(),
+                  H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
+            h5File_->WriteAttrib<double> ( "IPP", file->ipp(),
+                  H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
+            h5File_->WriteAttrib<double> ( "RF", file->txcarrier() , 
+                  H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
 
-         h5File_->WriteAttrib<double> ( 
-               "DDC" + lexical_cast<string> ( i ),
-               configuration.DDC ( i ), 
-               H5::PredType::NATIVE_DOUBLE, 
-               H5::DataSpace() 
-               );
+            for ( int i = 0; i < file->channel_size(); ++i ) {
 
-         h5File_->WriteAttrib<double> ( 
-               "PHASE" + lexical_cast<string> ( i ),
-               configuration.Phase ( i ), 
-               H5::PredType::NATIVE_DOUBLE, 
-               H5::DataSpace() 
-               );
-      }
+               h5File_->WriteAttrib<double> ( 
+                     "DDC" + lexical_cast<string> ( i ),
+                     file->channel(i).frequency(), 
+                     H5::PredType::NATIVE_DOUBLE, 
+                     H5::DataSpace() 
+                     );
 
-      h5File_->WriteAttrib<int> ( 
-            "SAMPLE_WINDOWS", configuration.NumWindows(),
-            H5::PredType::NATIVE_INT, H5::DataSpace()
-            );
+               h5File_->WriteAttrib<double> ( 
+                     "PHASE" + lexical_cast<string> ( i ),
+                     file->channel(i).phase(), 
+                     H5::PredType::NATIVE_DOUBLE, 
+                     H5::DataSpace() 
+                     );
+            }
 
-      for ( int i = 0; i < configuration.NumWindows(); ++i ) {
+            h5File_->WriteAttrib<int> ( 
+                  "SAMPLE_WINDOWS", file->window_size(),
+                  H5::PredType::NATIVE_INT, H5::DataSpace()
+                  );
 
-         // TODO: Window Renaming scheme - 10/19/2010
-         // Standardize window naming and add the user-defined
-         // window name as a separate attribute.
+            for ( int i = 0; i < file->window_size(); ++i ) {
 
-         h5File_->WriteAttrib<int> ( 
-               configuration.WindowName ( i ) + "_START", 
-               configuration.WindowStart ( i ),
-               H5::PredType::NATIVE_INT, H5::DataSpace()
-               );
+               // TODO: Window Renaming scheme - 10/19/2010
+               // Standardize window naming and add the user-defined
+               // window name as a separate attribute.
+               string idx = boost::lexical_cast<string> ( i );
 
-         h5File_->WriteAttrib<int> ( 
-               configuration.WindowName ( i ) + "_STOP", 
-               configuration.WindowStop ( i ),
-               H5::PredType::NATIVE_INT, H5::DataSpace()
-               );
+               h5File_->WriteAttrib<int> ( 
+                     "RxWin"+ idx + "_START", 
+                     file->window(i).start(),
+                     H5::PredType::NATIVE_INT, H5::DataSpace()
+                     );
 
-         // update gnuradar shared buffer header
-         header_->AddWindow( configuration.WindowName(i),
-               configuration.WindowStart(i),
-               configuration.WindowStop(i)
-               );
-      }
+               h5File_->WriteAttrib<int> ( 
+                     "RxWin" + idx + "_STOP", 
+                     file->window(i).stop(),
+                     H5::PredType::NATIVE_INT, H5::DataSpace()
+                     );
 
-      return h5File_;
-   }
+               // update gnuradar shared buffer header
+               header_->AddWindow( file->window(i).name(), file->window(i).start(), file->window(i).stop() );
+            }
 
-   public:
+            return h5File_;
+         }
 
-   Start( IoService& ioService, PCModelPtr pcModel): GnuRadarCommand( "start" ), pcModel_( pcModel )
-   {
-      statusThread_ = StatusThreadPtr( new StatusThread( ioService, pcModel ) );
-   }
+         public:
 
-   virtual const std::string Execute( const xml::XmlPacketArgs& args ) {
+         /////////////////////////////////////////////////////////////////////////////
+         /////////////////////////////////////////////////////////////////////////////
+         Start( zmq::context_t& ctx, PCModelPtr pcModel): GnuRadarCommand( "start" ), pcModel_( pcModel )
+         {
+            std::string ipaddr = gr_helper::ReadConfigurationFile("status");
+            statusServer_ = StatusServerPtr( new network::StatusServer( ctx, ipaddr, pcModel ) );
+         }
+
+         /////////////////////////////////////////////////////////////////////////////
+         /////////////////////////////////////////////////////////////////////////////
+         virtual const gnuradar::ResponseMessage Execute( gnuradar::ControlMessage& msg ){
+
+            std::cout << "GNURADAR: RUN CALLED" << std::endl;
+
+            gnuradar::ResponseMessage response_msg;
+
+            try{
+               // reset any existing configuration
+               producer_.reset();
+               consumer_.reset();
+               bufferManager_.reset();
+               hdf5_.reset();
+               array_.clear();
+
+               gnuradar::File* file = msg.mutable_file();
+               gnuradar::RadarParameters* rp = file->mutable_radarparameters();
+
+               // setup shared buffer header to assist in real-time processing 
+               header_ = SharedBufferHeaderPtr( new ::xml::SharedBufferHeader(
+                        constants::NUM_BUFFERS,
+                        rp->bytesperbuffer(),
+                        file->samplerate(),
+                        file->channel_size(),
+                        rp->prisperbuffer(),
+                        rp->samplesperbuffer()
+                        ));
 
 
-      // reset any existing configuration
-      producer_.reset();
-      consumer_.reset();
-      bufferManager_.reset();
-      hdf5_.reset();
-      array_.clear();
+               // read and parse configuration file->
+               GnuRadarSettingsPtr settings = GetSettings( file );
 
-      std::string response;
-      std::string xml_data = command::ParseArg( "file", args );
+               // create a device to communicate with hardware
+               GnuRadarDevicePtr gnuRadarDevice( new GnuRadarDevice( settings ) );
 
-      // incoming "file" is self-contained xml data.
-      bool data_is_xml = true;
+               // make sure we don't have an existing data set
+               CheckForExistingFileSet ( file->basefilename() ) ;
 
-      xml_data = xml::XmlPacket::DecodeXml( xml_data );
+               // setup HDF5 attributes and file->set.
+               hdf5_ = SetupHDF5( file );
 
-      // parse configuration file
-      ConfigFile configFile( xml_data, data_is_xml );
+               // setup shared memory buffers
+               CreateSharedBuffers( rp->bytesperbuffer() );
 
-      // create constants
-      const int BUFFER_SIZE        = configFile.BytesPerSecond();
-      const double SAMPLE_RATE     = configFile.SampleRate();
-      const int NUM_CHANNELS       = configFile.NumChannels();
-      const int IPPS_PER_BUFFER    = static_cast<int>( ceil(1.0/configFile.IPP()));
-      const int SAMPLES_PER_BUFFER = static_cast<int> ( configFile.SamplesPerIpp() * configFile.NumChannels() );
+               // setup the buffer manager
+               bufferManager_ = SynchronizedBufferManagerPtr( 
+                     new SynchronizedBufferManager( 
+                        array_, constants::NUM_BUFFERS, rp->bytesperbuffer()) );
 
-      // setup shared buffer header to assist in real-time processing 
-      header_ = SharedBufferHeaderPtr( new ::xml::SharedBufferHeader(
-               constants::NUM_BUFFERS,
-               BUFFER_SIZE,
-               SAMPLE_RATE,
-               NUM_CHANNELS,
-               IPPS_PER_BUFFER,
-               SAMPLES_PER_BUFFER
-               ));
+               // setup table dimensions column = samples per ipp , row = IPP number
+               vector<hsize_t> dims;
+               dims.push_back( rp->prisperbuffer() );
+               dims.push_back ( static_cast<int> ( rp->samplesperpri() * file->channel_size() ) );
 
-      // create a response packet and return to requester
-      std::string destination = command::ParseArg( "source", args );
-      xml::XmlPacketArgs responsePacket;
-      responsePacket["destination"] = destination;
-      responsePacket["type"] = "response";
-      gnuradar::xml::XmlPacket packet("gnuradar_server");
+               // setup producer thread
+               producer_ = gnuradar::ProducerThreadPtr (
+                     new ProducerThread ( bufferManager_, gnuRadarDevice ) );
 
-      try{
+               // flush header information
+               header_->Close();
 
-         // make sure we don't have an existing data set
-         CheckForExistingFileSet ( configFile.DataFileBaseName() ) ;
+               // setup consumer thread
+               consumer_ = gnuradar::ConsumerThreadPtr(
+                     new ConsumerThread ( bufferManager_ , header_, hdf5_, dims ) );
 
-         // setup HDF5 attributes and file set.
-         hdf5_ = SetupHDF5( configFile );
+               // new model
+               pcModel_->Initialize( bufferManager_, producer_, consumer_);
 
-         // read and parse configuration file.
-         GnuRadarSettingsPtr settings = GetSettings( configFile );
+               // start producer thread
+               pcModel_->Start();
 
-         // create a device to communicate with hardware
-         GnuRadarDevicePtr gnuRadarDevice( new GnuRadarDevice( settings ) );
+               response_msg.set_value(gnuradar::ResponseMessage::OK);
+               response_msg.set_message("Data collection successfully started.");
 
-         // setup shared memory buffers
-         CreateSharedBuffers( BUFFER_SIZE );
+               // Start status thread to broadcast status packets to any subscribers.
+               if( statusServer_->IsActive() == false )
+               {
+                  statusServer_->Start();
+               }
 
-         // setup the buffer manager
-         bufferManager_ = SynchronizedBufferManagerPtr( 
-               new SynchronizedBufferManager( 
-                  array_, constants::NUM_BUFFERS, BUFFER_SIZE) );
+            }
+            catch( std::runtime_error& e ){
 
-         // setup table dimensions column = samples per ipp , row = IPP number
-         vector<hsize_t> dims;
-         dims.push_back( IPPS_PER_BUFFER );
-         dims.push_back ( 
-               static_cast<int> ( 
-                  configFile.SamplesPerIpp() * configFile.NumChannels() ) 
-               );
+               response_msg.set_value(gnuradar::ResponseMessage::ERROR);
+               response_msg.set_message(e.what());
 
-         // setup producer thread
-         producer_ = gnuradar::ProducerThreadPtr (
-               new ProducerThread ( bufferManager_, gnuRadarDevice ) );
+            }
+            catch( H5::Exception& e ){
 
-         // flush header information
-         header_->Close();
+               response_msg.set_value(gnuradar::ResponseMessage::ERROR);
+               response_msg.set_message(e.getDetailMsg());
+            }
 
-         // setup consumer thread
-         consumer_ = gnuradar::ConsumerThreadPtr(
-               new ConsumerThread ( bufferManager_ , header_, hdf5_, dims ) );
-
-         // new model
-         pcModel_->Initialize( bufferManager_, producer_, consumer_);
-
-         // start producer thread
-         pcModel_->Start();
-
-         responsePacket["value"] = "OK";
-         responsePacket["message"] = "Data collection successfully started.";
-         response = packet.Format( responsePacket );
-
-         // Start status thread to broadcast status packets to any subscribers.
-         statusThread_->Stop();
-         statusThread_->Start();
-
-      }
-      catch( std::runtime_error& e ){
-
-         responsePacket["value"] = "ERROR";
-         responsePacket["message"] = e.what();
-         response = packet.Format( responsePacket );
-
-      }
-      catch( H5::Exception& e ){
-
-         responsePacket["value"] = "ERROR";
-         responsePacket["message"] = e.getDetailMsg();
-         response = packet.Format( responsePacket );
-      }
-
-      return response;
-   }
-};
-};
+            return response_msg;
+         }
+      };
+   };
 };
 
 #endif

@@ -19,42 +19,39 @@
 
 #include <gnuradar/GnuRadarCommand.hpp>
 #include <gnuradar/ProducerConsumerModel.h>
-#include <gnuradar/xml/XmlPacket.hpp>
+#include <gnuradar/commands/Response.pb.h>
 
 namespace gnuradar {
-namespace command {
+   namespace command {
 
-class Stop : public GnuRadarCommand {
+      class Stop : public GnuRadarCommand {
 
-    // setup shared pointers to extend life beyond this call
-    typedef boost::shared_ptr< ProducerConsumerModel > ProducerConsumerModelPtr;
-    ProducerConsumerModelPtr pcModel_;
+         // setup shared pointers to extend life beyond this call
+         typedef boost::shared_ptr< ProducerConsumerModel > ProducerConsumerModelPtr;
+         ProducerConsumerModelPtr pcModel_;
 
-   public:
+         public:
 
-    Stop( ProducerConsumerModelPtr pcModel ): 
-       GnuRadarCommand( "stop" ), pcModel_( pcModel ) {
-       }
+         Stop( ProducerConsumerModelPtr pcModel ): 
+            GnuRadarCommand( "stop" ), pcModel_( pcModel ) {
+            }
 
-    virtual const std::string Execute( const xml::XmlPacketArgs& args ) {
+         virtual const gnuradar::ResponseMessage Execute( gnuradar::ControlMessage& msg ){
 
-       std::cout << " Stop Command " << std::endl;
+            gnuradar::ResponseMessage response_msg;
 
-       pcModel_->Stop();
+            std::cout << " Stop Command " << std::endl;
 
-       // create a response packet and return to requester
-       std::string destination = command::ParseArg( "destination", args );
-       xml::XmlPacketArgs responsePacket;
-       responsePacket["destination"] = destination;
-       responsePacket["type"] = "response";
-       responsePacket["value"] = "OK";
-       gnuradar::xml::XmlPacket packet("gnuradar_server");
-       const std::string response = packet.Format( responsePacket );
+            pcModel_->Stop();
 
-       return response;
-    }
-};
-};
+            // create a response packet and return to requester
+            response_msg.set_value(gnuradar::ResponseMessage::OK);
+            response_msg.set_message("Data collection halted.");
+
+            return response_msg;
+         }
+      };
+   };
 };
 
 #endif

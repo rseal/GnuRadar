@@ -1,0 +1,38 @@
+import os
+import stat
+import sys
+import shutil
+
+HOME_DIR = os.environ['HOME']
+PROG_INSTALL_DIR='/usr/local/bin/'
+PROG_LIB_DIR='/usr/local/lib/'
+PROJECT_NAME='gnuradar'
+
+
+################################################################################
+# Loads c++ and java compiler options
+################################################################################
+def options(ctx):
+   ctx.load('compiler_c compiler_cxx')
+
+################################################################################
+# Loads c++ and java compiler options
+################################################################################
+def configure(ctx):
+   ctx.load('compiler_c compiler_cxx')
+   ctx.check(
+      features = 'cxx cxxprogram',
+      libpath  = ['/usr/lib/'],
+      libs     = ['protobufc'],
+      cflags   = ['-march=native','-Wall','-02'],
+   )
+
+################################################################################
+# Builds c++ and java files. Also manages call to install
+################################################################################
+def build(bld):
+
+	proto_src = bld.path.ant_glob('*.proto')
+	bld( rule='protoc --cpp_out=../cpp --proto_path=../ ${SRC}', source=proto_src)
+	bld.stlib( source=bld.path.ant_glob('cpp/*.cc'), target='protoc')
+

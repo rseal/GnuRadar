@@ -15,7 +15,7 @@ public final class Control {
     boolean hasName();
     String getName();
     
-    // optional .gnuradar.File file = 4;
+    // optional .gnuradar.File file = 2;
     boolean hasFile();
     com.gnuradar.proto.Control.File getFile();
     com.gnuradar.proto.Control.FileOrBuilder getFileOrBuilder();
@@ -81,8 +81,8 @@ public final class Control {
       }
     }
     
-    // optional .gnuradar.File file = 4;
-    public static final int FILE_FIELD_NUMBER = 4;
+    // optional .gnuradar.File file = 2;
+    public static final int FILE_FIELD_NUMBER = 2;
     private com.gnuradar.proto.Control.File file_;
     public boolean hasFile() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
@@ -124,7 +124,7 @@ public final class Control {
         output.writeBytes(1, getNameBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(4, file_);
+        output.writeMessage(2, file_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -141,7 +141,7 @@ public final class Control {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, file_);
+          .computeMessageSize(2, file_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -394,7 +394,7 @@ public final class Control {
               name_ = input.readBytes();
               break;
             }
-            case 34: {
+            case 18: {
               com.gnuradar.proto.Control.File.Builder subBuilder = com.gnuradar.proto.Control.File.newBuilder();
               if (hasFile()) {
                 subBuilder.mergeFrom(getFile());
@@ -445,7 +445,7 @@ public final class Control {
         onChanged();
       }
       
-      // optional .gnuradar.File file = 4;
+      // optional .gnuradar.File file = 2;
       private com.gnuradar.proto.Control.File file_ = com.gnuradar.proto.Control.File.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.gnuradar.proto.Control.File, com.gnuradar.proto.Control.File.Builder, com.gnuradar.proto.Control.FileOrBuilder> fileBuilder_;
@@ -5272,7 +5272,7 @@ public final class Control {
   static {
     java.lang.String[] descriptorData = {
       "\n\rControl.proto\022\010gnuradar\"<\n\016ControlMess" +
-      "age\022\014\n\004name\030\001 \002(\t\022\034\n\004file\030\004 \001(\0132\016.gnurad" +
+      "age\022\014\n\004name\030\001 \002(\t\022\034\n\004file\030\002 \001(\0132\016.gnurad" +
       "ar.File\"\317\003\n\004File\022\017\n\007version\030\001 \002(\t\022\022\n\nsam" +
       "pleRate\030\002 \002(\002\022\022\n\ndecimation\030\003 \002(\005\022\023\n\013num" +
       "Channels\030\004 \002(\005\022\021\n\tbandwidth\030\005 \002(\002\022\026\n\016ban" +

@@ -30,10 +30,10 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
@@ -52,321 +52,293 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Document;
 
+import org.yaml.snakeyaml.Yaml;
+
+import com.corejava.GBC;
 import com.gnuradar.common.FixedFrame;
 import com.gnuradar.run.ButtonPanel.State;
-import com.corejava.GBC;
+import com.google.protobuf.Descriptors.FieldDescriptor;
 
 public class Run implements ActionListener, PropertyChangeListener {
 
-    // define constants
-    private static final int DEFAULT_WIDTH = 575;
-    private static final int DEFAULT_HEIGHT = 560;
-    private static final String TITLE = "GnuRadarRun";
-    private static final String VERSION = "Version: 1.0.0";
-    private static final String BUILD = "Build: September 01, 2010";
-    private static final String COPYRIGHT = "Copyright: \u00a9 2009-2010";
-    private static final String AUTHOR = "Author: Ryan Seal";
-    private static final String RC_FILE=".gradarrc";
-    
-    // TODO: Make this xml-configurable
-    public final int PORT = 54321;
-    
-    public static InetAddress ipAddress;
-    private StatusListener statusListener;
-    private HashMap<String,String> responseMap = new HashMap<String,String>();    
-    
-    private JLabel statusLabel;
-    private JTextPane statusPane;
-    private ProgressPanel progressPanel;
-    private Document statusDocument;
+	// define constants
+	private static final int DEFAULT_WIDTH = 575;
+	private static final int DEFAULT_HEIGHT = 560;
+	private static final String TITLE = "GnuRadarRun";
+	private static final String VERSION = "Version: 1.0.0";
+	private static final String BUILD = "Build: September 01, 2012";
+	private static final String COPYRIGHT = "Copyright: \u00a9 2009-2012";
+	private static final String AUTHOR = "Author: Ryan Seal";
+	private static final String RC_FILE = ".gradarrc";
 
-    private static ButtonPanel buttonPanel;
-    private static FixedFrame frame;
-    private static String userNode = "/com/gnuradar/run";
+	private String statusIpAddress;
+	private String controlIpAddress;
 
-    private Thread thread = null;
-    private StatusThread statusThread = null;
-    
-    private JMenuItem quitAction;
-    private JMenuItem loadAction;
-    private JMenuItem aboutAction;
-    private JMenuItem plotAction;
-    private JMenuItem bpgAction;
-    private JMenuItem configureAction;
+	private StatusListener statusListener;
+	private JLabel statusLabel;
+	private JTextPane statusPane;
+	private ProgressPanel progressPanel;
+	private Document statusDocument;
 
-    private void loadPreferences()
-    {
-    	Preferences preferences = Preferences.userRoot().node(userNode);
-    	int x = preferences.getInt("x", 0);
-    	int y = preferences.getInt("y", 0);
-    	File file = new File( preferences.get("config_dir", "") );
-    	buttonPanel.setConfigurationFile( file );
-    	frame.setLocation(x,y);
-    }
-    
-    private void savePreferences()
-    {    	
-    	Point point = frame.getLocation();
-    	File file = buttonPanel.getConfigurationFile();
-    	
-    	Preferences preferences = Preferences.userRoot().node(userNode);    	
-        preferences.put("x", Integer.toString( point.x ));
-        preferences.put("y", Integer.toString( point.y ));
-        preferences.put("config_dir", file.toString() );
-    }
-    
-    private void updateDisplay(String xmlResponsePacket )
-    {
-    	//System.out.println("Updating Display");
-    	responseMap.clear();
-    	responseMap = XmlPacket.parse(xmlResponsePacket);
-    
-    	progressPanel.setHead( Integer.valueOf( responseMap.get("head")));
-    	progressPanel.setTail( Integer.valueOf( responseMap.get("tail")));
-    	progressPanel.setDepth( Integer.valueOf( responseMap.get("depth")));
-    	progressPanel.setNumBuffers( Integer.valueOf( responseMap.get("num_buffers")));    	
-    }
-    
-    private static void setComponentSize ( JComponent obj, Dimension dimension )
-    {
-       obj.setMinimumSize ( dimension );
-       obj.setPreferredSize ( dimension );
-    }
+	private static ButtonPanel buttonPanel;
+	private static FixedFrame frame;
+	private static String userNode = "/com/gnuradar/run";
 
-    // main entry point
-    public static void main ( String[] args )
-    {   
-       // location of the rc file
-       File rcFile = new File( System.getProperty("user.home") + 
-             System.getProperty("file.separator") + RC_FILE );
-       System.out.println("Opening file " + rcFile.toString());
+	private Thread thread = null;
+	private StatusThread statusThread = null;
 
-       final Run run = new Run();
+	private JMenuItem quitAction;
+	private JMenuItem loadAction;
+	private JMenuItem aboutAction;
+	private JMenuItem plotAction;
+	private JMenuItem bpgAction;
+	private JMenuItem configureAction;
 
-       try {
+	private void loadPreferences() {
+		Preferences preferences = Preferences.userRoot().node(userNode);
+		int x = preferences.getInt("x", 0);
+		int y = preferences.getInt("y", 0);
+		File file = new File(preferences.get("config_dir", ""));
+		buttonPanel.setConfigurationFile(file);
+		frame.setLocation(x, y);
+	}
 
-          XmlConfigParser parser = new XmlConfigParser( rcFile );
-          ipAddress = InetAddress.getByName( parser.getServerIP() );
+	private void savePreferences() {
+		Point point = frame.getLocation();
+		File file = buttonPanel.getConfigurationFile();
 
-       } catch (UnknownHostException e1) {
-          System.out.println(" Could not contact the specified IP address " );			
-          e1.printStackTrace();
-       } catch (IOException e) {
-          System.out.println(" Could not locate the rc file " + rcFile.toString());		
-          e.printStackTrace();
-       }    	
+		Preferences preferences = Preferences.userRoot().node(userNode);
+		preferences.put("x", Integer.toString(point.x));
+		preferences.put("y", Integer.toString(point.y));
+		preferences.put("config_dir", file.toString());
+	}
 
-       // this is required for proper event-handling
-       EventQueue.invokeLater ( new Runnable() {
-          public void run() {
+	private void updateDisplay(Map<FieldDescriptor, Object> map) {
 
-             // use the grid bag layout manager
-             GridBagLayout gridBagLayout = new GridBagLayout();
+		progressPanel.setHead((Integer) (map.get("head")));
+		progressPanel.setTail((Integer) (map.get("tail")));
+		progressPanel.setDepth((Integer) (map.get("depth")));
+		progressPanel.setNumBuffers((Integer) (map.get("num_buffers")));
+	}
 
-             Border border = BorderFactory.createEtchedBorder( );
-             TitledBorder tBorder = BorderFactory.createTitledBorder ( border, "Status" );
-             tBorder.setTitleJustification ( TitledBorder.CENTER );
+	private static void setComponentSize(JComponent obj, Dimension dimension) {
+		obj.setMinimumSize(dimension);
+		obj.setPreferredSize(dimension);
+	}
 
-             run.statusPane = new JTextPane();
-             run.statusDocument = new DefaultStyledDocument();
-             run.statusPane.setBorder ( tBorder );
-             run.statusPane.setEditable(false);
-             run.statusPane.setDocument( run.statusDocument);
+	// main entry point
+	public static void main(String[] args) {
+		// location of the rc file
+		File rcFile = new File(System.getProperty("user.home")
+				+ System.getProperty("file.separator") + RC_FILE);
+		System.out.println("Opening file " + rcFile.toString());
 
-             setComponentSize ( run.statusPane, new Dimension ( 400, 390 ) );
+		final Run run = new Run();
 
-             JPanel statusPanel = new JPanel();
-             statusPanel.setBorder ( border );
+		try {
 
-             run.statusLabel = new JLabel ( "UNCONFIGURED", JLabel.CENTER );
-             run.statusLabel.setFont ( new Font ( "", Font.BOLD, 16 ) );
-             run.statusLabel.setForeground ( Color.WHITE );
+			FileInputStream fin = new FileInputStream(rcFile);
+			Yaml yaml = new Yaml();
 
-             setComponentSize ( statusPanel, new Dimension ( 400, 25 ) );
+			@SuppressWarnings("unchecked")
+			Map<String, Object> data = (Map<String, Object>) yaml.load(fin);
+			fin.close();
 
-             statusPanel.setBackground ( Color.BLUE );
-             statusPanel.add ( run.statusLabel );
+			run.statusIpAddress = (String) data.get("status");
+			run.controlIpAddress = (String) data.get("control");
 
-             buttonPanel = new ButtonPanel( );
-             buttonPanel.setIpAddress( ipAddress );
-             setComponentSize ( buttonPanel, new Dimension ( 100, 400 ) );
+		} catch (UnknownHostException e1) {
+			System.out.println(" Could not contact the specified IP address ");
+			e1.printStackTrace();
+		} catch (IOException e) {
+			System.out.println(" Could not locate the rc file "
+					+ rcFile.toString());
+			e.printStackTrace();
+		}
 
-             run.progressPanel = new ProgressPanel();
-             setComponentSize ( run.progressPanel, new Dimension ( 400, 50 ) );
+		// this is required for proper event-handling
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
 
-             // create menu bar and menu items
-             JMenuBar menuBar = new JMenuBar();
+				// use the grid bag layout manager
+				GridBagLayout gridBagLayout = new GridBagLayout();
 
-             run.loadAction = new JMenuItem ( "Load", 'L' );
-             run.loadAction.addActionListener ( run );
-             run.quitAction = new JMenuItem ( "Quit", 'Q' );
-             run.quitAction.addActionListener ( run );
-             run.plotAction = new JMenuItem ( "Plotter", 'P' );
-             run.plotAction.addActionListener ( run );
-             run.bpgAction = new JMenuItem ( "BitPatternGenerator", 'B' );
-             run.bpgAction.addActionListener ( run );
-             run.aboutAction = new JMenuItem ( "About", 'A' );
-             run.aboutAction.addActionListener ( run );
-             run.configureAction = new JMenuItem( "GnuRadar Configure", 'C');
-             run.configureAction.addActionListener(run );
+				Border border = BorderFactory.createEtchedBorder();
+				TitledBorder tBorder = BorderFactory.createTitledBorder(border,
+						"Status");
+				tBorder.setTitleJustification(TitledBorder.CENTER);
 
-             JMenu fileMenu = new JMenu ( "File" );
-             fileMenu.add ( run.loadAction );
-             fileMenu.addSeparator();
-             fileMenu.add ( run.quitAction );
+				run.statusPane = new JTextPane();
+				run.statusDocument = new DefaultStyledDocument();
+				run.statusPane.setBorder(tBorder);
+				run.statusPane.setEditable(false);
+				run.statusPane.setDocument(run.statusDocument);
 
-             JMenu toolMenu = new JMenu ( "Tools" );
-             toolMenu.add ( run.plotAction );
-             toolMenu.add ( run.bpgAction );
-             toolMenu.add ( run.configureAction);
+				setComponentSize(run.statusPane, new Dimension(400, 390));
 
-             JMenu helpMenu = new JMenu ( "Help" );
-             helpMenu.add ( run.aboutAction );
+				JPanel statusPanel = new JPanel();
+				statusPanel.setBorder(border);
 
-             //TODO: Enable these when ready
-             run.plotAction.setEnabled ( false );
-             run.bpgAction.setEnabled ( false );
+				run.statusLabel = new JLabel("UNCONFIGURED", JLabel.CENTER);
+				run.statusLabel.setFont(new Font("", Font.BOLD, 16));
+				run.statusLabel.setForeground(Color.WHITE);
 
-             menuBar.add ( fileMenu );
-             menuBar.add ( toolMenu );
-             menuBar.add ( Box.createHorizontalGlue() );
-             menuBar.add ( helpMenu );
+				setComponentSize(statusPanel, new Dimension(400, 25));
 
-             // create main window frame and set properties.
-             frame = new FixedFrame (
-                   DEFAULT_WIDTH, DEFAULT_HEIGHT, TITLE + " " + VERSION );
-             frame.setLayout ( gridBagLayout );
-             frame.setJMenuBar ( menuBar );
-             frame.setDefaultCloseOperation ( JFrame.DO_NOTHING_ON_CLOSE );
+				statusPanel.setBackground(Color.BLUE);
+				statusPanel.add(run.statusLabel);
 
-             // make sure that a click to 'x' out the window passes through
-             // the quit function to ensure proper shutdown.
-             frame.addWindowListener (
-                   new WindowAdapter() {
-                      public void windowClosing ( WindowEvent e ) {
-                         run.quit();
-                      }
-                   } );
+				buttonPanel = new ButtonPanel();
+				buttonPanel.setIpAddress(run.controlIpAddress);
+				setComponentSize(buttonPanel, new Dimension(100, 400));
 
-             frame.add ( buttonPanel,
-                   new GBC ( 0, 1, 10, 100 ).setIpad ( 5, 5 ).
-                   setSpan ( 1, 4 ).setFill (
-                      GridBagConstraints.VERTICAL )
-                   );
-             frame.add ( statusPanel,
-                   new GBC ( 0, 0, 10, 10 ).setIpad ( 5, 5 ).
-                   setSpan ( 4, 1 ).setFill (
-                      GridBagConstraints.HORIZONTAL )
-                   );
-             frame.add ( run.statusPane,
-                   new GBC ( 1, 1, 100, 100 ).setIpad ( 5, 5 ).
-                   setSpan ( 3, 3 ).setFill (
-                      GridBagConstraints.HORIZONTAL )
-                   );
-             frame.add ( run.progressPanel,
-                   new GBC ( 1, 4, 100, 100 ).setIpad ( 5, 5 ).
-                   setSpan ( 3, 1 ).setFill (
-                      GridBagConstraints.HORIZONTAL )
-                   );
+				run.progressPanel = new ProgressPanel();
+				setComponentSize(run.progressPanel, new Dimension(400, 50));
 
-             run.loadPreferences();
+				// create menu bar and menu items
+				JMenuBar menuBar = new JMenuBar();
 
-             buttonPanel.addPropertyChangeListener ( run );
-             frame.setVisible ( true );
-          }
-       } );
-    }
+				run.loadAction = new JMenuItem("Load", 'L');
+				run.loadAction.addActionListener(run);
+				run.quitAction = new JMenuItem("Quit", 'Q');
+				run.quitAction.addActionListener(run);
+				run.plotAction = new JMenuItem("Plotter", 'P');
+				run.plotAction.addActionListener(run);
+				run.bpgAction = new JMenuItem("BitPatternGenerator", 'B');
+				run.bpgAction.addActionListener(run);
+				run.aboutAction = new JMenuItem("About", 'A');
+				run.aboutAction.addActionListener(run);
+				run.configureAction = new JMenuItem("GnuRadar Configure", 'C');
+				run.configureAction.addActionListener(run);
 
-    @Override
-       public void actionPerformed ( ActionEvent e )
-       {
-          Object source = e.getSource();
+				JMenu fileMenu = new JMenu("File");
+				fileMenu.add(run.loadAction);
+				fileMenu.addSeparator();
+				fileMenu.add(run.quitAction);
 
-          if ( source == configureAction ){
+				JMenu toolMenu = new JMenu("Tools");
+				toolMenu.add(run.plotAction);
+				toolMenu.add(run.bpgAction);
+				toolMenu.add(run.configureAction);
 
-             ProcessBuilder pBuilder = new ProcessBuilder("gradar-configure");
-             try {
-                Process process = pBuilder.start();
-                process.waitFor();
-             } catch (IOException e1) {				
-                e1.printStackTrace();
-             } catch (InterruptedException e2) {				
-                e2.printStackTrace();
-             }        
-          }
-          if ( source == loadAction ) {
-             buttonPanel.clickLoadButton();
-          }
+				JMenu helpMenu = new JMenu("Help");
+				helpMenu.add(run.aboutAction);
 
-          if ( source == quitAction ) {        	
-             quit();
-          }
+				// TODO: Enable these when ready
+				run.plotAction.setEnabled(false);
+				run.bpgAction.setEnabled(false);
 
-          if ( source == aboutAction ) {
-             JOptionPane.showMessageDialog (
-                   null, TITLE + "\n" +
-                   VERSION + "\n" + BUILD + "\n" +
-                   AUTHOR + "\n" +
-                   COPYRIGHT + "\n"
-                   );
-          }
-       }
+				menuBar.add(fileMenu);
+				menuBar.add(toolMenu);
+				menuBar.add(Box.createHorizontalGlue());
+				menuBar.add(helpMenu);
 
-    @Override
-       public void propertyChange ( PropertyChangeEvent evt )
-       {
-          State state = buttonPanel.getState();    	
-          statusLabel.setText ( state.getValue() );
+				// create main window frame and set properties.
+				frame = new FixedFrame(DEFAULT_WIDTH, DEFAULT_HEIGHT, TITLE
+						+ " " + VERSION);
+				frame.setLayout(gridBagLayout);
+				frame.setJMenuBar(menuBar);
+				frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-          // get the response packet from the server and parse if not null
-          String xmlResponsePacket = buttonPanel.getServerResponse();
-          if( xmlResponsePacket != null)
-          {
-             HashMap<String,String> map = XmlPacket.parse(xmlResponsePacket);
-             String response = map.get("message");      	
-             statusPane.setText(response);
-          }
+				// make sure that a click to 'x' out the window passes through
+				// the quit function to ensure proper shutdown.
+				frame.addWindowListener(new WindowAdapter() {
+					public void windowClosing(WindowEvent e) {
+						run.quit();
+					}
+				});
 
-          if( state == State.RUNNING )
-          {
-             statusThread = new StatusThread(PORT);
-             thread = new Thread(statusThread);
-             thread.start();
+				frame.add(buttonPanel, new GBC(0, 1, 10, 100).setIpad(5, 5)
+						.setSpan(1, 4).setFill(GridBagConstraints.VERTICAL));
+				frame.add(statusPanel, new GBC(0, 0, 10, 10).setIpad(5, 5)
+						.setSpan(4, 1).setFill(GridBagConstraints.HORIZONTAL));
+				frame.add(run.statusPane, new GBC(1, 1, 100, 100).setIpad(5, 5)
+						.setSpan(3, 3).setFill(GridBagConstraints.HORIZONTAL));
+				frame.add(run.progressPanel,
+						new GBC(1, 4, 100, 100).setIpad(5, 5).setSpan(3, 1)
+								.setFill(GridBagConstraints.HORIZONTAL));
 
-             statusListener = new StatusListener(){
-                @Override
-                   public void eventOccurred(StatusEvent event) {
-                      updateDisplay( statusThread.getResponse() );							
-                   }};				
-             statusThread.addStatusListener( statusListener );        	
-          }
+				run.loadPreferences();
 
-          if( state == State.STOPPED && thread.isAlive() ){
+				buttonPanel.addPropertyChangeListener(run);
+				frame.setVisible(true);
+			}
+		});
+	}
 
-             statusThread.removeStatusListener(statusListener);
-             statusThread.stopStatus();        	
-             try {
-                thread.join();
-             } catch (InterruptedException e) {
-                System.out.println( "Status thread join was interrupted.");
-             }
-          }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object source = e.getSource();
 
-          if( state == State.CONFIGURED ){
-             statusPane.setText( "Configuration File Loaded." );
-          }
-       }
+		if (source == configureAction) {
 
-    public void quit()
-    {
-       if ( buttonPanel.getState() == State.RUNNING ) {
-          JOptionPane.showMessageDialog ( 
-                null,
-                "System is currently in operation. Press <Stop> before" +
-                " attempting to exit" );
-       } else {
-          savePreferences();
-          System.exit ( 0 );
-       }
-    }
+			ProcessBuilder pBuilder = new ProcessBuilder("gradar-configure");
+			try {
+				Process process = pBuilder.start();
+				process.waitFor();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (InterruptedException e2) {
+				e2.printStackTrace();
+			}
+		}
+		if (source == loadAction) {
+			buttonPanel.clickLoadButton();
+		}
+
+		if (source == quitAction) {
+			quit();
+		}
+
+		if (source == aboutAction) {
+			JOptionPane.showMessageDialog(null, TITLE + "\n" + VERSION + "\n"
+					+ BUILD + "\n" + AUTHOR + "\n" + COPYRIGHT + "\n");
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		State state = buttonPanel.getState();
+		statusLabel.setText(state.getValue());
+
+		if (state == State.RUNNING) {
+			statusThread = new StatusThread(this.statusIpAddress);
+			thread = new Thread(statusThread);
+			thread.start();
+
+			statusListener = new StatusListener() {
+				@Override
+				public void eventOccurred(StatusEvent event) {
+					updateDisplay(statusThread.getResponse());
+				}
+			};
+			statusThread.addStatusListener(statusListener);
+		}
+
+		if (state == State.STOPPED && thread.isAlive()) {
+
+			statusThread.removeStatusListener(statusListener);
+			statusThread.stopStatus();
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				System.out.println("Status thread join was interrupted.");
+			}
+		}
+
+		if (state == State.CONFIGURED) {
+			statusPane.setText("Configuration File Loaded.");
+		}
+	}
+
+	public void quit() {
+		if (buttonPanel.getState() == State.RUNNING) {
+			JOptionPane.showMessageDialog(null,
+					"System is currently in operation. Press <Stop> before"
+							+ " attempting to exit");
+		} else {
+			savePreferences();
+			System.exit(0);
+		}
+	}
 }

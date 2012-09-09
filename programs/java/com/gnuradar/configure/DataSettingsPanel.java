@@ -18,12 +18,14 @@ package com.gnuradar.configure;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
+
+import com.gnuradar.common.ConfigFile;
+import com.gnuradar.common.Window;
 
 public class DataSettingsPanel extends JTabbedPane
             implements ActionListener, ApplicationSettings {
@@ -77,24 +79,21 @@ public class DataSettingsPanel extends JTabbedPane
     }
 
     @Override
-    public HashMap<String, String> getSettings()
+    public void getSettings( ConfigFile configuration )
     {
-        HashMap<String, String> settings = new HashMap<String, String>();
-
-        settings.put ( "num_windows", Integer.toString ( windows.size() ) );
-
+    	List<Window> config_windows = new LinkedList<Window>();
+    	
         for ( int i = 0; i < windows.size(); ++i ) {
-            settings.putAll ( windows.get ( i ).getSettings() );
+        	config_windows.add( windows.get(i).getSettings() );
         }
-
-        return settings;
+        
+        configuration.setWindows(config_windows);
     }
 
     @Override
-    public void pushSettings ( HashMap<String, String> map )
+    public void pushSettings ( ConfigFile configuration )
     {
-
-        int numAdd = Integer.valueOf ( map.get ( "num_windows" ) );
+    	List<Window> config_windows = configuration.getWindows();
 
         // remove existing windows first.
         this.removeAll();
@@ -102,9 +101,9 @@ public class DataSettingsPanel extends JTabbedPane
         numTabs = 0;
 
         // add windows from configuration file
-        for ( int i = 0; i < numAdd; ++i ) {
+        for ( int i = 0; i < config_windows.size(); ++i ) {
             addWindow();
-            windows.get ( i ).pushSettings ( map );
+            windows.get ( i ).pushSettings ( config_windows.get(i));
         }
     }
 }

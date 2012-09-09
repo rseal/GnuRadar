@@ -19,44 +19,25 @@
 
 #include <iostream>
 #include <stdexcept>
-#include <gnuradar/xml/XmlPacket.hpp>
+#include<gnuradar/commands/Response.pb.h>
+#include<gnuradar/commands/Control.pb.h>
 
 namespace gnuradar {
-namespace command {
+   namespace command {
 
-// helper function used to parse argument map
-static const std::string ParseArg ( const std::string key,
-                                    const xml::XmlPacketArgs& args )
-{
+      class GnuRadarCommand {
 
-    xml::XmlPacketArgs::const_iterator iter = args.find ( key );
+         std::string name_;
 
-    if ( iter == args.end() ) {
-        throw std::runtime_error ( "Command parser failed for " + key );
-    }
+         public:
 
-    return iter->second;
-}
+         GnuRadarCommand ( const std::string& name ) : name_ ( name ) {}
 
-class GnuRadarCommand {
+         virtual const gnuradar::ResponseMessage Execute ( gnuradar::ControlMessage& msg ) = 0;
 
-    std::string name_;
-
-protected:
-
-
-public:
-
-    GnuRadarCommand ( const std::string& name ) : name_ ( name ) {}
-
-    virtual const std::string
-    Execute ( const xml::XmlPacketArgs& args ) = 0;
-
-    const std::string& Name() {
-        return name_;
-    }
-};
-};
+         const std::string& Name() { return name_; }
+      };
+   };
 };
 
 #endif

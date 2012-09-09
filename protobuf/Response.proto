@@ -1,4 +1,5 @@
 package gnuradar;
+option java_package="com.gnuradar.proto";
 
 message ResponseMessage{
    enum Result{

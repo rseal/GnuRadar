@@ -19,10 +19,10 @@
 
 namespace gnuradar{
    namespace constants{
-
       static int NUM_BUFFERS = 20;
       static std::string BUFFER_BASE_NAME = "GnuRadar";
-		static std::string SERVER_CONFIGURATION_FILE = "/usr/local/gnuradar/gnuradar_server.xml";
+		static std::string SERVER_CONFIGURATION_FILE = "/usr/local/gnuradar/gnuradar_server.yml";
+		static int STATUS_REFRESH_RATE_MSEC = 1000;
    };
 };
 

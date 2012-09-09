@@ -18,7 +18,8 @@ package com.gnuradar.configure;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.util.HashMap;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -31,116 +32,114 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-public class PulseSettingsPanel extends JPanel
-            implements ApplicationSettings {
+import com.gnuradar.common.ConfigFile;
 
-    static private final int IPP_MSEC_INIT = 10;
-    private JPanel ippPanel;
-    private JLabel ippLabel;
-    private JTextField ippTextField;
-    private JComboBox ippComboBox;
-    private String[] ippUnits = { "MSEC", "USEC", "SAMPLES" };
+public class PulseSettingsPanel extends JPanel implements ApplicationSettings,
+		ActionListener {
 
-    private JPanel txPanel;
-    private JLabel txLabel;
-    private JTextField txTextField;
-    private JLabel txUnitsLabel;
+	static private final int IPP_MSEC_INIT = 10;
+	private JPanel ippPanel;
+	private JLabel ippLabel;
+	private JTextField ippTextField;
+	private JComboBox ippComboBox;
+	private String[] ippUnits = { "msec", "usec", "samples" };
 
-    private JButton addDataWindowButton;
-    private JButton removeDataWindowButton;
-    private JPanel buttonPanel;
-    private DataSettingsPanel dataSettingsPanel;
+	private JPanel txPanel;
+	private JLabel txLabel;
+	private JTextField txTextField;
+	private JLabel txUnitsLabel;
 
-    private JPanel leftPanel;
+	private JButton addDataWindowButton;
+	private JButton removeDataWindowButton;
+	private JPanel buttonPanel;
+	private DataSettingsPanel dataSettingsPanel;
 
-    // DataWindowPanel
+	private JPanel leftPanel;
 
-    private static final long serialVersionUID = 1L;
+	// DataWindowPanel
 
-    private void setComponentSize ( JComponent obj, Dimension dimension )
-    {
-        obj.setMinimumSize ( dimension );
-        obj.setPreferredSize ( dimension );
-    }
+	private static final long serialVersionUID = 1L;
 
-    public PulseSettingsPanel ( Dimension dims )
-    {
-        this.setLayout ( new FlowLayout ( FlowLayout.LEFT, 3, 2 ) );
-        setComponentSize ( this, dims );
+	private void setComponentSize(JComponent obj, Dimension dimension) {
+		obj.setMinimumSize(dimension);
+		obj.setPreferredSize(dimension);
+	}
 
-        Border border = BorderFactory.createEtchedBorder();
-        TitledBorder tBorder = new TitledBorder (
-            border, "Data Window and Pulse Settings" );
-        this.setBorder ( tBorder );
+	public PulseSettingsPanel(Dimension dims) {
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 2));
+		setComponentSize(this, dims);
 
-        leftPanel = new JPanel ( new FlowLayout ( FlowLayout.CENTER, 2, 2 ) );
+		Border border = BorderFactory.createEtchedBorder();
+		TitledBorder tBorder = new TitledBorder(border,
+				"Data Window and Pulse Settings");
+		this.setBorder(tBorder);
 
-        ippPanel = new JPanel();
-        ippLabel = new JLabel ( "IPP", JLabel.RIGHT );
-        ippTextField = new JTextField ( IPP_MSEC_INIT );
-        setComponentSize ( ippTextField, new Dimension ( 10, 20 ) );
-        ippComboBox = new JComboBox ( ippUnits );
-        ippPanel.add ( ippLabel );
-        ippPanel.add ( ippTextField );
-        ippPanel.add ( ippComboBox );
+		leftPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 2));
 
-        txPanel = new JPanel();
-        txLabel = new JLabel ( "Tx Carrier Frequency", JLabel.RIGHT );
-        txTextField = new JTextField ( "" );
-        setComponentSize ( txTextField, new Dimension ( 80, 20 ) );
-        txUnitsLabel = new JLabel ( "MHz", JLabel.LEFT );
-        txPanel.add ( txLabel );
-        txPanel.add ( txTextField );
-        txPanel.add ( txUnitsLabel );
+		ippPanel = new JPanel();
+		ippLabel = new JLabel("IPP", JLabel.RIGHT);
+		ippTextField = new JTextField(IPP_MSEC_INIT);
+		setComponentSize(ippTextField, new Dimension(10, 20));
+		ippComboBox = new JComboBox(ippUnits);
+		ippPanel.add(ippLabel);
+		ippPanel.add(ippTextField);
+		ippPanel.add(ippComboBox);
 
-        buttonPanel = new JPanel();
-        addDataWindowButton = new JButton ( "Add" );
-        setComponentSize ( addDataWindowButton, new Dimension ( 90, 20 ) );
-        removeDataWindowButton = new JButton ( "Remove" );
-        setComponentSize ( removeDataWindowButton, new Dimension ( 90, 20 ) );
-        
-        buttonPanel.add ( Box.createRigidArea( new Dimension( 70,20 )));
-        buttonPanel.add ( addDataWindowButton );
-        buttonPanel.add ( removeDataWindowButton );
+		txPanel = new JPanel();
+		txLabel = new JLabel("Tx Carrier Frequency", JLabel.RIGHT);
+		txTextField = new JTextField("");
+		setComponentSize(txTextField, new Dimension(80, 20));
+		txUnitsLabel = new JLabel("MHz", JLabel.LEFT);
+		txPanel.add(txLabel);
+		txPanel.add(txTextField);
+		txPanel.add(txUnitsLabel);
 
-        leftPanel.add ( ippPanel );
-        leftPanel.add ( buttonPanel );
+		buttonPanel = new JPanel();
+		addDataWindowButton = new JButton("Add");
+		setComponentSize(addDataWindowButton, new Dimension(90, 20));
+		removeDataWindowButton = new JButton("Remove");
+		setComponentSize(removeDataWindowButton, new Dimension(90, 20));
 
-        dataSettingsPanel = new DataSettingsPanel();
+		buttonPanel.add(Box.createRigidArea(new Dimension(70, 20)));
+		buttonPanel.add(addDataWindowButton);
+		buttonPanel.add(removeDataWindowButton);
 
-        this.add ( dataSettingsPanel );
-        this.add ( leftPanel );
-        this.add ( txPanel );
+		leftPanel.add(ippPanel);
+		leftPanel.add(buttonPanel);
 
-        addDataWindowButton.addActionListener ( dataSettingsPanel );
-        removeDataWindowButton.addActionListener ( dataSettingsPanel );
-    }
+		dataSettingsPanel = new DataSettingsPanel();
 
-    /**
-     * Reads all the settings from the GUI into the HashMap.
-     */
-    @Override
-    public HashMap<String, String> getSettings()
-    {
-        HashMap<String, String> settings = new HashMap<String, String> ( 3 );
-        settings.putAll ( dataSettingsPanel.getSettings() );
-        settings.put ( "ipp", ippTextField.getText() );
-        settings.put ( "ipp_units", ( String ) ippComboBox.getSelectedItem() );
-        settings.put ( "tx_carrier", txTextField.getText() );
+		this.add(dataSettingsPanel);
+		this.add(leftPanel);
+		this.add(txPanel);
 
-        return settings;
-    }
+		addDataWindowButton.addActionListener(dataSettingsPanel);
+		removeDataWindowButton.addActionListener(dataSettingsPanel);
+	}
 
-    /**
-     * Takes settings from a HashMap and pushes them to the Application.
-     */
-    @Override
-    public void pushSettings ( HashMap<String, String> map )
-    {
-        ippTextField.setText ( map.get ( "ipp" ) );
-        ippComboBox.setSelectedItem ( map.get ( "ipp_units" ) );
-        txTextField.setText ( map.get ( "tx_carrier" ) );
+	/**
+	 * Reads all the settings from the GUI into the HashMap.
+	 */
+	@Override
+	public void getSettings(ConfigFile configuration) {
+		configuration.setPri(Double.parseDouble(ippTextField.getText()));
+		configuration.setPriUnits((String) ippComboBox.getSelectedItem());
+		configuration.setTxCarrier(Double.parseDouble(txTextField.getText()));
+		dataSettingsPanel.getSettings(configuration);
+	}
 
-        dataSettingsPanel.pushSettings ( map );
-    }
+	/**
+	 * Takes settings from a HashMap and pushes them to the Application.
+	 */
+	@Override
+	public void pushSettings(ConfigFile configuration) {
+		ippTextField.setText(Double.toString(configuration.getPri()));
+		ippComboBox.setSelectedItem(configuration.getPriUnits());
+		txTextField.setText(Double.toString(configuration.getTxCarrier()));
+		dataSettingsPanel.pushSettings(configuration);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	}
 }

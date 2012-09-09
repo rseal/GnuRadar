@@ -50,7 +50,7 @@ void ConsumerThread::Run()
       out.close();
 
       // update the header file
-      header_->Update(
+      header_->Write(
             bufferManager_->Head(), 
             bufferManager_->Tail(), 
             bufferManager_->Depth()

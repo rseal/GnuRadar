@@ -1,0 +1,2 @@
+control : 'tcp://*:54321'
+status  : 'tcp://*:54320'

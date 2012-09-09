@@ -27,10 +27,8 @@
 #include <gnuradar/GnuRadarSettings.h>
 #include <gnuradar/SThread.h>
 #include <gnuradar/Console.h>
-#include <gnuradar/ConfigFile.h>
 #include <gnuradar/Units.h>
 #include <gnuradar/Constants.hpp>
-#include <clp/CommandLineParser.hpp>
 #include <hdf5r/HDF5.hpp>
 #include <hdf5r/Complex.hpp>
 #include <hdf5r/Time.hpp>

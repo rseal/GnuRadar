@@ -36,47 +36,67 @@ using std::endl;
 using std::map;
 using namespace boost;
 
+struct UnitType{
+	public:
+	const std::string units;
+	const double multiplier;
+	UnitType( const std::string& u, const double m ) : units(u), multiplier(m) {}
+};
+
 ///\brief Parses various defined time units and returns time with double precision
 struct Units {
 
-    typedef map<string, float> UnitMap;
-    UnitMap unitMap;
+	typedef map<string, UnitType > UnitTypeMap;
+	UnitTypeMap unitMap;
 
-public:
+	// finds a matching unit and returns a UnitType object.
+	UnitType Find( const string& token )
+	{
+		std::string str = token;
+		//remove everything to the left of 'units'
+		str.erase ( 0, str.find_last_of ( " " ) + 1 );
 
-    Units() {
-        unitMap["mhz" ] = 1e6;
-        unitMap["khz" ] = 1e3;
-        unitMap["hz"  ] = 1e0;
-        unitMap["nsec"] = 1e-9;
-        unitMap["usec"] = 1e-6;
-        unitMap["msec"] = 1e-3;
-        unitMap["sec" ] = 1e0;
-        unitMap["km"  ] = ( 2.0 / 3.0 ) * 1e-6;
-        unitMap["m"   ] = ( 2.0 / 3.0 ) * 1e-3;
-        unitMap["deg" ] = 1e0;
-        unitMap["rad" ] = 180.0 * 11.0 / 7.0;
-    }
+		//search map for token and assign if found
+		UnitTypeMap::iterator iter = unitMap.find ( str );
+		
+		return iter->second;
+	}
 
-///Overloaded operator creates a function operator (functor) that parses the supplied units
-///and returns time with double precision
-    const double operator() ( const string& token ) {
-        string str = token;
-        to_lower ( str );
-        double multiplier = double();
-//	cout << "units::str = " << str << endl;
-        //remove everything to the left of 'units'
-        str.erase ( 0, str.find_last_of ( " " ) + 1 );
+	// converts incoming token to lower for standardization.
+	std::string Format( const string& token )
+	{
+		string str = token;
+		to_lower ( str );
+		return str;
+	}
 
-        //search map for token and assign if found
-        UnitMap::iterator iter = unitMap.find ( str );
+	public:
 
-        if ( iter != unitMap.end() )
-            multiplier = iter->second;
+	Units() {
 
-//	cout << "units::multiplier = " << multiplier << endl;
-        return multiplier;
-    }
+		// resulting unit : hz
+		unitMap.insert( std::pair<std::string,UnitType>("mhz",UnitType("hz",1e6)));
+		unitMap.insert( std::pair<std::string,UnitType>("khz",UnitType("hz",1e3)));
+		unitMap.insert( std::pair<std::string,UnitType>("hz",UnitType("hz",1e0)));
+
+		// resulting unit : sec
+		unitMap.insert( std::pair<std::string,UnitType>("nsec",UnitType("sec",1e-9)));
+		unitMap.insert( std::pair<std::string,UnitType>("usec",UnitType("sec",1e-6)));
+		unitMap.insert( std::pair<std::string,UnitType>("msec",UnitType("sec",1e-3)));
+		unitMap.insert( std::pair<std::string,UnitType>("sec",UnitType("sec",1e0)));
+		unitMap.insert( std::pair<std::string,UnitType>("km",UnitType("sec",(2.0/3.0)*1e-6)));
+		unitMap.insert( std::pair<std::string,UnitType>("m",UnitType("sec",(2.0/3.0)*1e-3)));
+
+		// resulting unit : deg
+		unitMap.insert( std::pair<std::string,UnitType>("deg",UnitType("deg",1e0)));
+		unitMap.insert( std::pair<std::string,UnitType>("rad",UnitType("deg",180.0*11.0/7.0)));
+
+		unitMap.insert( std::pair<std::string,UnitType>("samples",UnitType("samples",1e0)));
+	}
+
+	const UnitType operator() ( const string& token ) {
+		return this->Find(this->Format(token));
+	}
 
 };
 

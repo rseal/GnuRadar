@@ -21,7 +21,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -36,240 +35,239 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.corejava.GBC;
+import com.gnuradar.common.ConfigFile;
 
-public class SettingsPanel extends JPanel
-            implements ActionListener, ChangeListener, ApplicationSettings {
-    private static final long serialVersionUID = 1L;
+public class SettingsPanel extends JPanel implements ActionListener,
+		ChangeListener, ApplicationSettings {
+	private static final long serialVersionUID = 1L;
 
-    private static final int LABEL_WIDTH = 100;
-    private static final int LABEL_HEIGHT = 20;
-    private static final int DECIMATION_INIT = 128;
+	private static final int LABEL_WIDTH = 100;
+	private static final int LABEL_HEIGHT = 20;
+	private static final int DECIMATION_INIT = 128;
 
-    private static final double SAMPLE_RATE_MIN = 1.0;
-    private static final double SAMPLE_RATE_MAX = 64.0;
-    private static final double SAMPLE_RATE_INIT = 64.0;
-    private static final String SAMPLE_RATE_UNIT_INIT = "MHz";
+	private static final double SAMPLE_RATE_MIN = 1.0;
+	private static final double SAMPLE_RATE_MAX = 64.0;
+	private static final double SAMPLE_RATE_INIT = 64.0;
+	private static final String SAMPLE_RATE_UNIT_INIT = "MHz";
 
-    private static final double BANDWIDTH_INIT = 500.0;
-    private static final int NUM_CHANNELS_INIT = 1;
-    private static final String BANDWIDTH_UNIT_INIT = "kHz";
+	private static final double BANDWIDTH_INIT = 500.0;
+	private static final int NUM_CHANNELS_INIT = 1;
+	private static final String BANDWIDTH_UNIT_INIT = "kHz";
 
-    private int decimation = DECIMATION_INIT;
-    private double sampleRate = SAMPLE_RATE_INIT;
-    private double bandwidth = BANDWIDTH_INIT;
-    private int numChannels = NUM_CHANNELS_INIT;
+	private int decimation = DECIMATION_INIT;
+	private double sampleRate = SAMPLE_RATE_INIT;
+	private double bandwidth = BANDWIDTH_INIT;
+	private int numChannels = NUM_CHANNELS_INIT;
 
-    private static final Dimension dimension =
-        new Dimension ( LABEL_WIDTH, LABEL_HEIGHT );
+	private static final Dimension dimension = new Dimension(LABEL_WIDTH,
+			LABEL_HEIGHT);
 
-    private JLabel sampleRateLabel;
-    private JLabel sampleRateUnitsLabel;
-    private JTextField sampleRateTextField;
-    private JPanel sampleRatePanel;
+	private JLabel sampleRateLabel;
+	private JLabel sampleRateUnitsLabel;
+	private JTextField sampleRateTextField;
+	private JPanel sampleRatePanel;
 
-    private JLabel decimationLabel;
-    //private JTextField decimationTextField;
-    private JComboBox decimationComboBox;
-    private String[] decimationValues = { "8", "16", "32", "64", "128" };
-    //private JSlider decimationSlider;
-    private JPanel decimationPanel;
+	private JLabel decimationLabel;
+	// private JTextField decimationTextField;
+	private JComboBox decimationComboBox;
+	private String[] decimationValues = { "8", "16", "32", "64", "128" };
+	// private JSlider decimationSlider;
+	private JPanel decimationPanel;
 
-    private JLabel channelsLabel;
-    public JComboBox channelsComboBox;
-    private String[] channels = { "1", "2", "4" };
-    private JPanel channelsPanel;
+	private JLabel channelsLabel;
+	public JComboBox channelsComboBox;
+	private String[] channels = { "1", "2", "4" };
+	private JPanel channelsPanel;
 
-    private JLabel bandwidthLabel;
-    private JLabel bandwidthUnitsLabel;
-    private JTextField bandwidthTextField;
-    private JPanel bandwidthPanel;
+	private JLabel bandwidthLabel;
+	private JLabel bandwidthUnitsLabel;
+	private JTextField bandwidthTextField;
+	private JPanel bandwidthPanel;
 
-    private void setComponentSize ( JComponent obj, Dimension dimension )
-    {
-        obj.setMinimumSize ( dimension );
-        obj.setPreferredSize ( dimension );
-    }
+	private void setComponentSize(JComponent obj, Dimension dimension) {
+		obj.setMinimumSize(dimension);
+		obj.setPreferredSize(dimension);
+	}
 
-    public SettingsPanel ( )
-    {
-        // use the grid bag layout manager
-        GridBagLayout gridBagLayout = new GridBagLayout();
-        this.setLayout ( gridBagLayout );
+	public SettingsPanel() {
 
-        Border border = BorderFactory.createEtchedBorder( );
-        TitledBorder tBorder = new TitledBorder ( border, "General Settings" );
-        this.setBorder ( tBorder );
+		// use the grid bag layout manager
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		this.setLayout(gridBagLayout);
 
-        sampleRateLabel = new JLabel ( "Sample Rate", JLabel.RIGHT );
-        sampleRateTextField =
-            new JTextField ( Double.toString ( SAMPLE_RATE_INIT ) );
-        sampleRateTextField.addActionListener ( this );
-        sampleRateUnitsLabel = new JLabel ( SAMPLE_RATE_UNIT_INIT, JLabel.LEFT );
-        sampleRatePanel = new JPanel();
-        sampleRatePanel.add ( sampleRateLabel );
-        sampleRatePanel.add ( sampleRateTextField );
-        sampleRatePanel.add ( sampleRateUnitsLabel );
-        sampleRatePanel.setSize ( dimension );
-        setComponentSize ( sampleRateUnitsLabel, new Dimension ( 50, 20 ) );
-        setComponentSize ( sampleRateTextField, new Dimension ( 80, 20 ) );
-        this.add ( sampleRatePanel, new GBC ( 0, 0, 100, 100 ).setIpad ( 5, 5 ) );
+		Border border = BorderFactory.createEtchedBorder();
+		TitledBorder tBorder = new TitledBorder(border, "General Settings");
+		this.setBorder(tBorder);
 
-        decimationLabel = new JLabel ( "Decimation", JLabel.RIGHT );        
-        decimationComboBox = new JComboBox( decimationValues );
-        decimationComboBox.addActionListener( this );
+		sampleRateLabel = new JLabel("Sample Rate", JLabel.RIGHT);
+		sampleRateTextField = new JTextField(Double.toString(SAMPLE_RATE_INIT));
+		sampleRateTextField.addActionListener(this);
 
-        setComponentSize ( decimationComboBox, new Dimension ( 80,20 ));
-        decimationPanel = new JPanel();
-        decimationPanel.add ( decimationLabel );
-        decimationPanel.add ( decimationComboBox );
-        decimationPanel.add( Box.createRigidArea(new Dimension( 50,20 )));
-        
-        this.add ( decimationPanel, new GBC ( 0, 1, 100, 100 ).setIpad ( 5, 5 ) );
+		sampleRateUnitsLabel = new JLabel(SAMPLE_RATE_UNIT_INIT, JLabel.LEFT);
 
-        channelsPanel = new JPanel();
-        channelsLabel = new JLabel ( "Channels", JLabel.RIGHT );
-        channelsComboBox = new JComboBox ( channels );
-        channelsComboBox.addActionListener ( this );
-        setComponentSize ( channelsComboBox, new Dimension ( 80, 20 ) );
-        channelsPanel.add ( channelsLabel );
-        channelsPanel.add ( channelsComboBox );
-        this.add ( channelsPanel, new GBC ( 1, 0, 100, 100 ).setIpad ( 5, 5 ) );
+		sampleRatePanel = new JPanel();
+		sampleRatePanel.add(sampleRateLabel);
+		sampleRatePanel.add(sampleRateTextField);
+		sampleRatePanel.add(sampleRateUnitsLabel);
+		sampleRatePanel.setSize(dimension);
 
-        bandwidthPanel = new JPanel();
-        bandwidthLabel = new JLabel ( "Bandwidth", JLabel.RIGHT );
-        bandwidthUnitsLabel = new JLabel ( BANDWIDTH_UNIT_INIT, JLabel.LEFT );
-        bandwidthTextField = new JTextField ( Double.toString ( BANDWIDTH_INIT ) );
-        bandwidthTextField.setEditable ( false );
-        setComponentSize ( bandwidthTextField, new Dimension ( 50, 20 ) );
-        setComponentSize ( bandwidthUnitsLabel, new Dimension ( 30, 20 ) );
-        bandwidthPanel.add ( bandwidthLabel );
-        bandwidthPanel.add ( bandwidthTextField );
-        bandwidthPanel.add ( bandwidthUnitsLabel );
-        this.add ( bandwidthPanel, new GBC ( 1, 1, 100, 100 ).setIpad ( 5, 5 ) );
-        
-        this.updateSettings();
+		setComponentSize(sampleRateUnitsLabel, new Dimension(50, 20));
+		setComponentSize(sampleRateTextField, new Dimension(80, 20));
+		this.add(sampleRatePanel, new GBC(0, 0, 100, 100).setIpad(5, 5));
 
-    }
+		decimationLabel = new JLabel("Decimation", JLabel.RIGHT);
+		decimationComboBox = new JComboBox(decimationValues);
+		decimationComboBox.addActionListener(this);
 
-    private void validateSampleRate()
-    {
-        try {
-            this.sampleRate = Double.valueOf (
-                                  sampleRateTextField.getText().trim() );
+		setComponentSize(decimationComboBox, new Dimension(80, 20));
+		decimationPanel = new JPanel();
+		decimationPanel.add(decimationLabel);
+		decimationPanel.add(decimationComboBox);
+		decimationPanel.add(Box.createRigidArea(new Dimension(50, 20)));
 
-            if ( this.sampleRate > SAMPLE_RATE_MAX ) {
-                this.sampleRate = SAMPLE_RATE_MAX;
-            }
+		this.add(decimationPanel, new GBC(0, 1, 100, 100).setIpad(5, 5));
 
-            if ( this.sampleRate < SAMPLE_RATE_MIN ) {
-                this.sampleRate = SAMPLE_RATE_MIN;
-            }
+		channelsPanel = new JPanel();
+		channelsLabel = new JLabel("Channels", JLabel.RIGHT);
 
-            sampleRateTextField.setText ( Double.toString ( this.sampleRate ) );
-        } catch ( NumberFormatException e ) {
-            System.out.println ( "number format exception caught" );
-        }
+		channelsComboBox = new JComboBox(channels);
+		channelsComboBox.addActionListener(this);
 
-    }
+		channelsPanel.add(channelsLabel);
+		channelsPanel.add(channelsComboBox);
 
-    private void setBandwidth()
-    {
-        numChannels = Integer.valueOf ( ( String ) channelsComboBox.getSelectedItem() );
-        bandwidth = sampleRate / decimation;
-        double value;
-        DecimalFormat formatter = new DecimalFormat ( "#0.00" );
+		setComponentSize(channelsComboBox, new Dimension(80, 20));
+		this.add(channelsPanel, new GBC(1, 0, 100, 100).setIpad(5, 5));
 
-        double totalBandwidth = bandwidth * numChannels;
-        
-        if( totalBandwidth > 8e0 ) {
-        	
-        	bandwidth = 8e0/numChannels;
-        	
-        	switch( numChannels)
-        	{
-        	case 1:
-        		decimationComboBox.setSelectedIndex(0);       		
-        		break;
-        	case 2:
-        		decimationComboBox.setSelectedIndex(1);
-        		break;
-        	case 4:
-        		decimationComboBox.setSelectedIndex(2);
-        		break;
-        	}
-        	
-        }
-        
-        if ( bandwidth >= 1e0 ) {
-            value = bandwidth ;
-            bandwidthUnitsLabel.setText ( "MHz" );
-        } else {
-            value = bandwidth * 1e3 ;
-            bandwidthUnitsLabel.setText ( "kHz" );
-        }
-        bandwidthTextField.setText ( formatter.format ( value ) );
-    }
+		bandwidthPanel = new JPanel();
+		bandwidthLabel = new JLabel("Bandwidth", JLabel.RIGHT);
 
-    public double sampleRate( )
-    {
-        return sampleRate;
-    }
+		bandwidthUnitsLabel = new JLabel(BANDWIDTH_UNIT_INIT, JLabel.LEFT);
 
-    public int decimation()
-    {
-        return decimation;
-    }
+		bandwidthTextField = new JTextField(Double.toString(BANDWIDTH_INIT));
+		bandwidthTextField.setEditable(false);
 
-    public int channels()
-    {
-        return numChannels;
-    }
+		bandwidthPanel.add(bandwidthLabel);
+		bandwidthPanel.add(bandwidthTextField);
+		bandwidthPanel.add(bandwidthUnitsLabel);
 
-    public double bandwidth()
-    {
-        return bandwidth;
-    }
+		setComponentSize(bandwidthTextField, new Dimension(50, 20));
+		setComponentSize(bandwidthUnitsLabel, new Dimension(30, 20));
+		this.add(bandwidthPanel, new GBC(1, 1, 100, 100).setIpad(5, 5));
 
-    private void updateSettings()
-    {    
-    	decimation = Integer.valueOf( (String)decimationComboBox.getSelectedItem()); 
-        validateSampleRate();
-        setBandwidth();
-    }
+		this.updateSettings();
 
-    public void stateChanged ( ChangeEvent e )
-    {
-        updateSettings();
-    }
+	}
 
-    public void actionPerformed ( ActionEvent e )
-    {
-        updateSettings();
-    }
+	private void validateSampleRate() {
+		try {
 
-    @Override
-    public HashMap<String, String> getSettings()
-    {
-        HashMap<String, String> settings = new HashMap<String, String> ( 5 );
-        //update settings
+			this.sampleRate = Double.valueOf(sampleRateTextField.getText()
+					.trim());
 
-        settings.put ( "sample_rate", sampleRateTextField.getText() );
-        settings.put ( "num_channels", Integer.toString ( numChannels ) );
-        settings.put ( "bandwidth", bandwidthTextField.getText() );
-        settings.put ( "bandwidth_units", bandwidthUnitsLabel.getText() );
-        settings.put ( "decimation" , Integer.toString(decimation ));
+			if (this.sampleRate > SAMPLE_RATE_MAX) {
+				this.sampleRate = SAMPLE_RATE_MAX;
+			}
 
-        return settings;
-    }
+			if (this.sampleRate < SAMPLE_RATE_MIN) {
+				this.sampleRate = SAMPLE_RATE_MIN;
+			}
 
-    @Override
-    public void pushSettings ( HashMap<String, String> map )
-    {
-        sampleRateTextField.setText ( map.get ( "sample_rate" ) );
-        channelsComboBox.setSelectedItem ( map.get ( "num_channels" ) );
-        bandwidthTextField.setText ( map.get ( "bandwidth" ) );
-        bandwidthUnitsLabel.setText ( map.get ( "bandwidth_units" ) );
-        decimationComboBox.setSelectedItem(map.get("decimation" )); 
+			sampleRateTextField.setText(Double.toString(this.sampleRate));
+		} catch (NumberFormatException e) {
+			System.out.println("number format exception caught");
+		}
 
-    }
+	}
+
+	private void setBandwidth() {
+		numChannels = Integer.valueOf((String) channelsComboBox
+				.getSelectedItem());
+		bandwidth = sampleRate / decimation;
+		double value;
+		DecimalFormat formatter = new DecimalFormat("#0.00");
+
+		double totalBandwidth = bandwidth * numChannels;
+
+		if (totalBandwidth > 8e0) {
+
+			bandwidth = 8e0 / numChannels;
+
+			switch (numChannels) {
+			case 1:
+				decimationComboBox.setSelectedIndex(0);
+				break;
+			case 2:
+				decimationComboBox.setSelectedIndex(1);
+				break;
+			case 4:
+				decimationComboBox.setSelectedIndex(2);
+				break;
+			}
+
+		}
+
+		if (bandwidth >= 1e0) {
+			value = bandwidth;
+			bandwidthUnitsLabel.setText("mhz");
+		} else {
+			value = bandwidth * 1e3;
+			bandwidthUnitsLabel.setText("khz");
+		}
+		bandwidthTextField.setText(formatter.format(value));
+	}
+
+	public double sampleRate() {
+		return sampleRate;
+	}
+
+	public int decimation() {
+		return decimation;
+	}
+
+	public int channels() {
+		return numChannels;
+	}
+
+	public double bandwidth() {
+		return bandwidth;
+	}
+
+	private void updateSettings() {
+		decimation = Integer.valueOf((String) decimationComboBox
+				.getSelectedItem());
+		validateSampleRate();
+		setBandwidth();
+	}
+
+	public void stateChanged(ChangeEvent e) {
+		updateSettings();
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		updateSettings();
+	}
+
+	@Override
+	public void getSettings(ConfigFile configuration) {
+		configuration.setSampleRate(Double.parseDouble(sampleRateTextField
+				.getText()));
+		configuration.setBandwidth(Double.parseDouble(bandwidthTextField
+				.getText()));
+		configuration.setBandwidthUnits(bandwidthUnitsLabel.getText());
+		configuration.setDecimation(decimation);
+		configuration.setNumChannels(Integer.parseInt((String)channelsComboBox.getSelectedItem()));
+	}
+
+	@Override
+	public void pushSettings(ConfigFile configuration) {
+		sampleRateTextField.setText(Double.toString(configuration
+				.getSampleRate()));
+		channelsComboBox.setSelectedItem(configuration.getNumChannels());
+		bandwidthTextField
+				.setText(Double.toString(configuration.getBandwidth()));
+		bandwidthUnitsLabel.setText(configuration.getBandwidthUnits());
+		decimationComboBox.setSelectedItem(Integer.toString(configuration
+				.getDecimation()));
+	}
 }

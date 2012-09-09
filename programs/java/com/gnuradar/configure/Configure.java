@@ -24,7 +24,9 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.HashMap;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.prefs.Preferences;
 
 import javax.swing.Box;
@@ -36,312 +38,297 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.yaml.snakeyaml.Yaml;
+
 import com.corejava.GBC;
+import com.gnuradar.common.ConfigFile;
+import com.gnuradar.common.FileParser;
 import com.gnuradar.common.FixedFrame;
 
 public class Configure implements ActionListener {
 
-    // define constants
-    public static final int DEFAULT_WIDTH = 875;
-    public static final int DEFAULT_HEIGHT = 530;
-    public static final int LEFT_WIDTH = 420;
-    public static final int RIGHT_WIDTH = 200;
-    public static final String TITLE = "GnuRadarConfigure";
-    public static final String VERSION = "Version: 1.0.0";
-    public static final String BUILD = "Build: August 28, 2010";
-    public static final String COPYRIGHT = "Copyright: \u00a9 2009-2010";
-    public static final String AUTHOR = "Author: Ryan Seal";
+	// define constants
+	public static final int DEFAULT_WIDTH = 875;
+	public static final int DEFAULT_HEIGHT = 530;
+	public static final int LEFT_WIDTH = 420;
+	public static final int RIGHT_WIDTH = 200;
+	public static final String TITLE = "GnuRadarConfigure";
+	public static final String VERSION = "Version: 1.0.0";
+	public static final String BUILD = "Build: August 28, 2010";
+	public static final String COPYRIGHT = "Copyright: \u00a9 2009-2010";
+	public static final String AUTHOR = "Author: Ryan Seal";
 
-    private static File configurationFile;
-    
-    private ButtonPanel configureButtonPanel;
-    private SettingsPanel settingsPanel;
-    private DdcSettingsPanel ddcSettingsPanel;
-    private PulseSettingsPanel pulseSettingsPanel;
-    private InformationPanel informationPanel;
-    private FileSettingsPanel fileSettingsPanel;
-    private static FixedFrame frame;
-    private static String userNode = "/com/gnuradar/config";
+	private static File configurationFile;
+	private static ConfigFile configuration = null;
 
-    private JMenuItem quitAction;
-    private JMenuItem loadAction;
-    private JMenuItem saveAction;
-    private JMenuItem aboutAction;
+	private ButtonPanel configureButtonPanel;
+	private SettingsPanel settingsPanel;
+	private DdcSettingsPanel ddcSettingsPanel;
+	private PulseSettingsPanel pulseSettingsPanel;
+	private InformationPanel informationPanel;
+	private FileSettingsPanel fileSettingsPanel;
+	private static FixedFrame frame;
+	private static String userNode = "/com/gnuradar/config";
 
-    private HashMap<String, String> settingsMap =
-        new HashMap<String, String> ( 50 );
+	private JMenuItem quitAction;
+	private JMenuItem loadAction;
+	private JMenuItem saveAction;
+	private JMenuItem aboutAction;
 
-    private void loadPreferences()
-    {
-    	Preferences preferences = Preferences.userRoot().node(userNode);
-    	int x = preferences.getInt("x", 0);
-    	int y = preferences.getInt("y", 0);
-    	configurationFile = new File( preferences.get("config_dir", "") );
-    	
-    	frame.setLocation(x,y);
-    }
-    
-    private void savePreferences()
-    {    	
-    	Point point = frame.getLocation();    	
-    	
-    	Preferences preferences = Preferences.userRoot().node(userNode);
-    	
-        preferences.put("x", Integer.toString( point.x ));
-        preferences.put("y", Integer.toString( point.y ));
-        preferences.put("config_dir", configurationFile.toString() );
-    }
-    
-    public boolean loadFile()
-    {
-        boolean loadSuccess = false;
+	private void loadPreferences() {
+		Preferences preferences = Preferences.userRoot().node(userNode);
+		int x = preferences.getInt("x", 0);
+		int y = preferences.getInt("y", 0);
+		configurationFile = new File(preferences.get("config_dir", ""));
 
-        settingsMap.clear();
+		frame.setLocation(x, y);
+	}
 
-        FileNameExtensionFilter fileFilter =
-            new FileNameExtensionFilter (
-            "USRP Configuration File", "ucf" );
+	private void savePreferences() {
+		Point point = frame.getLocation();
 
-        JFileChooser jf = new JFileChooser();
-        jf.setFileFilter ( fileFilter );
-        jf.setCurrentDirectory(configurationFile);
+		Preferences preferences = Preferences.userRoot().node(userNode);
 
-        int loadFile = jf.showOpenDialog ( null );
+		preferences.put("x", Integer.toString(point.x));
+		preferences.put("y", Integer.toString(point.y));
+		preferences.put("config_dir", configurationFile.toString());
+	}
 
-        if ( loadFile == JFileChooser.APPROVE_OPTION ) {
-            configurationFile = jf.getSelectedFile();
-            settingsMap = XmlParser.load ( configurationFile );
-            settingsMap.put ( "version", VERSION );
-            loadSuccess = true;
-        }
+	public boolean loadFile() throws FileNotFoundException {
+		boolean loadSuccess = false;
 
-        return loadSuccess;
-    }
+		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter(
+				"USRP Configuration File", "yml");
 
-    private boolean saveFile( )
-    {
-        boolean saveSuccess = false;
+		JFileChooser jf = new JFileChooser();
+		jf.setFileFilter(fileFilter);
+		jf.setCurrentDirectory(configurationFile);
 
-        FileNameExtensionFilter fileFilter =
-            new FileNameExtensionFilter (
-            "USRP Configuration File", "ucf" );
+		int loadFile = jf.showOpenDialog(null);
 
-        JFileChooser jf = new JFileChooser();
-        jf.setFileFilter ( fileFilter );
+		if (loadFile == JFileChooser.APPROVE_OPTION) {
+			configurationFile = jf.getSelectedFile();
+			FileParser parser = new FileParser(configurationFile);
+			configuration = parser.getData();
+			loadSuccess = true;
+		}
 
-        int saveChanges = jf.showSaveDialog ( null );
+		return loadSuccess;
+	}
 
-        if ( saveChanges == JFileChooser.APPROVE_OPTION ) {
-            File file = jf.getSelectedFile();
+	private boolean saveFile() {
 
-            int index = file.getName().lastIndexOf ( ".ucf" );
-            if ( index == -1 ) {
-                file = new File ( file.toString() + ".ucf" );
-            }
+		boolean saveSuccess = false;
 
-            XmlParser.save ( file, settingsMap );
-            saveSuccess = true;
-        }
+		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter(
+				"USRP Configuration File", "yml");
 
-        return saveSuccess;
-    }
+		JFileChooser jf = new JFileChooser();
+		jf.setFileFilter(fileFilter);
 
-    // main entry point
-    public static void main ( String[] args )
-    {
-        // create an instance of the containing class. Should
-        // probably put this in another class file to minize
-        // confusion. Java still feels a bit weird with the
-        // inner static main member.
-        final Configure configure = new Configure();
+		int saveChanges = jf.showSaveDialog(null);
 
-        // this is required for proper event-handling
-        EventQueue.invokeLater ( new Runnable() {
-            public void run() {
+		if (saveChanges == JFileChooser.APPROVE_OPTION) {
+			File file = jf.getSelectedFile();
 
-                // use the grid bag layout manager
-                GridBagLayout gridBagLayout = new GridBagLayout();
+			int index = file.getName().lastIndexOf(".yml");
+			if (index == -1) {
+				file = new File(file.toString() + ".yml");
+			}
 
-                configure.settingsPanel = new SettingsPanel();
-                configure.settingsPanel.setMinimumSize (
-                    new Dimension ( LEFT_WIDTH, 90 ) );
-                configure.settingsPanel.setPreferredSize (
-                    new Dimension ( LEFT_WIDTH, 90 ) );
+			try {
+				FileWriter writer = new FileWriter(file);
+				Yaml yaml = new Yaml();
+				yaml.dump(configuration, writer);
+				saveSuccess = true;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
-                configure.ddcSettingsPanel = new DdcSettingsPanel();
-                configure.ddcSettingsPanel.setMinimumSize (
-                    new Dimension ( LEFT_WIDTH, 170 ) );
-                configure.ddcSettingsPanel.setPreferredSize (
-                    new Dimension ( LEFT_WIDTH, 170 ) );
+		return saveSuccess;
+	}
 
-                configure.pulseSettingsPanel = new PulseSettingsPanel (
-                    new Dimension ( LEFT_WIDTH, 170 )
-                );
-                configure.pulseSettingsPanel.setMinimumSize (
-                    new Dimension ( LEFT_WIDTH, 170 ) );
-                configure.pulseSettingsPanel.setPreferredSize (
-                    new Dimension ( LEFT_WIDTH, 170 ) );
+	// main entry point
+	public static void main(String[] args) {
+		// create an instance of the containing class. Should
+		// probably put this in another class file to minize
+		// confusion. Java still feels a bit weird with the
+		// inner static main member.
+		final Configure configure = new Configure();
 
-                configure.informationPanel = new InformationPanel();
-                configure.fileSettingsPanel = new FileSettingsPanel();
-                configure.configureButtonPanel = new ButtonPanel();
+		// this is required for proper event-handling
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
 
-                // each time the settings panel changes the number of channels
-                // we need to alert the ddc settings panel to enable/disable
-                // the proper tabs.
-                configure.settingsPanel.channelsComboBox.addActionListener (
-                    configure.ddcSettingsPanel );
+				// use the grid bag layout manager
+				GridBagLayout gridBagLayout = new GridBagLayout();
 
-                // create menu bar and menu items
-                JMenuBar menuBar = new JMenuBar();
+				configure.settingsPanel = new SettingsPanel();
+				configure.settingsPanel.setMinimumSize(new Dimension(
+						LEFT_WIDTH, 90));
+				configure.settingsPanel.setPreferredSize(new Dimension(
+						LEFT_WIDTH, 90));
 
-                configure.loadAction = new JMenuItem ( "Load", 'L' );
-                configure.loadAction.addActionListener ( configure );
-                configure.saveAction = new JMenuItem ( "Save", 'S' );
-                configure.saveAction.addActionListener ( configure );
-                configure.quitAction = new JMenuItem ( "Quit", 'Q' );
-                configure.quitAction.addActionListener ( configure );
-                configure.aboutAction = new JMenuItem ( "About", 'A' );
-                configure.aboutAction.addActionListener ( configure );
+				configure.ddcSettingsPanel = new DdcSettingsPanel();
+				configure.ddcSettingsPanel.setMinimumSize(new Dimension(
+						LEFT_WIDTH, 170));
+				configure.ddcSettingsPanel.setPreferredSize(new Dimension(
+						LEFT_WIDTH, 170));
 
-                JMenu fileMenu = new JMenu ( "File" );
-                fileMenu.add ( configure.loadAction );
-                fileMenu.add ( configure.saveAction );
-                fileMenu.addSeparator();
-                fileMenu.add ( configure.quitAction );
+				configure.pulseSettingsPanel = new PulseSettingsPanel(
+						new Dimension(LEFT_WIDTH, 170));
+				configure.pulseSettingsPanel.setMinimumSize(new Dimension(
+						LEFT_WIDTH, 170));
+				configure.pulseSettingsPanel.setPreferredSize(new Dimension(
+						LEFT_WIDTH, 170));
 
-                JMenu helpMenu = new JMenu ( "Help" );
-                helpMenu.add ( configure.aboutAction );
+				configure.informationPanel = new InformationPanel();
+				configure.fileSettingsPanel = new FileSettingsPanel();
+				configure.configureButtonPanel = new ButtonPanel();
 
-                menuBar.add ( fileMenu );
-                menuBar.add ( Box.createHorizontalGlue() );
-                menuBar.add ( helpMenu );
+				// each time the settings panel changes the number of channels
+				// we need to alert the ddc settings panel to enable/disable
+				// the proper tabs.
+				configure.settingsPanel.channelsComboBox
+						.addActionListener(configure.ddcSettingsPanel);
 
-                // create main window frame and set properties.
-                frame = new FixedFrame (
-                    DEFAULT_WIDTH, DEFAULT_HEIGHT, TITLE + " " + VERSION );
-                frame.setLayout ( gridBagLayout );
-                frame.setJMenuBar ( menuBar );
-                frame.setDefaultCloseOperation ( JFrame.EXIT_ON_CLOSE );
+				// create menu bar and menu items
+				JMenuBar menuBar = new JMenuBar();
 
-                frame.add ( configure.settingsPanel,
-                            new GBC ( 0, 0, 10, 100 ).setIpad ( 5, 5 ).
-                            setSpan ( 1, 1 ).setFill (
-                                GridBagConstraints.HORIZONTAL )
-                          );
-                frame.add ( configure.ddcSettingsPanel,
-                            new GBC ( 0, 1, 10, 100 ).setIpad ( 5, 5 ).
-                            setSpan ( 1, 1 ).setFill (
-                                GridBagConstraints.HORIZONTAL )
-                          );
-                frame.add ( configure.pulseSettingsPanel,
-                            new GBC ( 0, 2, 10, 100 ).setIpad ( 5, 5 ).
-                            setSpan ( 1, 1 ).setFill (
-                                GridBagConstraints.BOTH )
-                          );
-                frame.add ( configure.informationPanel,
-                            new GBC ( 1, 0, 10, 100 ).setIpad ( 5, 5 ).
-                            setSpan ( 1, 2 ).setFill (
-                                GridBagConstraints.BOTH )
-                          );
+				configure.loadAction = new JMenuItem("Load", 'L');
+				configure.loadAction.addActionListener(configure);
+				configure.saveAction = new JMenuItem("Save", 'S');
+				configure.saveAction.addActionListener(configure);
+				configure.quitAction = new JMenuItem("Quit", 'Q');
+				configure.quitAction.addActionListener(configure);
+				configure.aboutAction = new JMenuItem("About", 'A');
+				configure.aboutAction.addActionListener(configure);
 
-                frame.add ( configure.fileSettingsPanel,
-                            new GBC ( 1, 2, 10, 100 ).setIpad ( 5, 5 ).
-                            setSpan ( 1, 1 ).setFill (
-                                GridBagConstraints.BOTH )
-                          );
+				JMenu fileMenu = new JMenu("File");
+				fileMenu.add(configure.loadAction);
+				fileMenu.add(configure.saveAction);
+				fileMenu.addSeparator();
+				fileMenu.add(configure.quitAction);
 
-                frame.add ( configure.configureButtonPanel,
-                            new GBC ( 0, 3, 10, 100 ).setIpad ( 5, 5 ).
-                            setSpan ( 2, 1 ).setFill (
-                                GridBagConstraints.HORIZONTAL )
-                          );
+				JMenu helpMenu = new JMenu("Help");
+				helpMenu.add(configure.aboutAction);
 
-                configure.loadPreferences();
-                
-                configure.configureButtonPanel.saveButton.addActionListener (
-                    configure );
-                configure.configureButtonPanel.loadButton.addActionListener (
-                    configure );
-                configure.configureButtonPanel.quitButton.addActionListener (
-                    configure );
+				menuBar.add(fileMenu);
+				menuBar.add(Box.createHorizontalGlue());
+				menuBar.add(helpMenu);
 
-                frame.setVisible ( true );
-            }
-        } );
-    }
+				// create main window frame and set properties.
+				frame = new FixedFrame(DEFAULT_WIDTH, DEFAULT_HEIGHT, TITLE
+						+ " " + VERSION);
+				frame.setLayout(gridBagLayout);
+				frame.setJMenuBar(menuBar);
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    @Override
-    public void actionPerformed ( ActionEvent e )
-    {
+				frame.add(configure.settingsPanel,
+						new GBC(0, 0, 10, 100).setIpad(5, 5).setSpan(1, 1)
+								.setFill(GridBagConstraints.HORIZONTAL));
+				frame.add(configure.ddcSettingsPanel,
+						new GBC(0, 1, 10, 100).setIpad(5, 5).setSpan(1, 1)
+								.setFill(GridBagConstraints.HORIZONTAL));
+				frame.add(configure.pulseSettingsPanel,
+						new GBC(0, 2, 10, 100).setIpad(5, 5).setSpan(1, 1)
+								.setFill(GridBagConstraints.BOTH));
+				frame.add(configure.informationPanel,
+						new GBC(1, 0, 10, 100).setIpad(5, 5).setSpan(1, 2)
+								.setFill(GridBagConstraints.BOTH));
 
-        Object source = e.getSource();
+				frame.add(configure.fileSettingsPanel,
+						new GBC(1, 2, 10, 100).setIpad(5, 5).setSpan(1, 1)
+								.setFill(GridBagConstraints.BOTH));
 
-        if ( source == configureButtonPanel.loadButton || source == loadAction ) {
-            if ( loadFile() ) {
-                settingsPanel.pushSettings ( settingsMap );
-                ddcSettingsPanel.pushSettings ( settingsMap );
-                pulseSettingsPanel.pushSettings ( settingsMap );
-                informationPanel.pushSettings ( settingsMap );
-                fileSettingsPanel.pushSettings ( settingsMap );
-            }
-        }
+				frame.add(configure.configureButtonPanel,
+						new GBC(0, 3, 10, 100).setIpad(5, 5).setSpan(2, 1)
+								.setFill(GridBagConstraints.HORIZONTAL));
 
-        if ( source == configureButtonPanel.saveButton || source == saveAction ) {
-            settingsMap.clear();
-            settingsMap.putAll ( settingsPanel.getSettings() );
-            settingsMap.putAll ( ddcSettingsPanel.getSettings() );
-            settingsMap.putAll ( pulseSettingsPanel.getSettings() );
-            settingsMap.putAll ( informationPanel.getSettings() );
-            settingsMap.putAll ( fileSettingsPanel.getSettings() );
-            settingsMap.put ( "version", VERSION );
-            saveFile();
-        }
+				configure.loadPreferences();
 
-        if ( source == configureButtonPanel.quitButton || source == quitAction ) {
-            HashMap<String, String> map =
-                new HashMap<String, String> ( 50 );
-            map.putAll ( settingsPanel.getSettings() );
-            map.putAll ( ddcSettingsPanel.getSettings() );
-            map.putAll ( pulseSettingsPanel.getSettings() );
-            map.putAll ( informationPanel.getSettings() );
-            map.putAll ( fileSettingsPanel.getSettings() );
-            map.put ( "version", VERSION );
+				configure.configureButtonPanel.saveButton
+						.addActionListener(configure);
+				configure.configureButtonPanel.loadButton
+						.addActionListener(configure);
+				configure.configureButtonPanel.quitButton
+						.addActionListener(configure);
 
-            // compare our local map with the global to see if
-            // the user has changed anything since their last
-            // save. If so, give them a chance to save
-            // modifications.
-            if ( !map.entrySet().equals ( settingsMap.entrySet() ) && !settingsMap.isEmpty() ) {
-                System.out.println ( " Settings do not match " );
-                int saveChanges =
-                    JOptionPane.showConfirmDialog (
-                        null, "Unsaved changes detected. Would " +
-                        "you like to save now?",
-                        "Input", JOptionPane.YES_NO_OPTION );
+				frame.setVisible(true);
+			}
+		});
+	}
 
-                if ( saveChanges == JOptionPane.YES_OPTION ) {
-                    settingsMap.clear();
-                    settingsMap.putAll ( settingsPanel.getSettings() );
-                    settingsMap.putAll ( ddcSettingsPanel.getSettings() );
-                    settingsMap.putAll ( pulseSettingsPanel.getSettings() );
-                    settingsMap.putAll ( informationPanel.getSettings() );
-                    settingsMap.putAll ( fileSettingsPanel.getSettings() );
-                    settingsMap.put ( "version", VERSION );
-                    saveFile();
-                }
-            }
-            
-            savePreferences();
-            System.exit ( 0 );
-        }
+	private void updateSettings() {
 
-        if ( source == aboutAction ) {
-            JOptionPane.showMessageDialog ( null, TITLE + "\n" +
-                                            VERSION + "\n" + BUILD + "\n" +
-                                            AUTHOR + "\n" +
-                                            COPYRIGHT + "\n"
-                                          );
-        }
-    }
+		try {
+			settingsPanel.getSettings(configuration);
+			ddcSettingsPanel.getSettings(configuration);
+			pulseSettingsPanel.getSettings(configuration);
+			informationPanel.getSettings(configuration);
+			fileSettingsPanel.getSettings(configuration);
+		} catch (Exception e) {
+			//pass
+		}
+	}
+
+	private void loadSettings() {
+		try {
+			settingsPanel.pushSettings(configuration);
+			ddcSettingsPanel.pushSettings(configuration);
+			pulseSettingsPanel.pushSettings(configuration);
+			informationPanel.pushSettings(configuration);
+			fileSettingsPanel.pushSettings(configuration);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		Object source = e.getSource();
+
+		if (source == configureButtonPanel.loadButton || source == loadAction) {
+			try {
+				if (loadFile()) {
+					loadSettings();
+				}
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+		}
+
+		if (source == configureButtonPanel.saveButton || source == saveAction) {
+			if( configuration == null)
+			{
+				configuration = new ConfigFile();
+			}
+			updateSettings();
+			saveFile();
+		}
+
+		if (source == configureButtonPanel.quitButton || source == quitAction) {
+
+			updateSettings();
+
+			int saveChanges = JOptionPane.showConfirmDialog(null,
+					"Save changes?", "Input", JOptionPane.YES_NO_OPTION);
+
+			if (saveChanges == JOptionPane.YES_OPTION) {
+				saveFile();
+			}
+
+			savePreferences();
+			System.exit(0);
+		}
+
+		if (source == aboutAction) {
+			JOptionPane.showMessageDialog(null, TITLE + "\n" + VERSION + "\n"
+					+ BUILD + "\n" + AUTHOR + "\n" + COPYRIGHT + "\n");
+		}
+	}
 }

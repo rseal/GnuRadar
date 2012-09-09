@@ -17,7 +17,6 @@
 package com.gnuradar.configure;
 
 import java.awt.Dimension;
-import java.util.HashMap;
 
 import javax.swing.Box;
 import javax.swing.JComboBox;
@@ -26,95 +25,90 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class DdcChannelPanel extends JPanel
-            implements ApplicationSettings {
+import com.gnuradar.common.Channel;
 
-    private static final long serialVersionUID = 1L;
-    private final int channelIndex;
+public class DdcChannelPanel extends JPanel {
 
-    static final double FREQUENCY_INIT = 0.0;
-    static final double PHASE_INIT = 0.0;
+	private static final long serialVersionUID = 1L;
+	private final int channelIndex;
 
-    JLabel frequencyLabel;
-    JTextField frequencyTextField;
-    JComboBox frequencyComboBox;
-    JPanel frequencyPanel;
-    static final String[] frequencyUnits = { "Hz", "kHz", "MHz" };
+	static final double FREQUENCY_INIT = 0.0;
+	static final double PHASE_INIT = 0.0;
 
-    JLabel phaseLabel;
-    JTextField phaseTextField;
-    JComboBox phaseComboBox;
-    JPanel phasePanel;
-    static final String[] phaseUnits = { "Degrees", "Radians" };
+	JLabel frequencyLabel;
+	JTextField frequencyTextField;
+	JComboBox frequencyComboBox;
+	JPanel frequencyPanel;
+	static final String[] frequencyUnits = { "hz", "khz", "mhz" };
 
-    private void setComponentSize ( JComponent obj, Dimension dimension )
-    {
-        obj.setMinimumSize ( dimension );
-        obj.setPreferredSize ( dimension );
-    }
+	JLabel phaseLabel;
+	JTextField phaseTextField;
+	JComboBox phaseComboBox;
+	JPanel phasePanel;
+	static final String[] phaseUnits = { "deg", "rad" };
 
-    public DdcChannelPanel ( int channelIndex )
+	private void setComponentSize(JComponent obj, Dimension dimension) {
+		obj.setMinimumSize(dimension);
+		obj.setPreferredSize(dimension);
+	}
 
-    {
-        this.channelIndex = channelIndex;
+	public DdcChannelPanel(int channelIndex) {
+		this.channelIndex = channelIndex;
 
-        frequencyPanel = new JPanel();
-        frequencyLabel = new JLabel ( "Frequency", JLabel.RIGHT );
-        setComponentSize ( frequencyLabel, new Dimension ( 80, 20 ) );
-        frequencyTextField = new JTextField ( Double.toString ( FREQUENCY_INIT ) );
-        setComponentSize ( frequencyTextField, new Dimension ( 80, 20 ) );
-        frequencyComboBox = new JComboBox ( frequencyUnits );
-        setComponentSize ( frequencyComboBox, new Dimension ( 100, 20 ) );
-        frequencyPanel.add ( frequencyLabel );
-        frequencyPanel.add ( frequencyTextField );
-        frequencyPanel.add ( frequencyComboBox );
-        frequencyPanel.add ( Box.createRigidArea( new Dimension( 200, 20 )));
-        this.add ( frequencyPanel );
+		frequencyPanel = new JPanel();
+		frequencyLabel = new JLabel("Frequency", JLabel.RIGHT);
 
-        phasePanel = new JPanel();
-        phaseLabel = new JLabel ( "Phase", JLabel.RIGHT );
-        setComponentSize ( phaseLabel, new Dimension ( 80, 20 ) );
-        phaseTextField = new JTextField ( Double.toString ( PHASE_INIT ) );
-        setComponentSize ( phaseTextField, new Dimension ( 80, 20 ) );
-        phaseComboBox = new JComboBox ( phaseUnits );
-        setComponentSize ( phaseComboBox, new Dimension ( 100, 20 ) );
-        phasePanel.add ( phaseLabel );
-        phasePanel.add ( phaseTextField );
-        phasePanel.add ( phaseComboBox );
-        phasePanel.add ( Box.createRigidArea( new Dimension( 200,20 )));
-        this.add ( phasePanel );
+		frequencyTextField = new JTextField(Double.toString(FREQUENCY_INIT));
+		frequencyComboBox = new JComboBox(frequencyUnits);
 
-    }
+		setComponentSize(frequencyLabel, new Dimension(80, 20));
+		setComponentSize(frequencyTextField, new Dimension(80, 20));
+		setComponentSize(frequencyComboBox, new Dimension(100, 20));
 
-    public int getChannelIndex()
-    {
-        return channelIndex;
-    }
+		frequencyPanel.add(frequencyLabel);
+		frequencyPanel.add(frequencyTextField);
+		frequencyPanel.add(frequencyComboBox);
+		frequencyPanel.add(Box.createRigidArea(new Dimension(200, 20)));
 
-    @Override
-    public HashMap<String, String> getSettings()
-    {
+		this.add(frequencyPanel);
 
-        String index = "_" + Integer.toString ( channelIndex );
-        HashMap<String, String> settings = new HashMap<String, String> ( 4 );
+		phasePanel = new JPanel();
+		phaseLabel = new JLabel("Phase", JLabel.RIGHT);
 
-        settings.put ( "frequency" + index, frequencyTextField.getText() );
-        settings.put ( "frequency_units" + index, ( String ) frequencyComboBox.getSelectedItem() );
-        settings.put ( "phase" + index, phaseTextField.getText() );
-        settings.put ( "phase_units" + index, ( String ) phaseComboBox.getSelectedItem() );
+		phaseTextField = new JTextField(Double.toString(PHASE_INIT));
+		phaseComboBox = new JComboBox(phaseUnits);
 
-        return settings;
-    }
+		setComponentSize(phaseLabel, new Dimension(80, 20));
+		setComponentSize(phaseTextField, new Dimension(80, 20));
+		setComponentSize(phaseComboBox, new Dimension(100, 20));
 
-    @Override
-    public void pushSettings ( HashMap<String, String> map )
-    {
+		phasePanel.add(phaseLabel);
+		phasePanel.add(phaseTextField);
+		phasePanel.add(phaseComboBox);
+		phasePanel.add(Box.createRigidArea(new Dimension(200, 20)));
 
-        frequencyTextField.setText ( map.get ( "frequency_" + channelIndex ) );
-        frequencyComboBox.setSelectedItem ( map.get ( "frequency_units_" + channelIndex ) );
-        phaseTextField.setText ( map.get ( "phase_" + channelIndex ) );
-        phaseComboBox.setSelectedItem ( map.get ( "phase_units_" + channelIndex ) );
-        // TODO Auto-generated method stub
+		this.add(phasePanel);
 
-    }
+	}
+
+	public int getChannelIndex() {
+		return channelIndex;
+	}
+
+	public Channel getSettings() {
+		Channel channel = new Channel();
+		channel.setFrequency(Double.parseDouble(frequencyTextField.getText()));
+		channel.setfUnits((String) frequencyComboBox.getSelectedItem());
+		channel.setPhase(Double.parseDouble(phaseTextField.getText()));
+		channel.setpUnits((String) phaseComboBox.getSelectedItem());
+		return channel;
+	}
+
+	public void pushSettings(Channel channel) {
+		frequencyTextField.setText(Double.toString(channel.getFrequency()));
+		frequencyComboBox.setSelectedItem(channel.getfUnits());
+		phaseTextField.setText(Double.toString(channel.getPhase()));
+		phaseComboBox.setSelectedItem(channel.getpUnits());
+	}
+
 }

@@ -18,7 +18,6 @@ package com.gnuradar.configure;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.util.HashMap;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -26,8 +25,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class DataWindowPanel extends JPanel
-            implements ApplicationSettings {
+import com.gnuradar.common.Window;
+
+public class DataWindowPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,9 +46,7 @@ public class DataWindowPanel extends JPanel
     private JPanel unitsPanel;
     private JLabel unitsLabel;
     private JComboBox unitsComboBox;
-    private static final String[] windowUnits = { "USEC", "Km", "SAMPLES" };
-
-    private final int index;
+    private static final String[] windowUnits = { "usec", "km", "samples" };
 
     private void setComponentSize ( JComponent obj, Dimension dimension )
     {
@@ -59,26 +57,24 @@ public class DataWindowPanel extends JPanel
     public DataWindowPanel ( int index )
     {
 
-        this.index = index;
-
         windowPanel = new JPanel();
         unitsPanel = new JPanel();
 
         nameLabel = new JLabel ( "Name", JLabel.RIGHT );
         nameTextField = new JTextField();
-        setComponentSize ( nameTextField, new Dimension ( 80, 20 ) );
+        setComponentSize ( nameTextField, new Dimension ( 70, 20 ) );
 
         startLabel = new JLabel ( "Start", JLabel.RIGHT );
         startTextField = new JTextField();
-        setComponentSize ( startTextField, new Dimension ( 80, 20 ) );
+        setComponentSize ( startTextField, new Dimension ( 70, 20 ) );
 
         stopLabel = new JLabel ( "Stop", JLabel.RIGHT );
         stopTextField = new JTextField();
-        setComponentSize ( stopTextField, new Dimension ( 80, 20 ) );
+        setComponentSize ( stopTextField, new Dimension ( 70, 20 ) );
 
         unitsComboBox = new JComboBox ( windowUnits );
         unitsLabel = new JLabel ( "Units", JLabel.RIGHT );
-        setComponentSize ( unitsComboBox, new Dimension ( 80, 20 ) );
+        setComponentSize ( unitsComboBox, new Dimension ( 70, 20 ) );
 
         windowPanel.add ( nameLabel );
         windowPanel.add ( nameTextField );
@@ -96,28 +92,24 @@ public class DataWindowPanel extends JPanel
 
     }
 
-    @Override
-    public HashMap<String, String> getSettings()
+    public Window getSettings()
     {
+    	Window window = new Window();
 
-        HashMap<String, String> settings = new HashMap<String, String> ( 4 );
-        settings.put ( "name_" + index, nameTextField.getText() );
-        settings.put ( "start_" + index, startTextField.getText() );
-        settings.put ( "stop_" + index, stopTextField.getText() );
-        settings.put ( "units_" + index,
-                       ( String ) unitsComboBox.getSelectedItem() );
-
-        // TODO Auto-generated method stub
-        return settings;
+    	window.setName( nameTextField.getText() );
+    	window.setStart(Double.parseDouble(startTextField.getText()));
+    	window.setStop(Double.parseDouble(stopTextField.getText()));
+    	window.setUnits((String) unitsComboBox.getSelectedItem());
+    	
+    	return window;
     }
 
-    @Override
-    public void pushSettings ( HashMap<String, String> map )
+    public void pushSettings ( Window window )
     {
-        nameTextField.setText ( map.get ( "name_" + index ) );
-        startTextField.setText ( map.get ( "start_" + index ) );
-        stopTextField.setText ( map.get ( "stop_" + index ) );
-        unitsComboBox.setSelectedItem ( map.get ( "units_" + index ) );
+        nameTextField.setText ( window.getName() );
+        startTextField.setText ( Double.toString(window.getStart()));
+        stopTextField.setText ( Double.toString(window.getStop()));
+        unitsComboBox.setSelectedItem ( window.getUnits());
     }
 
 }

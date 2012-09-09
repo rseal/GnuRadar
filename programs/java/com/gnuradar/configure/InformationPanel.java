@@ -17,7 +17,8 @@
 package com.gnuradar.configure;
 
 import java.awt.GridLayout;
-import java.util.HashMap;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -26,86 +27,82 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-public class InformationPanel extends JPanel
-            implements ApplicationSettings {
+import com.gnuradar.common.ConfigFile;
 
-    private static final long serialVersionUID = 1L;
+public class InformationPanel extends JPanel implements ApplicationSettings,
+		ActionListener {
 
-    private JLabel organizationLabel;
-    private JTextField organizationTextField;
+	private static final long serialVersionUID = 1L;
 
-    private JLabel siteLabel;
-    private JTextField siteTextField;
+	private JLabel organizationLabel;
+	private JTextField organizationTextField;
 
-    private JLabel userLabel;
-    private JTextField userTextField;
+	private JLabel siteLabel;
+	private JTextField siteTextField;
 
-    private JLabel radarLabel;
-    private JTextField radarTextField;
+	private JLabel userLabel;
+	private JTextField userTextField;
 
-    private JLabel receiverLabel;
-    private JTextField receiverTextField;
+	private JLabel radarLabel;
+	private JTextField radarTextField;
 
-    public InformationPanel ( )
-    {
-        this.setLayout ( new GridLayout ( 5 , 2 , 20, 20 ) );
+	private JLabel receiverLabel;
+	private JTextField receiverTextField;
 
-        organizationLabel = new JLabel ( "Organization", JLabel.RIGHT );
-        organizationTextField =
-            new JTextField ( "Organization", JTextField.RIGHT );
+	public InformationPanel() {
+		this.setLayout(new GridLayout(5, 2, 20, 20));
 
-        siteLabel = new JLabel ( "Site", JLabel.RIGHT );
-        siteTextField = new JTextField ( "Site", JTextField.RIGHT );
+		organizationLabel = new JLabel("Organization", JLabel.RIGHT);
+		organizationTextField = new JTextField("Organization", JTextField.RIGHT);
 
-        userLabel = new JLabel ( "User", JLabel.RIGHT );
-        userTextField = new JTextField ( "User", JTextField.RIGHT );
+		siteLabel = new JLabel("Site", JLabel.RIGHT);
+		siteTextField = new JTextField("Site", JTextField.RIGHT);
 
-        radarLabel = new JLabel ( "Radar", JLabel.RIGHT );
-        radarTextField = new JTextField ( "Radar", JTextField.RIGHT );
+		userLabel = new JLabel("User", JLabel.RIGHT);
+		userTextField = new JTextField("User", JTextField.RIGHT);
 
-        receiverLabel = new JLabel ( "Receiver", JLabel.RIGHT );
-        receiverTextField = new JTextField ( "Receiver", JTextField.RIGHT );
+		radarLabel = new JLabel("Radar", JLabel.RIGHT);
+		radarTextField = new JTextField("Radar", JTextField.RIGHT);
 
-        this.add ( organizationLabel  );
-        this.add ( organizationTextField  );
-        this.add ( siteLabel  );
-        this.add ( siteTextField  );
-        this.add ( userLabel  );
-        this.add ( userTextField  );
-        this.add ( radarLabel  );
-        this.add ( radarTextField  );
-        this.add ( receiverLabel  );
-        this.add ( receiverTextField  );
+		receiverLabel = new JLabel("Receiver", JLabel.RIGHT);
+		receiverTextField = new JTextField("Receiver", JTextField.RIGHT);
 
-        Border border = BorderFactory.createEtchedBorder( );
-        TitledBorder tBorder =
-            new TitledBorder ( border, "HDF5 Header Information" );
-        this.setBorder ( tBorder );
-    }
+		this.add(organizationLabel);
+		this.add(organizationTextField);
+		this.add(siteLabel);
+		this.add(siteTextField);
+		this.add(userLabel);
+		this.add(userTextField);
+		this.add(radarLabel);
+		this.add(radarTextField);
+		this.add(receiverLabel);
+		this.add(receiverTextField);
 
-    @Override
-    public HashMap<String, String> getSettings()
-    {
-        HashMap<String, String> settings = new HashMap<String, String> ( 5 );
+		Border border = BorderFactory.createEtchedBorder();
+		TitledBorder tBorder = new TitledBorder(border,
+				"HDF5 Header Information");
+		this.setBorder(tBorder);
+	}
 
-        settings.put ( "organization" , organizationTextField.getText() );
-        settings.put ( "site", siteTextField.getText() );
-        settings.put ( "user", userTextField.getText() );
-        settings.put ( "radar", radarTextField.getText() );
-        settings.put ( "receiver", receiverTextField.getText() );
+	@Override
+	public void getSettings(ConfigFile configuration) {
+		configuration.setOrganization(organizationTextField.getText());
+		configuration.setSite(siteTextField.getText());
+		configuration.setUser(userTextField.getText());
+		configuration.setRadar(radarTextField.getText());
+		configuration.setReceiver(receiverTextField.getText());
+	}
 
-        // TODO Auto-generated method stub
-        return settings;
-    }
+	@Override
+	public void pushSettings(ConfigFile configuration) {
+		organizationTextField.setText(configuration.getOrganization());
+		siteTextField.setText(configuration.getSite());
+		userTextField.setText(configuration.getUser());
+		radarTextField.setText(configuration.getRadar());
+		receiverTextField.setText(configuration.getReceiver());
+	}
 
-    @Override
-    public void pushSettings ( HashMap<String, String> map )
-    {
-
-        organizationTextField.setText ( map.get ( "organization" ) );
-        siteTextField.setText ( map.get ( "site" ) );
-        userTextField.setText ( map.get ( "user" ) );
-        radarTextField.setText ( map.get ( "radar" ) );
-        receiverTextField.setText ( map.get ( "receiver" ) );
-    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	}
 }

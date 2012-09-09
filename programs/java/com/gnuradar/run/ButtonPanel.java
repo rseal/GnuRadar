@@ -19,16 +19,8 @@ package com.gnuradar.run;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -40,10 +32,16 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.zeromq.ZMQ;
+
+import com.gnuradar.common.ConfigFile;
+import com.gnuradar.common.FileParser;
+import com.gnuradar.proto.Control;
+import com.gnuradar.proto.Control.ControlMessage;
+import com.gnuradar.proto.Response.ResponseMessage;
+
 public class ButtonPanel extends JPanel
             implements ActionListener {
-
-    
     
     public static enum State {
         UNCONFIGURED ( "UNCONFIGURED" ),
@@ -81,9 +79,8 @@ public class ButtonPanel extends JPanel
     private JButton verifyButton;
     private JButton runButton;
     private File configurationFile = null;
-    private String xmlResponsePacket;
-    private InetAddress ipAddress;
-
+    private ResponseMessage responseMsg;
+    private String ipAddress;
     private Dimension buttonSize = new Dimension ( 100, 25 );
 
     private void setComponentSize ( JComponent obj, Dimension dimension )
@@ -93,29 +90,21 @@ public class ButtonPanel extends JPanel
         obj.setMaximumSize ( dimension );
     }
 
-    private void WriteToServer ( String packet )
+    private void WriteToServer ( ControlMessage controlMsg )
     throws IOException, SecurityException
     {
-        xmlResponsePacket = null;
+        ZMQ.Context context = ZMQ.context(1);
+        ZMQ.Socket socket = context.socket(ZMQ.REQ);
         
-        Socket socket = new Socket ( ipAddress, 54321 );
+        // send command
+        socket.connect(ipAddress);
+        socket.send(controlMsg.toByteArray(), 0);
 
-        if ( socket.isConnected() ) {
-            BufferedWriter writer = new BufferedWriter( new OutputStreamWriter (
-                socket.getOutputStream())
-            );
-            BufferedReader reader = new BufferedReader (
-                new InputStreamReader ( socket.getInputStream() )
-            );
-            
-            writer.write ( packet );
-            writer.flush();
-            
-            xmlResponsePacket = reader.readLine();
-            writer.close();
-            reader.close();
-            socket.close();
-        }
+        // get response
+        byte[] reply = socket.recv(0);
+        responseMsg = ResponseMessage.parseFrom(reply);
+        
+        socket.close();
     }
 
     public boolean loadFile()
@@ -124,7 +113,7 @@ public class ButtonPanel extends JPanel
 
         FileNameExtensionFilter fileFilter =
             new FileNameExtensionFilter (
-            "USRP Configuration File", "ucf" );
+            "USRP Configuration File", "yml" );
 
         JFileChooser jf = new JFileChooser();
         jf.setFileFilter ( fileFilter );
@@ -179,10 +168,6 @@ public class ButtonPanel extends JPanel
     @Override
     public void actionPerformed ( ActionEvent e )
     {
-    	HashMap<String, String> map = new HashMap<String, String>();
-        map.put ( "type", "control" );
-        map.put ( "source", "gradar_run_java" );
-        map.put ( "destination", "gradar_server" );
         
 		if (e.getSource() == runButton) {
 			System.out.println("Run button pressed");
@@ -191,24 +176,22 @@ public class ButtonPanel extends JPanel
 
 				System.out.println("Stop button pressed");
 
-				// create xml packet and send to server
-				map.put("name", "stop");
-				String xmlPacket = XmlPacket.format(map);
-
+				ControlMessage control_msg = ControlMessage.newBuilder()
+						.setName("stop")
+						.build();
+				
 				try {
-					WriteToServer(xmlPacket);
-					map.clear();
-					map = XmlPacket.parse(xmlResponsePacket);
-					String response = map.get("value");
-
-					if (response.contains("OK")) {
-
+					
+					WriteToServer(control_msg);
+					
+					if (responseMsg.getValue() == ResponseMessage.Result.OK) {
 						// set button states
 						setState(State.STOPPED);
 						runButton.setText("Run");
 						loadButton.setEnabled(true);
 					} else {
 						setState(State.ERROR);
+						System.out.println(responseMsg.getMessage());
 					}
 
 				} catch (IOException e2) {
@@ -218,24 +201,20 @@ public class ButtonPanel extends JPanel
 			} else {
 				try {
 				
-					// read selected configuration file into byte stream for transport.
-					FileInputStream fileStream = new FileInputStream( configurationFile );					
-					byte[] bytes = new byte[ fileStream.available()];
-					fileStream.read(bytes);
-					fileStream.close();
+					FileParser parser = new FileParser(configurationFile);
+					ConfigFile config_file = parser.getData();
+					
+					Control.File f = ConfigFile.Serialize(config_file);
+					ControlMessage control_msg = ControlMessage.newBuilder()
+							.setName("start")
+							.setFile(f)
+							.build();
 									
-					// package start command. Embed xml file into map.
-					map.put("name", "start");	
-					map.put("file", new String(bytes, "ISO-8859-1"));
-					String xmlPacket = XmlPacket.format( map );
-					WriteToServer(xmlPacket);
+					WriteToServer(control_msg);
 					
 					// clear map and read response packet after transmission.
-					map.clear();
-					map = XmlPacket.parse(xmlResponsePacket);
-					String response = map.get("value");
-
-					if (response.contains("OK")) {
+					if (this.responseMsg.getValue() == ResponseMessage.Result.OK)
+					{
 						// System.out.println("Setting state to Run");
 						// set button states
 						setState(State.RUNNING);
@@ -243,6 +222,7 @@ public class ButtonPanel extends JPanel
 						loadButton.setEnabled(false);
 					} else {
 						setState(State.ERROR);
+						System.out.println(this.responseMsg.getMessage());
 					}
 
 				} catch (IOException e1) {
@@ -296,16 +276,15 @@ public class ButtonPanel extends JPanel
     }
     public String getServerResponse()
     {
-    	return xmlResponsePacket;
+    	return responseMsg.getValue().toString();
     }
     public void clickLoadButton()
     {
         loadButton.doClick();
     }
 
-    public void setIpAddress( InetAddress address )
+    public void setIpAddress( String address )
     {
        ipAddress = address;
     }
-
 }

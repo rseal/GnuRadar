@@ -16,29 +16,24 @@
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 package com.gnuradar.run;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
+import java.util.Map;
 
 import javax.swing.event.EventListenerList;
 
+import org.zeromq.ZMQ;
+
+import com.gnuradar.proto.Status.StatusMessage;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.InvalidProtocolBufferException;
+
 public class StatusThread implements Runnable {
 
-	private static final long serialVersionUID = 1L;
-
-	// we must use a fixed packet size to avoid problems 
-	// with the underlying byte buffer in a datagrampacket.
-	private static final int MAX_PACKET_SIZE_BYTES = 512;
-	
-	private final int SERVER_PORT;
 	private boolean running = false;
-	
-	private DatagramSocket socket = null;
-	
 	protected EventListenerList eventListeners;
+	private StatusMessage statusMsg;
 	
-	private String xmlResponsePacket;
+	ZMQ.Context context;
+	ZMQ.Socket socket;
 
 	public void addStatusListener( StatusListener listener ){
 		eventListeners.add(StatusListener.class, listener);
@@ -55,47 +50,37 @@ public class StatusThread implements Runnable {
 		}    	
 	}
 
-	public String getResponse()
+	public Map<FieldDescriptor, Object> getResponse()
 	{
-		return xmlResponsePacket;
+		return this.statusMsg.getAllFields();
 	}
 	
-	public StatusThread ( int port )
+	public StatusThread ( String ipAddress)
 	{    	    	
-		SERVER_PORT = port;
 		eventListeners = new EventListenerList();
 	}
 
 	public void run()
 	{
-		byte[] buffer = new byte[MAX_PACKET_SIZE_BYTES];		
-		DatagramPacket packet = null;
 		running = true;
   
-		try
-		{				
-			packet = new DatagramPacket(buffer, buffer.length);
-			socket = new DatagramSocket(SERVER_PORT);
-			socket.setBroadcast(true);
-			socket.setReceiveBufferSize( MAX_PACKET_SIZE_BYTES );
-		}
-		catch (SocketException e) {
-			e.printStackTrace();
-		} 
+		// SETUP SUBSCRIBER
+		this.context = ZMQ.context(1);
+		this.socket = this.context.socket(ZMQ.SUB);
 		
 		while ( running ) 
 		{
-			try 
-			{			
-				// receive udp packet and assign.
-				socket.receive(packet);
-                xmlResponsePacket = new String( packet.getData() );
-			} catch (IOException e)
-			{				
+			this.statusMsg = null;
+			
+			byte[] status = socket.recv(0);
+			try {
+				this.statusMsg = StatusMessage.parseFrom(status);
+			} catch (InvalidProtocolBufferException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			if ( xmlResponsePacket != null )
+			
+			if ( this.statusMsg != null )
 			{				
 				processEvent( new StatusEvent(this) );
 			}
@@ -109,7 +94,6 @@ public class StatusThread implements Runnable {
 	public void stopStatus()
 	{
 		running = false;
-		socket.disconnect();
 		socket.close();
 		System.out.println ( "Stop status called" );
 	}

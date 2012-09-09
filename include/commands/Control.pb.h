@@ -105,10 +105,10 @@ class ControlMessage : public ::google::protobuf::Message {
   inline ::std::string* mutable_name();
   inline ::std::string* release_name();
   
-  // optional .gnuradar.File file = 4;
+  // optional .gnuradar.File file = 2;
   inline bool has_file() const;
   inline void clear_file();
-  static const int kFileFieldNumber = 4;
+  static const int kFileFieldNumber = 2;
   inline const ::gnuradar::File& file() const;
   inline ::gnuradar::File* mutable_file();
   inline ::gnuradar::File* release_file();
@@ -941,7 +941,7 @@ inline ::std::string* ControlMessage::release_name() {
   }
 }
 
-// optional .gnuradar.File file = 4;
+// optional .gnuradar.File file = 2;
 inline bool ControlMessage::has_file() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }

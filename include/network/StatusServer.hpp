@@ -4,7 +4,6 @@
 #include<boost/shared_ptr.hpp>
 #include<zmq.hpp>
 
-#include<gnuradar/xml/XmlPacket.hpp>
 #include<gnuradar/ProducerConsumerModel.h>
 #include<gnuradar/network/Server.hpp>
 #include<gnuradar/Constants.hpp>

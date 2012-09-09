@@ -29,77 +29,75 @@
 
 namespace gnuradar {
 
-   static const std::string BUFFER_BASE_NAME = "GnuRadar";
+	static const std::string BUFFER_BASE_NAME = "GnuRadar";
 
-   thread::MutexPtr mutex_;
-   thread::ConditionPtr condition_;
+	thread::MutexPtr mutex_;
+	thread::ConditionPtr condition_;
 
-   typedef boost::shared_ptr<ProducerThread> ProducerThreadPtr;
-   typedef boost::shared_ptr<ConsumerThread> ConsumerThreadPtr;
+	typedef boost::shared_ptr<ProducerThread> ProducerThreadPtr;
+	typedef boost::shared_ptr<ConsumerThread> ConsumerThreadPtr;
 
-struct ProducerConsumerModel {
+	struct ProducerConsumerModel {
 
-   typedef boost::shared_ptr<SynchronizedBufferManager> 
-      SynchronizedBufferManagerPtr; 
-    typedef boost::shared_ptr<HDF5> Hdf5Ptr;
+		typedef boost::shared_ptr<SynchronizedBufferManager> 
+			SynchronizedBufferManagerPtr; 
+		typedef boost::shared_ptr<HDF5> Hdf5Ptr;
 
-    thread::MutexPtr mutex_;
-    thread::ConditionPtr condition_;
+		thread::MutexPtr mutex_;
+		thread::ConditionPtr condition_;
 
-   SynchronizedBufferManagerPtr bufferManager_;
-   ProducerThreadPtr producer_;
-   ConsumerThreadPtr consumer_;
+		SynchronizedBufferManagerPtr bufferManager_;
+		ProducerThreadPtr producer_;
+		ConsumerThreadPtr consumer_;
 
-public:
+		public:
 
-    ProducerConsumerModel() {}
+		void Initialize(
+				SynchronizedBufferManagerPtr bufferManager,
+				ProducerThreadPtr producer,
+				ConsumerThreadPtr consumer)
+		{
+			bufferManager_ = bufferManager;
+			producer_ = producer;
+			consumer_ = consumer;
 
-    void Initialize(
-          SynchronizedBufferManagerPtr bufferManager,
-          ProducerThreadPtr producer,
-          ConsumerThreadPtr consumer)
-   {
-      bufferManager_ = bufferManager;
-      producer_ = producer;
-      consumer_ = consumer;
+			mutex_ = thread::MutexPtr( new thread::Mutex() );
+			condition_ = thread::ConditionPtr( new thread::Condition() );
 
-      mutex_ = thread::MutexPtr( new thread::Mutex() );
-      condition_ = thread::ConditionPtr( new thread::Condition() );
+			producer_->Mutex( mutex_ );
+			producer_->Condition( condition_ );
+			consumer_->Mutex( mutex_ );
+			consumer_->Condition( condition_ );
+		}
 
-      producer_->Mutex( mutex_ );
-      producer_->Condition( condition_ );
-      consumer_->Mutex( mutex_ );
-      consumer_->Condition( condition_ );
-    }
+		/// start producer thread
+		void Start() {
 
-    /// start producer thread
-    void Start() {
+			// crank up threads and fall through
+			consumer_->Start();
+			consumer_->Detach();
+			producer_->Start();
+			producer_->Detach();
 
-       // crank up threads and fall through
-       consumer_->Start();
-       consumer_->Detach();
-       producer_->Start();
-       producer_->Detach();
+		}
 
-    }
+		/// Stop the producer and consumer.
+		void Stop ( void ) {
 
-    /// Stop the producer and consumer.
-    void Stop ( void ) {
+			std::cout << "ProducerConsumerModel: System Stop " << std::endl;
+			// each thread should wait until all operations 
+			// have completed before exiting.
+			consumer_->Stop();
+			producer_->Stop();
+		}
 
-       std::cout << "ProducerConsumerModel: System Stop " << std::endl;
-       // each thread should wait until all operations 
-       // have completed before exiting.
-       consumer_->Stop();
-       producer_->Stop();
-    }
-
-    // status information for diagno)stics
-    const int Head() { return bufferManager_->Head(); }
-    const int Tail() { return bufferManager_->Tail(); }
-    const int Depth() { return bufferManager_->Depth(); }
-    const int NumBuffers() { return bufferManager_->NumBuffers(); }
-    const int BytesPerBuffer() { return bufferManager_->BytesPerBuffer(); }
-    const bool OverFlow() { return bufferManager_->OverFlow(); }
-};
+		// status information for diagno)stics
+		const int Head()           { return bufferManager_->Head();           } 
+		const int Tail()           { return bufferManager_->Tail();           } 
+		const int Depth()          { return bufferManager_->Depth();          } 
+		const int NumBuffers()     { return bufferManager_->NumBuffers();     } 
+		const int BytesPerBuffer() { return bufferManager_->BytesPerBuffer(); } 
+		const bool OverFlow()      { return bufferManager_->OverFlow();       } 
+	};
 };
 #endif

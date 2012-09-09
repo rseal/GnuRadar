@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Created-By: 1.6.0_21 (Sun Microsystems Inc.)
 Main-Class: com/gnuradar/run/Run
-Class-Path: xom-1.2.6.jar
+Class-Path: snakeyaml-1.10.jar protobuf-java-2.4.1.jar zmq.jar

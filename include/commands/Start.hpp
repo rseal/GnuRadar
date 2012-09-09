@@ -31,9 +31,8 @@
 #include<gnuradar/ProducerConsumerModel.h>
 #include<gnuradar/Device.h>
 #include<gnuradar/GnuRadarDevice.h>
-#include<gnuradar/xml/XmlPacket.hpp>
 #include<gnuradar/SynchronizedBufferManager.hpp>
-#include<gnuradar/xml/SharedBufferHeader.hpp>
+#include<gnuradar/yaml/SharedBufferHeader.hpp>
 #include<gnuradar/SharedMemory.h>
 #include<gnuradar/Constants.hpp>
 #include<gnuradar/DataParameters.hpp>
@@ -59,7 +58,7 @@ namespace gnuradar {
          typedef boost::shared_ptr< GnuRadarDevice > GnuRadarDevicePtr;
          typedef boost::shared_ptr< GnuRadarSettings > GnuRadarSettingsPtr;
          typedef boost::shared_ptr< Device > DevicePtr;
-         typedef boost::shared_ptr< ::xml::SharedBufferHeader > SharedBufferHeaderPtr;
+         typedef boost::shared_ptr< ::yml::SharedBufferHeader > SharedBufferHeaderPtr;
          typedef boost::shared_ptr< network::StatusServer > StatusServerPtr;
 
 
@@ -240,7 +239,7 @@ namespace gnuradar {
                gnuradar::RadarParameters* rp = file->mutable_radarparameters();
 
                // setup shared buffer header to assist in real-time processing 
-               header_ = SharedBufferHeaderPtr( new ::xml::SharedBufferHeader(
+               header_ = SharedBufferHeaderPtr( new ::yml::SharedBufferHeader(
                         constants::NUM_BUFFERS,
                         rp->bytesperbuffer(),
                         file->samplerate(),
@@ -271,7 +270,7 @@ namespace gnuradar {
                         array_, constants::NUM_BUFFERS, rp->bytesperbuffer()) );
 
                // setup table dimensions column = samples per ipp , row = IPP number
-               vector<hsize_t> dims;
+               std::vector<hsize_t> dims;
                dims.push_back( rp->prisperbuffer() );
                dims.push_back ( static_cast<int> ( rp->samplesperpri() * file->channel_size() ) );
 
@@ -280,7 +279,7 @@ namespace gnuradar {
                      new ProducerThread ( bufferManager_, gnuRadarDevice ) );
 
                // flush header information
-               header_->Close();
+               header_->Write(0,0,0);
 
                // setup consumer thread
                consumer_ = gnuradar::ConsumerThreadPtr(

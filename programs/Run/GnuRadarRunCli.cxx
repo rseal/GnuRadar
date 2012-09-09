@@ -246,7 +246,7 @@ int main ( int argc, char** argv )
    }
 
    //flush header file and close
-   header->Close();
+   header->Write();
 
    gnuradar::GnuRadarSettingsPtr settings( new gnuradar::GnuRadarSettings() );
    //Program GNURadio

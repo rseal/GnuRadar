@@ -25,7 +25,7 @@
 #include <gnuradar/SynchronizedBufferManager.hpp>
 #include <gnuradar/BaseThread.h>
 #include <gnuradar/SThread.h>
-#include <gnuradar/xml/SharedBufferHeader.hpp>
+#include <gnuradar/yaml/SharedBufferHeader.hpp>
 
 #include<hdf5r/HDF5.hpp>
 #include<hdf5r/Complex.hpp>
@@ -37,7 +37,7 @@ class ConsumerThread: public BaseThread, public thread::SThread {
    
    typedef boost::shared_ptr< SynchronizedBufferManager > 
       SynchronizedBufferManagerPtr;
-   typedef boost::shared_ptr< xml::SharedBufferHeader >
+   typedef boost::shared_ptr< yml::SharedBufferHeader >
       SharedBufferHeaderPtr;
 
    SynchronizedBufferManagerPtr bufferManager_;

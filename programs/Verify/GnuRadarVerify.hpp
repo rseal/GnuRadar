@@ -19,7 +19,6 @@
 
 #include<usrp/usrp/standard.h>
 #include <gnuradar/GnuRadarSettings.h>
-#include <gnuradar/ConfigFile.h>
 #include <gnuradar/GnuRadarTypes.hpp>
 #include <gnuradar/WindowValidator.hpp>
 #include <clp/CommandLineParser.hpp>

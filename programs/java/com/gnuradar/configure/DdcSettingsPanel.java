@@ -18,7 +18,6 @@ package com.gnuradar.configure;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +26,9 @@ import javax.swing.JComboBox;
 import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+
+import com.gnuradar.common.Channel;
+import com.gnuradar.common.ConfigFile;
 
 public class DdcSettingsPanel extends JTabbedPane
             implements ActionListener, ApplicationSettings {
@@ -55,7 +57,6 @@ public class DdcSettingsPanel extends JTabbedPane
     @Override
     public void actionPerformed ( ActionEvent e )
     {
-
         JComboBox comboBox = ( JComboBox ) e.getSource();
 
         try {
@@ -80,29 +81,31 @@ public class DdcSettingsPanel extends JTabbedPane
     }
 
     @Override
-    public HashMap<String, String> getSettings()
+    public void getSettings( ConfigFile configuration )
     {
+    	List<Channel> config_channels = new LinkedList<Channel>();
 
         int size = channels.size();
-        HashMap<String, String> settings = new HashMap<String, String> ( 16 );
+        
         // collect settings from each channel
         for ( int i = 0; i < size; ++i ) {
-            settings.putAll ( channels.get ( i ).getSettings() );
+        	config_channels.add( channels.get(i).getSettings());
         }
 
-        return settings;
+        configuration.setChannels(config_channels);
     }
 
     @Override
-    public void pushSettings ( HashMap<String, String> map )
+    public void pushSettings ( ConfigFile configuration )
     {
+    	List<Channel> config_channels = configuration.getChannels();
 
-        for ( int i = 0; i < MAX_CHANNELS; ++i ) {
+        for ( int i = 0; i < config_channels.size(); ++i ) {
             this.setEnabledAt ( i, false );
-            channels.get ( i ).pushSettings ( map );
+            channels.get ( i ).pushSettings ( config_channels.get(i) );
         }
 
-        int activeChannels = Integer.valueOf ( map.get ( "num_channels" ) );
+        int activeChannels = configuration.getNumChannels();
 
         for ( int i = 0; i < activeChannels; ++i ) {
             this.setEnabledAt ( i, true );

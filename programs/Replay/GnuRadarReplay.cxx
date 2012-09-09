@@ -29,7 +29,7 @@
 #include <gnuradar/SharedMemory.h>
 #include <gnuradar/SynchronizedBufferManager.hpp>
 #include <gnuradar/Constants.hpp>
-#include <gnuradar/xml/SharedBufferHeader.hpp>
+#include <gnuradar/yaml/SharedBufferHeader.hpp>
 
 using namespace thread;
 using namespace hdf5;
@@ -41,7 +41,7 @@ class Viewer: public SThread {
     typedef std::vector<SharedBufferPtr> SharedArray;
     typedef boost::shared_ptr<SynchronizedBufferManager> 
        BufferManagerPtr;
-    typedef boost::shared_ptr<xml::SharedBufferHeader> 
+    typedef boost::shared_ptr<yml::SharedBufferHeader> 
        SharedBufferHeaderPtr;
 
     BufferManagerPtr bufferManager_;
@@ -107,7 +107,7 @@ public:
         numTables_ = h5File_.NumTables();
 
         header_ = SharedBufferHeaderPtr( 
-              new xml::SharedBufferHeader( 
+              new yml::SharedBufferHeader( 
                  constants::NUM_BUFFERS, 
                  bytesPerBuffer,
                  sampleRate_,
@@ -124,7 +124,7 @@ public:
            header_->AddWindow( windowName, windowStart, windowStop );
         }
 
-        header_->Close();
+        header_->Write(0,0,0);
 
         // setup buffer manager
         bufferManager_ = 
@@ -163,7 +163,7 @@ public:
                   table, bufferManager_->WriteTo(), cpx_.GetRef() );
 
 
-            header_->Update( 
+            header_->Write( 
                   bufferManager_->Head(),
                   bufferManager_->Tail(),
                   bufferManager_->Depth());

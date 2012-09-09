@@ -74,7 +74,7 @@ def configure(ctx):
    ctx.check(
       features = 'cxx cxxprogram',
       libpath  = [ctx.path.abspath()+'/build/usrp','/usr/lib/','/usr/local/lib'],
-      libs     = ['hdf5','hdf5_hl_cpp','hdf5_cpp','tinyxmlcpp','pthread','usb-1.0'],
+      libs     = ['hdf5','hdf5_hl_cpp','hdf5_cpp','yaml-cpp','pthread','usb-1.0'],
       cflags   = ['-march=native','-Wall','-02'],
    )
 
@@ -85,55 +85,56 @@ def build(bld):
 
    ## build the usrp library
    bld.recurse('usrp')
+   bld.recurse('protobuf')
    bld.recurse('programs/java')
 
    bld.add_group()
 
    ### build primary program
-   bld(
-         name     = 'verify',
-         features = 'cxx cxxprogram',
-         cxxflags = ['-march=native', '-Wall', '-W'],
-         defines  = {'TIXML_USE_TICPP':1},
-         includes = ['programs/Verify'],
-         source   = 'programs/Verify/GnuRadarVerify.cxx',
-         target   = 'gradar-verify-cli',
-         libpath  = ['usrp','/usr/lib','/usr/local/lib'],
-         lib      = ['tinyxmlcpp','pthread','gnuradar', 'usb-1.0'],
-   )
+   #bld(
+         #name     = 'verify',
+         #features = 'cxx cxxprogram',
+         #cxxflags = ['-march=native', '-Wall', '-W'],
+         #defines  = {'TIXML_USE_TICPP':1},
+         #includes = ['programs/Verify'],
+         #source   = 'programs/Verify/GnuRadarVerify.cxx',
+         #target   = 'gradar-verify-cli',
+         #libpath  = ['usrp','/usr/lib','/usr/local/lib'],
+         #lib      = ['tinyxmlcpp','pthread','gnuradar', 'usb-1.0'],
+   #)
 
    ### build Run command-line interface 
-   bld(
-         name     = 'run-cli',
-         features = 'cxx cxxprogram',
-         cxxflags = ['-march=native', '-Wall', '-W'],
-         defines  = {'TIXML_USE_TICPP':1},
-         includes = ['programs/Run'],
-         source   = ['programs/Run/GnuRadarRunCli.cxx',
-                     'programs/Run/ProducerThread.cxx',
-                     'programs/Run/ConsumerThread.cxx'],
-         target   = 'gradar-run-cli',
-         libpath  = ['usrp','/usr/lib','/usr/local/lib'],
-         lib      = ['boost_system','boost_filesystem',
-                     'tinyxmlcpp','pthread','gnuradar', 
-                     'usb-1.0','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
-   )
+   #bld(
+         #name     = 'run-cli',
+         #features = 'cxx cxxprogram',
+         #cxxflags = ['-march=native', '-Wall', '-W'],
+         #defines  = {'TIXML_USE_TICPP':1},
+         #includes = ['programs/Run'],
+         #source   = ['programs/Run/GnuRadarRunCli.cxx',
+                     #'programs/Run/ProducerThread.cxx',
+                     #'programs/Run/ConsumerThread.cxx'],
+         #target   = 'gradar-run-cli',
+         #libpath  = ['usrp','/usr/lib','/usr/local/lib'],
+         #lib      = ['boost_system','boost_filesystem',
+                     #'tinyxmlcpp','pthread','gnuradar', 
+                     #'usb-1.0','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
+   #)
 
    ### build Run server
    bld(
          name     = 'run-server',
          features = 'cxx cxxprogram',
          cxxflags = ['-march=native', '-Wall', '-W'],
-         defines  = {'TIXML_USE_TICPP':1},
-         includes = ['programs/Run'],
+         includes = ['programs/Run','protobuf'],
          source   = ['programs/Run/GnuRadarRun.cxx',
                      'programs/Run/ProducerThread.cxx',
-                     'programs/Run/ConsumerThread.cxx'],
+                     'programs/Run/ConsumerThread.cxx'], 
          target   = 'gradar-run-server',
          libpath  = ['usrp','/usr/lib','/usr/local/lib'],
-         lib      = ['boost_system','boost_filesystem',
-                     'tinyxmlcpp','pthread','gnuradar', 
+         lib      = ['boost_system','boost_filesystem','zmq',
+                     'yaml-cpp','pthread','gnuradar','protobuf',
                      'usb-1.0','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
+         use = 'proto'
    )
 
    ### build Replay
@@ -141,22 +142,35 @@ def build(bld):
          name     = 'replay',
          features = 'cxx cxxprogram',
          cxxflags = ['-march=native', '-Wall', '-W'],
-         defines  = {'TIXML_USE_TICPP':1},
          includes = ['programs/Replay'],
          source   = ['programs/Replay/GnuRadarReplay.cxx'],
          target   = 'gradar-replay',
          libpath  = ['usrp','/usr/lib','/usr/local/lib'],
-         lib      = ['boost_system','boost_filesystem',
-                     'tinyxmlcpp','pthread','gnuradar', 
+         lib      = ['boost_system','boost_filesystem','protobuf',
+                     'yaml-cpp','pthread','gnuradar', 
                      'usb-1.0','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
+         use = 'proto'
    )
 
    bld.add_group()
    bld(
         rule   = 'cp ${SRC} ${TGT}',
-        source = bld.path.ant_glob('programs/java/com/lib/xom-1.2.6.jar'),
-        target ='programs/java/xom-1.2.6.jar' 
+        source = bld.path.ant_glob('programs/java/com/lib/snakeyaml-1.10.jar'),
+        target ='programs/java/snakeyaml-1.10.jar' 
     )
+
+   bld(
+        rule   = 'cp ${SRC} ${TGT}',
+        source = bld.path.ant_glob('programs/java/com/lib/zmq.jar'),
+        target ='programs/java/zmq.jar' 
+    )
+
+   bld(
+        rule   = 'cp ${SRC} ${TGT}',
+        source = bld.path.ant_glob('programs/java/com/lib/protobuf-java-2.4.1.jar'),
+        target ='programs/java/protobuf-java-2.4.1.jar'
+    )
+
 
    bld.add_group()
    bld.install_files(

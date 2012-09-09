@@ -16,13 +16,13 @@
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 package com.gnuradar.configure;
 
-import java.util.HashMap;
+import com.gnuradar.common.ConfigFile;
 
 public interface ApplicationSettings {
 
     //pull settings from Application.
-    public HashMap< String, String > getSettings();
+    public void getSettings( ConfigFile file );
 
     //push settings to Application.
-    public void pushSettings ( HashMap< String, String> map );
+    public void pushSettings ( ConfigFile file );
 }

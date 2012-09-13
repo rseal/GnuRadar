@@ -75,11 +75,11 @@ public class ButtonPanel extends JPanel
     private State state = State.UNCONFIGURED;
     private static final long serialVersionUID = 1L;
     private static boolean running = false;
+    private String serverMessage;
     private JButton loadButton;
     private JButton verifyButton;
     private JButton runButton;
     private File configurationFile = null;
-    private ResponseMessage responseMsg;
     private String ipAddress;
     private Dimension buttonSize = new Dimension ( 100, 25 );
 
@@ -90,7 +90,7 @@ public class ButtonPanel extends JPanel
         obj.setMaximumSize ( dimension );
     }
 
-    private void WriteToServer ( ControlMessage controlMsg )
+    private ResponseMessage WriteToServer ( ControlMessage controlMsg )
     throws IOException, SecurityException
     {
         ZMQ.Context context = ZMQ.context(1);
@@ -102,9 +102,9 @@ public class ButtonPanel extends JPanel
 
         // get response
         byte[] reply = socket.recv(0);
-        responseMsg = ResponseMessage.parseFrom(reply);
-        
         socket.close();
+        
+        return ResponseMessage.parseFrom(reply);
     }
 
     public boolean loadFile()
@@ -170,11 +170,8 @@ public class ButtonPanel extends JPanel
     {
         
 		if (e.getSource() == runButton) {
-			System.out.println("Run button pressed");
 
 			if (state == State.RUNNING) {
-
-				System.out.println("Stop button pressed");
 
 				ControlMessage control_msg = ControlMessage.newBuilder()
 						.setName("stop")
@@ -182,21 +179,21 @@ public class ButtonPanel extends JPanel
 				
 				try {
 					
-					WriteToServer(control_msg);
+					ResponseMessage response = WriteToServer(control_msg);
 					
-					if (responseMsg.getValue() == ResponseMessage.Result.OK) {
+					if (response.getValue() == ResponseMessage.Result.OK) {
 						// set button states
 						setState(State.STOPPED);
 						runButton.setText("Run");
 						loadButton.setEnabled(true);
 					} else {
 						setState(State.ERROR);
-						System.out.println(responseMsg.getMessage());
+						serverMessage = response.getMessage();
 					}
 
 				} catch (IOException e2) {
 					setState(State.CONNECTION_ERROR);
-					e2.printStackTrace();
+					serverMessage = e2.getMessage();
 				}
 			} else {
 				try {
@@ -210,10 +207,10 @@ public class ButtonPanel extends JPanel
 							.setFile(f)
 							.build();
 									
-					WriteToServer(control_msg);
+					ResponseMessage response = WriteToServer(control_msg);
 					
 					// clear map and read response packet after transmission.
-					if (this.responseMsg.getValue() == ResponseMessage.Result.OK)
+					if (response.getValue() == ResponseMessage.Result.OK)
 					{
 						// System.out.println("Setting state to Run");
 						// set button states
@@ -222,12 +219,12 @@ public class ButtonPanel extends JPanel
 						loadButton.setEnabled(false);
 					} else {
 						setState(State.ERROR);
-						System.out.println(this.responseMsg.getMessage());
+						serverMessage = response.getMessage();
 					}
 
 				} catch (IOException e1) {
 					setState(State.CONNECTION_ERROR);
-					e1.printStackTrace();
+					serverMessage = e1.getMessage();
 				}
 			}
 		}
@@ -276,7 +273,7 @@ public class ButtonPanel extends JPanel
     }
     public String getServerResponse()
     {
-    	return responseMsg.getValue().toString();
+    	return serverMessage;
     }
     public void clickLoadButton()
     {

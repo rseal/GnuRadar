@@ -36,10 +36,12 @@
 #include<gnuradar/SharedMemory.h>
 #include<gnuradar/Constants.hpp>
 #include<gnuradar/DataParameters.hpp>
+#include<gnuradar/Units.h>
 #include<gnuradar/network/StatusServer.hpp>
 #include<gnuradar/commands/Response.pb.h>
 #include<gnuradar/commands/Control.pb.h>
 #include<gnuradar/utils/GrHelper.hpp>
+
 
 
 namespace gnuradar {
@@ -111,6 +113,37 @@ namespace gnuradar {
             }
          }
 
+         void FormatFile( gnuradar::File* file )
+         {
+            Units units;
+
+            // convert units
+            file->set_samplerate( file->samplerate() * 1e6);
+            file->set_outputrate( file->samplerate() / file->decimation());
+            file->set_ipp( file->ipp() * units(file->ippunits()).multiplier);
+            file->set_bandwidth( file->bandwidth() * units(file->bandwidthunits()).multiplier);
+            file->set_txcarrier( file->txcarrier() * 1e6);
+            
+            for ( int i = 0; i < file->channel_size(); ++i ) {
+               gnuradar::Channel* channel = file->mutable_channel(i);
+               channel->set_frequency( channel->frequency() * 
+                     units(channel->frequencyunits()).multiplier);
+               channel->set_phase( channel->phase() * 
+                     units(channel->phaseunits()).multiplier);
+            }
+
+            for ( int i = 0; i < file->window_size(); ++i ) {
+               gnuradar::Window* window = file->mutable_window(i);
+               double win_units = units(window->units()).multiplier;
+               window->set_start( window->start() * win_units * file->outputrate());
+               window->set_stop( window->stop() * win_units * file->outputrate());
+            }
+
+            // calculate and populate derived data parameters from file
+            DataParameters dp(file);
+
+         }
+
          /////////////////////////////////////////////////////////////////////////////
          // pull settings from the configuration file
          /////////////////////////////////////////////////////////////////////////////
@@ -118,12 +151,12 @@ namespace gnuradar {
 
             GnuRadarSettingsPtr settings( new GnuRadarSettings() );
 
-            settings->numChannels    = file->channel_size();
+            settings->numChannels    = file->numchannels();
             settings->decimationRate = file->decimation();
             settings->fpgaFileName   = file->fpgaimage();
 
             //Program GNURadio
-            for ( int i = 0; i < file->channel_size(); ++i ) {
+            for ( int i = 0; i < file->numchannels(); ++i ) {
                settings->Tune ( i, file->channel(i).frequency() );
                settings->Phase( i, file->channel(i).phase() );
             }
@@ -146,7 +179,7 @@ namespace gnuradar {
             h5File_->Description ( "GnuRadar Software" + file->version() );
             h5File_->WriteStrAttrib ( "START_TIME", currentTime.GetTime() );
             h5File_->WriteStrAttrib ( "INSTRUMENT", file->receiver() );
-            h5File_->WriteAttrib<int> ( "CHANNELS", file->channel_size(),
+            h5File_->WriteAttrib<int> ( "CHANNELS", file->numchannels(),
                   H5::PredType::NATIVE_INT, H5::DataSpace() );
             h5File_->WriteAttrib<double> ( "SAMPLE_RATE", file->samplerate(),
                   H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
@@ -161,7 +194,17 @@ namespace gnuradar {
             h5File_->WriteAttrib<double> ( "RF", file->txcarrier() , 
                   H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
 
-            for ( int i = 0; i < file->channel_size(); ++i ) {
+            std::cout << "HDF5 Settings " << std::endl;
+            std::cout << "INSTRUMENT " << file->receiver() << std::endl;
+            std::cout << "CHANNELS " << file->numchannels() << std::endl;
+            std::cout << "SAMPLE_RATE " << file->samplerate() << std::endl;
+            std::cout << "BANDWIDTH " << file->bandwidth() << std::endl;
+            std::cout << "DECIMATION " << file->decimation() << std::endl;
+            std::cout << "OUTPUTRATE " << file->outputrate() << std::endl;
+            std::cout << "IPP " << file->ipp() << std::endl;
+            std::cout << "RF " << file->txcarrier() << std::endl;
+
+            for ( int i = 0; i < file->numchannels(); ++i ) {
 
                h5File_->WriteAttrib<double> ( 
                      "DDC" + lexical_cast<string> ( i ),
@@ -236,6 +279,9 @@ namespace gnuradar {
                array_.clear();
 
                gnuradar::File* file = msg.mutable_file();
+
+               FormatFile( file );
+
                gnuradar::RadarParameters* rp = file->mutable_radarparameters();
 
                // setup shared buffer header to assist in real-time processing 
@@ -243,7 +289,7 @@ namespace gnuradar {
                         constants::NUM_BUFFERS,
                         rp->bytesperbuffer(),
                         file->samplerate(),
-                        file->channel_size(),
+                        file->numchannels(),
                         rp->prisperbuffer(),
                         rp->samplesperbuffer()
                         ));
@@ -272,7 +318,7 @@ namespace gnuradar {
                // setup table dimensions column = samples per ipp , row = IPP number
                std::vector<hsize_t> dims;
                dims.push_back( rp->prisperbuffer() );
-               dims.push_back ( static_cast<int> ( rp->samplesperpri() * file->channel_size() ) );
+               dims.push_back ( static_cast<int> ( rp->samplesperpri() * file->numchannels() ) );
 
                // setup producer thread
                producer_ = gnuradar::ProducerThreadPtr (

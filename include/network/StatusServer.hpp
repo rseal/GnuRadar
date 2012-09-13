@@ -28,7 +28,9 @@ namespace gnuradar{
          StatusServer( zmq::context_t& ctx, const std::string& ipAddr, PcModelPtr pcModel ) : pcModel_(pcModel) 
          {
             socket_ = SocketPtr( new zmq::socket_t(ctx, ZMQ_PUB));
+				//socket_->setsockopt( ZMQ_HWM, &gnuradar::constants::HWM, sizeof(gnuradar::constants::HWM));
             socket_->bind (ipAddr.c_str());
+				std::cout << "STATUS ADDRESS : " << ipAddr << std::endl;
          }
 
          //////////////////////////////////////////////////////////////////////////
@@ -49,22 +51,28 @@ namespace gnuradar{
                status_msg.set_over_flow(pcModel_->OverFlow() );
                status_msg.set_bytes_per_buffer( pcModel_->BytesPerBuffer() );
 
-               sleep(gnuradar::constants::STATUS_REFRESH_RATE_MSEC);
-            }
+					std::string data;
+					status_msg.SerializeToString(&data);
+					zmq::message_t zmq_msg(data.size());
+					memcpy ((void *) zmq_msg.data(), data.c_str(), data.size());
+					socket_->send (zmq_msg);
 
-            std::cout << "StatusServer: STOP " << std::endl;
-            socket_->close();
-         }
+					Sleep(thread::MSEC, gnuradar::constants::STATUS_REFRESH_RATE_MSEC);
+				}
 
-         //////////////////////////////////////////////////////////////////////////
-         //
-         //////////////////////////////////////////////////////////////////////////
-         void Stop()
-         {
-            active_ = false;
-         }
-      };
-   };
+				std::cout << "StatusServer: STOP " << std::endl;
+				socket_->close();
+			}
+
+			//////////////////////////////////////////////////////////////////////////
+			//
+			//////////////////////////////////////////////////////////////////////////
+			void Stop()
+			{
+				active_ = false;
+			}
+		};
+	};
 };
 
 #endif

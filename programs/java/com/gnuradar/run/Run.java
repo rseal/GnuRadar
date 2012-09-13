@@ -56,7 +56,9 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.corejava.GBC;
 import com.gnuradar.common.FixedFrame;
+import com.gnuradar.proto.Status.StatusMessage;
 import com.gnuradar.run.ButtonPanel.State;
+import com.gnuradar.verify.StatusPanel;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 
 public class Run implements ActionListener, PropertyChangeListener {
@@ -113,12 +115,12 @@ public class Run implements ActionListener, PropertyChangeListener {
 		preferences.put("config_dir", file.toString());
 	}
 
-	private void updateDisplay(Map<FieldDescriptor, Object> map) {
+	private void updateDisplay(StatusMessage msg) {
 
-		progressPanel.setHead((Integer) (map.get("head")));
-		progressPanel.setTail((Integer) (map.get("tail")));
-		progressPanel.setDepth((Integer) (map.get("depth")));
-		progressPanel.setNumBuffers((Integer) (map.get("num_buffers")));
+		progressPanel.setHead(msg.getHead());
+		progressPanel.setTail(msg.getTail());
+		progressPanel.setDepth(msg.getDepth());
+		progressPanel.setNumBuffers(20);
 	}
 
 	private static void setComponentSize(JComponent obj, Dimension dimension) {
@@ -302,6 +304,7 @@ public class Run implements ActionListener, PropertyChangeListener {
 		statusLabel.setText(state.getValue());
 
 		if (state == State.RUNNING) {
+			System.out.println("Starting Status Thread");
 			statusThread = new StatusThread(this.statusIpAddress);
 			thread = new Thread(statusThread);
 			thread.start();
@@ -309,7 +312,7 @@ public class Run implements ActionListener, PropertyChangeListener {
 			statusListener = new StatusListener() {
 				@Override
 				public void eventOccurred(StatusEvent event) {
-					updateDisplay(statusThread.getResponse());
+					updateDisplay((StatusMessage) event.getSource());
 				}
 			};
 			statusThread.addStatusListener(statusListener);
@@ -317,17 +320,23 @@ public class Run implements ActionListener, PropertyChangeListener {
 
 		if (state == State.STOPPED && thread.isAlive()) {
 
+			statusPane.setText("System Stopped.");
 			statusThread.removeStatusListener(statusListener);
 			statusThread.stopStatus();
+			
 			try {
 				thread.join();
 			} catch (InterruptedException e) {
-				System.out.println("Status thread join was interrupted.");
+				statusPane.setText("Status thread join was interrupted.");
 			}
 		}
 
 		if (state == State.CONFIGURED) {
 			statusPane.setText("Configuration File Loaded.");
+		}
+		
+		if (state == State.ERROR){
+			statusPane.setText(buttonPanel.getServerResponse());
 		}
 	}
 

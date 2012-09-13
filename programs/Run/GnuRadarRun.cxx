@@ -54,8 +54,6 @@ int main ( )
 
    std::string ipAddr = gr_helper::ReadConfigurationFile("control");
 
-   std::cout << "SERVER ADDRESS : " << ipAddr << std::endl;
-
    // Setup a network socket to listen for commands.
    network::RequestServer req_server( ctx, ipAddr, commandList );
    req_server.Start();

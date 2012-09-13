@@ -37,11 +37,7 @@ namespace gnuradar{
                // Execute the parsed command, passing in arguments, and 
                // receive response message on return.
                // These commands are all derived from GnuRadarCommand.
-
-               // TODO: UNCOMMENT FOR PROPER FUNCTION PARSING
                reply_msg = commandPtr->Execute ( msg );
-               //reply_msg.set_value( gnuradar::ResponseMessage::OK );
-               //reply_msg.set_message("TESTING");
 
             } catch ( std::exception& e ) {
                reply_msg.set_value( gnuradar::ResponseMessage::ERROR );

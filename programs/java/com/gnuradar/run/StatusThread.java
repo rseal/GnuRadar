@@ -31,6 +31,7 @@ public class StatusThread implements Runnable {
 	private boolean running = false;
 	protected EventListenerList eventListeners;
 	private StatusMessage statusMsg;
+	private String ipAddress;
 	
 	ZMQ.Context context;
 	ZMQ.Socket socket;
@@ -57,6 +58,7 @@ public class StatusThread implements Runnable {
 	
 	public StatusThread ( String ipAddress)
 	{    	    	
+		this.ipAddress = ipAddress;
 		eventListeners = new EventListenerList();
 	}
 
@@ -67,12 +69,16 @@ public class StatusThread implements Runnable {
 		// SETUP SUBSCRIBER
 		this.context = ZMQ.context(1);
 		this.socket = this.context.socket(ZMQ.SUB);
+		this.socket.connect(ipAddress);
+		String filter = "";
+		this.socket.subscribe(filter.getBytes());
 		
 		while ( running ) 
 		{
 			this.statusMsg = null;
 			
 			byte[] status = socket.recv(0);
+			System.out.println(status.toString());
 			try {
 				this.statusMsg = StatusMessage.parseFrom(status);
 			} catch (InvalidProtocolBufferException e) {
@@ -82,20 +88,20 @@ public class StatusThread implements Runnable {
 			
 			if ( this.statusMsg != null )
 			{				
-				processEvent( new StatusEvent(this) );
+				System.out.println("Status Event");
+				processEvent( new StatusEvent(this.statusMsg) );
 			}
 			else
 			{
 				System.out.println("Status receive timed out. You are not receiving status from the server!");
 			}
 		}
+		socket.close();
 	}
 
 	public void stopStatus()
 	{
 		running = false;
-		socket.close();
-		System.out.println ( "Stop status called" );
 	}
 }
 

@@ -40,8 +40,6 @@ namespace gnuradar {
 
             gnuradar::ResponseMessage response_msg;
 
-            std::cout << " Stop Command " << std::endl;
-
             pcModel_->Stop();
 
             // create a response packet and return to requester

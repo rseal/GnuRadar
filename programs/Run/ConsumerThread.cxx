@@ -22,21 +22,22 @@ void ConsumerThread::Run()
    static const char* LOCK_FILE = "/dev/shm/gnuradar.lock";
    running_ = true;
 
+	std::cout << "Consumer Thread Started " << std::endl;
+
    while( running_ ){
 
-      std::cout << "consumer running" << std::endl;
 
       // sleep if no data available
       if(!bufferManager_->DataAvailable()){
-         std::cout << "consumer sleeping" << std::endl;
          this->Pause( *BaseThread::condition_, *BaseThread::mutex_ );
       }
 
-      std::cout << "consumer writing table to disk" << std::endl;
+		std::cout << "Buffer address = " << (long)bufferManager_->ReadFrom() << std::endl;
+
       // write an HDF5 table to disk
-      h5File_->CreateTable ( cpx_.GetRef(), space_ );
-      h5File_->WriteTStrAttrib ( "TIME", time_.GetTime() );
-      h5File_->WriteTable ( bufferManager_->ReadFrom() );
+		h5File_->CreateTable ( cpx_.GetRef(), space_ );
+		h5File_->WriteTStrAttrib ( "TIME", time_.GetTime() );
+		h5File_->WriteTable ( bufferManager_->ReadFrom() );
 
       bufferManager_->IncrementTail();
 
@@ -60,5 +61,5 @@ void ConsumerThread::Run()
       boost::filesystem::remove_all( LOCK_FILE );
    }
    h5File_->Close();
-   std::cout << "consumer exiting " << std::endl;
+   std::cout << "Consumer Thread Exiting " << std::endl;
 }

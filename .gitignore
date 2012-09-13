@@ -4,6 +4,8 @@ usrpSVN/
 *~
 *.swp
 *.pyc
+protobuf/cpp
+protobuf/java
 programs/Analyze/binary.dat
 programs/Run/config
 programs/Config/java

@@ -23,6 +23,8 @@ namespace gnuradar{
       static std::string BUFFER_BASE_NAME = "GnuRadar";
 		static std::string SERVER_CONFIGURATION_FILE = "/usr/local/gnuradar/gnuradar_server.yml";
 		static int STATUS_REFRESH_RATE_MSEC = 1000;
+		// default high water mark for status server.
+		static int HWM=10;
    };
 };
 

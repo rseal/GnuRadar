@@ -84,8 +84,8 @@ struct Units {
 		unitMap.insert( std::pair<std::string,UnitType>("usec",UnitType("sec",1e-6)));
 		unitMap.insert( std::pair<std::string,UnitType>("msec",UnitType("sec",1e-3)));
 		unitMap.insert( std::pair<std::string,UnitType>("sec",UnitType("sec",1e0)));
-		unitMap.insert( std::pair<std::string,UnitType>("km",UnitType("sec",(2.0/3.0)*1e-6)));
-		unitMap.insert( std::pair<std::string,UnitType>("m",UnitType("sec",(2.0/3.0)*1e-3)));
+		unitMap.insert( std::pair<std::string,UnitType>("km",UnitType("sec",(2.0/3.0)*1e-5)));
+		unitMap.insert( std::pair<std::string,UnitType>("m",UnitType("sec",(2.0/3.0)*1e-8)));
 
 		// resulting unit : deg
 		unitMap.insert( std::pair<std::string,UnitType>("deg",UnitType("deg",1e0)));

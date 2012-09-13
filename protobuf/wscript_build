@@ -11,15 +11,15 @@ proto_bld = bld(rule='protoc --java_out=%r --proto_path=%s ${SRC}'%(java_dir,bld
 bld.add_group()
 bld.stlib( source=bld.path.ant_glob('cpp/*.cc'), target='proto')
 
-bld.add_group()
-bld(
-rule   = 'cp ${SRC} ${TGT}',
-source = bld.path.ant_glob('cpp/*.h'),
-target ='../include/commands/' 
-)
-bld(
-rule   = 'cp ${SRC} ${TGT}',
-source = bld.path.ant_glob('java/com/gnuradar/proto/*.java'),
-target ='../programs/java/com/gnuradar/proto' 
-)
+#bld.add_group()
+#bld(
+#rule   = 'cp ${SRC} ${TGT}',
+#source = bld.path.ant_glob('cpp/*.h'),
+#target ='../include/commands/' 
+#)
+#bld(
+#rule   = 'cp ${SRC} ${TGT}',
+#source = bld.path.ant_glob('java/com/gnuradar/proto/*.java'),
+#target ='../programs/java/com/gnuradar/proto' 
+#)
 

@@ -90,36 +90,6 @@ def build(bld):
 
    bld.add_group()
 
-   ### build primary program
-   #bld(
-         #name     = 'verify',
-         #features = 'cxx cxxprogram',
-         #cxxflags = ['-march=native', '-Wall', '-W'],
-         #defines  = {'TIXML_USE_TICPP':1},
-         #includes = ['programs/Verify'],
-         #source   = 'programs/Verify/GnuRadarVerify.cxx',
-         #target   = 'gradar-verify-cli',
-         #libpath  = ['usrp','/usr/lib','/usr/local/lib'],
-         #lib      = ['tinyxmlcpp','pthread','gnuradar', 'usb-1.0'],
-   #)
-
-   ### build Run command-line interface 
-   #bld(
-         #name     = 'run-cli',
-         #features = 'cxx cxxprogram',
-         #cxxflags = ['-march=native', '-Wall', '-W'],
-         #defines  = {'TIXML_USE_TICPP':1},
-         #includes = ['programs/Run'],
-         #source   = ['programs/Run/GnuRadarRunCli.cxx',
-                     #'programs/Run/ProducerThread.cxx',
-                     #'programs/Run/ConsumerThread.cxx'],
-         #target   = 'gradar-run-cli',
-         #libpath  = ['usrp','/usr/lib','/usr/local/lib'],
-         #lib      = ['boost_system','boost_filesystem',
-                     #'tinyxmlcpp','pthread','gnuradar', 
-                     #'usb-1.0','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
-   #)
-
    ### build Run server
    bld(
          name     = 'run-server',

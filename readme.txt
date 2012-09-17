@@ -14,8 +14,7 @@ project by Ettus. This software features the following:
 4. Parameter based configuration program for radar mode configuration.
 5. CLI-based run-time software to start/stop data recording. 
 6. C++ interface currently functional with the Basic RX daughterboard.
-7. Both command line and GUI-based programs for configuration,verification,
-   data collection.
+7. Networked programs for configuration,verification, and data collection.
 
 Programs:
 
@@ -33,7 +32,7 @@ Dependencies:
 3. Waf build system.
 4. HDF5 library.
 5. protobuf ( i.e google protocol buffers )
-6. zeromq ( a.k.a 0MQ )
+6. zeromq ( a.k.a 0MQ or zmq )
 7. local deps in github repository ( see below ).
 
 Local Dependency installation:
@@ -68,5 +67,5 @@ Networking Notes:
 For good measure, and future-proofing, add the following lines to your
 /etc/services file:
 
-gnuradar	54321/udp 	gradar		#gnuradar comm service
-gnuradar	54321/tcp 	gradar		#gnuradar comm service
+gnuradar	54320/tcp 	gradar		#gnuradar status service
+gnuradar	54321/tcp 	gradar		#gnuradar control service

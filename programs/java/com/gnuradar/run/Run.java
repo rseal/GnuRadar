@@ -58,17 +58,15 @@ import com.corejava.GBC;
 import com.gnuradar.common.FixedFrame;
 import com.gnuradar.proto.Status.StatusMessage;
 import com.gnuradar.run.ButtonPanel.State;
-import com.gnuradar.verify.StatusPanel;
-import com.google.protobuf.Descriptors.FieldDescriptor;
 
 public class Run implements ActionListener, PropertyChangeListener {
 
 	// define constants
 	private static final int DEFAULT_WIDTH = 575;
-	private static final int DEFAULT_HEIGHT = 560;
+	private static final int DEFAULT_HEIGHT = 230;
 	private static final String TITLE = "GnuRadarRun";
 	private static final String VERSION = "Version: 1.0.0";
-	private static final String BUILD = "Build: September 01, 2012";
+	private static final String BUILD = "Build: September 15, 2012";
 	private static final String COPYRIGHT = "Copyright: \u00a9 2009-2012";
 	private static final String AUTHOR = "Author: Ryan Seal";
 	private static final String RC_FILE = ".gradarrc";
@@ -176,7 +174,7 @@ public class Run implements ActionListener, PropertyChangeListener {
 				run.statusPane.setEditable(false);
 				run.statusPane.setDocument(run.statusDocument);
 
-				setComponentSize(run.statusPane, new Dimension(400, 390));
+				setComponentSize(run.statusPane, new Dimension(300, 100));
 
 				JPanel statusPanel = new JPanel();
 				statusPanel.setBorder(border);
@@ -192,7 +190,7 @@ public class Run implements ActionListener, PropertyChangeListener {
 
 				buttonPanel = new ButtonPanel();
 				buttonPanel.setIpAddress(run.controlIpAddress);
-				setComponentSize(buttonPanel, new Dimension(100, 400));
+				setComponentSize(buttonPanel, new Dimension(100, 100));
 
 				run.progressPanel = new ProgressPanel();
 				setComponentSize(run.progressPanel, new Dimension(400, 50));
@@ -251,14 +249,13 @@ public class Run implements ActionListener, PropertyChangeListener {
 				});
 
 				frame.add(buttonPanel, new GBC(0, 1, 10, 100).setIpad(5, 5)
-						.setSpan(1, 4).setFill(GridBagConstraints.VERTICAL));
+						.setSpan(1, 3).setFill(GridBagConstraints.VERTICAL));
 				frame.add(statusPanel, new GBC(0, 0, 10, 10).setIpad(5, 5)
 						.setSpan(4, 1).setFill(GridBagConstraints.HORIZONTAL));
 				frame.add(run.statusPane, new GBC(1, 1, 100, 100).setIpad(5, 5)
-						.setSpan(3, 3).setFill(GridBagConstraints.HORIZONTAL));
-				frame.add(run.progressPanel,
-						new GBC(1, 4, 100, 100).setIpad(5, 5).setSpan(3, 1)
-								.setFill(GridBagConstraints.HORIZONTAL));
+						.setSpan(3, 1).setFill(GridBagConstraints.HORIZONTAL));
+				frame.add(run.progressPanel, new GBC(1, 3, 100, 100).setIpad(5, 5)
+						.setSpan(3, 1).setFill(GridBagConstraints.HORIZONTAL));
 
 				run.loadPreferences();
 

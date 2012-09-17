@@ -35,7 +35,6 @@
 #include<gnuradar/yaml/SharedBufferHeader.hpp>
 #include<gnuradar/SharedMemory.h>
 #include<gnuradar/Constants.hpp>
-#include<gnuradar/DataParameters.hpp>
 #include<gnuradar/Units.h>
 #include<gnuradar/network/StatusServer.hpp>
 #include<gnuradar/commands/Response.pb.h>
@@ -76,20 +75,6 @@ namespace gnuradar {
 
          /////////////////////////////////////////////////////////////////////////////
          /////////////////////////////////////////////////////////////////////////////
-         void CheckForExistingFileSet ( const std::string& fileSet ) throw( std::runtime_error )
-         {
-            std::string fileName = fileSet + "." + hdf5::FILE_EXT;
-            boost::filesystem::path file ( fileName );
-
-            if ( boost::filesystem::exists ( file ) ) {
-               throw std::runtime_error( "HDF5 File set " + fileName + 
-                     " exists and cannot be overwritten. Change your "
-                     "base file set name and try again");
-            }
-         }
-
-         /////////////////////////////////////////////////////////////////////////////
-         /////////////////////////////////////////////////////////////////////////////
          void CreateSharedBuffers( const int bytesPerBuffer ) {
 
             // setup shared memory buffers
@@ -111,37 +96,6 @@ namespace gnuradar {
                // store buffer in a vector
                array_.push_back ( bufPtr );
             }
-         }
-
-         void FormatFile( gnuradar::File* file )
-         {
-            Units units;
-
-            // convert units
-            file->set_samplerate( file->samplerate() * 1e6);
-            file->set_outputrate( file->samplerate() / file->decimation());
-            file->set_ipp( file->ipp() * units(file->ippunits()).multiplier);
-            file->set_bandwidth( file->bandwidth() * units(file->bandwidthunits()).multiplier);
-            file->set_txcarrier( file->txcarrier() * 1e6);
-            
-            for ( int i = 0; i < file->channel_size(); ++i ) {
-               gnuradar::Channel* channel = file->mutable_channel(i);
-               channel->set_frequency( channel->frequency() * 
-                     units(channel->frequencyunits()).multiplier);
-               channel->set_phase( channel->phase() * 
-                     units(channel->phaseunits()).multiplier);
-            }
-
-            for ( int i = 0; i < file->window_size(); ++i ) {
-               gnuradar::Window* window = file->mutable_window(i);
-               double win_units = units(window->units()).multiplier;
-               window->set_start( window->start() * win_units * file->outputrate());
-               window->set_stop( window->stop() * win_units * file->outputrate());
-            }
-
-            // calculate and populate derived data parameters from file
-            DataParameters dp(file);
-
          }
 
          /////////////////////////////////////////////////////////////////////////////
@@ -193,16 +147,6 @@ namespace gnuradar {
                   H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
             h5File_->WriteAttrib<double> ( "RF", file->txcarrier() , 
                   H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-
-            std::cout << "HDF5 Settings " << std::endl;
-            std::cout << "INSTRUMENT " << file->receiver() << std::endl;
-            std::cout << "CHANNELS " << file->numchannels() << std::endl;
-            std::cout << "SAMPLE_RATE " << file->samplerate() << std::endl;
-            std::cout << "BANDWIDTH " << file->bandwidth() << std::endl;
-            std::cout << "DECIMATION " << file->decimation() << std::endl;
-            std::cout << "OUTPUTRATE " << file->outputrate() << std::endl;
-            std::cout << "IPP " << file->ipp() << std::endl;
-            std::cout << "RF " << file->txcarrier() << std::endl;
 
             for ( int i = 0; i < file->numchannels(); ++i ) {
 
@@ -258,7 +202,7 @@ namespace gnuradar {
          /////////////////////////////////////////////////////////////////////////////
          Start( zmq::context_t& ctx, PCModelPtr pcModel): GnuRadarCommand( "start" ), pcModel_( pcModel )
          {
-            std::string ipaddr = gr_helper::ReadConfigurationFile("status");
+            std::string ipaddr = gr_helper::GetIpAddress("status");
             statusServer_ = StatusServerPtr( new network::StatusServer( ctx, ipaddr, pcModel ) );
          }
 
@@ -280,20 +224,24 @@ namespace gnuradar {
 
                gnuradar::File* file = msg.mutable_file();
 
-               FormatFile( file );
+               // standardizes units of input file.
+               gr_helper::FormatFileFromMessage( file );
 
                gnuradar::RadarParameters* rp = file->mutable_radarparameters();
 
                // setup shared buffer header to assist in real-time processing 
-               header_ = SharedBufferHeaderPtr( new ::yml::SharedBufferHeader(
-                        constants::NUM_BUFFERS,
-                        rp->bytesperbuffer(),
-                        file->samplerate(),
-                        file->numchannels(),
-                        rp->prisperbuffer(),
-                        rp->samplesperbuffer()
-                        ));
-
+               header_ = SharedBufferHeaderPtr
+                  ( 
+                   new ::yml::SharedBufferHeader
+                   (
+                    constants::NUM_BUFFERS,
+                    rp->bytesperbuffer(),
+                    file->samplerate(),
+                    file->numchannels(),
+                    rp->prisperbuffer(),
+                    rp->samplesperbuffer()
+                   )
+                  );
 
                // read and parse configuration file->
                GnuRadarSettingsPtr settings = GetSettings( file );
@@ -302,7 +250,12 @@ namespace gnuradar {
                GnuRadarDevicePtr gnuRadarDevice( new GnuRadarDevice( settings ) );
 
                // make sure we don't have an existing data set
-               CheckForExistingFileSet ( file->basefilename() ) ;
+               if( gr_helper::HdfFileExists( file->basefilename() ))
+               {
+                  throw std::runtime_error( "HDF5 File set " + fileName + 
+                        " exists and cannot be overwritten. Change your "
+                        "base file set name and try again");
+               }
 
                // setup HDF5 attributes and file->set.
                hdf5_ = SetupHDF5( file );

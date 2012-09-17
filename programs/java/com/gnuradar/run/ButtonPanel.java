@@ -40,155 +40,142 @@ import com.gnuradar.proto.Control;
 import com.gnuradar.proto.Control.ControlMessage;
 import com.gnuradar.proto.Response.ResponseMessage;
 
-public class ButtonPanel extends JPanel
-            implements ActionListener {
-    
-    public static enum State {
-        UNCONFIGURED ( "UNCONFIGURED" ),
-        CONFIGURED ( "CONFIGURED" ),
-        VERIFIED ( "VERIFIED" ),
-        RUNNING ( "RUNNING" ),
-        STOPPED ( "STOPPED" ),
-        ERROR ( "ERROR" ),
-        CONNECTION_ERROR ( "CONNECTION ERROR" );
+public class ButtonPanel extends JPanel implements ActionListener {
 
-        private String state;
+	public static enum State {
+		UNCONFIGURED("UNCONFIGURED"), CONFIGURED("CONFIGURED"), VERIFIED(
+				"VERIFIED"), RUNNING("RUNNING"), STOPPED("STOPPED"), ERROR(
+				"ERROR"), CONNECTION_ERROR("CONNECTION ERROR");
 
-        private State ( String state ) {
-            this.state = state;
-        }
+		private String state;
 
-        public String getValue() {
-            return state;
-        }
-    }
+		private State(String state) {
+			this.state = state;
+		}
 
-    private void setState ( State next )
-    {
-        state = next;
-        // probably not the best solution, but it appears
-        // to work as long as old and new values are different.
-        // thus the 0 and 1.
-        firePropertyChange ( "state", 0, 1 );
-    }
+		public String getValue() {
+			return state;
+		}
+	}
 
-    private State state = State.UNCONFIGURED;
-    private static final long serialVersionUID = 1L;
-    private static boolean running = false;
-    private String serverMessage;
-    private JButton loadButton;
-    private JButton verifyButton;
-    private JButton runButton;
-    private File configurationFile = null;
-    private String ipAddress;
-    private Dimension buttonSize = new Dimension ( 100, 25 );
+	private void setState(State next) {
+		state = next;
+		// probably not the best solution, but it appears
+		// to work as long as old and new values are different.
+		// thus the 0 and 1.
+		firePropertyChange("state", 0, 1);
+	}
 
-    private void setComponentSize ( JComponent obj, Dimension dimension )
-    {
-        obj.setMinimumSize ( dimension );
-        obj.setPreferredSize ( dimension );
-        obj.setMaximumSize ( dimension );
-    }
+	private State state = State.UNCONFIGURED;
+	private static final long serialVersionUID = 1L;
+	private static boolean running = false;
+	private String serverMessage;
+	private JButton loadButton;
+	private JButton verifyButton;
+	private JButton runButton;
+	private File configurationFile = null;
+	private String ipAddress;
+	private Dimension buttonSize = new Dimension(100, 25);
 
-    private ResponseMessage WriteToServer ( ControlMessage controlMsg )
-    throws IOException, SecurityException
-    {
-        ZMQ.Context context = ZMQ.context(1);
-        ZMQ.Socket socket = context.socket(ZMQ.REQ);
-        
-        // send command
-        socket.connect(ipAddress);
-        socket.send(controlMsg.toByteArray(), 0);
+	private void setComponentSize(JComponent obj, Dimension dimension) {
+		obj.setMinimumSize(dimension);
+		obj.setPreferredSize(dimension);
+		obj.setMaximumSize(dimension);
+	}
 
-        // get response
-        byte[] reply = socket.recv(0);
-        socket.close();
-        
-        return ResponseMessage.parseFrom(reply);
-    }
+	private ResponseMessage WriteToServer(ControlMessage controlMsg)
+			throws IOException, SecurityException {
+		ZMQ.Context context = ZMQ.context(1);
+		ZMQ.Socket socket = context.socket(ZMQ.REQ);
 
-    public boolean loadFile()
-    {
-        boolean loaded = false;
+		// send command
+		socket.connect(ipAddress);
+		socket.send(controlMsg.toByteArray(), 0);
 
-        FileNameExtensionFilter fileFilter =
-            new FileNameExtensionFilter (
-            "USRP Configuration File", "yml" );
+		// get response
+		byte[] reply = socket.recv(0);
+		socket.close();
 
-        JFileChooser jf = new JFileChooser();
-        jf.setFileFilter ( fileFilter );
-        
-        // used to set default directory from Preferences API
-        jf.setCurrentDirectory(configurationFile);
+		return ResponseMessage.parseFrom(reply);
+	}
 
-        int loadFile = jf.showOpenDialog ( null );
+	public boolean loadFile() {
+		boolean loaded = false;
 
-        if ( loadFile == JFileChooser.APPROVE_OPTION ) {
-            loaded = true;
-            configurationFile = jf.getSelectedFile();
-            System.out.println ( "file = " + configurationFile.getAbsolutePath() );
-        }
+		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter(
+				"USRP Configuration File", "yml");
 
-        return loaded;
-    }
+		JFileChooser jf = new JFileChooser();
+		jf.setFileFilter(fileFilter);
 
-    public ButtonPanel( )
-    {
-        this.setLayout ( new BoxLayout ( this, BoxLayout.Y_AXIS ) );
+		// used to set default directory from Preferences API
+		jf.setCurrentDirectory(configurationFile);
 
-        loadButton = new JButton ( "Load" );
-        loadButton.setAlignmentX ( CENTER_ALIGNMENT );
+		int loadFile = jf.showOpenDialog(null);
 
-        setComponentSize ( loadButton, buttonSize );
-        verifyButton = new JButton ( "Verify" );
-        verifyButton.setAlignmentX ( CENTER_ALIGNMENT );
-        verifyButton.setEnabled ( false );
-        setComponentSize ( verifyButton, buttonSize );
-        runButton = new JButton ( "Run" );
-        runButton.setAlignmentX ( CENTER_ALIGNMENT );
-        runButton.setEnabled ( false );
-        setComponentSize ( runButton, buttonSize );
+		if (loadFile == JFileChooser.APPROVE_OPTION) {
+			loaded = true;
+			configurationFile = jf.getSelectedFile();
+			System.out.println("file = " + configurationFile.getAbsolutePath());
+		}
 
-        this.add ( Box.createRigidArea ( new Dimension ( 0, 5 ) ) );
-        this.add ( loadButton  );
-        this.add ( Box.createRigidArea ( new Dimension ( 0, 5 ) ) );
-        this.add ( verifyButton  );
-        this.add ( Box.createRigidArea ( new Dimension ( 0, 5 ) ) );
-        this.add ( runButton  );
-        this.add ( Box.createVerticalGlue() );
+		return loaded;
+	}
 
-        loadButton.addActionListener ( this );
-        verifyButton.addActionListener ( this );
-        runButton.addActionListener ( this );
+	public ButtonPanel() {
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        Border border = BorderFactory.createEtchedBorder( );
-        this.setBorder ( border );
-    }
+		loadButton = new JButton("Load");
+		loadButton.setAlignmentX(CENTER_ALIGNMENT);
 
-    @Override
-    public void actionPerformed ( ActionEvent e )
-    {
-        
+		setComponentSize(loadButton, buttonSize);
+		verifyButton = new JButton("Verify");
+		verifyButton.setAlignmentX(CENTER_ALIGNMENT);
+		verifyButton.setEnabled(false);
+		setComponentSize(verifyButton, buttonSize);
+		runButton = new JButton("Run");
+		runButton.setAlignmentX(CENTER_ALIGNMENT);
+		runButton.setEnabled(false);
+		setComponentSize(runButton, buttonSize);
+
+		this.add(Box.createRigidArea(new Dimension(0, 5)));
+		this.add(loadButton);
+		this.add(Box.createRigidArea(new Dimension(0, 5)));
+		this.add(verifyButton);
+		this.add(Box.createRigidArea(new Dimension(0, 5)));
+		this.add(runButton);
+		this.add(Box.createVerticalGlue());
+
+		loadButton.addActionListener(this);
+		verifyButton.addActionListener(this);
+		runButton.addActionListener(this);
+
+		Border border = BorderFactory.createEtchedBorder();
+		this.setBorder(border);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
 		if (e.getSource() == runButton) {
 
 			if (state == State.RUNNING) {
 
 				ControlMessage control_msg = ControlMessage.newBuilder()
-						.setName("stop")
-						.build();
-				
+						.setName("stop").build();
+
 				try {
-					
+
 					ResponseMessage response = WriteToServer(control_msg);
-					
+
 					if (response.getValue() == ResponseMessage.Result.OK) {
 						// set button states
 						setState(State.STOPPED);
 						runButton.setText("Run");
 						loadButton.setEnabled(true);
 					} else {
-						setState(State.ERROR);
 						serverMessage = response.getMessage();
+						setState(State.ERROR);
 					}
 
 				} catch (IOException e2) {
@@ -197,40 +184,36 @@ public class ButtonPanel extends JPanel
 				}
 			} else {
 				try {
-				
+
 					FileParser parser = new FileParser(configurationFile);
 					ConfigFile config_file = parser.getData();
-					
+
 					Control.File f = ConfigFile.Serialize(config_file);
 					ControlMessage control_msg = ControlMessage.newBuilder()
-							.setName("start")
-							.setFile(f)
-							.build();
-									
+							.setName("start").setFile(f).build();
+
 					ResponseMessage response = WriteToServer(control_msg);
-					
+
 					// clear map and read response packet after transmission.
-					if (response.getValue() == ResponseMessage.Result.OK)
-					{
-						// System.out.println("Setting state to Run");
+					if (response.getValue() == ResponseMessage.Result.OK) {
 						// set button states
 						setState(State.RUNNING);
 						runButton.setText("Stop");
 						loadButton.setEnabled(false);
 					} else {
-						setState(State.ERROR);
 						serverMessage = response.getMessage();
+						setState(State.ERROR);
 					}
 
 				} catch (IOException e1) {
-					setState(State.CONNECTION_ERROR);
 					serverMessage = e1.getMessage();
+					setState(State.CONNECTION_ERROR);
 				}
 			}
 		}
 
 		if (e.getSource() == loadButton) {
-			
+
 			verifyButton.setEnabled(false);
 			runButton.setEnabled(false);
 
@@ -240,48 +223,65 @@ public class ButtonPanel extends JPanel
 			}
 		}
 
-        if ( e.getSource() == verifyButton ) {
+		if (e.getSource() == verifyButton) {
 
-            boolean verified = false;
-            
-            // TODO: Send Verification Message and get response
-            // if successful set verified = true
-            setState ( State.VERIFIED );
-            runButton.setEnabled ( verified );
-            // TODO: Remove me
-            runButton.setEnabled ( true );
-        }
-    }
+			try {
 
-    public boolean isRunning()
-    {
-        return running;
-    }
-    public File getConfigurationFile()
-    {
-        return configurationFile;
-    }
-   
-    public void setConfigurationFile( File file )
-    {
-    	configurationFile = file;
-    }
-    
-    public State getState()
-    {
-        return state;
-    }
-    public String getServerResponse()
-    {
-    	return serverMessage;
-    }
-    public void clickLoadButton()
-    {
-        loadButton.doClick();
-    }
+				FileParser parser = new FileParser(configurationFile);
+				ConfigFile config_file = parser.getData();
 
-    public void setIpAddress( String address )
-    {
-       ipAddress = address;
-    }
+				Control.File f = ConfigFile.Serialize(config_file);
+				ControlMessage control_msg = ControlMessage.newBuilder()
+						.setName("verify").setFile(f).build();
+
+				ResponseMessage response = WriteToServer(control_msg);
+
+				// clear map and read response packet after transmission.
+				if (response.getValue() == ResponseMessage.Result.OK) {
+					setState(State.VERIFIED);
+					verifyButton.setEnabled(false);
+					runButton.setEnabled(true);
+				} else {
+					serverMessage = response.getMessage();
+					System.out.println(response.getMessage());
+					setState(State.ERROR);
+				}
+
+			} catch (SecurityException e1) {
+				serverMessage = e1.getMessage();
+				setState(State.ERROR);
+			} catch (IOException e1) {
+				serverMessage = e1.getMessage();
+				setState(State.ERROR);
+			}
+		}
+	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	public File getConfigurationFile() {
+		return configurationFile;
+	}
+
+	public void setConfigurationFile(File file) {
+		configurationFile = file;
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public String getServerResponse() {
+		return serverMessage;
+	}
+
+	public void clickLoadButton() {
+		loadButton.doClick();
+	}
+
+	public void setIpAddress(String address) {
+		ipAddress = address;
+	}
 }

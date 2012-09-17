@@ -105,8 +105,6 @@ namespace yml{
          *emitter_ << YAML::EndSeq;
          *emitter_ << YAML::EndMap;
 
-         std::cout << emitter_->c_str() << std::endl;
-
          std::ofstream fout( FILE_NAME.c_str());
          fout << emitter_->c_str();
          fout.close();

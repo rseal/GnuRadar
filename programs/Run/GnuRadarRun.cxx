@@ -26,6 +26,7 @@
 #include<gnuradar/CommandList.hpp>
 #include<gnuradar/commands/Stop.hpp>
 #include<gnuradar/commands/Start.hpp>
+#include<gnuradar/commands/Verify.hpp>
 #include<gnuradar/utils/GrHelper.hpp>
 
 using namespace boost;
@@ -47,12 +48,14 @@ int main ( )
    // Create various command objects.
    CommandPtr startCommand  = command::CommandPtr ( new command::Start ( ctx, pcModel ) );
    CommandPtr stopCommand   = command::CommandPtr ( new command::Stop ( pcModel ) );
+   CommandPtr verifyCommand = command::CommandPtr ( new command::Verify() );
 
    // Add commands to the command list.
    commandList.Add ( startCommand );
    commandList.Add ( stopCommand );
+   commandList.Add ( verifyCommand );
 
-   std::string ipAddr = gr_helper::ReadConfigurationFile("control");
+   std::string ipAddr = gr_helper::GetIpAddress("control");
 
    // Setup a network socket to listen for commands.
    network::RequestServer req_server( ctx, ipAddr, commandList );

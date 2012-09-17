@@ -78,7 +78,6 @@ public class StatusThread implements Runnable {
 			this.statusMsg = null;
 			
 			byte[] status = socket.recv(0);
-			System.out.println(status.toString());
 			try {
 				this.statusMsg = StatusMessage.parseFrom(status);
 			} catch (InvalidProtocolBufferException e) {
@@ -88,7 +87,6 @@ public class StatusThread implements Runnable {
 			
 			if ( this.statusMsg != null )
 			{				
-				System.out.println("Status Event");
 				processEvent( new StatusEvent(this.statusMsg) );
 			}
 			else

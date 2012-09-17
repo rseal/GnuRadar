@@ -32,8 +32,6 @@ void ConsumerThread::Run()
          this->Pause( *BaseThread::condition_, *BaseThread::mutex_ );
       }
 
-		std::cout << "Buffer address = " << (long)bufferManager_->ReadFrom() << std::endl;
-
       // write an HDF5 table to disk
 		h5File_->CreateTable ( cpx_.GetRef(), space_ );
 		h5File_->WriteTStrAttrib ( "TIME", time_.GetTime() );

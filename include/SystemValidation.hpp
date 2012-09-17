@@ -20,55 +20,63 @@
 #include<gnuradar/GnuRadarTypes.hpp>
 #include<gnuradar/commands/Control.pb.h>
 #include<boost/shared_ptr.hpp>
+#include<boost/lexical_cast.hpp>
 #include<iostream>
 #include<stdexcept>
 
-struct WindowValidator {
+struct SystemValidation {
 
-	typedef std::vector<int> MeasuredWindowVector;
+	typedef std::vector<int> WindowVector;
 	typedef std::vector<gnuradar::iq_t> IqVector;
 	typedef IqVector::const_iterator IqIterator;
 
 	IqVector buffer_;
 	IqIterator bufferIter_;
-	MeasuredWindowVector measuredWindows_;
-	gnuradar::File file_;
+	WindowVector measuredWindows_;
+	WindowVector windowWidth_;
+	gnuradar::File* file_;
 
 	// determines the number of samples between data tags
 	// and repositions the iterator.
-	const int getCount() {
+	const int getCount() 
+	{
 		int count = 0;
-		do {
+		do
+	  	{
 			++count;
 			++bufferIter_;
-		} while (
-				*bufferIter_ != gnuradar::DATA_TAG &&
-				bufferIter_ != buffer_.end()
-				);
+		} while ( *bufferIter_ != gnuradar::DATA_TAG && bufferIter_ != buffer_.end());
 
 		return count + 1;
 	}
 
 	// compares the determined window sizes to the
 	// sizes given in the configuration file.
-	const bool Compare() {
+	const bool Compare()
+	{
+
 		bool result = true;
 
-		for ( int i = 0; i < file_.window_size(); ++i ) {
-			if ( file_.window(i).width() != measuredWindows_[i] ) {
+		for(int i=0; i<file_->window_size(); ++i)
+		{
+			double start = file_->window(i).start();
+			double stop = file_->window(i).stop();
+			int width = ceil(stop-start);
+			windowWidth_.push_back(width);
+
+			if( width != measuredWindows_[i] )
+			{
 				result = false;
 				break;
 			}
 		}
+
 		return result;
 	}
 
 	public:
-	const bool Validate ( 
-			const std::vector<gnuradar::iq_t>& buffer, 
-			const gnuradar::File& file
-			)
-  	{
+	const bool Validate ( const std::vector<gnuradar::iq_t>& buffer, gnuradar::File* file)
+	{
 		file_ = file;
 		buffer_ = buffer;
 		bufferIter_ = buffer_.begin();
@@ -78,32 +86,36 @@ struct WindowValidator {
 
 		if ( bufferIter_ == buffer_.end() ) {
 			throw std::runtime_error (
-					"WindowValidator: Could not locate data tag connections.\n"
+					"SystemValidation: Could not locate data tag connections.\n"
 					);
 		}
 
 		++bufferIter_;
 
 		// store a sample count for each window defined by the window vector.
-		for ( int i = 0; i < file.window_size(); ++i )
+		for ( int i = 0; i < file_->window_size(); ++i )
 			measuredWindows_.push_back ( getCount() );
 
 		return Compare();
 	}
 
-	void PrintResults ( std::ostream& outputStream ) {
-
-		outputStream << " window " << " configured " << "   " << " measured " << std::endl;
-		for ( int i = 0; i < file_.window_size(); ++i ) {
-			std::cout
-				<< "   "
-				<< i << "       "
-				<< file_.window(i).width()
-				<< "           "
-				<< measuredWindows_[i]
-				<< std::endl;
+	std::string GetResults ( ) 
+	{
+		std::string result;
+		for ( int i = 0; i < file_->window_size(); ++i ) 
+		{
+			double start = file_->window(i).start();
+			double stop = file_->window(i).stop();
+			result+= "window   : " + boost::lexical_cast<string>(i) + "\n";
+			result+= "start    : " + boost::lexical_cast<string>(start) + "\n";
+			result+= "stop     : " + boost::lexical_cast<string>(stop) + "\n";
+			result+=	"width    : " + boost::lexical_cast<string>(windowWidth_[i]) + "\n";
+			result+= "measured : " + boost::lexical_cast<string>(measuredWindows_[i]) + "\n";
 		}
+
+		return result;
 	}
+
 };
 
 #endif

@@ -38,6 +38,22 @@ def install_symlinks(hdr):
    except Exception as ex:
       print(ex)
 
+   sym_path =  os.path.abspath('usrp/include')
+
+   if not os.geteuid()==0:
+      sys.exit('\nERROR: Root Acces is required to execute this script.\n')
+
+   dst_dir = '/usr/local/include/usrp'
+
+   remove_files(dst_dir)
+
+   try:
+      print('Creating Directory Tree...')
+      os.symlink(sym_path,dst_dir)
+      print('Header installation complete.')
+   except Exception as ex:
+      print(ex)
+
 ################################################################################
 # Installs a copy of header files in /usr/local/include
 ################################################################################
@@ -48,6 +64,18 @@ def install_headers(hdr):
 
    src_dir = 'include'
    dst_dir = '/usr/local/include/gnuradar'
+
+   remove_files(dst_dir)
+
+   try:
+      print('Creating Directory Tree...')
+      shutil.copytree(src_dir,dst_dir,symlinks=True)
+      print('Header installation complete.')
+   except Exception as ex:
+      print(ex)
+
+   src_dir = 'usrp/include'
+   dst_dir = '/usr/local/include/usrp'
 
    remove_files(dst_dir)
 

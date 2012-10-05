@@ -33,7 +33,8 @@ Dependencies:
 4. HDF5 library.
 5. protobuf ( i.e google protocol buffers )
 6. zeromq ( a.k.a 0MQ or zmq )
-7. local deps in github repository ( see below ).
+7. yaml-cpp parser.
+8. local deps in github repository ( see below ).
 
 Local Dependency installation:
 

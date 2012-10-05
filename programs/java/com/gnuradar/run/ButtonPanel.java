@@ -208,6 +208,11 @@ public class ButtonPanel extends JPanel implements ActionListener {
 				} catch (IOException e1) {
 					serverMessage = e1.getMessage();
 					setState(State.CONNECTION_ERROR);
+				} catch (NullPointerException e2) {
+					serverMessage = "Invalid Configuration Detected:"
+							+ " Did you define receive windows in your configuration?";
+					setState(State.ERROR);
+					verifyButton.setEnabled(false);
 				}
 			}
 		}
@@ -253,6 +258,11 @@ public class ButtonPanel extends JPanel implements ActionListener {
 			} catch (IOException e1) {
 				serverMessage = e1.getMessage();
 				setState(State.ERROR);
+			} catch (NullPointerException e2) {
+				serverMessage = "Invalid Configuration Detected:"
+						+ " Did you define receive windows in your configuration?";
+				setState(State.ERROR);
+				verifyButton.setEnabled(false);
 			}
 		}
 	}

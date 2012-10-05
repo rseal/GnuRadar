@@ -67,6 +67,7 @@ public class ConfigFile implements Cloneable{
 	public void setWindows( List<Window> windows) { this.windows = windows; }
 	
 	public static File Serialize( ConfigFile file )
+	throws NullPointerException
 	{
 		
 		List<Control.Channel> channels = new LinkedList<Control.Channel>();

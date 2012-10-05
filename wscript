@@ -150,7 +150,7 @@ def build(bld):
 
    bld.install_files(
          '${PREFIX}/gnuradar', 
-         bld.path.ant_glob('scripts/*.xml')
+         bld.path.ant_glob('scripts/*.yml')
    )
 
    bld.install_files(

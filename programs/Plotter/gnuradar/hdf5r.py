@@ -5,7 +5,7 @@ class Reader:
 
    def __getRoot(self):
 
-      HEADER_FILE = '/dev/shm/GnuRadarHeader.xml'
+      HEADER_FILE = '/dev/shm/GnuRadarHeader.yml'
       root = ET.parse( HEADER_FILE )
       return root
 

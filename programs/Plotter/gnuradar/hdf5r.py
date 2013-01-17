@@ -1,53 +1,36 @@
-import xml.etree.ElementTree as ET
+import yaml
 import numpy as np
 
 class Reader:
 
-   def __getRoot(self):
-
-      HEADER_FILE = '/dev/shm/GnuRadarHeader.yml'
-      root = ET.parse( HEADER_FILE )
-      return root
-
-   def __getElement( self, root, name ):
-      return int( root.find(name).text )
-
-   def __getElements( self, root, name ):
-      return root.findall(name)
-
    def __init__(self):
-
-      root = self.__getRoot()
-      self.sampleRate = self.__getElement(root, 'sample_rate')
-      self.channels = self.__getElement(root, 'channels')
-      ipps = self.__getElement(root, 'ipps')
-      samples = self.__getElement(root, 'samples')
-      self.windows = self.__getElements(root, 'rx_win')
+      self.HEADER_FILE = '/dev/shm/GnuRadarHeader.yml'
+      self.BUFFER_PREFIX = '/dev/shm/GnuRadar'
+      self.BUFFER_EXT = '.buf'
+      fid = open(HEADER_FILE)
+      self.yml = yaml.load(fid)
+      fid.close()
       self.dType = np.dtype([('real', np.int16), ('imag', np.int16)])
-      self.shape = (ipps, samples)
 
    def getBuffer(self):
-
-      root = self.__getRoot()
-      index = int( self.__getElement( root, 'tail' ) )
-      fileName = '/dev/shm/GnuRadar' + str(index) + '.buf'
-      fd = 0
-      fd = open( fileName, 'rb' )
+      fileName = self.BUFFER_PREFIX + str(self.yml['tail']) + self.BUFFER_EXT
+      fid = open( fileName, 'rb' )
       data = np.fromfile( fd, dtype=self.dType ).reshape(self.shape) 
+      fid.close()
       return data
 
    def getWindows(self):
-      return self.windows
+      return self.yml['rx_win']
 
    def getSampleRate(self):
-      return self.sampleRate
+      return self.yml['sample_rate']
 
    def getChannels(self):
-      return self.channels
+      return self.yml['channels']
 
    def getSamples(self):
-      return self.shape[1]
+      return self.yml['samples']
 
    def getIpps(self):
-      return self.shape[0]
+      return self.yml['ipps']
 

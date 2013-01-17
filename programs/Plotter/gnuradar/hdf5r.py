@@ -7,7 +7,7 @@ class Reader:
       self.HEADER_FILE = '/dev/shm/GnuRadarHeader.yml'
       self.BUFFER_PREFIX = '/dev/shm/GnuRadar'
       self.BUFFER_EXT = '.buf'
-      fid = open(HEADER_FILE)
+      fid = open(self.HEADER_FILE)
       self.yml = yaml.load(fid)
       fid.close()
       self.dType = np.dtype([('real', np.int16), ('imag', np.int16)])

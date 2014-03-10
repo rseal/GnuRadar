@@ -4,6 +4,7 @@ usrpSVN/
 *~
 *.swp
 *.pyc
+*.bak
 protobuf/cpp
 protobuf/java
 programs/Analyze/binary.dat

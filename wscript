@@ -165,8 +165,8 @@ def build(bld):
 
    bld(
         rule   = 'cp ${SRC} ${TGT}',
-        source = bld.path.ant_glob('programs/java/com/lib/protobuf-java-2.4.1.jar'),
-        target ='programs/java/protobuf-java-2.4.1.jar'
+        source = bld.path.ant_glob('programs/java/com/lib/protobuf-java-2.5.0.jar'),
+        target ='programs/java/protobuf-java-2.5.0.jar'
     )
 
 

@@ -4,6 +4,7 @@
 #include<fstream>
 #include<boost/filesystem.hpp>
 #include<yaml-cpp/yaml.h>
+#include<gnuradar/Units.h>
 #include<gnuradar/Constants.hpp>
 #include<gnuradar/commands/Control.pb.h>
 #include<hdf5r/HDF5.hpp>
@@ -17,11 +18,8 @@ namespace gr_helper{
       std::string ip_addr;
 
       try{
-         std::ifstream fin( gnuradar::constants::SERVER_CONFIGURATION_FILE.c_str() );
-         YAML::Parser parser(fin);
-         YAML::Node doc;
-         parser.GetNextDocument(doc);
-         doc[networkType]  >> ip_addr;
+         YAML::Node node = YAML::LoadFile(gnuradar::constants::SERVER_CONFIGURATION_FILE);
+         ip_addr = node[networkType].as<std::string>();
       }
       catch( YAML::ParserException& e ) 
       {

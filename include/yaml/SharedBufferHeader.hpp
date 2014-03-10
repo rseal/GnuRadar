@@ -36,7 +36,7 @@ namespace yml{
    struct SharedBufferHeader{
 
       typedef std::vector<RxWindow> WindowVec;
-      typedef boost::shared_ptr<YAML::Emitter> EmitterPtr;
+      typedef boost::shared_ptr<YAML::Node> NodePtr;
       WindowVec windows_;
 
       const std::string FILE_NAME;
@@ -47,23 +47,19 @@ namespace yml{
       const float SAMPLE_RATE;
       const int CHANNELS;
 
-      EmitterPtr emitter_;
+      NodePtr node_;
       
 
       void CreateEmitter(int head, int tail, int depth)
       {
-         emitter_.reset();
-         emitter_ = EmitterPtr( new YAML::Emitter() );
-         *emitter_ << YAML::BeginMap;
-         *emitter_ << YAML::Key << "head"        << YAML::Value << head;
-         *emitter_ << YAML::Key << "tail"        << YAML::Value << tail;
-         *emitter_ << YAML::Key << "depth"       << YAML::Value << depth;
-         *emitter_ << YAML::Key << "buffers"     << YAML::Value << BUFFERS;
-         *emitter_ << YAML::Key << "bytes"       << YAML::Value << BYTES;
-         *emitter_ << YAML::Key << "sample_rate" << YAML::Value << SAMPLE_RATE;
-         *emitter_ << YAML::Key << "channels"    << YAML::Value << CHANNELS;
-         *emitter_ << YAML::Key << "ipps"        << YAML::Value << IPPS;
-         *emitter_ << YAML::Key << "samples"     << YAML::Value << SAMPLES;
+         node_ = NodePtr( new YAML::Node() );
+         (*node_)["head"]=head;
+         (*node_)["tail"]=tail;
+         (*node_)["depth"]=BUFFERS;
+         (*node_)["bytes"]=SAMPLE_RATE;
+         (*node_)["channels"]=CHANNELS;
+         (*node_)["ipps"]=IPPS;
+         (*node_)["samples"]=SAMPLES;
       }
 
       public:
@@ -88,25 +84,18 @@ namespace yml{
       {
          CreateEmitter(head,tail,depth);
 
-         *emitter_ << YAML::Key << "rx_win";
-         *emitter_ << YAML::Value << YAML::BeginSeq;
-
          for( int i=0; i<windows_.size(); ++i)
          {
-            *emitter_ << YAML::BeginMap;
-            *emitter_ << YAML::Key << "name";
-            *emitter_ << YAML::Value << windows_[i].name;
-            *emitter_ << YAML::Key << "start";
-            *emitter_ << YAML::Value << windows_[i].start;
-            *emitter_ << YAML::Key << "stop";
-            *emitter_ << YAML::Value << windows_[i].stop;
-            *emitter_ << YAML::EndMap;
+            YAML::Node node;
+            node["name"] = windows_[i].name;
+            node["start"] = windows_[i].start;
+            node["stop"] = windows_[i].stop;
+
+            (*node_)["rx_win"].push_back(node);
          }
-         *emitter_ << YAML::EndSeq;
-         *emitter_ << YAML::EndMap;
 
          std::ofstream fout( FILE_NAME.c_str());
-         fout << emitter_->c_str();
+         fout << (*node_);
          fout.close();
 
       }

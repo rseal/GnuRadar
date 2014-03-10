@@ -10,90 +10,210 @@ public final class Control {
   }
   public interface ControlMessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required string name = 1;
+    /**
+     * <code>required string name = 1;</code>
+     */
     boolean hasName();
-    String getName();
-    
+    /**
+     * <code>required string name = 1;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <code>required string name = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
     // optional .gnuradar.File file = 2;
+    /**
+     * <code>optional .gnuradar.File file = 2;</code>
+     */
     boolean hasFile();
+    /**
+     * <code>optional .gnuradar.File file = 2;</code>
+     */
     com.gnuradar.proto.Control.File getFile();
+    /**
+     * <code>optional .gnuradar.File file = 2;</code>
+     */
     com.gnuradar.proto.Control.FileOrBuilder getFileOrBuilder();
   }
+  /**
+   * Protobuf type {@code gnuradar.ControlMessage}
+   */
   public static final class ControlMessage extends
       com.google.protobuf.GeneratedMessage
       implements ControlMessageOrBuilder {
     // Use ControlMessage.newBuilder() to construct.
-    private ControlMessage(Builder builder) {
+    private ControlMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ControlMessage(boolean noInit) {}
-    
+    private ControlMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ControlMessage defaultInstance;
     public static ControlMessage getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ControlMessage getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ControlMessage(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              name_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              com.gnuradar.proto.Control.File.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = file_.toBuilder();
+              }
+              file_ = input.readMessage(com.gnuradar.proto.Control.File.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(file_);
+                file_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.gnuradar.proto.Control.internal_static_gnuradar_ControlMessage_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.gnuradar.proto.Control.internal_static_gnuradar_ControlMessage_fieldAccessorTable;
+      return com.gnuradar.proto.Control.internal_static_gnuradar_ControlMessage_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.gnuradar.proto.Control.ControlMessage.class, com.gnuradar.proto.Control.ControlMessage.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<ControlMessage> PARSER =
+        new com.google.protobuf.AbstractParser<ControlMessage>() {
+      public ControlMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ControlMessage(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ControlMessage> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
     private java.lang.Object name_;
+    /**
+     * <code>required string name = 1;</code>
+     */
     public boolean hasName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public String getName() {
+    /**
+     * <code>required string name = 1;</code>
+     */
+    public java.lang.String getName() {
       java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           name_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getNameBytes() {
+    /**
+     * <code>required string name = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
       java.lang.Object ref = name_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         name_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // optional .gnuradar.File file = 2;
     public static final int FILE_FIELD_NUMBER = 2;
     private com.gnuradar.proto.Control.File file_;
+    /**
+     * <code>optional .gnuradar.File file = 2;</code>
+     */
     public boolean hasFile() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>optional .gnuradar.File file = 2;</code>
+     */
     public com.gnuradar.proto.Control.File getFile() {
       return file_;
     }
+    /**
+     * <code>optional .gnuradar.File file = 2;</code>
+     */
     public com.gnuradar.proto.Control.FileOrBuilder getFileOrBuilder() {
       return file_;
     }
-    
+
     private void initFields() {
       name_ = "";
       file_ = com.gnuradar.proto.Control.File.getDefaultInstance();
@@ -102,7 +222,7 @@ public final class Control {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasName()) {
         memoizedIsInitialized = 0;
         return false;
@@ -116,7 +236,7 @@ public final class Control {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -128,12 +248,12 @@ public final class Control {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -147,94 +267,83 @@ public final class Control {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static com.gnuradar.proto.Control.ControlMessage parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static com.gnuradar.proto.Control.ControlMessage parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.gnuradar.proto.Control.ControlMessage parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static com.gnuradar.proto.Control.ControlMessage parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.gnuradar.proto.Control.ControlMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static com.gnuradar.proto.Control.ControlMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static com.gnuradar.proto.Control.ControlMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static com.gnuradar.proto.Control.ControlMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static com.gnuradar.proto.Control.ControlMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static com.gnuradar.proto.Control.ControlMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(com.gnuradar.proto.Control.ControlMessage prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code gnuradar.ControlMessage}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements com.gnuradar.proto.Control.ControlMessageOrBuilder {
@@ -242,18 +351,21 @@ public final class Control {
           getDescriptor() {
         return com.gnuradar.proto.Control.internal_static_gnuradar_ControlMessage_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.gnuradar.proto.Control.internal_static_gnuradar_ControlMessage_fieldAccessorTable;
+        return com.gnuradar.proto.Control.internal_static_gnuradar_ControlMessage_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.gnuradar.proto.Control.ControlMessage.class, com.gnuradar.proto.Control.ControlMessage.Builder.class);
       }
-      
+
       // Construct using com.gnuradar.proto.Control.ControlMessage.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -265,7 +377,7 @@ public final class Control {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         name_ = "";
@@ -278,20 +390,20 @@ public final class Control {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.gnuradar.proto.Control.ControlMessage.getDescriptor();
+        return com.gnuradar.proto.Control.internal_static_gnuradar_ControlMessage_descriptor;
       }
-      
+
       public com.gnuradar.proto.Control.ControlMessage getDefaultInstanceForType() {
         return com.gnuradar.proto.Control.ControlMessage.getDefaultInstance();
       }
-      
+
       public com.gnuradar.proto.Control.ControlMessage build() {
         com.gnuradar.proto.Control.ControlMessage result = buildPartial();
         if (!result.isInitialized()) {
@@ -299,17 +411,7 @@ public final class Control {
         }
         return result;
       }
-      
-      private com.gnuradar.proto.Control.ControlMessage buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        com.gnuradar.proto.Control.ControlMessage result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public com.gnuradar.proto.Control.ControlMessage buildPartial() {
         com.gnuradar.proto.Control.ControlMessage result = new com.gnuradar.proto.Control.ControlMessage(this);
         int from_bitField0_ = bitField0_;
@@ -330,7 +432,7 @@ public final class Control {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.gnuradar.proto.Control.ControlMessage) {
           return mergeFrom((com.gnuradar.proto.Control.ControlMessage)other);
@@ -339,11 +441,13 @@ public final class Control {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(com.gnuradar.proto.Control.ControlMessage other) {
         if (other == com.gnuradar.proto.Control.ControlMessage.getDefaultInstance()) return this;
         if (other.hasName()) {
-          setName(other.getName());
+          bitField0_ |= 0x00000001;
+          name_ = other.name_;
+          onChanged();
         }
         if (other.hasFile()) {
           mergeFile(other.getFile());
@@ -351,7 +455,7 @@ public final class Control {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasName()) {
           
@@ -365,66 +469,69 @@ public final class Control {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              name_ = input.readBytes();
-              break;
-            }
-            case 18: {
-              com.gnuradar.proto.Control.File.Builder subBuilder = com.gnuradar.proto.Control.File.newBuilder();
-              if (hasFile()) {
-                subBuilder.mergeFrom(getFile());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setFile(subBuilder.buildPartial());
-              break;
-            }
+        com.gnuradar.proto.Control.ControlMessage parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.gnuradar.proto.Control.ControlMessage) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required string name = 1;
       private java.lang.Object name_ = "";
+      /**
+       * <code>required string name = 1;</code>
+       */
       public boolean hasName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getName() {
+      /**
+       * <code>required string name = 1;</code>
+       */
+      public java.lang.String getName() {
         java.lang.Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           name_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setName(String value) {
+      /**
+       * <code>required string name = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string name = 1;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -433,25 +540,42 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string name = 1;</code>
+       */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000001);
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
-      void setName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000001;
+      /**
+       * <code>required string name = 1;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         name_ = value;
         onChanged();
+        return this;
       }
-      
+
       // optional .gnuradar.File file = 2;
       private com.gnuradar.proto.Control.File file_ = com.gnuradar.proto.Control.File.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.gnuradar.proto.Control.File, com.gnuradar.proto.Control.File.Builder, com.gnuradar.proto.Control.FileOrBuilder> fileBuilder_;
+      /**
+       * <code>optional .gnuradar.File file = 2;</code>
+       */
       public boolean hasFile() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>optional .gnuradar.File file = 2;</code>
+       */
       public com.gnuradar.proto.Control.File getFile() {
         if (fileBuilder_ == null) {
           return file_;
@@ -459,6 +583,9 @@ public final class Control {
           return fileBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .gnuradar.File file = 2;</code>
+       */
       public Builder setFile(com.gnuradar.proto.Control.File value) {
         if (fileBuilder_ == null) {
           if (value == null) {
@@ -472,6 +599,9 @@ public final class Control {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>optional .gnuradar.File file = 2;</code>
+       */
       public Builder setFile(
           com.gnuradar.proto.Control.File.Builder builderForValue) {
         if (fileBuilder_ == null) {
@@ -483,6 +613,9 @@ public final class Control {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>optional .gnuradar.File file = 2;</code>
+       */
       public Builder mergeFile(com.gnuradar.proto.Control.File value) {
         if (fileBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
@@ -499,6 +632,9 @@ public final class Control {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>optional .gnuradar.File file = 2;</code>
+       */
       public Builder clearFile() {
         if (fileBuilder_ == null) {
           file_ = com.gnuradar.proto.Control.File.getDefaultInstance();
@@ -509,11 +645,17 @@ public final class Control {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
+      /**
+       * <code>optional .gnuradar.File file = 2;</code>
+       */
       public com.gnuradar.proto.Control.File.Builder getFileBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
         return getFileFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .gnuradar.File file = 2;</code>
+       */
       public com.gnuradar.proto.Control.FileOrBuilder getFileOrBuilder() {
         if (fileBuilder_ != null) {
           return fileBuilder_.getMessageOrBuilder();
@@ -521,6 +663,9 @@ public final class Control {
           return file_;
         }
       }
+      /**
+       * <code>optional .gnuradar.File file = 2;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           com.gnuradar.proto.Control.File, com.gnuradar.proto.Control.File.Builder, com.gnuradar.proto.Control.FileOrBuilder> 
           getFileFieldBuilder() {
@@ -534,602 +679,1183 @@ public final class Control {
         }
         return fileBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:gnuradar.ControlMessage)
     }
-    
+
     static {
       defaultInstance = new ControlMessage(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:gnuradar.ControlMessage)
   }
-  
+
   public interface FileOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required string version = 1;
+    /**
+     * <code>required string version = 1;</code>
+     */
     boolean hasVersion();
-    String getVersion();
-    
+    /**
+     * <code>required string version = 1;</code>
+     */
+    java.lang.String getVersion();
+    /**
+     * <code>required string version = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getVersionBytes();
+
     // required float sampleRate = 2;
+    /**
+     * <code>required float sampleRate = 2;</code>
+     */
     boolean hasSampleRate();
+    /**
+     * <code>required float sampleRate = 2;</code>
+     */
     float getSampleRate();
-    
+
     // required int32 decimation = 3;
+    /**
+     * <code>required int32 decimation = 3;</code>
+     */
     boolean hasDecimation();
+    /**
+     * <code>required int32 decimation = 3;</code>
+     */
     int getDecimation();
-    
+
     // required int32 numChannels = 4;
+    /**
+     * <code>required int32 numChannels = 4;</code>
+     */
     boolean hasNumChannels();
+    /**
+     * <code>required int32 numChannels = 4;</code>
+     */
     int getNumChannels();
-    
+
     // required float bandwidth = 5;
+    /**
+     * <code>required float bandwidth = 5;</code>
+     */
     boolean hasBandwidth();
+    /**
+     * <code>required float bandwidth = 5;</code>
+     */
     float getBandwidth();
-    
+
     // required string bandwidthUnits = 6;
+    /**
+     * <code>required string bandwidthUnits = 6;</code>
+     */
     boolean hasBandwidthUnits();
-    String getBandwidthUnits();
-    
+    /**
+     * <code>required string bandwidthUnits = 6;</code>
+     */
+    java.lang.String getBandwidthUnits();
+    /**
+     * <code>required string bandwidthUnits = 6;</code>
+     */
+    com.google.protobuf.ByteString
+        getBandwidthUnitsBytes();
+
     // required int32 numWindows = 7;
+    /**
+     * <code>required int32 numWindows = 7;</code>
+     */
     boolean hasNumWindows();
+    /**
+     * <code>required int32 numWindows = 7;</code>
+     */
     int getNumWindows();
-    
+
     // required float ipp = 8;
+    /**
+     * <code>required float ipp = 8;</code>
+     */
     boolean hasIpp();
+    /**
+     * <code>required float ipp = 8;</code>
+     */
     float getIpp();
-    
+
     // required string ippUnits = 9;
+    /**
+     * <code>required string ippUnits = 9;</code>
+     */
     boolean hasIppUnits();
-    String getIppUnits();
-    
+    /**
+     * <code>required string ippUnits = 9;</code>
+     */
+    java.lang.String getIppUnits();
+    /**
+     * <code>required string ippUnits = 9;</code>
+     */
+    com.google.protobuf.ByteString
+        getIppUnitsBytes();
+
     // required float txCarrier = 10;
+    /**
+     * <code>required float txCarrier = 10;</code>
+     */
     boolean hasTxCarrier();
+    /**
+     * <code>required float txCarrier = 10;</code>
+     */
     float getTxCarrier();
-    
+
     // required string organization = 11;
+    /**
+     * <code>required string organization = 11;</code>
+     */
     boolean hasOrganization();
-    String getOrganization();
-    
+    /**
+     * <code>required string organization = 11;</code>
+     */
+    java.lang.String getOrganization();
+    /**
+     * <code>required string organization = 11;</code>
+     */
+    com.google.protobuf.ByteString
+        getOrganizationBytes();
+
     // required string site = 12;
+    /**
+     * <code>required string site = 12;</code>
+     */
     boolean hasSite();
-    String getSite();
-    
+    /**
+     * <code>required string site = 12;</code>
+     */
+    java.lang.String getSite();
+    /**
+     * <code>required string site = 12;</code>
+     */
+    com.google.protobuf.ByteString
+        getSiteBytes();
+
     // required string user = 13;
+    /**
+     * <code>required string user = 13;</code>
+     */
     boolean hasUser();
-    String getUser();
-    
+    /**
+     * <code>required string user = 13;</code>
+     */
+    java.lang.String getUser();
+    /**
+     * <code>required string user = 13;</code>
+     */
+    com.google.protobuf.ByteString
+        getUserBytes();
+
     // required string radar = 14;
+    /**
+     * <code>required string radar = 14;</code>
+     */
     boolean hasRadar();
-    String getRadar();
-    
+    /**
+     * <code>required string radar = 14;</code>
+     */
+    java.lang.String getRadar();
+    /**
+     * <code>required string radar = 14;</code>
+     */
+    com.google.protobuf.ByteString
+        getRadarBytes();
+
     // required string receiver = 15;
+    /**
+     * <code>required string receiver = 15;</code>
+     */
     boolean hasReceiver();
-    String getReceiver();
-    
+    /**
+     * <code>required string receiver = 15;</code>
+     */
+    java.lang.String getReceiver();
+    /**
+     * <code>required string receiver = 15;</code>
+     */
+    com.google.protobuf.ByteString
+        getReceiverBytes();
+
     // required string fpgaImage = 16;
+    /**
+     * <code>required string fpgaImage = 16;</code>
+     */
     boolean hasFpgaImage();
-    String getFpgaImage();
-    
+    /**
+     * <code>required string fpgaImage = 16;</code>
+     */
+    java.lang.String getFpgaImage();
+    /**
+     * <code>required string fpgaImage = 16;</code>
+     */
+    com.google.protobuf.ByteString
+        getFpgaImageBytes();
+
     // required string baseFileName = 17;
+    /**
+     * <code>required string baseFileName = 17;</code>
+     */
     boolean hasBaseFileName();
-    String getBaseFileName();
-    
+    /**
+     * <code>required string baseFileName = 17;</code>
+     */
+    java.lang.String getBaseFileName();
+    /**
+     * <code>required string baseFileName = 17;</code>
+     */
+    com.google.protobuf.ByteString
+        getBaseFileNameBytes();
+
     // optional float outputRate = 18;
+    /**
+     * <code>optional float outputRate = 18;</code>
+     */
     boolean hasOutputRate();
+    /**
+     * <code>optional float outputRate = 18;</code>
+     */
     float getOutputRate();
-    
+
     // repeated .gnuradar.Channel channel = 19;
+    /**
+     * <code>repeated .gnuradar.Channel channel = 19;</code>
+     */
     java.util.List<com.gnuradar.proto.Control.Channel> 
         getChannelList();
+    /**
+     * <code>repeated .gnuradar.Channel channel = 19;</code>
+     */
     com.gnuradar.proto.Control.Channel getChannel(int index);
+    /**
+     * <code>repeated .gnuradar.Channel channel = 19;</code>
+     */
     int getChannelCount();
+    /**
+     * <code>repeated .gnuradar.Channel channel = 19;</code>
+     */
     java.util.List<? extends com.gnuradar.proto.Control.ChannelOrBuilder> 
         getChannelOrBuilderList();
+    /**
+     * <code>repeated .gnuradar.Channel channel = 19;</code>
+     */
     com.gnuradar.proto.Control.ChannelOrBuilder getChannelOrBuilder(
         int index);
-    
+
     // repeated .gnuradar.Window window = 20;
+    /**
+     * <code>repeated .gnuradar.Window window = 20;</code>
+     */
     java.util.List<com.gnuradar.proto.Control.Window> 
         getWindowList();
+    /**
+     * <code>repeated .gnuradar.Window window = 20;</code>
+     */
     com.gnuradar.proto.Control.Window getWindow(int index);
+    /**
+     * <code>repeated .gnuradar.Window window = 20;</code>
+     */
     int getWindowCount();
+    /**
+     * <code>repeated .gnuradar.Window window = 20;</code>
+     */
     java.util.List<? extends com.gnuradar.proto.Control.WindowOrBuilder> 
         getWindowOrBuilderList();
+    /**
+     * <code>repeated .gnuradar.Window window = 20;</code>
+     */
     com.gnuradar.proto.Control.WindowOrBuilder getWindowOrBuilder(
         int index);
-    
+
     // optional .gnuradar.RadarParameters radarParameters = 21;
+    /**
+     * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+     */
     boolean hasRadarParameters();
+    /**
+     * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+     */
     com.gnuradar.proto.Control.RadarParameters getRadarParameters();
+    /**
+     * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+     */
     com.gnuradar.proto.Control.RadarParametersOrBuilder getRadarParametersOrBuilder();
   }
+  /**
+   * Protobuf type {@code gnuradar.File}
+   */
   public static final class File extends
       com.google.protobuf.GeneratedMessage
       implements FileOrBuilder {
     // Use File.newBuilder() to construct.
-    private File(Builder builder) {
+    private File(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private File(boolean noInit) {}
-    
+    private File(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final File defaultInstance;
     public static File getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public File getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private File(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              version_ = input.readBytes();
+              break;
+            }
+            case 21: {
+              bitField0_ |= 0x00000002;
+              sampleRate_ = input.readFloat();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              decimation_ = input.readInt32();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              numChannels_ = input.readInt32();
+              break;
+            }
+            case 45: {
+              bitField0_ |= 0x00000010;
+              bandwidth_ = input.readFloat();
+              break;
+            }
+            case 50: {
+              bitField0_ |= 0x00000020;
+              bandwidthUnits_ = input.readBytes();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000040;
+              numWindows_ = input.readInt32();
+              break;
+            }
+            case 69: {
+              bitField0_ |= 0x00000080;
+              ipp_ = input.readFloat();
+              break;
+            }
+            case 74: {
+              bitField0_ |= 0x00000100;
+              ippUnits_ = input.readBytes();
+              break;
+            }
+            case 85: {
+              bitField0_ |= 0x00000200;
+              txCarrier_ = input.readFloat();
+              break;
+            }
+            case 90: {
+              bitField0_ |= 0x00000400;
+              organization_ = input.readBytes();
+              break;
+            }
+            case 98: {
+              bitField0_ |= 0x00000800;
+              site_ = input.readBytes();
+              break;
+            }
+            case 106: {
+              bitField0_ |= 0x00001000;
+              user_ = input.readBytes();
+              break;
+            }
+            case 114: {
+              bitField0_ |= 0x00002000;
+              radar_ = input.readBytes();
+              break;
+            }
+            case 122: {
+              bitField0_ |= 0x00004000;
+              receiver_ = input.readBytes();
+              break;
+            }
+            case 130: {
+              bitField0_ |= 0x00008000;
+              fpgaImage_ = input.readBytes();
+              break;
+            }
+            case 138: {
+              bitField0_ |= 0x00010000;
+              baseFileName_ = input.readBytes();
+              break;
+            }
+            case 149: {
+              bitField0_ |= 0x00020000;
+              outputRate_ = input.readFloat();
+              break;
+            }
+            case 154: {
+              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
+                channel_ = new java.util.ArrayList<com.gnuradar.proto.Control.Channel>();
+                mutable_bitField0_ |= 0x00040000;
+              }
+              channel_.add(input.readMessage(com.gnuradar.proto.Control.Channel.PARSER, extensionRegistry));
+              break;
+            }
+            case 162: {
+              if (!((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+                window_ = new java.util.ArrayList<com.gnuradar.proto.Control.Window>();
+                mutable_bitField0_ |= 0x00080000;
+              }
+              window_.add(input.readMessage(com.gnuradar.proto.Control.Window.PARSER, extensionRegistry));
+              break;
+            }
+            case 170: {
+              com.gnuradar.proto.Control.RadarParameters.Builder subBuilder = null;
+              if (((bitField0_ & 0x00040000) == 0x00040000)) {
+                subBuilder = radarParameters_.toBuilder();
+              }
+              radarParameters_ = input.readMessage(com.gnuradar.proto.Control.RadarParameters.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(radarParameters_);
+                radarParameters_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00040000;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
+          channel_ = java.util.Collections.unmodifiableList(channel_);
+        }
+        if (((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+          window_ = java.util.Collections.unmodifiableList(window_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.gnuradar.proto.Control.internal_static_gnuradar_File_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.gnuradar.proto.Control.internal_static_gnuradar_File_fieldAccessorTable;
+      return com.gnuradar.proto.Control.internal_static_gnuradar_File_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.gnuradar.proto.Control.File.class, com.gnuradar.proto.Control.File.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<File> PARSER =
+        new com.google.protobuf.AbstractParser<File>() {
+      public File parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new File(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<File> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required string version = 1;
     public static final int VERSION_FIELD_NUMBER = 1;
     private java.lang.Object version_;
+    /**
+     * <code>required string version = 1;</code>
+     */
     public boolean hasVersion() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public String getVersion() {
+    /**
+     * <code>required string version = 1;</code>
+     */
+    public java.lang.String getVersion() {
       java.lang.Object ref = version_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           version_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getVersionBytes() {
+    /**
+     * <code>required string version = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getVersionBytes() {
       java.lang.Object ref = version_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         version_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required float sampleRate = 2;
     public static final int SAMPLERATE_FIELD_NUMBER = 2;
     private float sampleRate_;
+    /**
+     * <code>required float sampleRate = 2;</code>
+     */
     public boolean hasSampleRate() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required float sampleRate = 2;</code>
+     */
     public float getSampleRate() {
       return sampleRate_;
     }
-    
+
     // required int32 decimation = 3;
     public static final int DECIMATION_FIELD_NUMBER = 3;
     private int decimation_;
+    /**
+     * <code>required int32 decimation = 3;</code>
+     */
     public boolean hasDecimation() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
+    /**
+     * <code>required int32 decimation = 3;</code>
+     */
     public int getDecimation() {
       return decimation_;
     }
-    
+
     // required int32 numChannels = 4;
     public static final int NUMCHANNELS_FIELD_NUMBER = 4;
     private int numChannels_;
+    /**
+     * <code>required int32 numChannels = 4;</code>
+     */
     public boolean hasNumChannels() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
+    /**
+     * <code>required int32 numChannels = 4;</code>
+     */
     public int getNumChannels() {
       return numChannels_;
     }
-    
+
     // required float bandwidth = 5;
     public static final int BANDWIDTH_FIELD_NUMBER = 5;
     private float bandwidth_;
+    /**
+     * <code>required float bandwidth = 5;</code>
+     */
     public boolean hasBandwidth() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
+    /**
+     * <code>required float bandwidth = 5;</code>
+     */
     public float getBandwidth() {
       return bandwidth_;
     }
-    
+
     // required string bandwidthUnits = 6;
     public static final int BANDWIDTHUNITS_FIELD_NUMBER = 6;
     private java.lang.Object bandwidthUnits_;
+    /**
+     * <code>required string bandwidthUnits = 6;</code>
+     */
     public boolean hasBandwidthUnits() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
-    public String getBandwidthUnits() {
+    /**
+     * <code>required string bandwidthUnits = 6;</code>
+     */
+    public java.lang.String getBandwidthUnits() {
       java.lang.Object ref = bandwidthUnits_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           bandwidthUnits_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getBandwidthUnitsBytes() {
+    /**
+     * <code>required string bandwidthUnits = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getBandwidthUnitsBytes() {
       java.lang.Object ref = bandwidthUnits_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         bandwidthUnits_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required int32 numWindows = 7;
     public static final int NUMWINDOWS_FIELD_NUMBER = 7;
     private int numWindows_;
+    /**
+     * <code>required int32 numWindows = 7;</code>
+     */
     public boolean hasNumWindows() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
+    /**
+     * <code>required int32 numWindows = 7;</code>
+     */
     public int getNumWindows() {
       return numWindows_;
     }
-    
+
     // required float ipp = 8;
     public static final int IPP_FIELD_NUMBER = 8;
     private float ipp_;
+    /**
+     * <code>required float ipp = 8;</code>
+     */
     public boolean hasIpp() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
+    /**
+     * <code>required float ipp = 8;</code>
+     */
     public float getIpp() {
       return ipp_;
     }
-    
+
     // required string ippUnits = 9;
     public static final int IPPUNITS_FIELD_NUMBER = 9;
     private java.lang.Object ippUnits_;
+    /**
+     * <code>required string ippUnits = 9;</code>
+     */
     public boolean hasIppUnits() {
       return ((bitField0_ & 0x00000100) == 0x00000100);
     }
-    public String getIppUnits() {
+    /**
+     * <code>required string ippUnits = 9;</code>
+     */
+    public java.lang.String getIppUnits() {
       java.lang.Object ref = ippUnits_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           ippUnits_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getIppUnitsBytes() {
+    /**
+     * <code>required string ippUnits = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIppUnitsBytes() {
       java.lang.Object ref = ippUnits_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         ippUnits_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required float txCarrier = 10;
     public static final int TXCARRIER_FIELD_NUMBER = 10;
     private float txCarrier_;
+    /**
+     * <code>required float txCarrier = 10;</code>
+     */
     public boolean hasTxCarrier() {
       return ((bitField0_ & 0x00000200) == 0x00000200);
     }
+    /**
+     * <code>required float txCarrier = 10;</code>
+     */
     public float getTxCarrier() {
       return txCarrier_;
     }
-    
+
     // required string organization = 11;
     public static final int ORGANIZATION_FIELD_NUMBER = 11;
     private java.lang.Object organization_;
+    /**
+     * <code>required string organization = 11;</code>
+     */
     public boolean hasOrganization() {
       return ((bitField0_ & 0x00000400) == 0x00000400);
     }
-    public String getOrganization() {
+    /**
+     * <code>required string organization = 11;</code>
+     */
+    public java.lang.String getOrganization() {
       java.lang.Object ref = organization_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           organization_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getOrganizationBytes() {
+    /**
+     * <code>required string organization = 11;</code>
+     */
+    public com.google.protobuf.ByteString
+        getOrganizationBytes() {
       java.lang.Object ref = organization_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         organization_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required string site = 12;
     public static final int SITE_FIELD_NUMBER = 12;
     private java.lang.Object site_;
+    /**
+     * <code>required string site = 12;</code>
+     */
     public boolean hasSite() {
       return ((bitField0_ & 0x00000800) == 0x00000800);
     }
-    public String getSite() {
+    /**
+     * <code>required string site = 12;</code>
+     */
+    public java.lang.String getSite() {
       java.lang.Object ref = site_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           site_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getSiteBytes() {
+    /**
+     * <code>required string site = 12;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSiteBytes() {
       java.lang.Object ref = site_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         site_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required string user = 13;
     public static final int USER_FIELD_NUMBER = 13;
     private java.lang.Object user_;
+    /**
+     * <code>required string user = 13;</code>
+     */
     public boolean hasUser() {
       return ((bitField0_ & 0x00001000) == 0x00001000);
     }
-    public String getUser() {
+    /**
+     * <code>required string user = 13;</code>
+     */
+    public java.lang.String getUser() {
       java.lang.Object ref = user_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           user_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getUserBytes() {
+    /**
+     * <code>required string user = 13;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUserBytes() {
       java.lang.Object ref = user_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         user_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required string radar = 14;
     public static final int RADAR_FIELD_NUMBER = 14;
     private java.lang.Object radar_;
+    /**
+     * <code>required string radar = 14;</code>
+     */
     public boolean hasRadar() {
       return ((bitField0_ & 0x00002000) == 0x00002000);
     }
-    public String getRadar() {
+    /**
+     * <code>required string radar = 14;</code>
+     */
+    public java.lang.String getRadar() {
       java.lang.Object ref = radar_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           radar_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getRadarBytes() {
+    /**
+     * <code>required string radar = 14;</code>
+     */
+    public com.google.protobuf.ByteString
+        getRadarBytes() {
       java.lang.Object ref = radar_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         radar_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required string receiver = 15;
     public static final int RECEIVER_FIELD_NUMBER = 15;
     private java.lang.Object receiver_;
+    /**
+     * <code>required string receiver = 15;</code>
+     */
     public boolean hasReceiver() {
       return ((bitField0_ & 0x00004000) == 0x00004000);
     }
-    public String getReceiver() {
+    /**
+     * <code>required string receiver = 15;</code>
+     */
+    public java.lang.String getReceiver() {
       java.lang.Object ref = receiver_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           receiver_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getReceiverBytes() {
+    /**
+     * <code>required string receiver = 15;</code>
+     */
+    public com.google.protobuf.ByteString
+        getReceiverBytes() {
       java.lang.Object ref = receiver_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         receiver_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required string fpgaImage = 16;
     public static final int FPGAIMAGE_FIELD_NUMBER = 16;
     private java.lang.Object fpgaImage_;
+    /**
+     * <code>required string fpgaImage = 16;</code>
+     */
     public boolean hasFpgaImage() {
       return ((bitField0_ & 0x00008000) == 0x00008000);
     }
-    public String getFpgaImage() {
+    /**
+     * <code>required string fpgaImage = 16;</code>
+     */
+    public java.lang.String getFpgaImage() {
       java.lang.Object ref = fpgaImage_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           fpgaImage_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getFpgaImageBytes() {
+    /**
+     * <code>required string fpgaImage = 16;</code>
+     */
+    public com.google.protobuf.ByteString
+        getFpgaImageBytes() {
       java.lang.Object ref = fpgaImage_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         fpgaImage_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required string baseFileName = 17;
     public static final int BASEFILENAME_FIELD_NUMBER = 17;
     private java.lang.Object baseFileName_;
+    /**
+     * <code>required string baseFileName = 17;</code>
+     */
     public boolean hasBaseFileName() {
       return ((bitField0_ & 0x00010000) == 0x00010000);
     }
-    public String getBaseFileName() {
+    /**
+     * <code>required string baseFileName = 17;</code>
+     */
+    public java.lang.String getBaseFileName() {
       java.lang.Object ref = baseFileName_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           baseFileName_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getBaseFileNameBytes() {
+    /**
+     * <code>required string baseFileName = 17;</code>
+     */
+    public com.google.protobuf.ByteString
+        getBaseFileNameBytes() {
       java.lang.Object ref = baseFileName_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         baseFileName_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // optional float outputRate = 18;
     public static final int OUTPUTRATE_FIELD_NUMBER = 18;
     private float outputRate_;
+    /**
+     * <code>optional float outputRate = 18;</code>
+     */
     public boolean hasOutputRate() {
       return ((bitField0_ & 0x00020000) == 0x00020000);
     }
+    /**
+     * <code>optional float outputRate = 18;</code>
+     */
     public float getOutputRate() {
       return outputRate_;
     }
-    
+
     // repeated .gnuradar.Channel channel = 19;
     public static final int CHANNEL_FIELD_NUMBER = 19;
     private java.util.List<com.gnuradar.proto.Control.Channel> channel_;
+    /**
+     * <code>repeated .gnuradar.Channel channel = 19;</code>
+     */
     public java.util.List<com.gnuradar.proto.Control.Channel> getChannelList() {
       return channel_;
     }
+    /**
+     * <code>repeated .gnuradar.Channel channel = 19;</code>
+     */
     public java.util.List<? extends com.gnuradar.proto.Control.ChannelOrBuilder> 
         getChannelOrBuilderList() {
       return channel_;
     }
+    /**
+     * <code>repeated .gnuradar.Channel channel = 19;</code>
+     */
     public int getChannelCount() {
       return channel_.size();
     }
+    /**
+     * <code>repeated .gnuradar.Channel channel = 19;</code>
+     */
     public com.gnuradar.proto.Control.Channel getChannel(int index) {
       return channel_.get(index);
     }
+    /**
+     * <code>repeated .gnuradar.Channel channel = 19;</code>
+     */
     public com.gnuradar.proto.Control.ChannelOrBuilder getChannelOrBuilder(
         int index) {
       return channel_.get(index);
     }
-    
+
     // repeated .gnuradar.Window window = 20;
     public static final int WINDOW_FIELD_NUMBER = 20;
     private java.util.List<com.gnuradar.proto.Control.Window> window_;
+    /**
+     * <code>repeated .gnuradar.Window window = 20;</code>
+     */
     public java.util.List<com.gnuradar.proto.Control.Window> getWindowList() {
       return window_;
     }
+    /**
+     * <code>repeated .gnuradar.Window window = 20;</code>
+     */
     public java.util.List<? extends com.gnuradar.proto.Control.WindowOrBuilder> 
         getWindowOrBuilderList() {
       return window_;
     }
+    /**
+     * <code>repeated .gnuradar.Window window = 20;</code>
+     */
     public int getWindowCount() {
       return window_.size();
     }
+    /**
+     * <code>repeated .gnuradar.Window window = 20;</code>
+     */
     public com.gnuradar.proto.Control.Window getWindow(int index) {
       return window_.get(index);
     }
+    /**
+     * <code>repeated .gnuradar.Window window = 20;</code>
+     */
     public com.gnuradar.proto.Control.WindowOrBuilder getWindowOrBuilder(
         int index) {
       return window_.get(index);
     }
-    
+
     // optional .gnuradar.RadarParameters radarParameters = 21;
     public static final int RADARPARAMETERS_FIELD_NUMBER = 21;
     private com.gnuradar.proto.Control.RadarParameters radarParameters_;
+    /**
+     * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+     */
     public boolean hasRadarParameters() {
       return ((bitField0_ & 0x00040000) == 0x00040000);
     }
+    /**
+     * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+     */
     public com.gnuradar.proto.Control.RadarParameters getRadarParameters() {
       return radarParameters_;
     }
+    /**
+     * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+     */
     public com.gnuradar.proto.Control.RadarParametersOrBuilder getRadarParametersOrBuilder() {
       return radarParameters_;
     }
-    
+
     private void initFields() {
       version_ = "";
       sampleRate_ = 0F;
@@ -1157,7 +1883,7 @@ public final class Control {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasVersion()) {
         memoizedIsInitialized = 0;
         return false;
@@ -1247,7 +1973,7 @@ public final class Control {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -1316,12 +2042,12 @@ public final class Control {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -1411,94 +2137,83 @@ public final class Control {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static com.gnuradar.proto.Control.File parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static com.gnuradar.proto.Control.File parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.gnuradar.proto.Control.File parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static com.gnuradar.proto.Control.File parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static com.gnuradar.proto.Control.File parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static com.gnuradar.proto.Control.File parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static com.gnuradar.proto.Control.File parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static com.gnuradar.proto.Control.File parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static com.gnuradar.proto.Control.File parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static com.gnuradar.proto.Control.File parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(com.gnuradar.proto.Control.File prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code gnuradar.File}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements com.gnuradar.proto.Control.FileOrBuilder {
@@ -1506,18 +2221,21 @@ public final class Control {
           getDescriptor() {
         return com.gnuradar.proto.Control.internal_static_gnuradar_File_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.gnuradar.proto.Control.internal_static_gnuradar_File_fieldAccessorTable;
+        return com.gnuradar.proto.Control.internal_static_gnuradar_File_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.gnuradar.proto.Control.File.class, com.gnuradar.proto.Control.File.Builder.class);
       }
-      
+
       // Construct using com.gnuradar.proto.Control.File.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1531,7 +2249,7 @@ public final class Control {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         version_ = "";
@@ -1590,20 +2308,20 @@ public final class Control {
         bitField0_ = (bitField0_ & ~0x00100000);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.gnuradar.proto.Control.File.getDescriptor();
+        return com.gnuradar.proto.Control.internal_static_gnuradar_File_descriptor;
       }
-      
+
       public com.gnuradar.proto.Control.File getDefaultInstanceForType() {
         return com.gnuradar.proto.Control.File.getDefaultInstance();
       }
-      
+
       public com.gnuradar.proto.Control.File build() {
         com.gnuradar.proto.Control.File result = buildPartial();
         if (!result.isInitialized()) {
@@ -1611,17 +2329,7 @@ public final class Control {
         }
         return result;
       }
-      
-      private com.gnuradar.proto.Control.File buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        com.gnuradar.proto.Control.File result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public com.gnuradar.proto.Control.File buildPartial() {
         com.gnuradar.proto.Control.File result = new com.gnuradar.proto.Control.File(this);
         int from_bitField0_ = bitField0_;
@@ -1728,7 +2436,7 @@ public final class Control {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.gnuradar.proto.Control.File) {
           return mergeFrom((com.gnuradar.proto.Control.File)other);
@@ -1737,11 +2445,13 @@ public final class Control {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(com.gnuradar.proto.Control.File other) {
         if (other == com.gnuradar.proto.Control.File.getDefaultInstance()) return this;
         if (other.hasVersion()) {
-          setVersion(other.getVersion());
+          bitField0_ |= 0x00000001;
+          version_ = other.version_;
+          onChanged();
         }
         if (other.hasSampleRate()) {
           setSampleRate(other.getSampleRate());
@@ -1756,7 +2466,9 @@ public final class Control {
           setBandwidth(other.getBandwidth());
         }
         if (other.hasBandwidthUnits()) {
-          setBandwidthUnits(other.getBandwidthUnits());
+          bitField0_ |= 0x00000020;
+          bandwidthUnits_ = other.bandwidthUnits_;
+          onChanged();
         }
         if (other.hasNumWindows()) {
           setNumWindows(other.getNumWindows());
@@ -1765,31 +2477,47 @@ public final class Control {
           setIpp(other.getIpp());
         }
         if (other.hasIppUnits()) {
-          setIppUnits(other.getIppUnits());
+          bitField0_ |= 0x00000100;
+          ippUnits_ = other.ippUnits_;
+          onChanged();
         }
         if (other.hasTxCarrier()) {
           setTxCarrier(other.getTxCarrier());
         }
         if (other.hasOrganization()) {
-          setOrganization(other.getOrganization());
+          bitField0_ |= 0x00000400;
+          organization_ = other.organization_;
+          onChanged();
         }
         if (other.hasSite()) {
-          setSite(other.getSite());
+          bitField0_ |= 0x00000800;
+          site_ = other.site_;
+          onChanged();
         }
         if (other.hasUser()) {
-          setUser(other.getUser());
+          bitField0_ |= 0x00001000;
+          user_ = other.user_;
+          onChanged();
         }
         if (other.hasRadar()) {
-          setRadar(other.getRadar());
+          bitField0_ |= 0x00002000;
+          radar_ = other.radar_;
+          onChanged();
         }
         if (other.hasReceiver()) {
-          setReceiver(other.getReceiver());
+          bitField0_ |= 0x00004000;
+          receiver_ = other.receiver_;
+          onChanged();
         }
         if (other.hasFpgaImage()) {
-          setFpgaImage(other.getFpgaImage());
+          bitField0_ |= 0x00008000;
+          fpgaImage_ = other.fpgaImage_;
+          onChanged();
         }
         if (other.hasBaseFileName()) {
-          setBaseFileName(other.getBaseFileName());
+          bitField0_ |= 0x00010000;
+          baseFileName_ = other.baseFileName_;
+          onChanged();
         }
         if (other.hasOutputRate()) {
           setOutputRate(other.getOutputRate());
@@ -1852,7 +2580,7 @@ public final class Control {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasVersion()) {
           
@@ -1942,163 +2670,69 @@ public final class Control {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              version_ = input.readBytes();
-              break;
-            }
-            case 21: {
-              bitField0_ |= 0x00000002;
-              sampleRate_ = input.readFloat();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              decimation_ = input.readInt32();
-              break;
-            }
-            case 32: {
-              bitField0_ |= 0x00000008;
-              numChannels_ = input.readInt32();
-              break;
-            }
-            case 45: {
-              bitField0_ |= 0x00000010;
-              bandwidth_ = input.readFloat();
-              break;
-            }
-            case 50: {
-              bitField0_ |= 0x00000020;
-              bandwidthUnits_ = input.readBytes();
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000040;
-              numWindows_ = input.readInt32();
-              break;
-            }
-            case 69: {
-              bitField0_ |= 0x00000080;
-              ipp_ = input.readFloat();
-              break;
-            }
-            case 74: {
-              bitField0_ |= 0x00000100;
-              ippUnits_ = input.readBytes();
-              break;
-            }
-            case 85: {
-              bitField0_ |= 0x00000200;
-              txCarrier_ = input.readFloat();
-              break;
-            }
-            case 90: {
-              bitField0_ |= 0x00000400;
-              organization_ = input.readBytes();
-              break;
-            }
-            case 98: {
-              bitField0_ |= 0x00000800;
-              site_ = input.readBytes();
-              break;
-            }
-            case 106: {
-              bitField0_ |= 0x00001000;
-              user_ = input.readBytes();
-              break;
-            }
-            case 114: {
-              bitField0_ |= 0x00002000;
-              radar_ = input.readBytes();
-              break;
-            }
-            case 122: {
-              bitField0_ |= 0x00004000;
-              receiver_ = input.readBytes();
-              break;
-            }
-            case 130: {
-              bitField0_ |= 0x00008000;
-              fpgaImage_ = input.readBytes();
-              break;
-            }
-            case 138: {
-              bitField0_ |= 0x00010000;
-              baseFileName_ = input.readBytes();
-              break;
-            }
-            case 149: {
-              bitField0_ |= 0x00020000;
-              outputRate_ = input.readFloat();
-              break;
-            }
-            case 154: {
-              com.gnuradar.proto.Control.Channel.Builder subBuilder = com.gnuradar.proto.Control.Channel.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addChannel(subBuilder.buildPartial());
-              break;
-            }
-            case 162: {
-              com.gnuradar.proto.Control.Window.Builder subBuilder = com.gnuradar.proto.Control.Window.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addWindow(subBuilder.buildPartial());
-              break;
-            }
-            case 170: {
-              com.gnuradar.proto.Control.RadarParameters.Builder subBuilder = com.gnuradar.proto.Control.RadarParameters.newBuilder();
-              if (hasRadarParameters()) {
-                subBuilder.mergeFrom(getRadarParameters());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setRadarParameters(subBuilder.buildPartial());
-              break;
-            }
+        com.gnuradar.proto.Control.File parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.gnuradar.proto.Control.File) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required string version = 1;
       private java.lang.Object version_ = "";
+      /**
+       * <code>required string version = 1;</code>
+       */
       public boolean hasVersion() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getVersion() {
+      /**
+       * <code>required string version = 1;</code>
+       */
+      public java.lang.String getVersion() {
         java.lang.Object ref = version_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           version_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setVersion(String value) {
+      /**
+       * <code>required string version = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getVersionBytes() {
+        java.lang.Object ref = version_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          version_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string version = 1;</code>
+       */
+      public Builder setVersion(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2107,118 +2741,204 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string version = 1;</code>
+       */
       public Builder clearVersion() {
         bitField0_ = (bitField0_ & ~0x00000001);
         version_ = getDefaultInstance().getVersion();
         onChanged();
         return this;
       }
-      void setVersion(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000001;
+      /**
+       * <code>required string version = 1;</code>
+       */
+      public Builder setVersionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         version_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required float sampleRate = 2;
       private float sampleRate_ ;
+      /**
+       * <code>required float sampleRate = 2;</code>
+       */
       public boolean hasSampleRate() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required float sampleRate = 2;</code>
+       */
       public float getSampleRate() {
         return sampleRate_;
       }
+      /**
+       * <code>required float sampleRate = 2;</code>
+       */
       public Builder setSampleRate(float value) {
         bitField0_ |= 0x00000002;
         sampleRate_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required float sampleRate = 2;</code>
+       */
       public Builder clearSampleRate() {
         bitField0_ = (bitField0_ & ~0x00000002);
         sampleRate_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // required int32 decimation = 3;
       private int decimation_ ;
+      /**
+       * <code>required int32 decimation = 3;</code>
+       */
       public boolean hasDecimation() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>required int32 decimation = 3;</code>
+       */
       public int getDecimation() {
         return decimation_;
       }
+      /**
+       * <code>required int32 decimation = 3;</code>
+       */
       public Builder setDecimation(int value) {
         bitField0_ |= 0x00000004;
         decimation_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required int32 decimation = 3;</code>
+       */
       public Builder clearDecimation() {
         bitField0_ = (bitField0_ & ~0x00000004);
         decimation_ = 0;
         onChanged();
         return this;
       }
-      
+
       // required int32 numChannels = 4;
       private int numChannels_ ;
+      /**
+       * <code>required int32 numChannels = 4;</code>
+       */
       public boolean hasNumChannels() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
+      /**
+       * <code>required int32 numChannels = 4;</code>
+       */
       public int getNumChannels() {
         return numChannels_;
       }
+      /**
+       * <code>required int32 numChannels = 4;</code>
+       */
       public Builder setNumChannels(int value) {
         bitField0_ |= 0x00000008;
         numChannels_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required int32 numChannels = 4;</code>
+       */
       public Builder clearNumChannels() {
         bitField0_ = (bitField0_ & ~0x00000008);
         numChannels_ = 0;
         onChanged();
         return this;
       }
-      
+
       // required float bandwidth = 5;
       private float bandwidth_ ;
+      /**
+       * <code>required float bandwidth = 5;</code>
+       */
       public boolean hasBandwidth() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
+      /**
+       * <code>required float bandwidth = 5;</code>
+       */
       public float getBandwidth() {
         return bandwidth_;
       }
+      /**
+       * <code>required float bandwidth = 5;</code>
+       */
       public Builder setBandwidth(float value) {
         bitField0_ |= 0x00000010;
         bandwidth_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required float bandwidth = 5;</code>
+       */
       public Builder clearBandwidth() {
         bitField0_ = (bitField0_ & ~0x00000010);
         bandwidth_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // required string bandwidthUnits = 6;
       private java.lang.Object bandwidthUnits_ = "";
+      /**
+       * <code>required string bandwidthUnits = 6;</code>
+       */
       public boolean hasBandwidthUnits() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
-      public String getBandwidthUnits() {
+      /**
+       * <code>required string bandwidthUnits = 6;</code>
+       */
+      public java.lang.String getBandwidthUnits() {
         java.lang.Object ref = bandwidthUnits_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           bandwidthUnits_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setBandwidthUnits(String value) {
+      /**
+       * <code>required string bandwidthUnits = 6;</code>
+       */
+      public com.google.protobuf.ByteString
+          getBandwidthUnitsBytes() {
+        java.lang.Object ref = bandwidthUnits_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          bandwidthUnits_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string bandwidthUnits = 6;</code>
+       */
+      public Builder setBandwidthUnits(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2227,76 +2947,138 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string bandwidthUnits = 6;</code>
+       */
       public Builder clearBandwidthUnits() {
         bitField0_ = (bitField0_ & ~0x00000020);
         bandwidthUnits_ = getDefaultInstance().getBandwidthUnits();
         onChanged();
         return this;
       }
-      void setBandwidthUnits(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000020;
+      /**
+       * <code>required string bandwidthUnits = 6;</code>
+       */
+      public Builder setBandwidthUnitsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
         bandwidthUnits_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required int32 numWindows = 7;
       private int numWindows_ ;
+      /**
+       * <code>required int32 numWindows = 7;</code>
+       */
       public boolean hasNumWindows() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
+      /**
+       * <code>required int32 numWindows = 7;</code>
+       */
       public int getNumWindows() {
         return numWindows_;
       }
+      /**
+       * <code>required int32 numWindows = 7;</code>
+       */
       public Builder setNumWindows(int value) {
         bitField0_ |= 0x00000040;
         numWindows_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required int32 numWindows = 7;</code>
+       */
       public Builder clearNumWindows() {
         bitField0_ = (bitField0_ & ~0x00000040);
         numWindows_ = 0;
         onChanged();
         return this;
       }
-      
+
       // required float ipp = 8;
       private float ipp_ ;
+      /**
+       * <code>required float ipp = 8;</code>
+       */
       public boolean hasIpp() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
+      /**
+       * <code>required float ipp = 8;</code>
+       */
       public float getIpp() {
         return ipp_;
       }
+      /**
+       * <code>required float ipp = 8;</code>
+       */
       public Builder setIpp(float value) {
         bitField0_ |= 0x00000080;
         ipp_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required float ipp = 8;</code>
+       */
       public Builder clearIpp() {
         bitField0_ = (bitField0_ & ~0x00000080);
         ipp_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // required string ippUnits = 9;
       private java.lang.Object ippUnits_ = "";
+      /**
+       * <code>required string ippUnits = 9;</code>
+       */
       public boolean hasIppUnits() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
-      public String getIppUnits() {
+      /**
+       * <code>required string ippUnits = 9;</code>
+       */
+      public java.lang.String getIppUnits() {
         java.lang.Object ref = ippUnits_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           ippUnits_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setIppUnits(String value) {
+      /**
+       * <code>required string ippUnits = 9;</code>
+       */
+      public com.google.protobuf.ByteString
+          getIppUnitsBytes() {
+        java.lang.Object ref = ippUnits_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          ippUnits_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string ippUnits = 9;</code>
+       */
+      public Builder setIppUnits(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2305,55 +3087,105 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string ippUnits = 9;</code>
+       */
       public Builder clearIppUnits() {
         bitField0_ = (bitField0_ & ~0x00000100);
         ippUnits_ = getDefaultInstance().getIppUnits();
         onChanged();
         return this;
       }
-      void setIppUnits(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000100;
+      /**
+       * <code>required string ippUnits = 9;</code>
+       */
+      public Builder setIppUnitsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
         ippUnits_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required float txCarrier = 10;
       private float txCarrier_ ;
+      /**
+       * <code>required float txCarrier = 10;</code>
+       */
       public boolean hasTxCarrier() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
+      /**
+       * <code>required float txCarrier = 10;</code>
+       */
       public float getTxCarrier() {
         return txCarrier_;
       }
+      /**
+       * <code>required float txCarrier = 10;</code>
+       */
       public Builder setTxCarrier(float value) {
         bitField0_ |= 0x00000200;
         txCarrier_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required float txCarrier = 10;</code>
+       */
       public Builder clearTxCarrier() {
         bitField0_ = (bitField0_ & ~0x00000200);
         txCarrier_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // required string organization = 11;
       private java.lang.Object organization_ = "";
+      /**
+       * <code>required string organization = 11;</code>
+       */
       public boolean hasOrganization() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
-      public String getOrganization() {
+      /**
+       * <code>required string organization = 11;</code>
+       */
+      public java.lang.String getOrganization() {
         java.lang.Object ref = organization_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           organization_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setOrganization(String value) {
+      /**
+       * <code>required string organization = 11;</code>
+       */
+      public com.google.protobuf.ByteString
+          getOrganizationBytes() {
+        java.lang.Object ref = organization_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          organization_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string organization = 11;</code>
+       */
+      public Builder setOrganization(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2362,34 +3194,72 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string organization = 11;</code>
+       */
       public Builder clearOrganization() {
         bitField0_ = (bitField0_ & ~0x00000400);
         organization_ = getDefaultInstance().getOrganization();
         onChanged();
         return this;
       }
-      void setOrganization(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000400;
+      /**
+       * <code>required string organization = 11;</code>
+       */
+      public Builder setOrganizationBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
         organization_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required string site = 12;
       private java.lang.Object site_ = "";
+      /**
+       * <code>required string site = 12;</code>
+       */
       public boolean hasSite() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
-      public String getSite() {
+      /**
+       * <code>required string site = 12;</code>
+       */
+      public java.lang.String getSite() {
         java.lang.Object ref = site_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           site_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setSite(String value) {
+      /**
+       * <code>required string site = 12;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSiteBytes() {
+        java.lang.Object ref = site_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          site_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string site = 12;</code>
+       */
+      public Builder setSite(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2398,34 +3268,72 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string site = 12;</code>
+       */
       public Builder clearSite() {
         bitField0_ = (bitField0_ & ~0x00000800);
         site_ = getDefaultInstance().getSite();
         onChanged();
         return this;
       }
-      void setSite(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000800;
+      /**
+       * <code>required string site = 12;</code>
+       */
+      public Builder setSiteBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000800;
         site_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required string user = 13;
       private java.lang.Object user_ = "";
+      /**
+       * <code>required string user = 13;</code>
+       */
       public boolean hasUser() {
         return ((bitField0_ & 0x00001000) == 0x00001000);
       }
-      public String getUser() {
+      /**
+       * <code>required string user = 13;</code>
+       */
+      public java.lang.String getUser() {
         java.lang.Object ref = user_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           user_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setUser(String value) {
+      /**
+       * <code>required string user = 13;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUserBytes() {
+        java.lang.Object ref = user_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          user_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string user = 13;</code>
+       */
+      public Builder setUser(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2434,34 +3342,72 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string user = 13;</code>
+       */
       public Builder clearUser() {
         bitField0_ = (bitField0_ & ~0x00001000);
         user_ = getDefaultInstance().getUser();
         onChanged();
         return this;
       }
-      void setUser(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00001000;
+      /**
+       * <code>required string user = 13;</code>
+       */
+      public Builder setUserBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00001000;
         user_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required string radar = 14;
       private java.lang.Object radar_ = "";
+      /**
+       * <code>required string radar = 14;</code>
+       */
       public boolean hasRadar() {
         return ((bitField0_ & 0x00002000) == 0x00002000);
       }
-      public String getRadar() {
+      /**
+       * <code>required string radar = 14;</code>
+       */
+      public java.lang.String getRadar() {
         java.lang.Object ref = radar_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           radar_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setRadar(String value) {
+      /**
+       * <code>required string radar = 14;</code>
+       */
+      public com.google.protobuf.ByteString
+          getRadarBytes() {
+        java.lang.Object ref = radar_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          radar_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string radar = 14;</code>
+       */
+      public Builder setRadar(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2470,34 +3416,72 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string radar = 14;</code>
+       */
       public Builder clearRadar() {
         bitField0_ = (bitField0_ & ~0x00002000);
         radar_ = getDefaultInstance().getRadar();
         onChanged();
         return this;
       }
-      void setRadar(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00002000;
+      /**
+       * <code>required string radar = 14;</code>
+       */
+      public Builder setRadarBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00002000;
         radar_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required string receiver = 15;
       private java.lang.Object receiver_ = "";
+      /**
+       * <code>required string receiver = 15;</code>
+       */
       public boolean hasReceiver() {
         return ((bitField0_ & 0x00004000) == 0x00004000);
       }
-      public String getReceiver() {
+      /**
+       * <code>required string receiver = 15;</code>
+       */
+      public java.lang.String getReceiver() {
         java.lang.Object ref = receiver_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           receiver_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setReceiver(String value) {
+      /**
+       * <code>required string receiver = 15;</code>
+       */
+      public com.google.protobuf.ByteString
+          getReceiverBytes() {
+        java.lang.Object ref = receiver_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          receiver_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string receiver = 15;</code>
+       */
+      public Builder setReceiver(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2506,34 +3490,72 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string receiver = 15;</code>
+       */
       public Builder clearReceiver() {
         bitField0_ = (bitField0_ & ~0x00004000);
         receiver_ = getDefaultInstance().getReceiver();
         onChanged();
         return this;
       }
-      void setReceiver(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00004000;
+      /**
+       * <code>required string receiver = 15;</code>
+       */
+      public Builder setReceiverBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00004000;
         receiver_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required string fpgaImage = 16;
       private java.lang.Object fpgaImage_ = "";
+      /**
+       * <code>required string fpgaImage = 16;</code>
+       */
       public boolean hasFpgaImage() {
         return ((bitField0_ & 0x00008000) == 0x00008000);
       }
-      public String getFpgaImage() {
+      /**
+       * <code>required string fpgaImage = 16;</code>
+       */
+      public java.lang.String getFpgaImage() {
         java.lang.Object ref = fpgaImage_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           fpgaImage_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setFpgaImage(String value) {
+      /**
+       * <code>required string fpgaImage = 16;</code>
+       */
+      public com.google.protobuf.ByteString
+          getFpgaImageBytes() {
+        java.lang.Object ref = fpgaImage_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          fpgaImage_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string fpgaImage = 16;</code>
+       */
+      public Builder setFpgaImage(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2542,34 +3564,72 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string fpgaImage = 16;</code>
+       */
       public Builder clearFpgaImage() {
         bitField0_ = (bitField0_ & ~0x00008000);
         fpgaImage_ = getDefaultInstance().getFpgaImage();
         onChanged();
         return this;
       }
-      void setFpgaImage(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00008000;
+      /**
+       * <code>required string fpgaImage = 16;</code>
+       */
+      public Builder setFpgaImageBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00008000;
         fpgaImage_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required string baseFileName = 17;
       private java.lang.Object baseFileName_ = "";
+      /**
+       * <code>required string baseFileName = 17;</code>
+       */
       public boolean hasBaseFileName() {
         return ((bitField0_ & 0x00010000) == 0x00010000);
       }
-      public String getBaseFileName() {
+      /**
+       * <code>required string baseFileName = 17;</code>
+       */
+      public java.lang.String getBaseFileName() {
         java.lang.Object ref = baseFileName_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           baseFileName_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setBaseFileName(String value) {
+      /**
+       * <code>required string baseFileName = 17;</code>
+       */
+      public com.google.protobuf.ByteString
+          getBaseFileNameBytes() {
+        java.lang.Object ref = baseFileName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          baseFileName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string baseFileName = 17;</code>
+       */
+      public Builder setBaseFileName(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2578,39 +3638,62 @@ public final class Control {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string baseFileName = 17;</code>
+       */
       public Builder clearBaseFileName() {
         bitField0_ = (bitField0_ & ~0x00010000);
         baseFileName_ = getDefaultInstance().getBaseFileName();
         onChanged();
         return this;
       }
-      void setBaseFileName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00010000;
+      /**
+       * <code>required string baseFileName = 17;</code>
+       */
+      public Builder setBaseFileNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00010000;
         baseFileName_ = value;
         onChanged();
+        return this;
       }
-      
+
       // optional float outputRate = 18;
       private float outputRate_ ;
+      /**
+       * <code>optional float outputRate = 18;</code>
+       */
       public boolean hasOutputRate() {
         return ((bitField0_ & 0x00020000) == 0x00020000);
       }
+      /**
+       * <code>optional float outputRate = 18;</code>
+       */
       public float getOutputRate() {
         return outputRate_;
       }
+      /**
+       * <code>optional float outputRate = 18;</code>
+       */
       public Builder setOutputRate(float value) {
         bitField0_ |= 0x00020000;
         outputRate_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional float outputRate = 18;</code>
+       */
       public Builder clearOutputRate() {
         bitField0_ = (bitField0_ & ~0x00020000);
         outputRate_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // repeated .gnuradar.Channel channel = 19;
       private java.util.List<com.gnuradar.proto.Control.Channel> channel_ =
         java.util.Collections.emptyList();
@@ -2620,10 +3703,13 @@ public final class Control {
           bitField0_ |= 0x00040000;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           com.gnuradar.proto.Control.Channel, com.gnuradar.proto.Control.Channel.Builder, com.gnuradar.proto.Control.ChannelOrBuilder> channelBuilder_;
-      
+
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public java.util.List<com.gnuradar.proto.Control.Channel> getChannelList() {
         if (channelBuilder_ == null) {
           return java.util.Collections.unmodifiableList(channel_);
@@ -2631,6 +3717,9 @@ public final class Control {
           return channelBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public int getChannelCount() {
         if (channelBuilder_ == null) {
           return channel_.size();
@@ -2638,6 +3727,9 @@ public final class Control {
           return channelBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public com.gnuradar.proto.Control.Channel getChannel(int index) {
         if (channelBuilder_ == null) {
           return channel_.get(index);
@@ -2645,6 +3737,9 @@ public final class Control {
           return channelBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public Builder setChannel(
           int index, com.gnuradar.proto.Control.Channel value) {
         if (channelBuilder_ == null) {
@@ -2659,6 +3754,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public Builder setChannel(
           int index, com.gnuradar.proto.Control.Channel.Builder builderForValue) {
         if (channelBuilder_ == null) {
@@ -2670,6 +3768,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public Builder addChannel(com.gnuradar.proto.Control.Channel value) {
         if (channelBuilder_ == null) {
           if (value == null) {
@@ -2683,6 +3784,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public Builder addChannel(
           int index, com.gnuradar.proto.Control.Channel value) {
         if (channelBuilder_ == null) {
@@ -2697,6 +3801,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public Builder addChannel(
           com.gnuradar.proto.Control.Channel.Builder builderForValue) {
         if (channelBuilder_ == null) {
@@ -2708,6 +3815,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public Builder addChannel(
           int index, com.gnuradar.proto.Control.Channel.Builder builderForValue) {
         if (channelBuilder_ == null) {
@@ -2719,6 +3829,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public Builder addAllChannel(
           java.lang.Iterable<? extends com.gnuradar.proto.Control.Channel> values) {
         if (channelBuilder_ == null) {
@@ -2730,6 +3843,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public Builder clearChannel() {
         if (channelBuilder_ == null) {
           channel_ = java.util.Collections.emptyList();
@@ -2740,6 +3856,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public Builder removeChannel(int index) {
         if (channelBuilder_ == null) {
           ensureChannelIsMutable();
@@ -2750,10 +3869,16 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public com.gnuradar.proto.Control.Channel.Builder getChannelBuilder(
           int index) {
         return getChannelFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public com.gnuradar.proto.Control.ChannelOrBuilder getChannelOrBuilder(
           int index) {
         if (channelBuilder_ == null) {
@@ -2761,6 +3886,9 @@ public final class Control {
           return channelBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public java.util.List<? extends com.gnuradar.proto.Control.ChannelOrBuilder> 
            getChannelOrBuilderList() {
         if (channelBuilder_ != null) {
@@ -2769,15 +3897,24 @@ public final class Control {
           return java.util.Collections.unmodifiableList(channel_);
         }
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public com.gnuradar.proto.Control.Channel.Builder addChannelBuilder() {
         return getChannelFieldBuilder().addBuilder(
             com.gnuradar.proto.Control.Channel.getDefaultInstance());
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public com.gnuradar.proto.Control.Channel.Builder addChannelBuilder(
           int index) {
         return getChannelFieldBuilder().addBuilder(
             index, com.gnuradar.proto.Control.Channel.getDefaultInstance());
       }
+      /**
+       * <code>repeated .gnuradar.Channel channel = 19;</code>
+       */
       public java.util.List<com.gnuradar.proto.Control.Channel.Builder> 
            getChannelBuilderList() {
         return getChannelFieldBuilder().getBuilderList();
@@ -2796,7 +3933,7 @@ public final class Control {
         }
         return channelBuilder_;
       }
-      
+
       // repeated .gnuradar.Window window = 20;
       private java.util.List<com.gnuradar.proto.Control.Window> window_ =
         java.util.Collections.emptyList();
@@ -2806,10 +3943,13 @@ public final class Control {
           bitField0_ |= 0x00080000;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           com.gnuradar.proto.Control.Window, com.gnuradar.proto.Control.Window.Builder, com.gnuradar.proto.Control.WindowOrBuilder> windowBuilder_;
-      
+
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public java.util.List<com.gnuradar.proto.Control.Window> getWindowList() {
         if (windowBuilder_ == null) {
           return java.util.Collections.unmodifiableList(window_);
@@ -2817,6 +3957,9 @@ public final class Control {
           return windowBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public int getWindowCount() {
         if (windowBuilder_ == null) {
           return window_.size();
@@ -2824,6 +3967,9 @@ public final class Control {
           return windowBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public com.gnuradar.proto.Control.Window getWindow(int index) {
         if (windowBuilder_ == null) {
           return window_.get(index);
@@ -2831,6 +3977,9 @@ public final class Control {
           return windowBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public Builder setWindow(
           int index, com.gnuradar.proto.Control.Window value) {
         if (windowBuilder_ == null) {
@@ -2845,6 +3994,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public Builder setWindow(
           int index, com.gnuradar.proto.Control.Window.Builder builderForValue) {
         if (windowBuilder_ == null) {
@@ -2856,6 +4008,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public Builder addWindow(com.gnuradar.proto.Control.Window value) {
         if (windowBuilder_ == null) {
           if (value == null) {
@@ -2869,6 +4024,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public Builder addWindow(
           int index, com.gnuradar.proto.Control.Window value) {
         if (windowBuilder_ == null) {
@@ -2883,6 +4041,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public Builder addWindow(
           com.gnuradar.proto.Control.Window.Builder builderForValue) {
         if (windowBuilder_ == null) {
@@ -2894,6 +4055,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public Builder addWindow(
           int index, com.gnuradar.proto.Control.Window.Builder builderForValue) {
         if (windowBuilder_ == null) {
@@ -2905,6 +4069,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public Builder addAllWindow(
           java.lang.Iterable<? extends com.gnuradar.proto.Control.Window> values) {
         if (windowBuilder_ == null) {
@@ -2916,6 +4083,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public Builder clearWindow() {
         if (windowBuilder_ == null) {
           window_ = java.util.Collections.emptyList();
@@ -2926,6 +4096,9 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public Builder removeWindow(int index) {
         if (windowBuilder_ == null) {
           ensureWindowIsMutable();
@@ -2936,10 +4109,16 @@ public final class Control {
         }
         return this;
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public com.gnuradar.proto.Control.Window.Builder getWindowBuilder(
           int index) {
         return getWindowFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public com.gnuradar.proto.Control.WindowOrBuilder getWindowOrBuilder(
           int index) {
         if (windowBuilder_ == null) {
@@ -2947,6 +4126,9 @@ public final class Control {
           return windowBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public java.util.List<? extends com.gnuradar.proto.Control.WindowOrBuilder> 
            getWindowOrBuilderList() {
         if (windowBuilder_ != null) {
@@ -2955,15 +4137,24 @@ public final class Control {
           return java.util.Collections.unmodifiableList(window_);
         }
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public com.gnuradar.proto.Control.Window.Builder addWindowBuilder() {
         return getWindowFieldBuilder().addBuilder(
             com.gnuradar.proto.Control.Window.getDefaultInstance());
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public com.gnuradar.proto.Control.Window.Builder addWindowBuilder(
           int index) {
         return getWindowFieldBuilder().addBuilder(
             index, com.gnuradar.proto.Control.Window.getDefaultInstance());
       }
+      /**
+       * <code>repeated .gnuradar.Window window = 20;</code>
+       */
       public java.util.List<com.gnuradar.proto.Control.Window.Builder> 
            getWindowBuilderList() {
         return getWindowFieldBuilder().getBuilderList();
@@ -2982,14 +4173,20 @@ public final class Control {
         }
         return windowBuilder_;
       }
-      
+
       // optional .gnuradar.RadarParameters radarParameters = 21;
       private com.gnuradar.proto.Control.RadarParameters radarParameters_ = com.gnuradar.proto.Control.RadarParameters.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.gnuradar.proto.Control.RadarParameters, com.gnuradar.proto.Control.RadarParameters.Builder, com.gnuradar.proto.Control.RadarParametersOrBuilder> radarParametersBuilder_;
+      /**
+       * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+       */
       public boolean hasRadarParameters() {
         return ((bitField0_ & 0x00100000) == 0x00100000);
       }
+      /**
+       * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+       */
       public com.gnuradar.proto.Control.RadarParameters getRadarParameters() {
         if (radarParametersBuilder_ == null) {
           return radarParameters_;
@@ -2997,6 +4194,9 @@ public final class Control {
           return radarParametersBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+       */
       public Builder setRadarParameters(com.gnuradar.proto.Control.RadarParameters value) {
         if (radarParametersBuilder_ == null) {
           if (value == null) {
@@ -3010,6 +4210,9 @@ public final class Control {
         bitField0_ |= 0x00100000;
         return this;
       }
+      /**
+       * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+       */
       public Builder setRadarParameters(
           com.gnuradar.proto.Control.RadarParameters.Builder builderForValue) {
         if (radarParametersBuilder_ == null) {
@@ -3021,6 +4224,9 @@ public final class Control {
         bitField0_ |= 0x00100000;
         return this;
       }
+      /**
+       * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+       */
       public Builder mergeRadarParameters(com.gnuradar.proto.Control.RadarParameters value) {
         if (radarParametersBuilder_ == null) {
           if (((bitField0_ & 0x00100000) == 0x00100000) &&
@@ -3037,6 +4243,9 @@ public final class Control {
         bitField0_ |= 0x00100000;
         return this;
       }
+      /**
+       * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+       */
       public Builder clearRadarParameters() {
         if (radarParametersBuilder_ == null) {
           radarParameters_ = com.gnuradar.proto.Control.RadarParameters.getDefaultInstance();
@@ -3047,11 +4256,17 @@ public final class Control {
         bitField0_ = (bitField0_ & ~0x00100000);
         return this;
       }
+      /**
+       * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+       */
       public com.gnuradar.proto.Control.RadarParameters.Builder getRadarParametersBuilder() {
         bitField0_ |= 0x00100000;
         onChanged();
         return getRadarParametersFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+       */
       public com.gnuradar.proto.Control.RadarParametersOrBuilder getRadarParametersOrBuilder() {
         if (radarParametersBuilder_ != null) {
           return radarParametersBuilder_.getMessageOrBuilder();
@@ -3059,6 +4274,9 @@ public final class Control {
           return radarParameters_;
         }
       }
+      /**
+       * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           com.gnuradar.proto.Control.RadarParameters, com.gnuradar.proto.Control.RadarParameters.Builder, com.gnuradar.proto.Control.RadarParametersOrBuilder> 
           getRadarParametersFieldBuilder() {
@@ -3072,479 +4290,119 @@ public final class Control {
         }
         return radarParametersBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:gnuradar.File)
     }
-    
+
     static {
       defaultInstance = new File(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:gnuradar.File)
   }
-  
+
   public interface ChannelOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required float frequency = 1;
+    /**
+     * <code>required float frequency = 1;</code>
+     */
     boolean hasFrequency();
+    /**
+     * <code>required float frequency = 1;</code>
+     */
     float getFrequency();
-    
+
     // required string frequencyUnits = 2;
+    /**
+     * <code>required string frequencyUnits = 2;</code>
+     */
     boolean hasFrequencyUnits();
-    String getFrequencyUnits();
-    
+    /**
+     * <code>required string frequencyUnits = 2;</code>
+     */
+    java.lang.String getFrequencyUnits();
+    /**
+     * <code>required string frequencyUnits = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getFrequencyUnitsBytes();
+
     // required float phase = 3;
+    /**
+     * <code>required float phase = 3;</code>
+     */
     boolean hasPhase();
+    /**
+     * <code>required float phase = 3;</code>
+     */
     float getPhase();
-    
+
     // required string phaseUnits = 4;
+    /**
+     * <code>required string phaseUnits = 4;</code>
+     */
     boolean hasPhaseUnits();
-    String getPhaseUnits();
+    /**
+     * <code>required string phaseUnits = 4;</code>
+     */
+    java.lang.String getPhaseUnits();
+    /**
+     * <code>required string phaseUnits = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getPhaseUnitsBytes();
   }
+  /**
+   * Protobuf type {@code gnuradar.Channel}
+   */
   public static final class Channel extends
       com.google.protobuf.GeneratedMessage
       implements ChannelOrBuilder {
     // Use Channel.newBuilder() to construct.
-    private Channel(Builder builder) {
+    private Channel(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private Channel(boolean noInit) {}
-    
+    private Channel(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final Channel defaultInstance;
     public static Channel getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Channel getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.gnuradar.proto.Control.internal_static_gnuradar_Channel_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.gnuradar.proto.Control.internal_static_gnuradar_Channel_fieldAccessorTable;
-    }
-    
-    private int bitField0_;
-    // required float frequency = 1;
-    public static final int FREQUENCY_FIELD_NUMBER = 1;
-    private float frequency_;
-    public boolean hasFrequency() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    public float getFrequency() {
-      return frequency_;
-    }
-    
-    // required string frequencyUnits = 2;
-    public static final int FREQUENCYUNITS_FIELD_NUMBER = 2;
-    private java.lang.Object frequencyUnits_;
-    public boolean hasFrequencyUnits() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    public String getFrequencyUnits() {
-      java.lang.Object ref = frequencyUnits_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          frequencyUnits_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getFrequencyUnitsBytes() {
-      java.lang.Object ref = frequencyUnits_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        frequencyUnits_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // required float phase = 3;
-    public static final int PHASE_FIELD_NUMBER = 3;
-    private float phase_;
-    public boolean hasPhase() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public float getPhase() {
-      return phase_;
-    }
-    
-    // required string phaseUnits = 4;
-    public static final int PHASEUNITS_FIELD_NUMBER = 4;
-    private java.lang.Object phaseUnits_;
-    public boolean hasPhaseUnits() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    public String getPhaseUnits() {
-      java.lang.Object ref = phaseUnits_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          phaseUnits_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getPhaseUnitsBytes() {
-      java.lang.Object ref = phaseUnits_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        phaseUnits_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    private void initFields() {
-      frequency_ = 0F;
-      frequencyUnits_ = "";
-      phase_ = 0F;
-      phaseUnits_ = "";
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-      
-      if (!hasFrequency()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasFrequencyUnits()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasPhase()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasPhaseUnits()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeFloat(1, frequency_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getFrequencyUnitsBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeFloat(3, phase_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getPhaseUnitsBytes());
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(1, frequency_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getFrequencyUnitsBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(3, phase_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getPhaseUnitsBytes());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    private static final long serialVersionUID = 0L;
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
     }
-    
-    public static com.gnuradar.proto.Control.Channel parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.gnuradar.proto.Control.Channel parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.gnuradar.proto.Control.Channel parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.gnuradar.proto.Control.Channel parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.gnuradar.proto.Control.Channel parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.gnuradar.proto.Control.Channel parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.gnuradar.proto.Control.Channel parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.gnuradar.proto.Control.Channel parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.gnuradar.proto.Control.Channel parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.gnuradar.proto.Control.Channel parseFrom(
+    private Channel(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.gnuradar.proto.Control.Channel prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.gnuradar.proto.Control.ChannelOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.gnuradar.proto.Control.internal_static_gnuradar_Channel_descriptor;
-      }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.gnuradar.proto.Control.internal_static_gnuradar_Channel_fieldAccessorTable;
-      }
-      
-      // Construct using com.gnuradar.proto.Control.Channel.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-      
-      private Builder(BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-      
-      public Builder clear() {
-        super.clear();
-        frequency_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        frequencyUnits_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
-        phase_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        phaseUnits_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.gnuradar.proto.Control.Channel.getDescriptor();
-      }
-      
-      public com.gnuradar.proto.Control.Channel getDefaultInstanceForType() {
-        return com.gnuradar.proto.Control.Channel.getDefaultInstance();
-      }
-      
-      public com.gnuradar.proto.Control.Channel build() {
-        com.gnuradar.proto.Control.Channel result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-      
-      private com.gnuradar.proto.Control.Channel buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        com.gnuradar.proto.Control.Channel result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
-      public com.gnuradar.proto.Control.Channel buildPartial() {
-        com.gnuradar.proto.Control.Channel result = new com.gnuradar.proto.Control.Channel(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.frequency_ = frequency_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.frequencyUnits_ = frequencyUnits_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.phase_ = phase_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.phaseUnits_ = phaseUnits_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.gnuradar.proto.Control.Channel) {
-          return mergeFrom((com.gnuradar.proto.Control.Channel)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(com.gnuradar.proto.Control.Channel other) {
-        if (other == com.gnuradar.proto.Control.Channel.getDefaultInstance()) return this;
-        if (other.hasFrequency()) {
-          setFrequency(other.getFrequency());
-        }
-        if (other.hasFrequencyUnits()) {
-          setFrequencyUnits(other.getFrequencyUnits());
-        }
-        if (other.hasPhase()) {
-          setPhase(other.getPhase());
-        }
-        if (other.hasPhaseUnits()) {
-          setPhaseUnits(other.getPhaseUnits());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public final boolean isInitialized() {
-        if (!hasFrequency()) {
-          
-          return false;
-        }
-        if (!hasFrequencyUnits()) {
-          
-          return false;
-        }
-        if (!hasPhase()) {
-          
-          return false;
-        }
-        if (!hasPhaseUnits()) {
-          
-          return false;
-        }
-        return true;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
           int tag = input.readTag();
           switch (tag) {
             case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
+              done = true;
+              break;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
+                done = true;
               }
               break;
             }
@@ -3570,471 +4428,336 @@ public final class Control {
             }
           }
         }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
       }
-      
-      private int bitField0_;
-      
-      // required float frequency = 1;
-      private float frequency_ ;
-      public boolean hasFrequency() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      public float getFrequency() {
-        return frequency_;
-      }
-      public Builder setFrequency(float value) {
-        bitField0_ |= 0x00000001;
-        frequency_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearFrequency() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        frequency_ = 0F;
-        onChanged();
-        return this;
-      }
-      
-      // required string frequencyUnits = 2;
-      private java.lang.Object frequencyUnits_ = "";
-      public boolean hasFrequencyUnits() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      public String getFrequencyUnits() {
-        java.lang.Object ref = frequencyUnits_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          frequencyUnits_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      public Builder setFrequencyUnits(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        frequencyUnits_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearFrequencyUnits() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        frequencyUnits_ = getDefaultInstance().getFrequencyUnits();
-        onChanged();
-        return this;
-      }
-      void setFrequencyUnits(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000002;
-        frequencyUnits_ = value;
-        onChanged();
-      }
-      
-      // required float phase = 3;
-      private float phase_ ;
-      public boolean hasPhase() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      public float getPhase() {
-        return phase_;
-      }
-      public Builder setPhase(float value) {
-        bitField0_ |= 0x00000004;
-        phase_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearPhase() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        phase_ = 0F;
-        onChanged();
-        return this;
-      }
-      
-      // required string phaseUnits = 4;
-      private java.lang.Object phaseUnits_ = "";
-      public boolean hasPhaseUnits() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      public String getPhaseUnits() {
-        java.lang.Object ref = phaseUnits_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          phaseUnits_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      public Builder setPhaseUnits(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        phaseUnits_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearPhaseUnits() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        phaseUnits_ = getDefaultInstance().getPhaseUnits();
-        onChanged();
-        return this;
-      }
-      void setPhaseUnits(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000008;
-        phaseUnits_ = value;
-        onChanged();
-      }
-      
-      // @@protoc_insertion_point(builder_scope:gnuradar.Channel)
     }
-    
-    static {
-      defaultInstance = new Channel(true);
-      defaultInstance.initFields();
-    }
-    
-    // @@protoc_insertion_point(class_scope:gnuradar.Channel)
-  }
-  
-  public interface WindowOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-    
-    // required string name = 1;
-    boolean hasName();
-    String getName();
-    
-    // required float start = 2;
-    boolean hasStart();
-    float getStart();
-    
-    // required float stop = 3;
-    boolean hasStop();
-    float getStop();
-    
-    // optional float width = 4;
-    boolean hasWidth();
-    float getWidth();
-    
-    // required string units = 5;
-    boolean hasUnits();
-    String getUnits();
-  }
-  public static final class Window extends
-      com.google.protobuf.GeneratedMessage
-      implements WindowOrBuilder {
-    // Use Window.newBuilder() to construct.
-    private Window(Builder builder) {
-      super(builder);
-    }
-    private Window(boolean noInit) {}
-    
-    private static final Window defaultInstance;
-    public static Window getDefaultInstance() {
-      return defaultInstance;
-    }
-    
-    public Window getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-    
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.gnuradar.proto.Control.internal_static_gnuradar_Window_descriptor;
+      return com.gnuradar.proto.Control.internal_static_gnuradar_Channel_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.gnuradar.proto.Control.internal_static_gnuradar_Window_fieldAccessorTable;
+      return com.gnuradar.proto.Control.internal_static_gnuradar_Channel_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.gnuradar.proto.Control.Channel.class, com.gnuradar.proto.Control.Channel.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<Channel> PARSER =
+        new com.google.protobuf.AbstractParser<Channel>() {
+      public Channel parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Channel(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Channel> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
-    // required string name = 1;
-    public static final int NAME_FIELD_NUMBER = 1;
-    private java.lang.Object name_;
-    public boolean hasName() {
+    // required float frequency = 1;
+    public static final int FREQUENCY_FIELD_NUMBER = 1;
+    private float frequency_;
+    /**
+     * <code>required float frequency = 1;</code>
+     */
+    public boolean hasFrequency() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public String getName() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          name_ = s;
-        }
-        return s;
-      }
+    /**
+     * <code>required float frequency = 1;</code>
+     */
+    public float getFrequency() {
+      return frequency_;
     }
-    private com.google.protobuf.ByteString getNameBytes() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // required float start = 2;
-    public static final int START_FIELD_NUMBER = 2;
-    private float start_;
-    public boolean hasStart() {
+
+    // required string frequencyUnits = 2;
+    public static final int FREQUENCYUNITS_FIELD_NUMBER = 2;
+    private java.lang.Object frequencyUnits_;
+    /**
+     * <code>required string frequencyUnits = 2;</code>
+     */
+    public boolean hasFrequencyUnits() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public float getStart() {
-      return start_;
-    }
-    
-    // required float stop = 3;
-    public static final int STOP_FIELD_NUMBER = 3;
-    private float stop_;
-    public boolean hasStop() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public float getStop() {
-      return stop_;
-    }
-    
-    // optional float width = 4;
-    public static final int WIDTH_FIELD_NUMBER = 4;
-    private float width_;
-    public boolean hasWidth() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    public float getWidth() {
-      return width_;
-    }
-    
-    // required string units = 5;
-    public static final int UNITS_FIELD_NUMBER = 5;
-    private java.lang.Object units_;
-    public boolean hasUnits() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    public String getUnits() {
-      java.lang.Object ref = units_;
-      if (ref instanceof String) {
-        return (String) ref;
+    /**
+     * <code>required string frequencyUnits = 2;</code>
+     */
+    public java.lang.String getFrequencyUnits() {
+      java.lang.Object ref = frequencyUnits_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          units_ = s;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          frequencyUnits_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getUnitsBytes() {
-      java.lang.Object ref = units_;
-      if (ref instanceof String) {
+    /**
+     * <code>required string frequencyUnits = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getFrequencyUnitsBytes() {
+      java.lang.Object ref = frequencyUnits_;
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        units_ = b;
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        frequencyUnits_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
+    // required float phase = 3;
+    public static final int PHASE_FIELD_NUMBER = 3;
+    private float phase_;
+    /**
+     * <code>required float phase = 3;</code>
+     */
+    public boolean hasPhase() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required float phase = 3;</code>
+     */
+    public float getPhase() {
+      return phase_;
+    }
+
+    // required string phaseUnits = 4;
+    public static final int PHASEUNITS_FIELD_NUMBER = 4;
+    private java.lang.Object phaseUnits_;
+    /**
+     * <code>required string phaseUnits = 4;</code>
+     */
+    public boolean hasPhaseUnits() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required string phaseUnits = 4;</code>
+     */
+    public java.lang.String getPhaseUnits() {
+      java.lang.Object ref = phaseUnits_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          phaseUnits_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string phaseUnits = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getPhaseUnitsBytes() {
+      java.lang.Object ref = phaseUnits_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        phaseUnits_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
-      name_ = "";
-      start_ = 0F;
-      stop_ = 0F;
-      width_ = 0F;
-      units_ = "";
+      frequency_ = 0F;
+      frequencyUnits_ = "";
+      phase_ = 0F;
+      phaseUnits_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
-      if (!hasName()) {
+
+      if (!hasFrequency()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasStart()) {
+      if (!hasFrequencyUnits()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasStop()) {
+      if (!hasPhase()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasUnits()) {
+      if (!hasPhaseUnits()) {
         memoizedIsInitialized = 0;
         return false;
       }
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getNameBytes());
+        output.writeFloat(1, frequency_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeFloat(2, start_);
+        output.writeBytes(2, getFrequencyUnitsBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeFloat(3, stop_);
+        output.writeFloat(3, phase_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeFloat(4, width_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBytes(5, getUnitsBytes());
+        output.writeBytes(4, getPhaseUnitsBytes());
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getNameBytes());
+          .computeFloatSize(1, frequency_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(2, start_);
+          .computeBytesSize(2, getFrequencyUnitsBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(3, stop_);
+          .computeFloatSize(3, phase_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(4, width_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getUnitsBytes());
+          .computeBytesSize(4, getPhaseUnitsBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
-    public static com.gnuradar.proto.Control.Window parseFrom(
+
+    public static com.gnuradar.proto.Control.Channel parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
-    public static com.gnuradar.proto.Control.Window parseFrom(
+    public static com.gnuradar.proto.Control.Channel parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gnuradar.proto.Control.Window parseFrom(byte[] data)
+    public static com.gnuradar.proto.Control.Channel parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
-    public static com.gnuradar.proto.Control.Window parseFrom(
+    public static com.gnuradar.proto.Control.Channel parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gnuradar.proto.Control.Window parseFrom(java.io.InputStream input)
+    public static com.gnuradar.proto.Control.Channel parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
-    public static com.gnuradar.proto.Control.Window parseFrom(
+    public static com.gnuradar.proto.Control.Channel parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.gnuradar.proto.Control.Window parseDelimitedFrom(java.io.InputStream input)
+    public static com.gnuradar.proto.Control.Channel parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
-    public static com.gnuradar.proto.Control.Window parseDelimitedFrom(
+    public static com.gnuradar.proto.Control.Channel parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.gnuradar.proto.Control.Window parseFrom(
+    public static com.gnuradar.proto.Control.Channel parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
-    public static com.gnuradar.proto.Control.Window parseFrom(
+    public static com.gnuradar.proto.Control.Channel parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.gnuradar.proto.Control.Window prototype) {
+    public static Builder newBuilder(com.gnuradar.proto.Control.Channel prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code gnuradar.Channel}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.gnuradar.proto.Control.WindowOrBuilder {
+       implements com.gnuradar.proto.Control.ChannelOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.gnuradar.proto.Control.internal_static_gnuradar_Window_descriptor;
+        return com.gnuradar.proto.Control.internal_static_gnuradar_Channel_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.gnuradar.proto.Control.internal_static_gnuradar_Window_fieldAccessorTable;
+        return com.gnuradar.proto.Control.internal_static_gnuradar_Channel_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.gnuradar.proto.Control.Channel.class, com.gnuradar.proto.Control.Channel.Builder.class);
       }
-      
-      // Construct using com.gnuradar.proto.Control.Window.newBuilder()
+
+      // Construct using com.gnuradar.proto.Control.Channel.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -4045,152 +4768,472 @@ public final class Control {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
-        name_ = "";
+        frequency_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000001);
-        start_ = 0F;
+        frequencyUnits_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        stop_ = 0F;
+        phase_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000004);
-        width_ = 0F;
+        phaseUnits_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
-        units_ = "";
-        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.gnuradar.proto.Control.Window.getDescriptor();
+        return com.gnuradar.proto.Control.internal_static_gnuradar_Channel_descriptor;
       }
-      
-      public com.gnuradar.proto.Control.Window getDefaultInstanceForType() {
-        return com.gnuradar.proto.Control.Window.getDefaultInstance();
+
+      public com.gnuradar.proto.Control.Channel getDefaultInstanceForType() {
+        return com.gnuradar.proto.Control.Channel.getDefaultInstance();
       }
-      
-      public com.gnuradar.proto.Control.Window build() {
-        com.gnuradar.proto.Control.Window result = buildPartial();
+
+      public com.gnuradar.proto.Control.Channel build() {
+        com.gnuradar.proto.Control.Channel result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
-      
-      private com.gnuradar.proto.Control.Window buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        com.gnuradar.proto.Control.Window result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
-      public com.gnuradar.proto.Control.Window buildPartial() {
-        com.gnuradar.proto.Control.Window result = new com.gnuradar.proto.Control.Window(this);
+
+      public com.gnuradar.proto.Control.Channel buildPartial() {
+        com.gnuradar.proto.Control.Channel result = new com.gnuradar.proto.Control.Channel(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.name_ = name_;
+        result.frequency_ = frequency_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.start_ = start_;
+        result.frequencyUnits_ = frequencyUnits_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.stop_ = stop_;
+        result.phase_ = phase_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.width_ = width_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.units_ = units_;
+        result.phaseUnits_ = phaseUnits_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.gnuradar.proto.Control.Window) {
-          return mergeFrom((com.gnuradar.proto.Control.Window)other);
+        if (other instanceof com.gnuradar.proto.Control.Channel) {
+          return mergeFrom((com.gnuradar.proto.Control.Channel)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.gnuradar.proto.Control.Window other) {
-        if (other == com.gnuradar.proto.Control.Window.getDefaultInstance()) return this;
-        if (other.hasName()) {
-          setName(other.getName());
+
+      public Builder mergeFrom(com.gnuradar.proto.Control.Channel other) {
+        if (other == com.gnuradar.proto.Control.Channel.getDefaultInstance()) return this;
+        if (other.hasFrequency()) {
+          setFrequency(other.getFrequency());
         }
-        if (other.hasStart()) {
-          setStart(other.getStart());
+        if (other.hasFrequencyUnits()) {
+          bitField0_ |= 0x00000002;
+          frequencyUnits_ = other.frequencyUnits_;
+          onChanged();
         }
-        if (other.hasStop()) {
-          setStop(other.getStop());
+        if (other.hasPhase()) {
+          setPhase(other.getPhase());
         }
-        if (other.hasWidth()) {
-          setWidth(other.getWidth());
-        }
-        if (other.hasUnits()) {
-          setUnits(other.getUnits());
+        if (other.hasPhaseUnits()) {
+          bitField0_ |= 0x00000008;
+          phaseUnits_ = other.phaseUnits_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
-        if (!hasName()) {
+        if (!hasFrequency()) {
           
           return false;
         }
-        if (!hasStart()) {
+        if (!hasFrequencyUnits()) {
           
           return false;
         }
-        if (!hasStop()) {
+        if (!hasPhase()) {
           
           return false;
         }
-        if (!hasUnits()) {
+        if (!hasPhaseUnits()) {
           
           return false;
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
+        com.gnuradar.proto.Control.Channel parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.gnuradar.proto.Control.Channel) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required float frequency = 1;
+      private float frequency_ ;
+      /**
+       * <code>required float frequency = 1;</code>
+       */
+      public boolean hasFrequency() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required float frequency = 1;</code>
+       */
+      public float getFrequency() {
+        return frequency_;
+      }
+      /**
+       * <code>required float frequency = 1;</code>
+       */
+      public Builder setFrequency(float value) {
+        bitField0_ |= 0x00000001;
+        frequency_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required float frequency = 1;</code>
+       */
+      public Builder clearFrequency() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        frequency_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      // required string frequencyUnits = 2;
+      private java.lang.Object frequencyUnits_ = "";
+      /**
+       * <code>required string frequencyUnits = 2;</code>
+       */
+      public boolean hasFrequencyUnits() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string frequencyUnits = 2;</code>
+       */
+      public java.lang.String getFrequencyUnits() {
+        java.lang.Object ref = frequencyUnits_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          frequencyUnits_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string frequencyUnits = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getFrequencyUnitsBytes() {
+        java.lang.Object ref = frequencyUnits_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          frequencyUnits_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string frequencyUnits = 2;</code>
+       */
+      public Builder setFrequencyUnits(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        frequencyUnits_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string frequencyUnits = 2;</code>
+       */
+      public Builder clearFrequencyUnits() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        frequencyUnits_ = getDefaultInstance().getFrequencyUnits();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string frequencyUnits = 2;</code>
+       */
+      public Builder setFrequencyUnitsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        frequencyUnits_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required float phase = 3;
+      private float phase_ ;
+      /**
+       * <code>required float phase = 3;</code>
+       */
+      public boolean hasPhase() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required float phase = 3;</code>
+       */
+      public float getPhase() {
+        return phase_;
+      }
+      /**
+       * <code>required float phase = 3;</code>
+       */
+      public Builder setPhase(float value) {
+        bitField0_ |= 0x00000004;
+        phase_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required float phase = 3;</code>
+       */
+      public Builder clearPhase() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        phase_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      // required string phaseUnits = 4;
+      private java.lang.Object phaseUnits_ = "";
+      /**
+       * <code>required string phaseUnits = 4;</code>
+       */
+      public boolean hasPhaseUnits() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>required string phaseUnits = 4;</code>
+       */
+      public java.lang.String getPhaseUnits() {
+        java.lang.Object ref = phaseUnits_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          phaseUnits_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string phaseUnits = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getPhaseUnitsBytes() {
+        java.lang.Object ref = phaseUnits_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          phaseUnits_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string phaseUnits = 4;</code>
+       */
+      public Builder setPhaseUnits(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        phaseUnits_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string phaseUnits = 4;</code>
+       */
+      public Builder clearPhaseUnits() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        phaseUnits_ = getDefaultInstance().getPhaseUnits();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string phaseUnits = 4;</code>
+       */
+      public Builder setPhaseUnitsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        phaseUnits_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:gnuradar.Channel)
+    }
+
+    static {
+      defaultInstance = new Channel(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:gnuradar.Channel)
+  }
+
+  public interface WindowOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required string name = 1;
+    /**
+     * <code>required string name = 1;</code>
+     */
+    boolean hasName();
+    /**
+     * <code>required string name = 1;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <code>required string name = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
+    // required float start = 2;
+    /**
+     * <code>required float start = 2;</code>
+     */
+    boolean hasStart();
+    /**
+     * <code>required float start = 2;</code>
+     */
+    float getStart();
+
+    // required float stop = 3;
+    /**
+     * <code>required float stop = 3;</code>
+     */
+    boolean hasStop();
+    /**
+     * <code>required float stop = 3;</code>
+     */
+    float getStop();
+
+    // optional float width = 4;
+    /**
+     * <code>optional float width = 4;</code>
+     */
+    boolean hasWidth();
+    /**
+     * <code>optional float width = 4;</code>
+     */
+    float getWidth();
+
+    // required string units = 5;
+    /**
+     * <code>required string units = 5;</code>
+     */
+    boolean hasUnits();
+    /**
+     * <code>required string units = 5;</code>
+     */
+    java.lang.String getUnits();
+    /**
+     * <code>required string units = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getUnitsBytes();
+  }
+  /**
+   * Protobuf type {@code gnuradar.Window}
+   */
+  public static final class Window extends
+      com.google.protobuf.GeneratedMessage
+      implements WindowOrBuilder {
+    // Use Window.newBuilder() to construct.
+    private Window(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Window(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Window defaultInstance;
+    public static Window getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Window getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Window(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
           int tag = input.readTag();
           switch (tag) {
             case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
+              done = true;
+              break;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
+                done = true;
               }
               break;
             }
@@ -4221,556 +5264,360 @@ public final class Control {
             }
           }
         }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
       }
-      
-      private int bitField0_;
-      
-      // required string name = 1;
-      private java.lang.Object name_ = "";
-      public boolean hasName() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      public String getName() {
-        java.lang.Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          name_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      public Builder setName(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        name_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearName() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        name_ = getDefaultInstance().getName();
-        onChanged();
-        return this;
-      }
-      void setName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000001;
-        name_ = value;
-        onChanged();
-      }
-      
-      // required float start = 2;
-      private float start_ ;
-      public boolean hasStart() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      public float getStart() {
-        return start_;
-      }
-      public Builder setStart(float value) {
-        bitField0_ |= 0x00000002;
-        start_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearStart() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        start_ = 0F;
-        onChanged();
-        return this;
-      }
-      
-      // required float stop = 3;
-      private float stop_ ;
-      public boolean hasStop() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      public float getStop() {
-        return stop_;
-      }
-      public Builder setStop(float value) {
-        bitField0_ |= 0x00000004;
-        stop_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearStop() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        stop_ = 0F;
-        onChanged();
-        return this;
-      }
-      
-      // optional float width = 4;
-      private float width_ ;
-      public boolean hasWidth() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      public float getWidth() {
-        return width_;
-      }
-      public Builder setWidth(float value) {
-        bitField0_ |= 0x00000008;
-        width_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearWidth() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        width_ = 0F;
-        onChanged();
-        return this;
-      }
-      
-      // required string units = 5;
-      private java.lang.Object units_ = "";
-      public boolean hasUnits() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      public String getUnits() {
-        java.lang.Object ref = units_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          units_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      public Builder setUnits(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-        units_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearUnits() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        units_ = getDefaultInstance().getUnits();
-        onChanged();
-        return this;
-      }
-      void setUnits(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000010;
-        units_ = value;
-        onChanged();
-      }
-      
-      // @@protoc_insertion_point(builder_scope:gnuradar.Window)
     }
-    
-    static {
-      defaultInstance = new Window(true);
-      defaultInstance.initFields();
-    }
-    
-    // @@protoc_insertion_point(class_scope:gnuradar.Window)
-  }
-  
-  public interface RadarParametersOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-    
-    // required int32 samplesPerPri = 1;
-    boolean hasSamplesPerPri();
-    int getSamplesPerPri();
-    
-    // required int32 samplesPerBuffer = 2;
-    boolean hasSamplesPerBuffer();
-    int getSamplesPerBuffer();
-    
-    // required int32 bytesPerBuffer = 3;
-    boolean hasBytesPerBuffer();
-    int getBytesPerBuffer();
-    
-    // required float bytesPerSecond = 4;
-    boolean hasBytesPerSecond();
-    float getBytesPerSecond();
-    
-    // required float pri = 5;
-    boolean hasPri();
-    float getPri();
-    
-    // required float prf = 6;
-    boolean hasPrf();
-    float getPrf();
-    
-    // required int32 prisPerBuffer = 7;
-    boolean hasPrisPerBuffer();
-    int getPrisPerBuffer();
-    
-    // required int32 bytesPerSample = 8;
-    boolean hasBytesPerSample();
-    int getBytesPerSample();
-    
-    // required float secondsPerBuffer = 9;
-    boolean hasSecondsPerBuffer();
-    float getSecondsPerBuffer();
-  }
-  public static final class RadarParameters extends
-      com.google.protobuf.GeneratedMessage
-      implements RadarParametersOrBuilder {
-    // Use RadarParameters.newBuilder() to construct.
-    private RadarParameters(Builder builder) {
-      super(builder);
-    }
-    private RadarParameters(boolean noInit) {}
-    
-    private static final RadarParameters defaultInstance;
-    public static RadarParameters getDefaultInstance() {
-      return defaultInstance;
-    }
-    
-    public RadarParameters getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-    
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.gnuradar.proto.Control.internal_static_gnuradar_RadarParameters_descriptor;
+      return com.gnuradar.proto.Control.internal_static_gnuradar_Window_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.gnuradar.proto.Control.internal_static_gnuradar_RadarParameters_fieldAccessorTable;
+      return com.gnuradar.proto.Control.internal_static_gnuradar_Window_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.gnuradar.proto.Control.Window.class, com.gnuradar.proto.Control.Window.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<Window> PARSER =
+        new com.google.protobuf.AbstractParser<Window>() {
+      public Window parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Window(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Window> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
-    // required int32 samplesPerPri = 1;
-    public static final int SAMPLESPERPRI_FIELD_NUMBER = 1;
-    private int samplesPerPri_;
-    public boolean hasSamplesPerPri() {
+    // required string name = 1;
+    public static final int NAME_FIELD_NUMBER = 1;
+    private java.lang.Object name_;
+    /**
+     * <code>required string name = 1;</code>
+     */
+    public boolean hasName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public int getSamplesPerPri() {
-      return samplesPerPri_;
+    /**
+     * <code>required string name = 1;</code>
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          name_ = s;
+        }
+        return s;
+      }
     }
-    
-    // required int32 samplesPerBuffer = 2;
-    public static final int SAMPLESPERBUFFER_FIELD_NUMBER = 2;
-    private int samplesPerBuffer_;
-    public boolean hasSamplesPerBuffer() {
+    /**
+     * <code>required string name = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required float start = 2;
+    public static final int START_FIELD_NUMBER = 2;
+    private float start_;
+    /**
+     * <code>required float start = 2;</code>
+     */
+    public boolean hasStart() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public int getSamplesPerBuffer() {
-      return samplesPerBuffer_;
+    /**
+     * <code>required float start = 2;</code>
+     */
+    public float getStart() {
+      return start_;
     }
-    
-    // required int32 bytesPerBuffer = 3;
-    public static final int BYTESPERBUFFER_FIELD_NUMBER = 3;
-    private int bytesPerBuffer_;
-    public boolean hasBytesPerBuffer() {
+
+    // required float stop = 3;
+    public static final int STOP_FIELD_NUMBER = 3;
+    private float stop_;
+    /**
+     * <code>required float stop = 3;</code>
+     */
+    public boolean hasStop() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    public int getBytesPerBuffer() {
-      return bytesPerBuffer_;
+    /**
+     * <code>required float stop = 3;</code>
+     */
+    public float getStop() {
+      return stop_;
     }
-    
-    // required float bytesPerSecond = 4;
-    public static final int BYTESPERSECOND_FIELD_NUMBER = 4;
-    private float bytesPerSecond_;
-    public boolean hasBytesPerSecond() {
+
+    // optional float width = 4;
+    public static final int WIDTH_FIELD_NUMBER = 4;
+    private float width_;
+    /**
+     * <code>optional float width = 4;</code>
+     */
+    public boolean hasWidth() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    public float getBytesPerSecond() {
-      return bytesPerSecond_;
+    /**
+     * <code>optional float width = 4;</code>
+     */
+    public float getWidth() {
+      return width_;
     }
-    
-    // required float pri = 5;
-    public static final int PRI_FIELD_NUMBER = 5;
-    private float pri_;
-    public boolean hasPri() {
+
+    // required string units = 5;
+    public static final int UNITS_FIELD_NUMBER = 5;
+    private java.lang.Object units_;
+    /**
+     * <code>required string units = 5;</code>
+     */
+    public boolean hasUnits() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
-    public float getPri() {
-      return pri_;
+    /**
+     * <code>required string units = 5;</code>
+     */
+    public java.lang.String getUnits() {
+      java.lang.Object ref = units_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          units_ = s;
+        }
+        return s;
+      }
     }
-    
-    // required float prf = 6;
-    public static final int PRF_FIELD_NUMBER = 6;
-    private float prf_;
-    public boolean hasPrf() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+    /**
+     * <code>required string units = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUnitsBytes() {
+      java.lang.Object ref = units_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        units_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
-    public float getPrf() {
-      return prf_;
-    }
-    
-    // required int32 prisPerBuffer = 7;
-    public static final int PRISPERBUFFER_FIELD_NUMBER = 7;
-    private int prisPerBuffer_;
-    public boolean hasPrisPerBuffer() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    public int getPrisPerBuffer() {
-      return prisPerBuffer_;
-    }
-    
-    // required int32 bytesPerSample = 8;
-    public static final int BYTESPERSAMPLE_FIELD_NUMBER = 8;
-    private int bytesPerSample_;
-    public boolean hasBytesPerSample() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
-    }
-    public int getBytesPerSample() {
-      return bytesPerSample_;
-    }
-    
-    // required float secondsPerBuffer = 9;
-    public static final int SECONDSPERBUFFER_FIELD_NUMBER = 9;
-    private float secondsPerBuffer_;
-    public boolean hasSecondsPerBuffer() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
-    }
-    public float getSecondsPerBuffer() {
-      return secondsPerBuffer_;
-    }
-    
+
     private void initFields() {
-      samplesPerPri_ = 0;
-      samplesPerBuffer_ = 0;
-      bytesPerBuffer_ = 0;
-      bytesPerSecond_ = 0F;
-      pri_ = 0F;
-      prf_ = 0F;
-      prisPerBuffer_ = 0;
-      bytesPerSample_ = 0;
-      secondsPerBuffer_ = 0F;
+      name_ = "";
+      start_ = 0F;
+      stop_ = 0F;
+      width_ = 0F;
+      units_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
-      if (!hasSamplesPerPri()) {
+
+      if (!hasName()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasSamplesPerBuffer()) {
+      if (!hasStart()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasBytesPerBuffer()) {
+      if (!hasStop()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasBytesPerSecond()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasPri()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasPrf()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasPrisPerBuffer()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasBytesPerSample()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasSecondsPerBuffer()) {
+      if (!hasUnits()) {
         memoizedIsInitialized = 0;
         return false;
       }
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, samplesPerPri_);
+        output.writeBytes(1, getNameBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, samplesPerBuffer_);
+        output.writeFloat(2, start_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, bytesPerBuffer_);
+        output.writeFloat(3, stop_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeFloat(4, bytesPerSecond_);
+        output.writeFloat(4, width_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeFloat(5, pri_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeFloat(6, prf_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(7, prisPerBuffer_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeInt32(8, bytesPerSample_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeFloat(9, secondsPerBuffer_);
+        output.writeBytes(5, getUnitsBytes());
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, samplesPerPri_);
+          .computeBytesSize(1, getNameBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, samplesPerBuffer_);
+          .computeFloatSize(2, start_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, bytesPerBuffer_);
+          .computeFloatSize(3, stop_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(4, bytesPerSecond_);
+          .computeFloatSize(4, width_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(5, pri_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(6, prf_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, prisPerBuffer_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(8, bytesPerSample_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(9, secondsPerBuffer_);
+          .computeBytesSize(5, getUnitsBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
-    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+
+    public static com.gnuradar.proto.Control.Window parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
-    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+    public static com.gnuradar.proto.Control.Window parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gnuradar.proto.Control.RadarParameters parseFrom(byte[] data)
+    public static com.gnuradar.proto.Control.Window parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
-    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+    public static com.gnuradar.proto.Control.Window parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.gnuradar.proto.Control.RadarParameters parseFrom(java.io.InputStream input)
+    public static com.gnuradar.proto.Control.Window parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
-    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+    public static com.gnuradar.proto.Control.Window parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.gnuradar.proto.Control.RadarParameters parseDelimitedFrom(java.io.InputStream input)
+    public static com.gnuradar.proto.Control.Window parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
-    public static com.gnuradar.proto.Control.RadarParameters parseDelimitedFrom(
+    public static com.gnuradar.proto.Control.Window parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+    public static com.gnuradar.proto.Control.Window parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
-    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+    public static com.gnuradar.proto.Control.Window parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.gnuradar.proto.Control.RadarParameters prototype) {
+    public static Builder newBuilder(com.gnuradar.proto.Control.Window prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code gnuradar.Window}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.gnuradar.proto.Control.RadarParametersOrBuilder {
+       implements com.gnuradar.proto.Control.WindowOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.gnuradar.proto.Control.internal_static_gnuradar_RadarParameters_descriptor;
+        return com.gnuradar.proto.Control.internal_static_gnuradar_Window_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.gnuradar.proto.Control.internal_static_gnuradar_RadarParameters_fieldAccessorTable;
+        return com.gnuradar.proto.Control.internal_static_gnuradar_Window_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.gnuradar.proto.Control.Window.class, com.gnuradar.proto.Control.Window.Builder.class);
       }
-      
-      // Construct using com.gnuradar.proto.Control.RadarParameters.newBuilder()
+
+      // Construct using com.gnuradar.proto.Control.Window.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -4781,208 +5628,544 @@ public final class Control {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
-        samplesPerPri_ = 0;
+        name_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        samplesPerBuffer_ = 0;
+        start_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000002);
-        bytesPerBuffer_ = 0;
+        stop_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000004);
-        bytesPerSecond_ = 0F;
+        width_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000008);
-        pri_ = 0F;
+        units_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
-        prf_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        prisPerBuffer_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        bytesPerSample_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000080);
-        secondsPerBuffer_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.gnuradar.proto.Control.RadarParameters.getDescriptor();
+        return com.gnuradar.proto.Control.internal_static_gnuradar_Window_descriptor;
       }
-      
-      public com.gnuradar.proto.Control.RadarParameters getDefaultInstanceForType() {
-        return com.gnuradar.proto.Control.RadarParameters.getDefaultInstance();
+
+      public com.gnuradar.proto.Control.Window getDefaultInstanceForType() {
+        return com.gnuradar.proto.Control.Window.getDefaultInstance();
       }
-      
-      public com.gnuradar.proto.Control.RadarParameters build() {
-        com.gnuradar.proto.Control.RadarParameters result = buildPartial();
+
+      public com.gnuradar.proto.Control.Window build() {
+        com.gnuradar.proto.Control.Window result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
-      
-      private com.gnuradar.proto.Control.RadarParameters buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        com.gnuradar.proto.Control.RadarParameters result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
-      public com.gnuradar.proto.Control.RadarParameters buildPartial() {
-        com.gnuradar.proto.Control.RadarParameters result = new com.gnuradar.proto.Control.RadarParameters(this);
+
+      public com.gnuradar.proto.Control.Window buildPartial() {
+        com.gnuradar.proto.Control.Window result = new com.gnuradar.proto.Control.Window(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.samplesPerPri_ = samplesPerPri_;
+        result.name_ = name_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.samplesPerBuffer_ = samplesPerBuffer_;
+        result.start_ = start_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.bytesPerBuffer_ = bytesPerBuffer_;
+        result.stop_ = stop_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.bytesPerSecond_ = bytesPerSecond_;
+        result.width_ = width_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.pri_ = pri_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.prf_ = prf_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.prisPerBuffer_ = prisPerBuffer_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000080;
-        }
-        result.bytesPerSample_ = bytesPerSample_;
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000100;
-        }
-        result.secondsPerBuffer_ = secondsPerBuffer_;
+        result.units_ = units_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.gnuradar.proto.Control.RadarParameters) {
-          return mergeFrom((com.gnuradar.proto.Control.RadarParameters)other);
+        if (other instanceof com.gnuradar.proto.Control.Window) {
+          return mergeFrom((com.gnuradar.proto.Control.Window)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.gnuradar.proto.Control.RadarParameters other) {
-        if (other == com.gnuradar.proto.Control.RadarParameters.getDefaultInstance()) return this;
-        if (other.hasSamplesPerPri()) {
-          setSamplesPerPri(other.getSamplesPerPri());
+
+      public Builder mergeFrom(com.gnuradar.proto.Control.Window other) {
+        if (other == com.gnuradar.proto.Control.Window.getDefaultInstance()) return this;
+        if (other.hasName()) {
+          bitField0_ |= 0x00000001;
+          name_ = other.name_;
+          onChanged();
         }
-        if (other.hasSamplesPerBuffer()) {
-          setSamplesPerBuffer(other.getSamplesPerBuffer());
+        if (other.hasStart()) {
+          setStart(other.getStart());
         }
-        if (other.hasBytesPerBuffer()) {
-          setBytesPerBuffer(other.getBytesPerBuffer());
+        if (other.hasStop()) {
+          setStop(other.getStop());
         }
-        if (other.hasBytesPerSecond()) {
-          setBytesPerSecond(other.getBytesPerSecond());
+        if (other.hasWidth()) {
+          setWidth(other.getWidth());
         }
-        if (other.hasPri()) {
-          setPri(other.getPri());
-        }
-        if (other.hasPrf()) {
-          setPrf(other.getPrf());
-        }
-        if (other.hasPrisPerBuffer()) {
-          setPrisPerBuffer(other.getPrisPerBuffer());
-        }
-        if (other.hasBytesPerSample()) {
-          setBytesPerSample(other.getBytesPerSample());
-        }
-        if (other.hasSecondsPerBuffer()) {
-          setSecondsPerBuffer(other.getSecondsPerBuffer());
+        if (other.hasUnits()) {
+          bitField0_ |= 0x00000010;
+          units_ = other.units_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
-        if (!hasSamplesPerPri()) {
+        if (!hasName()) {
           
           return false;
         }
-        if (!hasSamplesPerBuffer()) {
+        if (!hasStart()) {
           
           return false;
         }
-        if (!hasBytesPerBuffer()) {
+        if (!hasStop()) {
           
           return false;
         }
-        if (!hasBytesPerSecond()) {
-          
-          return false;
-        }
-        if (!hasPri()) {
-          
-          return false;
-        }
-        if (!hasPrf()) {
-          
-          return false;
-        }
-        if (!hasPrisPerBuffer()) {
-          
-          return false;
-        }
-        if (!hasBytesPerSample()) {
-          
-          return false;
-        }
-        if (!hasSecondsPerBuffer()) {
+        if (!hasUnits()) {
           
           return false;
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
+        com.gnuradar.proto.Control.Window parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.gnuradar.proto.Control.Window) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required string name = 1;
+      private java.lang.Object name_ = "";
+      /**
+       * <code>required string name = 1;</code>
+       */
+      public boolean hasName() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string name = 1;</code>
+       */
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          name_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string name = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string name = 1;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        name_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string name = 1;</code>
+       */
+      public Builder clearName() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        name_ = getDefaultInstance().getName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string name = 1;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        name_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required float start = 2;
+      private float start_ ;
+      /**
+       * <code>required float start = 2;</code>
+       */
+      public boolean hasStart() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required float start = 2;</code>
+       */
+      public float getStart() {
+        return start_;
+      }
+      /**
+       * <code>required float start = 2;</code>
+       */
+      public Builder setStart(float value) {
+        bitField0_ |= 0x00000002;
+        start_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required float start = 2;</code>
+       */
+      public Builder clearStart() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        start_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      // required float stop = 3;
+      private float stop_ ;
+      /**
+       * <code>required float stop = 3;</code>
+       */
+      public boolean hasStop() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required float stop = 3;</code>
+       */
+      public float getStop() {
+        return stop_;
+      }
+      /**
+       * <code>required float stop = 3;</code>
+       */
+      public Builder setStop(float value) {
+        bitField0_ |= 0x00000004;
+        stop_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required float stop = 3;</code>
+       */
+      public Builder clearStop() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        stop_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      // optional float width = 4;
+      private float width_ ;
+      /**
+       * <code>optional float width = 4;</code>
+       */
+      public boolean hasWidth() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional float width = 4;</code>
+       */
+      public float getWidth() {
+        return width_;
+      }
+      /**
+       * <code>optional float width = 4;</code>
+       */
+      public Builder setWidth(float value) {
+        bitField0_ |= 0x00000008;
+        width_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional float width = 4;</code>
+       */
+      public Builder clearWidth() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        width_ = 0F;
+        onChanged();
+        return this;
+      }
+
+      // required string units = 5;
+      private java.lang.Object units_ = "";
+      /**
+       * <code>required string units = 5;</code>
+       */
+      public boolean hasUnits() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>required string units = 5;</code>
+       */
+      public java.lang.String getUnits() {
+        java.lang.Object ref = units_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          units_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string units = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUnitsBytes() {
+        java.lang.Object ref = units_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          units_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string units = 5;</code>
+       */
+      public Builder setUnits(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        units_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string units = 5;</code>
+       */
+      public Builder clearUnits() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        units_ = getDefaultInstance().getUnits();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string units = 5;</code>
+       */
+      public Builder setUnitsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        units_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:gnuradar.Window)
+    }
+
+    static {
+      defaultInstance = new Window(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:gnuradar.Window)
+  }
+
+  public interface RadarParametersOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required int32 samplesPerPri = 1;
+    /**
+     * <code>required int32 samplesPerPri = 1;</code>
+     */
+    boolean hasSamplesPerPri();
+    /**
+     * <code>required int32 samplesPerPri = 1;</code>
+     */
+    int getSamplesPerPri();
+
+    // required int32 samplesPerBuffer = 2;
+    /**
+     * <code>required int32 samplesPerBuffer = 2;</code>
+     */
+    boolean hasSamplesPerBuffer();
+    /**
+     * <code>required int32 samplesPerBuffer = 2;</code>
+     */
+    int getSamplesPerBuffer();
+
+    // required int32 bytesPerBuffer = 3;
+    /**
+     * <code>required int32 bytesPerBuffer = 3;</code>
+     */
+    boolean hasBytesPerBuffer();
+    /**
+     * <code>required int32 bytesPerBuffer = 3;</code>
+     */
+    int getBytesPerBuffer();
+
+    // required float bytesPerSecond = 4;
+    /**
+     * <code>required float bytesPerSecond = 4;</code>
+     */
+    boolean hasBytesPerSecond();
+    /**
+     * <code>required float bytesPerSecond = 4;</code>
+     */
+    float getBytesPerSecond();
+
+    // required float pri = 5;
+    /**
+     * <code>required float pri = 5;</code>
+     */
+    boolean hasPri();
+    /**
+     * <code>required float pri = 5;</code>
+     */
+    float getPri();
+
+    // required float prf = 6;
+    /**
+     * <code>required float prf = 6;</code>
+     */
+    boolean hasPrf();
+    /**
+     * <code>required float prf = 6;</code>
+     */
+    float getPrf();
+
+    // required int32 prisPerBuffer = 7;
+    /**
+     * <code>required int32 prisPerBuffer = 7;</code>
+     */
+    boolean hasPrisPerBuffer();
+    /**
+     * <code>required int32 prisPerBuffer = 7;</code>
+     */
+    int getPrisPerBuffer();
+
+    // required int32 bytesPerSample = 8;
+    /**
+     * <code>required int32 bytesPerSample = 8;</code>
+     */
+    boolean hasBytesPerSample();
+    /**
+     * <code>required int32 bytesPerSample = 8;</code>
+     */
+    int getBytesPerSample();
+
+    // required float secondsPerBuffer = 9;
+    /**
+     * <code>required float secondsPerBuffer = 9;</code>
+     */
+    boolean hasSecondsPerBuffer();
+    /**
+     * <code>required float secondsPerBuffer = 9;</code>
+     */
+    float getSecondsPerBuffer();
+  }
+  /**
+   * Protobuf type {@code gnuradar.RadarParameters}
+   */
+  public static final class RadarParameters extends
+      com.google.protobuf.GeneratedMessage
+      implements RadarParametersOrBuilder {
+    // Use RadarParameters.newBuilder() to construct.
+    private RadarParameters(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private RadarParameters(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final RadarParameters defaultInstance;
+    public static RadarParameters getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public RadarParameters getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RadarParameters(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
           int tag = input.readTag();
           switch (tag) {
             case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
+              done = true;
+              break;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
+                done = true;
               }
               break;
             }
@@ -5033,210 +6216,931 @@ public final class Control {
             }
           }
         }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
       }
-      
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.gnuradar.proto.Control.internal_static_gnuradar_RadarParameters_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.gnuradar.proto.Control.internal_static_gnuradar_RadarParameters_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.gnuradar.proto.Control.RadarParameters.class, com.gnuradar.proto.Control.RadarParameters.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<RadarParameters> PARSER =
+        new com.google.protobuf.AbstractParser<RadarParameters>() {
+      public RadarParameters parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RadarParameters(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RadarParameters> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // required int32 samplesPerPri = 1;
+    public static final int SAMPLESPERPRI_FIELD_NUMBER = 1;
+    private int samplesPerPri_;
+    /**
+     * <code>required int32 samplesPerPri = 1;</code>
+     */
+    public boolean hasSamplesPerPri() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required int32 samplesPerPri = 1;</code>
+     */
+    public int getSamplesPerPri() {
+      return samplesPerPri_;
+    }
+
+    // required int32 samplesPerBuffer = 2;
+    public static final int SAMPLESPERBUFFER_FIELD_NUMBER = 2;
+    private int samplesPerBuffer_;
+    /**
+     * <code>required int32 samplesPerBuffer = 2;</code>
+     */
+    public boolean hasSamplesPerBuffer() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required int32 samplesPerBuffer = 2;</code>
+     */
+    public int getSamplesPerBuffer() {
+      return samplesPerBuffer_;
+    }
+
+    // required int32 bytesPerBuffer = 3;
+    public static final int BYTESPERBUFFER_FIELD_NUMBER = 3;
+    private int bytesPerBuffer_;
+    /**
+     * <code>required int32 bytesPerBuffer = 3;</code>
+     */
+    public boolean hasBytesPerBuffer() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required int32 bytesPerBuffer = 3;</code>
+     */
+    public int getBytesPerBuffer() {
+      return bytesPerBuffer_;
+    }
+
+    // required float bytesPerSecond = 4;
+    public static final int BYTESPERSECOND_FIELD_NUMBER = 4;
+    private float bytesPerSecond_;
+    /**
+     * <code>required float bytesPerSecond = 4;</code>
+     */
+    public boolean hasBytesPerSecond() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required float bytesPerSecond = 4;</code>
+     */
+    public float getBytesPerSecond() {
+      return bytesPerSecond_;
+    }
+
+    // required float pri = 5;
+    public static final int PRI_FIELD_NUMBER = 5;
+    private float pri_;
+    /**
+     * <code>required float pri = 5;</code>
+     */
+    public boolean hasPri() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>required float pri = 5;</code>
+     */
+    public float getPri() {
+      return pri_;
+    }
+
+    // required float prf = 6;
+    public static final int PRF_FIELD_NUMBER = 6;
+    private float prf_;
+    /**
+     * <code>required float prf = 6;</code>
+     */
+    public boolean hasPrf() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>required float prf = 6;</code>
+     */
+    public float getPrf() {
+      return prf_;
+    }
+
+    // required int32 prisPerBuffer = 7;
+    public static final int PRISPERBUFFER_FIELD_NUMBER = 7;
+    private int prisPerBuffer_;
+    /**
+     * <code>required int32 prisPerBuffer = 7;</code>
+     */
+    public boolean hasPrisPerBuffer() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>required int32 prisPerBuffer = 7;</code>
+     */
+    public int getPrisPerBuffer() {
+      return prisPerBuffer_;
+    }
+
+    // required int32 bytesPerSample = 8;
+    public static final int BYTESPERSAMPLE_FIELD_NUMBER = 8;
+    private int bytesPerSample_;
+    /**
+     * <code>required int32 bytesPerSample = 8;</code>
+     */
+    public boolean hasBytesPerSample() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>required int32 bytesPerSample = 8;</code>
+     */
+    public int getBytesPerSample() {
+      return bytesPerSample_;
+    }
+
+    // required float secondsPerBuffer = 9;
+    public static final int SECONDSPERBUFFER_FIELD_NUMBER = 9;
+    private float secondsPerBuffer_;
+    /**
+     * <code>required float secondsPerBuffer = 9;</code>
+     */
+    public boolean hasSecondsPerBuffer() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>required float secondsPerBuffer = 9;</code>
+     */
+    public float getSecondsPerBuffer() {
+      return secondsPerBuffer_;
+    }
+
+    private void initFields() {
+      samplesPerPri_ = 0;
+      samplesPerBuffer_ = 0;
+      bytesPerBuffer_ = 0;
+      bytesPerSecond_ = 0F;
+      pri_ = 0F;
+      prf_ = 0F;
+      prisPerBuffer_ = 0;
+      bytesPerSample_ = 0;
+      secondsPerBuffer_ = 0F;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasSamplesPerPri()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasSamplesPerBuffer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasBytesPerBuffer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasBytesPerSecond()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPri()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPrf()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPrisPerBuffer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasBytesPerSample()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasSecondsPerBuffer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, samplesPerPri_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, samplesPerBuffer_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, bytesPerBuffer_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeFloat(4, bytesPerSecond_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeFloat(5, pri_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeFloat(6, prf_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(7, prisPerBuffer_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeInt32(8, bytesPerSample_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeFloat(9, secondsPerBuffer_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, samplesPerPri_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, samplesPerBuffer_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, bytesPerBuffer_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(4, bytesPerSecond_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(5, pri_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(6, prf_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, prisPerBuffer_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, bytesPerSample_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(9, secondsPerBuffer_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.gnuradar.proto.Control.RadarParameters parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.gnuradar.proto.Control.RadarParameters parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static com.gnuradar.proto.Control.RadarParameters parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static com.gnuradar.proto.Control.RadarParameters parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static com.gnuradar.proto.Control.RadarParameters parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.gnuradar.proto.Control.RadarParameters prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code gnuradar.RadarParameters}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.gnuradar.proto.Control.RadarParametersOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.gnuradar.proto.Control.internal_static_gnuradar_RadarParameters_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.gnuradar.proto.Control.internal_static_gnuradar_RadarParameters_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.gnuradar.proto.Control.RadarParameters.class, com.gnuradar.proto.Control.RadarParameters.Builder.class);
+      }
+
+      // Construct using com.gnuradar.proto.Control.RadarParameters.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        samplesPerPri_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        samplesPerBuffer_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        bytesPerBuffer_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        bytesPerSecond_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        pri_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        prf_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        prisPerBuffer_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        bytesPerSample_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        secondsPerBuffer_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.gnuradar.proto.Control.internal_static_gnuradar_RadarParameters_descriptor;
+      }
+
+      public com.gnuradar.proto.Control.RadarParameters getDefaultInstanceForType() {
+        return com.gnuradar.proto.Control.RadarParameters.getDefaultInstance();
+      }
+
+      public com.gnuradar.proto.Control.RadarParameters build() {
+        com.gnuradar.proto.Control.RadarParameters result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public com.gnuradar.proto.Control.RadarParameters buildPartial() {
+        com.gnuradar.proto.Control.RadarParameters result = new com.gnuradar.proto.Control.RadarParameters(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.samplesPerPri_ = samplesPerPri_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.samplesPerBuffer_ = samplesPerBuffer_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.bytesPerBuffer_ = bytesPerBuffer_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.bytesPerSecond_ = bytesPerSecond_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.pri_ = pri_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.prf_ = prf_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.prisPerBuffer_ = prisPerBuffer_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.bytesPerSample_ = bytesPerSample_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.secondsPerBuffer_ = secondsPerBuffer_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.gnuradar.proto.Control.RadarParameters) {
+          return mergeFrom((com.gnuradar.proto.Control.RadarParameters)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.gnuradar.proto.Control.RadarParameters other) {
+        if (other == com.gnuradar.proto.Control.RadarParameters.getDefaultInstance()) return this;
+        if (other.hasSamplesPerPri()) {
+          setSamplesPerPri(other.getSamplesPerPri());
+        }
+        if (other.hasSamplesPerBuffer()) {
+          setSamplesPerBuffer(other.getSamplesPerBuffer());
+        }
+        if (other.hasBytesPerBuffer()) {
+          setBytesPerBuffer(other.getBytesPerBuffer());
+        }
+        if (other.hasBytesPerSecond()) {
+          setBytesPerSecond(other.getBytesPerSecond());
+        }
+        if (other.hasPri()) {
+          setPri(other.getPri());
+        }
+        if (other.hasPrf()) {
+          setPrf(other.getPrf());
+        }
+        if (other.hasPrisPerBuffer()) {
+          setPrisPerBuffer(other.getPrisPerBuffer());
+        }
+        if (other.hasBytesPerSample()) {
+          setBytesPerSample(other.getBytesPerSample());
+        }
+        if (other.hasSecondsPerBuffer()) {
+          setSecondsPerBuffer(other.getSecondsPerBuffer());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasSamplesPerPri()) {
+          
+          return false;
+        }
+        if (!hasSamplesPerBuffer()) {
+          
+          return false;
+        }
+        if (!hasBytesPerBuffer()) {
+          
+          return false;
+        }
+        if (!hasBytesPerSecond()) {
+          
+          return false;
+        }
+        if (!hasPri()) {
+          
+          return false;
+        }
+        if (!hasPrf()) {
+          
+          return false;
+        }
+        if (!hasPrisPerBuffer()) {
+          
+          return false;
+        }
+        if (!hasBytesPerSample()) {
+          
+          return false;
+        }
+        if (!hasSecondsPerBuffer()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.gnuradar.proto.Control.RadarParameters parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.gnuradar.proto.Control.RadarParameters) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
       private int bitField0_;
-      
+
       // required int32 samplesPerPri = 1;
       private int samplesPerPri_ ;
+      /**
+       * <code>required int32 samplesPerPri = 1;</code>
+       */
       public boolean hasSamplesPerPri() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required int32 samplesPerPri = 1;</code>
+       */
       public int getSamplesPerPri() {
         return samplesPerPri_;
       }
+      /**
+       * <code>required int32 samplesPerPri = 1;</code>
+       */
       public Builder setSamplesPerPri(int value) {
         bitField0_ |= 0x00000001;
         samplesPerPri_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required int32 samplesPerPri = 1;</code>
+       */
       public Builder clearSamplesPerPri() {
         bitField0_ = (bitField0_ & ~0x00000001);
         samplesPerPri_ = 0;
         onChanged();
         return this;
       }
-      
+
       // required int32 samplesPerBuffer = 2;
       private int samplesPerBuffer_ ;
+      /**
+       * <code>required int32 samplesPerBuffer = 2;</code>
+       */
       public boolean hasSamplesPerBuffer() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required int32 samplesPerBuffer = 2;</code>
+       */
       public int getSamplesPerBuffer() {
         return samplesPerBuffer_;
       }
+      /**
+       * <code>required int32 samplesPerBuffer = 2;</code>
+       */
       public Builder setSamplesPerBuffer(int value) {
         bitField0_ |= 0x00000002;
         samplesPerBuffer_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required int32 samplesPerBuffer = 2;</code>
+       */
       public Builder clearSamplesPerBuffer() {
         bitField0_ = (bitField0_ & ~0x00000002);
         samplesPerBuffer_ = 0;
         onChanged();
         return this;
       }
-      
+
       // required int32 bytesPerBuffer = 3;
       private int bytesPerBuffer_ ;
+      /**
+       * <code>required int32 bytesPerBuffer = 3;</code>
+       */
       public boolean hasBytesPerBuffer() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>required int32 bytesPerBuffer = 3;</code>
+       */
       public int getBytesPerBuffer() {
         return bytesPerBuffer_;
       }
+      /**
+       * <code>required int32 bytesPerBuffer = 3;</code>
+       */
       public Builder setBytesPerBuffer(int value) {
         bitField0_ |= 0x00000004;
         bytesPerBuffer_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required int32 bytesPerBuffer = 3;</code>
+       */
       public Builder clearBytesPerBuffer() {
         bitField0_ = (bitField0_ & ~0x00000004);
         bytesPerBuffer_ = 0;
         onChanged();
         return this;
       }
-      
+
       // required float bytesPerSecond = 4;
       private float bytesPerSecond_ ;
+      /**
+       * <code>required float bytesPerSecond = 4;</code>
+       */
       public boolean hasBytesPerSecond() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
+      /**
+       * <code>required float bytesPerSecond = 4;</code>
+       */
       public float getBytesPerSecond() {
         return bytesPerSecond_;
       }
+      /**
+       * <code>required float bytesPerSecond = 4;</code>
+       */
       public Builder setBytesPerSecond(float value) {
         bitField0_ |= 0x00000008;
         bytesPerSecond_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required float bytesPerSecond = 4;</code>
+       */
       public Builder clearBytesPerSecond() {
         bitField0_ = (bitField0_ & ~0x00000008);
         bytesPerSecond_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // required float pri = 5;
       private float pri_ ;
+      /**
+       * <code>required float pri = 5;</code>
+       */
       public boolean hasPri() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
+      /**
+       * <code>required float pri = 5;</code>
+       */
       public float getPri() {
         return pri_;
       }
+      /**
+       * <code>required float pri = 5;</code>
+       */
       public Builder setPri(float value) {
         bitField0_ |= 0x00000010;
         pri_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required float pri = 5;</code>
+       */
       public Builder clearPri() {
         bitField0_ = (bitField0_ & ~0x00000010);
         pri_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // required float prf = 6;
       private float prf_ ;
+      /**
+       * <code>required float prf = 6;</code>
+       */
       public boolean hasPrf() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
+      /**
+       * <code>required float prf = 6;</code>
+       */
       public float getPrf() {
         return prf_;
       }
+      /**
+       * <code>required float prf = 6;</code>
+       */
       public Builder setPrf(float value) {
         bitField0_ |= 0x00000020;
         prf_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required float prf = 6;</code>
+       */
       public Builder clearPrf() {
         bitField0_ = (bitField0_ & ~0x00000020);
         prf_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // required int32 prisPerBuffer = 7;
       private int prisPerBuffer_ ;
+      /**
+       * <code>required int32 prisPerBuffer = 7;</code>
+       */
       public boolean hasPrisPerBuffer() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
+      /**
+       * <code>required int32 prisPerBuffer = 7;</code>
+       */
       public int getPrisPerBuffer() {
         return prisPerBuffer_;
       }
+      /**
+       * <code>required int32 prisPerBuffer = 7;</code>
+       */
       public Builder setPrisPerBuffer(int value) {
         bitField0_ |= 0x00000040;
         prisPerBuffer_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required int32 prisPerBuffer = 7;</code>
+       */
       public Builder clearPrisPerBuffer() {
         bitField0_ = (bitField0_ & ~0x00000040);
         prisPerBuffer_ = 0;
         onChanged();
         return this;
       }
-      
+
       // required int32 bytesPerSample = 8;
       private int bytesPerSample_ ;
+      /**
+       * <code>required int32 bytesPerSample = 8;</code>
+       */
       public boolean hasBytesPerSample() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
+      /**
+       * <code>required int32 bytesPerSample = 8;</code>
+       */
       public int getBytesPerSample() {
         return bytesPerSample_;
       }
+      /**
+       * <code>required int32 bytesPerSample = 8;</code>
+       */
       public Builder setBytesPerSample(int value) {
         bitField0_ |= 0x00000080;
         bytesPerSample_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required int32 bytesPerSample = 8;</code>
+       */
       public Builder clearBytesPerSample() {
         bitField0_ = (bitField0_ & ~0x00000080);
         bytesPerSample_ = 0;
         onChanged();
         return this;
       }
-      
+
       // required float secondsPerBuffer = 9;
       private float secondsPerBuffer_ ;
+      /**
+       * <code>required float secondsPerBuffer = 9;</code>
+       */
       public boolean hasSecondsPerBuffer() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
+      /**
+       * <code>required float secondsPerBuffer = 9;</code>
+       */
       public float getSecondsPerBuffer() {
         return secondsPerBuffer_;
       }
+      /**
+       * <code>required float secondsPerBuffer = 9;</code>
+       */
       public Builder setSecondsPerBuffer(float value) {
         bitField0_ |= 0x00000100;
         secondsPerBuffer_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required float secondsPerBuffer = 9;</code>
+       */
       public Builder clearSecondsPerBuffer() {
         bitField0_ = (bitField0_ & ~0x00000100);
         secondsPerBuffer_ = 0F;
         onChanged();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:gnuradar.RadarParameters)
     }
-    
+
     static {
       defaultInstance = new RadarParameters(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:gnuradar.RadarParameters)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_gnuradar_ControlMessage_descriptor;
   private static
@@ -5262,7 +7166,7 @@ public final class Control {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_gnuradar_RadarParameters_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -5307,41 +7211,31 @@ public final class Control {
           internal_static_gnuradar_ControlMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_gnuradar_ControlMessage_descriptor,
-              new java.lang.String[] { "Name", "File", },
-              com.gnuradar.proto.Control.ControlMessage.class,
-              com.gnuradar.proto.Control.ControlMessage.Builder.class);
+              new java.lang.String[] { "Name", "File", });
           internal_static_gnuradar_File_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_gnuradar_File_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_gnuradar_File_descriptor,
-              new java.lang.String[] { "Version", "SampleRate", "Decimation", "NumChannels", "Bandwidth", "BandwidthUnits", "NumWindows", "Ipp", "IppUnits", "TxCarrier", "Organization", "Site", "User", "Radar", "Receiver", "FpgaImage", "BaseFileName", "OutputRate", "Channel", "Window", "RadarParameters", },
-              com.gnuradar.proto.Control.File.class,
-              com.gnuradar.proto.Control.File.Builder.class);
+              new java.lang.String[] { "Version", "SampleRate", "Decimation", "NumChannels", "Bandwidth", "BandwidthUnits", "NumWindows", "Ipp", "IppUnits", "TxCarrier", "Organization", "Site", "User", "Radar", "Receiver", "FpgaImage", "BaseFileName", "OutputRate", "Channel", "Window", "RadarParameters", });
           internal_static_gnuradar_Channel_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_gnuradar_Channel_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_gnuradar_Channel_descriptor,
-              new java.lang.String[] { "Frequency", "FrequencyUnits", "Phase", "PhaseUnits", },
-              com.gnuradar.proto.Control.Channel.class,
-              com.gnuradar.proto.Control.Channel.Builder.class);
+              new java.lang.String[] { "Frequency", "FrequencyUnits", "Phase", "PhaseUnits", });
           internal_static_gnuradar_Window_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_gnuradar_Window_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_gnuradar_Window_descriptor,
-              new java.lang.String[] { "Name", "Start", "Stop", "Width", "Units", },
-              com.gnuradar.proto.Control.Window.class,
-              com.gnuradar.proto.Control.Window.Builder.class);
+              new java.lang.String[] { "Name", "Start", "Stop", "Width", "Units", });
           internal_static_gnuradar_RadarParameters_descriptor =
             getDescriptor().getMessageTypes().get(4);
           internal_static_gnuradar_RadarParameters_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_gnuradar_RadarParameters_descriptor,
-              new java.lang.String[] { "SamplesPerPri", "SamplesPerBuffer", "BytesPerBuffer", "BytesPerSecond", "Pri", "Prf", "PrisPerBuffer", "BytesPerSample", "SecondsPerBuffer", },
-              com.gnuradar.proto.Control.RadarParameters.class,
-              com.gnuradar.proto.Control.RadarParameters.Builder.class);
+              new java.lang.String[] { "SamplesPerPri", "SamplesPerBuffer", "BytesPerBuffer", "BytesPerSecond", "Pri", "Prf", "PrisPerBuffer", "BytesPerSample", "SecondsPerBuffer", });
           return null;
         }
       };
@@ -5350,6 +7244,6 @@ public final class Control {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }

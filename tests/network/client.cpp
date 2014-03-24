@@ -3,8 +3,8 @@
 #include <zmq.hpp>
 #include <boost/lexical_cast.hpp>
 #include <google/protobuf/message.h>
-#include <gnuradar/commands/Control.pb.h>
-#include <gnuradar/commands/Response.pb.h>
+#include <commands/Control.pb.h>
+#include <commands/Response.pb.h>
 
 int main ()
 {

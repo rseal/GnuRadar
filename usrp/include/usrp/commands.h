@@ -21,8 +21,8 @@
 #ifndef _USRP_COMMANDS_H_
 #define _USRP_COMMANDS_H_
 
-#include <usrp/usrp/interfaces.h>
-#include <usrp/usrp/spi_defs.h>
+#include <usrp/interfaces.h>
+#include <usrp/spi_defs.h>
 
 #define	MAX_EP0_PKTSIZE		       64	// max size of EP0 packet on FX2
 

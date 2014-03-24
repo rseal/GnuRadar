@@ -27,7 +27,7 @@
 #ifndef _USRP_PRIMSI_H_
 #define _USRP_PRIMSI_H_
 
-#include <usrp/usrp/prims.h>
+#include <usrp/prims.h>
 
 /*
  * Internal functions

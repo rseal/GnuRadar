@@ -4,10 +4,10 @@
 #include<boost/shared_ptr.hpp>
 #include<zmq.hpp>
 
-#include<gnuradar/network/Server.hpp>
-#include<gnuradar/commands/Control.pb.h>
-#include<gnuradar/commands/Response.pb.h>
-#include<gnuradar/utils/ZmqHelper.hpp>
+#include <network/Server.hpp>
+#include <commands/Control.pb.h>
+#include <commands/Response.pb.h>
+#include <utils/ZmqHelper.hpp>
 
 namespace gnuradar{
    namespace network{

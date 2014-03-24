@@ -17,8 +17,8 @@
 #ifndef WINDOW_VALIDATOR_HPP
 #define WINDOW_VALIDATOR_HPP
 
-#include<gnuradar/GnuRadarTypes.hpp>
-#include<gnuradar/commands/Control.pb.h>
+#include <GnuRadarTypes.hpp>
+#include <commands/Control.pb.h>
 #include<boost/shared_ptr.hpp>
 #include<boost/lexical_cast.hpp>
 #include<iostream>
@@ -38,7 +38,7 @@ struct SystemValidation {
 
 	// determines the number of samples between data tags
 	// and repositions the iterator.
-	const int getCount() 
+	int getCount() 
 	{
 		int count = 0;
 		do
@@ -52,7 +52,7 @@ struct SystemValidation {
 
 	// compares the determined window sizes to the
 	// sizes given in the configuration file.
-	const bool Compare()
+	bool Compare()
 	{
 
 		bool result = true;
@@ -75,7 +75,7 @@ struct SystemValidation {
 	}
 
 	public:
-	const bool Validate ( const std::vector<gnuradar::iq_t>& buffer, gnuradar::File* file)
+	bool Validate ( const std::vector<gnuradar::iq_t>& buffer, gnuradar::File* file)
 	{
 		file_ = file;
 		buffer_ = buffer;

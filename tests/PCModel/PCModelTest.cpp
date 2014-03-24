@@ -1,4 +1,4 @@
-#include <gnuradar/ProducerConsumerModel.h>
+#include <ProducerConsumerModel.h>
 
 int main(){
     //ProducerConsumerModel(const int& bytes, const int& buffers, const int& dataWidth, const std::string baseFileName):

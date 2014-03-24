@@ -26,8 +26,8 @@
 #include <assert.h>
 #include <errno.h>
 
-#include <usrp/usrp/prims.h>
-#include <usrp/usrp/spi_defs.h>
+#include <usrp/prims.h>
+#include <usrp/spi_defs.h>
 
 char *prog_name;
 

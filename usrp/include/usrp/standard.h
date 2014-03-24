@@ -23,8 +23,8 @@
 #ifndef INCLUDED_USRP_STANDARD_H
 #define INCLUDED_USRP_STANDARD_H
 
-#include <usrp/usrp/basic.h>
-#include <usrp/usrp/tune_result.h>
+#include <usrp/basic.h>
+#include <usrp/tune_result.h>
 
 #include <boost/shared_ptr.hpp>
 

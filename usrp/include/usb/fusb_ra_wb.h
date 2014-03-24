@@ -23,7 +23,7 @@
 #ifndef _FUSB_RA_WB_H_
 #define _FUSB_RA_WB_H_
 
-#include <usrp/usb/fusb.h>
+#include <usb/fusb.h>
 
 /*!
  * \brief generic implementation of fusb_devhandle using only libusb

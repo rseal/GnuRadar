@@ -19,8 +19,8 @@
 
 #include <iostream>
 #include <stdexcept>
-#include<gnuradar/commands/Response.pb.h>
-#include<gnuradar/commands/Control.pb.h>
+#include <commands/Response.pb.h>
+#include <commands/Control.pb.h>
 
 namespace gnuradar {
    namespace command {

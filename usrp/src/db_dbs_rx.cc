@@ -22,8 +22,8 @@
 #include "config.h"
 #endif
 
-#include <usrp/boards/db_dbs_rx.h>
-#include <usrp/boards/db_base_impl.h>
+#include <boards/db_dbs_rx.h>
+#include <boards/db_base_impl.h>
 #include <cmath>
 #include <cstdio>
 

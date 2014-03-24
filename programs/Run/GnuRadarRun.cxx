@@ -22,12 +22,12 @@
 #include<boost/asio.hpp>
 #include<zmq.h>
 
-#include<gnuradar/network/RequestServer.hpp>
-#include<gnuradar/CommandList.hpp>
-#include<gnuradar/commands/Stop.hpp>
-#include<gnuradar/commands/Start.hpp>
-#include<gnuradar/commands/Verify.hpp>
-#include<gnuradar/utils/GrHelper.hpp>
+#include<network/RequestServer.hpp>
+#include<CommandList.hpp>
+#include<commands/Stop.hpp>
+#include<commands/Start.hpp>
+#include<commands/Verify.hpp>
+#include<utils/GrHelper.hpp>
 
 using namespace boost;
 using namespace gnuradar;

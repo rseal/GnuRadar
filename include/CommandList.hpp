@@ -23,7 +23,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <gnuradar/GnuRadarCommand.hpp>
+#include <GnuRadarCommand.hpp>
 
 namespace gnuradar {
 	namespace command {

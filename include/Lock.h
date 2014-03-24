@@ -17,7 +17,7 @@
 #ifndef LOCK_H
 #define LOCK_H
 
-#include <gnuradar/Mutex.hpp>
+#include <Mutex.hpp>
 
 
 namespace thread{

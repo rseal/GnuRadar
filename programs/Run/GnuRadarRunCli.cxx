@@ -19,11 +19,11 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/filesystem.hpp>
 #include <cmath>
-#include <gnuradar/Mutex.hpp>
-#include <gnuradar/Condition.hpp>
-#include <gnuradar/SynchronizedBufferManager.hpp>
-#include <gnuradar/SharedMemory.h>
-#include <gnuradar/xml/SharedBufferHeader.hpp>
+#include <Mutex.hpp>
+#include <Condition.hpp>
+#include <SynchronizedBufferManager.hpp>
+#include <SharedMemory.h>
+#include <xml/SharedBufferHeader.hpp>
 
 using namespace boost;
 using namespace gnuradar;

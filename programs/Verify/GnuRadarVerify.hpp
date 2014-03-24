@@ -18,9 +18,9 @@
 #define GNURADAR_VERIFY_HPP
 
 #include<usrp/usrp/standard.h>
-#include <gnuradar/GnuRadarSettings.h>
-#include <gnuradar/GnuRadarTypes.hpp>
-#include <gnuradar/WindowValidator.hpp>
+#include <GnuRadarSettings.h>
+#include <GnuRadarTypes.hpp>
+#include <WindowValidator.hpp>
 #include <clp/CommandLineParser.hpp>
 #include <stdexcept>
 #include <vector>

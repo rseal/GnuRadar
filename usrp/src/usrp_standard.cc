@@ -24,11 +24,11 @@
 #include <math.h>
 #include <cstdio>
 
-#include <usrp/usrp/standard.h>
-#include <usrp/usrp/prims.h>
-#include <usrp/fpga/fpga_regs_common.h>
-#include <usrp/fpga/fpga_regs_standard.h>
-#include <usrp/adc/ad9862.h>
+#include <usrp/standard.h>
+#include <usrp/prims.h>
+#include <fpga/fpga_regs_common.h>
+#include <fpga/fpga_regs_standard.h>
+#include <adc/ad9862.h>
 
 
 static const int OLD_CAPS_VAL = 0xaa55ff77;

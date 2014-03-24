@@ -17,13 +17,13 @@
 #ifndef GNURADARDEVICE_H
 #define GNURADARDEVICE_H
 
-#include<gnuradar/GnuRadarSettings.h>
-#include <gnuradar/Device.h>
-#include <gnuradar/StreamBuffer.hpp>
+#include<GnuRadarSettings.h>
+#include <Device.h>
+#include <StreamBuffer.hpp>
 
 #include <boost/cstdint.hpp>
 #include <boost/shared_ptr.hpp>
-#include <usrp/usrp/standard.h>
+#include <usrp/standard.h>
 
 #include <iostream>
 #include <vector>
@@ -47,13 +47,9 @@ class GnuRadarDevice: public Device {
     SynchronizationBufferPtr synchroBuffer_;
 
     // define constants
-    const int ALIGNMENT_SIZE_BYTES;
     const int ALIGNMENT_SIZE;
+    const int ALIGNMENT_SIZE_BYTES;
     const int FX2_FLUSH_FIFO_SIZE_BYTES;
-
-    // this is a gnuradio pointer of some sort.
-    // older versions did not use this.
-    usrp_standard_rx_sptr usrp_;
 
     // configuration settings class
     GnuRadarSettingsPtr grSettings_;
@@ -64,6 +60,10 @@ class GnuRadarDevice: public Device {
 
     //StreamBuffer<int16_t> stBuf_;
     std::vector<int> sequence_;
+
+    // this is a gnuradio pointer of some sort.
+    // older versions did not use this.
+    usrp_standard_rx_sptr usrp_;
 
 public:
 
@@ -116,7 +116,6 @@ public:
     ///\param bytes number of bytes to write.
     virtual void RequestData ( void* address, const int bytes ) {
 
-        int bytesRead;
         bool overrun;
         int readRequestSizeSamples = bytes / sizeof ( iq_t );
 
@@ -173,11 +172,11 @@ public:
         } else {
 
             //read data from USRP
-            bytesRead = usrp_->read (
-                            synchroBuffer_->WritePtr(),
-                            synchroBuffer_->WriteSizeBytes(),
-                            &overFlow_
-                        );
+            usrp_->read (
+                  synchroBuffer_->WritePtr(),
+                  synchroBuffer_->WriteSizeBytes(),
+                  &overFlow_
+                  );
 
             //Transfer data to shared memory buffer
             memcpy (

@@ -20,16 +20,16 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include <hdf5r/HDF5.hpp>
-#include <hdf5r/Complex.hpp>
+#include <HDF5.hpp>
+#include <Complex.hpp>
 
-#include <clp/CommandLineParser.hpp>
+#include <CommandLineParser.hpp>
 
-#include <gnuradar/SThread.h>
-#include <gnuradar/SharedMemory.h>
-#include <gnuradar/SynchronizedBufferManager.hpp>
-#include <gnuradar/Constants.hpp>
-#include <gnuradar/yaml/SharedBufferHeader.hpp>
+#include <SThread.h>
+#include <SharedMemory.h>
+#include <SynchronizedBufferManager.hpp>
+#include <Constants.hpp>
+#include <yaml/SharedBufferHeader.hpp>
 
 using namespace thread;
 using namespace hdf5;
@@ -49,7 +49,6 @@ class Viewer: public SThread {
     ComplexHDF5 cpx_;
     HDF5 h5File_;
 
-    typedef short Int16;
     int numTables_;
     long sleep_;
     int offset_;
@@ -189,7 +188,6 @@ public:
 
 int main ( int argc, char** argv )
 {
-    typedef short Int16;
     string fileName;
     int refreshRate;
     int offset;

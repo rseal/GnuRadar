@@ -1,7 +1,7 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include<gnuradar/SThread.h>
+#include <SThread.h>
 
 namespace gnuradar{
    namespace network{
@@ -17,7 +17,7 @@ namespace gnuradar{
 			public:
 				Server() : active_(false) {}
 
-				IsActive() { return active_; }
+				bool IsActive() { return active_; }
 		};
 	};
 };

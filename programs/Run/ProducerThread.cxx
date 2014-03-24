@@ -14,7 +14,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
-#include <gnuradar/ProducerThread.h>
+#include <ProducerThread.h>
 
 /// worker thread implementation. Calls GnuRadarDevice's
 /// StartDevice method.

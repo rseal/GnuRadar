@@ -18,10 +18,10 @@
 #define PRODUCER_THREAD_H
 
 #include <boost/shared_ptr.hpp>
-#include <gnuradar/BaseThread.h>
-#include <gnuradar/SThread.h>
-#include <gnuradar/Device.h>
-#include <gnuradar/SynchronizedBufferManager.hpp>
+#include <BaseThread.h>
+#include <SThread.h>
+#include <Device.h>
+#include <SynchronizedBufferManager.hpp>
 
 
 /// This class inherits from Sthread and is responsible for
@@ -33,8 +33,8 @@ class ProducerThread: public BaseThread, public thread::SThread {
    typedef boost::shared_ptr< SynchronizedBufferManager > 
       SynchronizedBufferManagerPtr;
 
-   SynchronizedBufferManagerPtr bufferManager_;
    DevicePtr device_;
+   SynchronizedBufferManagerPtr bufferManager_;
 
 public:
    

@@ -17,9 +17,9 @@
 #ifndef STHREAD_H
 #define STHREAD_H
 
-#include <gnuradar/Mutex.hpp>
-#include <gnuradar/Condition.hpp>
-#include <gnuradar/Lock.h>
+#include <Mutex.hpp>
+#include <Condition.hpp>
+#include <Lock.h>
 
 #include <iostream>
 #include <map>

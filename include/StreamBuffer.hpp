@@ -24,12 +24,12 @@ template<typename T>
 struct StreamBuffer {
 
     // define constants
+    const int START_INDEX;
     const int NUM_BUFFERS;
     const int READ_SIZE;
     const int READ_SIZE_BYTES;
     const int PACKET_SIZE;
     const int PACKET_SIZE_BYTES;
-    const int START_INDEX;
     // these are considered constants.
     int BUFFER_SIZE;
     int STORAGE_SIZE;
@@ -61,7 +61,6 @@ struct StreamBuffer {
 
         readIndex_ = 0;
         writeIndex_ = 0;
-        T temp;
 
         for ( int i = 0; i < bufferLevel_; ++i ) {
             buffer_[destIndex+i] = buffer_[srcIndex + i] ;
@@ -99,129 +98,117 @@ public:
     }
 
     /// get write pointer to write to the data buffer
-    void* WritePtr() {
-        return &buffer_[writeIndex_];
-    }
+    void* WritePtr() { return &buffer_[writeIndex_]; }
 
     /// get read pointer to read from the data buffer
-    void* ReadPtr() {
-        return &buffer_[readIndex_];
-    }
+    void* ReadPtr() { return &buffer_[readIndex_]; }
 
     /// get read size in bytes
-    const int ReadSize()  {
-        return READ_SIZE;
-    }
-    const int ReadSizeBytes()  {
-        return READ_SIZE_BYTES;
-    }
+    int ReadSize()  { return READ_SIZE; }
+    int ReadSizeBytes()  { return READ_SIZE_BYTES; }
 
     /// get write size in bytes
-    const int WriteSize() {
-        return writeSize_;
-    }
-    const int WriteSizeBytes() {
-        return writeSize_*sizeof ( T );
-    }
+    int WriteSize() { return writeSize_; }
+    int WriteSizeBytes() { return writeSize_*sizeof ( T ); }
 
     /// Monitors the buffersize and adjust subsequent write sizes
     /// in an attempt to minimize buffer depth.
     void AdjustWriteSize() {
 
-        int samplesRequired = READ_SIZE - bufferLevel_;
-        writeSize_ = samplesRequired > 0 ?
-                     ( samplesRequired / PACKET_SIZE + 1 ) * PACKET_SIZE : PACKET_SIZE ;
+       int samplesRequired = READ_SIZE - bufferLevel_;
+       writeSize_ = samplesRequired > 0 ?
+          ( samplesRequired / PACKET_SIZE + 1 ) * PACKET_SIZE : PACKET_SIZE ;
     }
 
     /// Called after a write and subsequent read. Updates read and write
     /// indexes, as well as the buffer level.
     void Update() {
 
-        writeIndex_ += writeSize_;
-        readIndex_ += READ_SIZE;
-        bufferLevel_ = writeIndex_ - readIndex_;
+       writeIndex_ += writeSize_;
+       readIndex_ += READ_SIZE;
+       bufferLevel_ = writeIndex_ - readIndex_;
 
-        AdjustWriteSize();
+       AdjustWriteSize();
 
-        int nextWriteIndex = writeIndex_ + writeSize_;
-        int nextReadIndex  = readIndex_ + READ_SIZE;
+       int nextWriteIndex = writeIndex_ + writeSize_;
+       int nextReadIndex  = readIndex_ + READ_SIZE;
 
-        if ( nextWriteIndex > STORAGE_SIZE || nextReadIndex > STORAGE_SIZE ) {
-            Copy ( START_INDEX , readIndex_ );
-        }
+       if ( nextWriteIndex > STORAGE_SIZE || nextReadIndex > STORAGE_SIZE ) {
+          Copy ( START_INDEX , readIndex_ );
+       }
     }
 
     /// returns the current buffer level
-    const int Level()   {
-        return bufferLevel_;
+    int Level()   {
+       return bufferLevel_;
     }
 
     /// returns the buffers smallest unit ( a.k.a packet size ).
-    const int PacketSize() {
-        return PACKET_SIZE;
+    int PacketSize() {
+       return PACKET_SIZE;
     }
 
     /// Synchronizes data stream by finding the tag sequence. Called
     /// internally on the first buffer write.
-    const bool Sync( ) {
+    bool Sync( ) {
 
-        int i = 0;
-        int j = 0;
-        bool found = false;
+       int i = 0;
+       int j = 0;
+       bool found = false;
 
-        // we have to assume the user has written samples before syncing
-        writeIndex_ = writeSize_;
+       // we have to assume the user has written samples before syncing
+       writeIndex_ = writeSize_;
 
-        // search for data tag
-        for ( i = 0; i < BUFFER_SIZE; ++i ) {
+       // search for data tag
+       for ( i = 0; i < BUFFER_SIZE; ++i ) {
 
-            if ( buffer_[i] == tags_[j] ) {
+          if ( buffer_[i] == tags_[j] ) {
 
-                found = true;
-                readIndex_ = i;
+             found = true;
+             readIndex_ = i;
 
-                for ( j = 1; j < tags_.size(); ++j ) {
-                    if ( buffer_[i+j] != tags_[j] )
-                        found = false;
-                }
-                break;
-            }
-        }
+             for ( j = 1; j < tags_.size(); ++j ) {
+                if ( buffer_[i+j] != tags_[j] )
+                   found = false;
+             }
+             break;
+          }
+       }
 
-        bufferLevel_ = writeSize_ - readIndex_;
-        isSynchronized_ = true;
-        return found;
+       bufferLevel_ = writeSize_ - readIndex_;
+       isSynchronized_ = true;
+       return found;
     }
 
     /// Used for debugging. Displays current state of all important variables.
     void Status() {
-        static int printHeader = 0;
+       static int printHeader = 0;
 
-        if ( ! ( printHeader % 30 ) ) {
-            std::cout
-                << std::setw ( 10 ) << "rd "
-                << std::setw ( 10 ) << "wr "
-                << std::setw ( 10 ) << "wr size "
-                << std::setw ( 10 ) << "level "
-                << std::setw ( 10 ) << " max "
-                << std::endl;
-        }
+       if ( ! ( printHeader % 30 ) ) {
+          std::cout
+             << std::setw ( 10 ) << "rd "
+             << std::setw ( 10 ) << "wr "
+             << std::setw ( 10 ) << "wr size "
+             << std::setw ( 10 ) << "level "
+             << std::setw ( 10 ) << " max "
+             << std::endl;
+       }
 
-        std::cout
-            << std::setw ( 10 ) << readIndex_
-            << std::setw ( 10 ) << writeIndex_
-            << std::setw ( 10 ) << writeSize_
-            << std::setw ( 10 ) << bufferLevel_
-            << std::setw ( 10 ) << STORAGE_SIZE
-            << std::endl;
+       std::cout
+          << std::setw ( 10 ) << readIndex_
+          << std::setw ( 10 ) << writeIndex_
+          << std::setw ( 10 ) << writeSize_
+          << std::setw ( 10 ) << bufferLevel_
+          << std::setw ( 10 ) << STORAGE_SIZE
+          << std::endl;
 
-        ++printHeader;
+       ++printHeader;
     }
 
     /// Returns a reference to the internal buffer. Currently
     /// used for debugging purposes.
     Buffer& GetBuffer() {
-        return buffer_;
+       return buffer_;
     }
 };
 #endif

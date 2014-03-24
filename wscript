@@ -111,6 +111,9 @@ def configure(ctx):
 ################################################################################
 def build(bld):
 
+   # defines paths for dependencies and local files
+   common_include = ['include','deps/hdf5r/include','deps/clp/include','usrp/include']
+
    ## build the usrp library
    bld.recurse('usrp')
    bld.recurse('protobuf')
@@ -123,7 +126,7 @@ def build(bld):
          name     = 'run-server',
          features = 'cxx cxxprogram',
          cxxflags = ['-march=native', '-Wall', '-W'],
-         includes = ['programs/Run','protobuf'],
+         includes = common_include + ['programs/Run','protobuf'],
          source   = ['programs/Run/GnuRadarRun.cxx',
                      'programs/Run/ProducerThread.cxx',
                      'programs/Run/ConsumerThread.cxx'], 
@@ -140,7 +143,7 @@ def build(bld):
          name     = 'replay',
          features = 'cxx cxxprogram',
          cxxflags = ['-march=native', '-Wall', '-W'],
-         includes = ['programs/Replay'],
+         includes = common_include + ['programs/Replay'],
          source   = ['programs/Replay/GnuRadarReplay.cxx'],
          target   = 'gradar-replay',
          libpath  = ['usrp','/usr/lib','/usr/local/lib'],

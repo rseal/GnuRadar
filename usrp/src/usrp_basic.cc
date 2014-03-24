@@ -26,14 +26,14 @@
 #include <string.h>
 #include <cstdio>
 
-#include <usrp/usrp/basic.h>
-#include <usrp/usrp/prims.h>
-#include <usrp/usrp/interfaces.h>
-#include <usrp/fpga/fpga_regs_common.h>
-#include <usrp/fpga/fpga_regs_standard.h>
-#include <usrp/usb/fusb.h>
-#include <usrp/boards/db_boards.h>
-#include <usrp/adc/ad9862.h>
+#include <usrp/basic.h>
+#include <usrp/prims.h>
+#include <usrp/interfaces.h>
+#include <fpga/fpga_regs_common.h>
+#include <fpga/fpga_regs_standard.h>
+#include <usb/fusb.h>
+#include <boards/db_boards.h>
+#include <adc/ad9862.h>
 
 using namespace ad9862;
 

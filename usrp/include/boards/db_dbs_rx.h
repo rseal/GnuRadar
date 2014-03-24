@@ -22,7 +22,7 @@
 #ifndef DB_DBS_RX_H
 #define DB_DBS_RX_H
 
-#include <usrp/boards/db_base.h>
+#include <boards/db_base.h>
 #include <vector>
 
 #if 0

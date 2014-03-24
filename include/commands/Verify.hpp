@@ -18,10 +18,10 @@
 #define VERIFY_HPP
 
 #include <vector>
-#include <gnuradar/utils/GrHelper.hpp>
-#include <gnuradar/GnuRadarCommand.hpp>
-#include <gnuradar/commands/Response.pb.h>
-#include <gnuradar/SystemValidation.hpp>
+#include <utils/GrHelper.hpp>
+#include <GnuRadarCommand.hpp>
+#include <commands/Response.pb.h>
+#include <SystemValidation.hpp>
 
 namespace gnuradar {
 	namespace command {

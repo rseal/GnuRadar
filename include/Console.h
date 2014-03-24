@@ -16,8 +16,8 @@
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CONSOLE_H
 #define CONSOLE_H
-#include <gnuradar/SThread.h>
-#include <gnuradar/ProducerConsumerModel.h>
+#include <SThread.h>
+#include <ProducerConsumerModel.h>
 
 class Console: public thread::SThread {
     gnuradar::ProducerConsumerModel& pcmodel_;

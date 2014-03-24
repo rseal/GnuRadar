@@ -17,9 +17,9 @@
 #ifndef STOP_HPP
 #define STOP_HPP
 
-#include <gnuradar/GnuRadarCommand.hpp>
-#include <gnuradar/ProducerConsumerModel.h>
-#include <gnuradar/commands/Response.pb.h>
+#include <GnuRadarCommand.hpp>
+#include <ProducerConsumerModel.h>
+#include <commands/Response.pb.h>
 
 namespace gnuradar {
    namespace command {
@@ -37,6 +37,9 @@ namespace gnuradar {
             }
 
          virtual const gnuradar::ResponseMessage Execute( gnuradar::ControlMessage& msg ){
+
+            // satisfy compiler warning
+            (void)msg;
 
             gnuradar::ResponseMessage response_msg;
 

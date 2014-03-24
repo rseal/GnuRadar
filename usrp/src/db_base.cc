@@ -23,8 +23,8 @@
 #include "config.h"
 #endif
 
-#include <usrp/boards/db_base.h>
-#include <usrp/boards/db_base_impl.h>
+#include <boards/db_base.h>
+#include <boards/db_base_impl.h>
 
 #if 0
 tune_result::tune_result(double baseband, double dxc, double residual, bool inv)

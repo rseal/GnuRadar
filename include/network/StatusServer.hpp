@@ -4,10 +4,10 @@
 #include<boost/shared_ptr.hpp>
 #include<zmq.hpp>
 
-#include<gnuradar/ProducerConsumerModel.h>
-#include<gnuradar/network/Server.hpp>
-#include<gnuradar/Constants.hpp>
-#include<gnuradar/commands/Status.pb.h>
+#include <ProducerConsumerModel.h>
+#include <network/Server.hpp>
+#include <Constants.hpp>
+#include <commands/Status.pb.h>
 
 namespace gnuradar{
    namespace network{

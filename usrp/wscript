@@ -84,7 +84,7 @@ def build(bld):
 
    bld(
       features = 'cxx cxxstlib',
-      includes = 'src',
+      includes = ['include','src'],
       source   = bld.path.ant_glob('src/*.c*'),
       cflags   = ['-O2','-fPIC'],
       cxxflags = ['-O2','-fPIC'],
@@ -97,7 +97,7 @@ def build(bld):
 
    bld(
       features = 'cxx cxxprogram',
-      includes = ['utils'],
+      includes = ['include','utils'],
       source   = 'utils/usrper.cc',
       libpath  = 'usrp',
       lib      = ['gnuradar','usb-1.0'],

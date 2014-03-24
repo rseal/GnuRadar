@@ -23,10 +23,10 @@
 #ifndef INCLUDED_USRP_BASIC_H
 #define INCLUDED_USRP_BASIC_H
 
-#include <usrp/boards/db_base.h>
-#include <usrp/usrp/slots.h>
-#include <usrp/usrp/subdev_spec.h>
-#include <usrp/usb/libusb_types.h>
+#include <boards/db_base.h>
+#include <usrp/slots.h>
+#include <usrp/subdev_spec.h>
+#include <usb/libusb_types.h>
 
 #include <string>
 #include <vector>

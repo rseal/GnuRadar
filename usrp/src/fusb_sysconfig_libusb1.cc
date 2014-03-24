@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <usrp/usb/fusb.h>
-#include <usrp/usb/fusb_libusb1.h>
+#include <usb/fusb.h>
+#include <usb/fusb_libusb1.h>
 
 static const int MAX_BLOCK_SIZE = 16 * 1024;		// hard limit
 static const int DEFAULT_BLOCK_SIZE =   4 * 1024;

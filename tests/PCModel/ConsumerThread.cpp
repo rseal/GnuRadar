@@ -1,4 +1,4 @@
-#include <gnuradar/ConsumerThread.h>
+#include <ConsumerThread.h>
 #include <cstring>
 
 //redefine run method for threading

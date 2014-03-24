@@ -21,13 +21,13 @@
 #ifndef INCLUDED_DB_BASE_IMPL_H
 #define INCLUDED_DB_BASE_IMPL_H
 
-#include <usrp/boards/db_base.h>
-#include <usrp/boards/db_util.h>
-#include <usrp/usrp/basic.h>
-#include <usrp/fpga/fpga_regs_standard.h>
-#include <usrp/fpga/fpga_regs_common.h>
-#include <usrp/usrp/prims.h>
-#include <usrp/usrp/spi_defs.h>
+#include <boards/db_base.h>
+#include <boards/db_util.h>
+#include <usrp/basic.h>
+#include <fpga/fpga_regs_standard.h>
+#include <fpga/fpga_regs_common.h>
+#include <usrp/prims.h>
+#include <usrp/spi_defs.h>
 #include <stdexcept>
 
 #endif /* INCLUDED_DB_BASE_IMPL_H */

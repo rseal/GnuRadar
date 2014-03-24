@@ -17,12 +17,12 @@
 #ifndef PRODUCER_CONSUMER_MODEL_H
 #define PRODUCER_CONSUMER_MODEL_H
 
-#include <gnuradar/SynchronizedBufferManager.hpp>
-#include <gnuradar/ProducerThread.h>
-#include <gnuradar/ConsumerThread.h>
-#include <gnuradar/ProducerConsumerExceptions.h>
-#include <gnuradar/Mutex.hpp>
-#include <gnuradar/Condition.hpp>
+#include <SynchronizedBufferManager.hpp>
+#include <ProducerThread.h>
+#include <ConsumerThread.h>
+#include <ProducerConsumerExceptions.h>
+#include <Mutex.hpp>
+#include <Condition.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <iostream>
@@ -92,12 +92,12 @@ namespace gnuradar {
 		}
 
 		// status information for diagno)stics
-		const int Head()           { return bufferManager_->Head();           } 
-		const int Tail()           { return bufferManager_->Tail();           } 
-		const int Depth()          { return bufferManager_->Depth();          } 
-		const int NumBuffers()     { return bufferManager_->NumBuffers();     } 
-		const int BytesPerBuffer() { return bufferManager_->BytesPerBuffer(); } 
-		const bool OverFlow()      { return bufferManager_->OverFlow();       } 
+		int Head()           { return bufferManager_->Head();           } 
+		int Tail()           { return bufferManager_->Tail();           } 
+		int Depth()          { return bufferManager_->Depth();          } 
+		int NumBuffers()     { return bufferManager_->NumBuffers();     } 
+		int BytesPerBuffer() { return bufferManager_->BytesPerBuffer(); } 
+		bool OverFlow()      { return bufferManager_->OverFlow();       } 
 	};
 };
 #endif

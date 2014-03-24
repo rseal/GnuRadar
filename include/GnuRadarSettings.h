@@ -61,11 +61,11 @@ namespace gnuradar{
          else std::cout << "GnuRadarSettings: Phase Error - invalid channel number " << std::endl;
       }
 
-      const double& Tune ( int channel ) {
+      double Tune ( int channel ) {
          return ValidChannel ( channel ) ? tuningFrequency[channel] : 0;
       }
 
-      const double& Phase ( int channel ) {
+      double Phase ( int channel ) {
          return ValidChannel ( channel ) ? ddcPhase[channel] : 0;
       }
 

@@ -29,12 +29,12 @@
 
 #include <libusb-1.0/libusb.h>
 
-#include <usrp/usrp/primsi.h>
-#include <usrp/usrp/commands.h>
-#include <usrp/adc/ad9862.h>
+#include <usrp/primsi.h>
+#include <usrp/commands.h>
+#include <adc/ad9862.h>
 
 extern "C" {
-#include <usrp/utils/md5.h>
+#include <utils/md5.h>
 };
 
 using namespace ad9862;

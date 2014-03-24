@@ -39,23 +39,23 @@ namespace yml{
       typedef boost::shared_ptr<YAML::Node> NodePtr;
       WindowVec windows_;
 
-      const std::string FILE_NAME;
       const int BUFFERS;
       const int BYTES;
       const int IPPS;
-      const int SAMPLES;
       const float SAMPLE_RATE;
       const int CHANNELS;
+      const int SAMPLES;
+      const std::string FILE_NAME;
 
       NodePtr node_;
-      
+
 
       void CreateEmitter(int head, int tail, int depth)
       {
          node_ = NodePtr( new YAML::Node() );
          (*node_)["head"]=head;
          (*node_)["tail"]=tail;
-         (*node_)["depth"]=BUFFERS;
+         (*node_)["depth"]=depth;
          (*node_)["bytes"]=SAMPLE_RATE;
          (*node_)["channels"]=CHANNELS;
          (*node_)["ipps"]=IPPS;
@@ -63,13 +63,18 @@ namespace yml{
       }
 
       public:
-      SharedBufferHeader( const int buffers, const int bytes, 
-            const float sampleRate, const int channels, const int ipps,
-            const int samples, const std::string& file= "/dev/shm/GnuRadarHeader.yml"):
+      SharedBufferHeader( 
+            const int buffers, 
+            const int bytes, 
+            const float sampleRate, 
+            const int channels, const int ipps,
+            const int samples, 
+            const std::string& file= "/dev/shm/GnuRadarHeader.yml"
+            ):
          BUFFERS( buffers ), BYTES( bytes ), IPPS( ipps ), 
          SAMPLE_RATE( sampleRate ), CHANNELS( channels ), 
          SAMPLES( samples ), FILE_NAME( file )
-         { }
+      { }
 
       void AddWindow( const std::string& name, const int start, const int stop)
       {
@@ -84,7 +89,7 @@ namespace yml{
       {
          CreateEmitter(head,tail,depth);
 
-         for( int i=0; i<windows_.size(); ++i)
+         for( unsigned int i=0; i<windows_.size(); ++i)
          {
             YAML::Node node;
             node["name"] = windows_[i].name;

@@ -14,7 +14,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with GnuRadar.  If not, see <http://www.gnu.org/licenses/>.
-#include <gnuradar/ConsumerThread.h>
+#include <ConsumerThread.h>
 
 // worker thread implementation.
 void ConsumerThread::Run()

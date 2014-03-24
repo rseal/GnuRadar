@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <usrp/usrp/local_sighandler.h>
+#include <usrp/local_sighandler.h>
 
 usrp_local_sighandler::usrp_local_sighandler (int signum,
 					      void (*new_handler)(int))

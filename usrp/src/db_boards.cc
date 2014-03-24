@@ -24,10 +24,10 @@
 #include "config.h"
 #endif
 
-#include <usrp/boards/db_boards.h>
-#include <usrp/usrp/dbid.h>
-#include <usrp/boards/db_basic.h>
-#include <usrp/boards/db_dbs_rx.h>
+#include <boards/db_boards.h>
+#include <usrp/dbid.h>
+#include <boards/db_basic.h>
+#include <boards/db_dbs_rx.h>
 #include <cstdio>
 
 std::vector<db_base_sptr>

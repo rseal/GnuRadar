@@ -24,8 +24,8 @@
 #include "config.h"
 #endif
 
-#include <usrp/usb/fusb_libusb1.h>
-#include <usrp/usb/fusb.h>
+#include <usb/fusb_libusb1.h>
+#include <usb/fusb.h>
 #include <libusb-1.0/libusb.h>
 #include <stdexcept>
 #include <cstdio>

@@ -25,21 +25,21 @@
 #include<boost/asio.hpp>
 #include<boost/lexical_cast.hpp>
 
-#include<hdf5r/HDF5.hpp>
+#include <HDF5.hpp>
 
-#include<gnuradar/GnuRadarCommand.hpp>
-#include<gnuradar/ProducerConsumerModel.h>
-#include<gnuradar/Device.h>
-#include<gnuradar/GnuRadarDevice.h>
-#include<gnuradar/SynchronizedBufferManager.hpp>
-#include<gnuradar/yaml/SharedBufferHeader.hpp>
-#include<gnuradar/SharedMemory.h>
-#include<gnuradar/Constants.hpp>
-#include<gnuradar/Units.h>
-#include<gnuradar/network/StatusServer.hpp>
-#include<gnuradar/commands/Response.pb.h>
-#include<gnuradar/commands/Control.pb.h>
-#include<gnuradar/utils/GrHelper.hpp>
+#include <GnuRadarCommand.hpp>
+#include <ProducerConsumerModel.h>
+#include <Device.h>
+#include <GnuRadarDevice.h>
+#include <SynchronizedBufferManager.hpp>
+#include <yaml/SharedBufferHeader.hpp>
+#include <SharedMemory.h>
+#include <Constants.hpp>
+#include <Units.h>
+#include <network/StatusServer.hpp>
+#include <commands/Response.pb.h>
+#include <commands/Control.pb.h>
+#include <utils/GrHelper.hpp>
 
 
 

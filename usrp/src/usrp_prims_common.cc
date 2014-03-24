@@ -30,17 +30,17 @@
 #include <algorithm>
 #include <assert.h>
 
-#include <usrp/usrp/primsi.h>
-#include <usrp/usrp/commands.h>
-#include <usrp/usrp/ids.h>
-#include <usrp/usrp/i2c_addr.h>
-#include <usrp/fpga/fpga_regs_common.h>
-#include <usrp/fpga/fpga_regs_standard.h>
-#include <usrp/adc/ad9862.h>
-#include <usrp/utils/std_paths.h>
+#include <usrp/primsi.h>
+#include <usrp/commands.h>
+#include <usrp/ids.h>
+#include <usrp/i2c_addr.h>
+#include <fpga/fpga_regs_common.h>
+#include <fpga/fpga_regs_standard.h>
+#include <adc/ad9862.h>
+#include <utils/std_paths.h>
 
 extern "C" {
-#include <usrp/utils/md5.h>
+#include <utils/md5.h>
 };
 
 #define NELEM(x) sizeof(x)/sizeof(x[0])

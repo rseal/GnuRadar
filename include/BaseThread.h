@@ -17,10 +17,10 @@
 #ifndef BASE_THREAD_H
 #define BASE_THREAD_H
 
-#include <gnuradar/SharedMemory.h>
-#include <gnuradar/SThread.h>
-#include <gnuradar/Mutex.hpp>
-#include <gnuradar/Condition.hpp>
+#include <SharedMemory.h>
+#include <SThread.h>
+#include <Mutex.hpp>
+#include <Condition.hpp>
 
 /// Abstract class for use with Producer and Consumer threads.
 class BaseThread {
@@ -32,11 +32,11 @@ public:
     running_(false){}
 
     // abstract members
-    virtual const int Status() {
+    virtual int Status() {
         return status_;
     }
 
-    virtual const std::string& Error()  {
+    virtual std::string& Error()  {
         return error_;
     }
 

@@ -22,7 +22,7 @@
 #ifndef DB_DTT754_H
 #define DB_DTT754_H
 
-#include <usrp/boards/db_base.h>
+#include <boards/db_base.h>
 #include <boost/shared_ptr.hpp>
 
 class db_dtt754 : public db_base

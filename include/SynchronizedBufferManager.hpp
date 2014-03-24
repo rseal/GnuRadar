@@ -17,9 +17,9 @@
 #ifndef SYNCHRONIZED_BUFFER_MANAGER
 #define SYNCHRONIZED_BUFFER_MANAGER
 
-#include <gnuradar/Lock.h>
-#include <gnuradar/SharedMemory.h>
-#include <gnuradar/Mutex.hpp>
+#include <Lock.h>
+#include <SharedMemory.h>
+#include <Mutex.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
@@ -59,16 +59,16 @@ public:
         --depth_;
     }
 
-    const int Depth()
+    int Depth()
     {
        thread::ScopedLock lock( mutex_ );
         return depth_;
     }
 
-    const int BytesPerBuffer() { return bytesPerBuffer_; }
-    const int NumBuffers() { return numBuffers_; }
-    const int Head() { return head_; }
-    const int Tail() { return tail_; }
+    int BytesPerBuffer() { return bytesPerBuffer_; }
+    int NumBuffers() { return numBuffers_; }
+    int Head() { return head_; }
+    int Tail() { return tail_; }
     
     void* WriteTo() { 
        return reinterpret_cast< void*>( array_[head_]->GetPtr() );
@@ -78,12 +78,12 @@ public:
        return reinterpret_cast< void*>( array_[tail_]->GetPtr() );
     }
 
-    const bool OverFlow() {
+    bool OverFlow() {
        return depth_ > numBuffers_; 
     }
 
     /// Returns true if data is available - thread safe
-    const bool DataAvailable() {
+    bool DataAvailable() {
        thread::ScopedLock scopedLock ( mutex_ );
        return ( depth_ != 0 ) ? true : false;
     }

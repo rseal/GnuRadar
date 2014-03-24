@@ -22,8 +22,8 @@
 #include "config.h"
 #endif
 
-#include <usrp/boards/db_basic.h>
-#include <usrp/boards/db_base_impl.h>
+#include <boards/db_basic.h>
+#include <boards/db_base_impl.h>
 
 db_basic_tx::db_basic_tx(boost::shared_ptr<usrp_basic> usrp, int which)
   : db_base(usrp, which)

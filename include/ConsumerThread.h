@@ -20,16 +20,16 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/filesystem.hpp>
 
-#include <gnuradar/Condition.hpp>
-#include <gnuradar/Mutex.hpp>
-#include <gnuradar/SynchronizedBufferManager.hpp>
-#include <gnuradar/BaseThread.h>
-#include <gnuradar/SThread.h>
-#include <gnuradar/yaml/SharedBufferHeader.hpp>
+#include <Condition.hpp>
+#include <Mutex.hpp>
+#include <SynchronizedBufferManager.hpp>
+#include <BaseThread.h>
+#include <SThread.h>
+#include <yaml/SharedBufferHeader.hpp>
 
-#include<hdf5r/HDF5.hpp>
-#include<hdf5r/Complex.hpp>
-#include<hdf5r/Time.hpp>
+#include<HDF5.hpp>
+#include<Complex.hpp>
+#include<Time.hpp>
 
 #include <fstream>
 
@@ -41,10 +41,10 @@ class ConsumerThread: public BaseThread, public thread::SThread {
       SharedBufferHeaderPtr;
 
    SynchronizedBufferManagerPtr bufferManager_;
-   boost::shared_ptr<HDF5> h5File_;
-   ComplexHDF5 cpx_;
-   H5::DataSpace space_;
    SharedBufferHeaderPtr header_;
+   boost::shared_ptr<HDF5> h5File_;
+   H5::DataSpace space_;
+   ComplexHDF5 cpx_;
    Time time_;
 
    public:
@@ -65,7 +65,10 @@ class ConsumerThread: public BaseThread, public thread::SThread {
       this->Wait();
    }
 
-   virtual void RequestData ( void* address ) {}
+   virtual void RequestData ( void* address ) { 
+      // satisfy compiler warning
+      (void)address;
+   }
 
    //redefine run method locally for threading - this provides
    //modularity and a clean interface for testing/verification

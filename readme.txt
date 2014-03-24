@@ -28,7 +28,7 @@ Programs:
 Dependencies:
 
 1. Latest version of the boost libraries ( http://www.boost.org ).
-2. Sun Java Version 1.6
+2. Sun Java Version 1.6 (1.7 may work but hasn't been tested)
 3. Waf build system.
 4. HDF5 library.
 5. protobuf ( i.e google protocol buffers )
@@ -44,27 +44,19 @@ Local Dependency installation:
 1. From the root project directory:
    a. git submodule init
    b. git submodule update
-   c. cd deps/hdf5r, login as root, run "waf install_headers".
-   d. cd deps/clp, login as root, run "waf install_headers".
 
 
 Primary installation:
 
-1. Configure build system as <user> : "waf configure"
-2. Install headers as <root>        : "waf install_headers"
-3. Build project as <user>          : "waf build -j<num_threads>"
-4. Install executables as <root>    : "waf install"
+1. Configure build system as <user> : "waf configure build -j<num_processors+1>"
+2. Install executables as <root>    : "waf install"
 
 The following steps only need to be executed once:
 
-5. Install user configuration file as <user> : "waf setup_user"
-6. Add each user to the "usrp" group for device access permission : 
+3. Install user configuration file as <user> : "waf setup_user"
+4. Add each user to the "usrp" group for device access permission : 
    a. groupadd usrp
    b. gpasswd -a <username> usrp
-
-Developer Notes:
-
-Use "waf install_symlinks" to setup a link to header files in /usr/local/include/gnuradar.
 
 Networking Notes:
 

@@ -149,20 +149,14 @@ namespace gnuradar {
 						throw std::runtime_error( validator.GetResults() );
 					}
 
-				   std::cout << "HERE" << std::endl;
-
 					// create a response packet and return to requester
 					response_msg.set_value(gnuradar::ResponseMessage::OK);
 					response_msg.set_message("Configuration Verified.");
-
-				   std::cout << "HERE" << std::endl;
-
 				}
 				catch( std::runtime_error& e ){
 
 					response_msg.set_value(gnuradar::ResponseMessage::ERROR);
 					response_msg.set_message(e.what());
-
 				}
 
 				return response_msg;

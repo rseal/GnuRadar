@@ -69,13 +69,13 @@ public class SettingsPanel extends JPanel implements ActionListener,
 
 	private JLabel decimationLabel;
 	// private JTextField decimationTextField;
-	private JComboBox decimationComboBox;
+	private JComboBox<String> decimationComboBox;
 	private String[] decimationValues = { "8", "16", "32", "64", "128" };
 	// private JSlider decimationSlider;
 	private JPanel decimationPanel;
 
 	private JLabel channelsLabel;
-	public JComboBox channelsComboBox;
+	public JComboBox<String> channelsComboBox;
 	private String[] channels = { "1", "2", "4" };
 	private JPanel channelsPanel;
 
@@ -116,7 +116,7 @@ public class SettingsPanel extends JPanel implements ActionListener,
 		this.add(sampleRatePanel, new GBC(0, 0, 100, 100).setIpad(5, 5));
 
 		decimationLabel = new JLabel("Decimation", JLabel.RIGHT);
-		decimationComboBox = new JComboBox(decimationValues);
+		decimationComboBox = new JComboBox<String>(decimationValues);
 		decimationComboBox.addActionListener(this);
 
 		setComponentSize(decimationComboBox, new Dimension(80, 20));
@@ -130,7 +130,7 @@ public class SettingsPanel extends JPanel implements ActionListener,
 		channelsPanel = new JPanel();
 		channelsLabel = new JLabel("Channels", JLabel.RIGHT);
 
-		channelsComboBox = new JComboBox(channels);
+		channelsComboBox = new JComboBox<String>(channels);
 		channelsComboBox.addActionListener(this);
 
 		channelsPanel.add(channelsLabel);
@@ -181,8 +181,7 @@ public class SettingsPanel extends JPanel implements ActionListener,
 	}
 
 	private void setBandwidth() {
-		numChannels = Integer.valueOf((String) channelsComboBox
-				.getSelectedItem());
+		numChannels = Integer.parseInt((String) channelsComboBox.getSelectedItem());
 		bandwidth = sampleRate / decimation;
 		double value;
 		DecimalFormat formatter = new DecimalFormat("#0.00");
@@ -263,11 +262,14 @@ public class SettingsPanel extends JPanel implements ActionListener,
 	public void pushSettings(ConfigFile configuration) {
 		sampleRateTextField.setText(Double.toString(configuration
 				.getSampleRate()));
-		channelsComboBox.setSelectedItem(configuration.getNumChannels());
+
+		channelsComboBox.setSelectedItem(Integer.toString(configuration.getNumChannels()));
+
 		bandwidthTextField
 				.setText(Double.toString(configuration.getBandwidth()));
 		bandwidthUnitsLabel.setText(configuration.getBandwidthUnits());
 		decimationComboBox.setSelectedItem(Integer.toString(configuration
 				.getDecimation()));
+
 	}
 }

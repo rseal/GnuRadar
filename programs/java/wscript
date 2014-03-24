@@ -17,7 +17,7 @@ def build(bld):
          features  = 'javac',
          srcdir    = 'com',
          outdir    = 'classes',
-         compat    = '1.6',
+         compat    = '1.7',
          classpath = ['.',LIB],
          name      = 'gradar-src'
       )
@@ -28,7 +28,7 @@ def build(bld):
          features = 'jar',
          basedir  = 'classes',
          destfile = 'gradar-configure.jar',
-         compat   = '1.6',
+         compat   = '1.7',
          manifest = 'com/CONFIGURE_MANIFEST.MF',
          use      = 'gradar-src'
       )
@@ -39,7 +39,7 @@ def build(bld):
          features = 'jar',
          basedir  = 'classes',
          destfile = 'gradar-verify.jar',
-         compat   = '1.6',
+         compat   = '1.7',
          manifest = 'com/VERIFY_MANIFEST.MF',
          use      = 'gradar-src'
       )
@@ -50,7 +50,7 @@ def build(bld):
          features = 'jar',
          basedir  = 'classes',
          destfile = 'gradar-run.jar',
-         compat   = '1.6',
+         compat   = '1.7',
          manifest = 'com/RUN_MANIFEST.MF',
          use      = 'gradar-src'
       )

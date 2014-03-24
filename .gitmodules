@@ -4,3 +4,6 @@
 [submodule "deps/clp"]
 	path = deps/clp
 	url = git://github.com/rseal/CommandLineParser.git
+[submodule "deps/jzmq"]
+	path = deps/jzmq
+	url = https://github.com/zeromq/jzmq.git

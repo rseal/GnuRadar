@@ -44,7 +44,10 @@ Local Dependency installation:
 1. From the root project directory:
    a. git submodule init
    b. git submodule update
-
+   c. cd deps/jzmq
+       i. ./autogen
+      ii. ./configure
+     iii. make; make install
 
 Primary installation:
 

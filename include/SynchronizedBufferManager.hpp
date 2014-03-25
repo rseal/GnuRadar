@@ -61,24 +61,39 @@ public:
 
     int Depth()
     {
-       thread::ScopedLock lock( mutex_ );
+       thread::ScopedLock lock(mutex_);
         return depth_;
     }
 
-    int BytesPerBuffer() { return bytesPerBuffer_; }
-    int NumBuffers() { return numBuffers_; }
-    int Head() { return head_; }
-    int Tail() { return tail_; }
+    int BytesPerBuffer() { 
+       thread::ScopedLock lock(mutex_);
+       return bytesPerBuffer_; }
+
+    int NumBuffers() { 
+       thread::ScopedLock lock(mutex_);
+       return numBuffers_; 
+    }
+
+    int Head() { 
+       thread::ScopedLock lock(mutex_);
+       return head_; }
+
+    int Tail() {
+       thread::ScopedLock lock(mutex_);
+       return tail_; }
     
     void* WriteTo() { 
+       thread::ScopedLock lock(mutex_);
        return reinterpret_cast< void*>( array_[head_]->GetPtr() );
     }
 
     void* ReadFrom() { 
+       thread::ScopedLock lock(mutex_);
        return reinterpret_cast< void*>( array_[tail_]->GetPtr() );
     }
 
     bool OverFlow() {
+       thread::ScopedLock lock(mutex_);
        return depth_ > numBuffers_; 
     }
 

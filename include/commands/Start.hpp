@@ -101,9 +101,7 @@ namespace gnuradar {
          /////////////////////////////////////////////////////////////////////////////
          // pull settings from the configuration file
          /////////////////////////////////////////////////////////////////////////////
-         GnuRadarSettingsPtr GetSettings( gnuradar::File* file ) {
-
-            GnuRadarSettingsPtr settings( new GnuRadarSettings() );
+         void GetSettings( GnuRadarSettingsPtr settings, gnuradar::File* file ) {
 
             settings->numChannels    = file->numchannels();
             settings->decimationRate = file->decimation();
@@ -119,8 +117,6 @@ namespace gnuradar {
             settings->fUsbBlockSize  = 0;
             settings->fUsbNblocks    = 0;
             settings->mux            = 0xf3f2f1f0;
-
-            return settings;
          }
 
          /////////////////////////////////////////////////////////////////////////////
@@ -143,7 +139,7 @@ namespace gnuradar {
                   H5::PredType::NATIVE_INT, H5::DataSpace() );
             h5File_->WriteAttrib<double> ( "OUTPUT_RATE", file->outputrate(),
                   H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
-            h5File_->WriteAttrib<double> ( "IPP", file->ipp(),
+            h5File_->WriteAttrib<double> ( "IPP", file->pri(),
                   H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
             h5File_->WriteAttrib<double> ( "RF", file->txcarrier() , 
                   H5::PredType::NATIVE_DOUBLE, H5::DataSpace() );
@@ -210,8 +206,6 @@ namespace gnuradar {
          /////////////////////////////////////////////////////////////////////////////
          virtual const gnuradar::ResponseMessage Execute( gnuradar::ControlMessage& msg ){
 
-            std::cout << "GNURADAR: RUN CALLED" << std::endl;
-
             gnuradar::ResponseMessage response_msg;
 
             try{
@@ -243,8 +237,11 @@ namespace gnuradar {
                    )
                   );
 
+               // setup gnuradar settings pointer
+               GnuRadarSettingsPtr settings( new GnuRadarSettings() );
+
                // read and parse configuration file->
-               GnuRadarSettingsPtr settings = GetSettings( file );
+               GetSettings( settings, file );
 
                // create a device to communicate with hardware
                GnuRadarDevicePtr gnuRadarDevice( new GnuRadarDevice( settings ) );
@@ -270,8 +267,8 @@ namespace gnuradar {
 
                // setup table dimensions column = samples per ipp , row = IPP number
                std::vector<hsize_t> dims;
-               dims.push_back( rp->prisperbuffer() );
-               dims.push_back ( static_cast<int> ( rp->samplesperpri() * file->numchannels() ) );
+               dims.push_back(rp->prisperbuffer());
+               dims.push_back (static_cast<int> (rp->samplesperpri()));
 
                // setup producer thread
                producer_ = gnuradar::ProducerThreadPtr (
@@ -298,6 +295,8 @@ namespace gnuradar {
                {
                   statusServer_->Start();
                }
+
+               std::cout << "System is running..." << std::endl;
 
             }
             catch( std::runtime_error& e ){

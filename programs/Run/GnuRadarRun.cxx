@@ -38,6 +38,11 @@ int main ( )
    typedef boost::shared_ptr<ProducerConsumerModel> PCModelPtr;
    command::CommandList commandList;
 
+   std::cout 
+      << "GnuRadar Software Version 1.2.0-24Mar2014\n"
+      << "Author: rlseal@gmail.com\n"
+      << std::endl;
+
    // define network context
    zmq::context_t ctx(1);
 

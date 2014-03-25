@@ -157,6 +157,7 @@ public:
                 &overrun
             );
 
+
             // copy 1 second of data from synchro buffer
             memcpy (
                 address,

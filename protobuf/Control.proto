@@ -14,8 +14,8 @@ message File{
    required float bandwidth                 = 5;
    required string bandwidthUnits           = 6;
    required int32 numWindows                = 7;
-   required float ipp                       = 8;
-   required string ippUnits                 = 9;
+   required float pri                       = 8;
+   required string priUnits                 = 9;
    required float txCarrier                 = 10;
    required string organization             = 11;
    required string site                     = 12;

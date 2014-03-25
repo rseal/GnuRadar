@@ -22,7 +22,7 @@ void ProducerThread::Run()
 {
    running_ = true;
 
-   std::cout << "Starting Producer Thread" << std::endl;
+   std::cout << "ProducerThread starting..." << std::endl;
 
    while( running_ ){
 
@@ -36,5 +36,5 @@ void ProducerThread::Run()
    }
       //we're exiting now, make sure Consumer is awake.
       this->Wake( *BaseThread::condition_, *BaseThread::mutex_ );
-      std::cout << "Stopping Producer Thread" << std::endl;
+      std::cout << "ProducerThread Stopping..." << std::endl;
 }

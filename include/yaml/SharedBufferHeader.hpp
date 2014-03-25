@@ -27,55 +27,72 @@
 
 namespace yml{
 
+   ///////////////////////////////////////////////////////////////////////////
+   ///
+   ///////////////////////////////////////////////////////////////////////////
    struct RxWindow{
       std::string name;
       double start;
       double stop;
    };
 
+   ///////////////////////////////////////////////////////////////////////////
+   ///
+   ///////////////////////////////////////////////////////////////////////////
    struct SharedBufferHeader{
 
-      typedef std::vector<RxWindow> WindowVec;
+      private:
+
+      typedef std::vector<RxWindow> RxWindowVector;
       typedef boost::shared_ptr<YAML::Node> NodePtr;
-      WindowVec windows_;
 
-      const int BUFFERS;
-      const int BYTES;
-      const int IPPS;
-      const float SAMPLE_RATE;
-      const int CHANNELS;
-      const int SAMPLES;
-      const std::string FILE_NAME;
+      const int numBuffers_;
+      const int bytesPerBuffer_;
+      const int pri_;
+      const float sampleRate_;
+      const int numChannels_;
+      const int samplesPerBuffer_;
+      const std::string bufferFileName_;
+      RxWindowVector windows_;
 
-      NodePtr node_;
-
-
-      void CreateEmitter(int head, int tail, int depth)
+      ////////////////////////////////////////////////////////////////////////
+      ///
+      ////////////////////////////////////////////////////////////////////////
+      void CreateEmitter(NodePtr nodePtr, int head, int tail, int depth)
       {
-         node_ = NodePtr( new YAML::Node() );
-         (*node_)["head"]=head;
-         (*node_)["tail"]=tail;
-         (*node_)["depth"]=depth;
-         (*node_)["bytes"]=SAMPLE_RATE;
-         (*node_)["channels"]=CHANNELS;
-         (*node_)["ipps"]=IPPS;
-         (*node_)["samples"]=SAMPLES;
+         (*nodePtr)["head"]        = head;
+         (*nodePtr)["tail"]        = tail;
+         (*nodePtr)["depth"]       = depth;
+         (*nodePtr)["buffers"]     = numBuffers_;
+         (*nodePtr)["bytes"]       = bytesPerBuffer_;
+         (*nodePtr)["sample_rate"] = sampleRate_;
+         (*nodePtr)["channels"]    = numChannels_;
+         (*nodePtr)["ipps"]        = pri_;
+         (*nodePtr)["samples"]     = samplesPerBuffer_;
       }
 
       public:
+
+      ////////////////////////////////////////////////////////////////////////
+      ///
+      ////////////////////////////////////////////////////////////////////////
       SharedBufferHeader( 
-            const int buffers, 
-            const int bytes, 
-            const float sampleRate, 
-            const int channels, const int ipps,
-            const int samples, 
-            const std::string& file= "/dev/shm/GnuRadarHeader.yml"
+            const int buffers     ,
+            const int bytes       ,
+            const float sampleRate,
+            const int channels    ,
+            const int pri         ,
+            const int samples     ,
+            const std::string file= "/dev/shm/GnuRadarHeader.yml"
             ):
-         BUFFERS( buffers ), BYTES( bytes ), IPPS( ipps ), 
-         SAMPLE_RATE( sampleRate ), CHANNELS( channels ), 
-         SAMPLES( samples ), FILE_NAME( file )
+         numBuffers_( buffers ), bytesPerBuffer_( bytes ), pri_( pri ), 
+         sampleRate_( sampleRate ), numChannels_( channels ), 
+         samplesPerBuffer_( samples ), bufferFileName_( file )
       { }
 
+      ////////////////////////////////////////////////////////////////////////
+      ///
+      ////////////////////////////////////////////////////////////////////////
       void AddWindow( const std::string& name, const int start, const int stop)
       {
          RxWindow window;
@@ -85,22 +102,28 @@ namespace yml{
          windows_.push_back( window );
       }
 
+      ////////////////////////////////////////////////////////////////////////
+      ///
+      ////////////////////////////////////////////////////////////////////////
       void Write(int head, int tail, int depth)
       {
-         CreateEmitter(head,tail,depth);
+         NodePtr root_node = NodePtr( new YAML::Node());
+
+         CreateEmitter(root_node,head,tail,depth);
 
          for( unsigned int i=0; i<windows_.size(); ++i)
          {
             YAML::Node node;
-            node["name"] = windows_[i].name;
-            node["start"] = windows_[i].start;
-            node["stop"] = windows_[i].stop;
 
-            (*node_)["rx_win"].push_back(node);
+            node["name"]  = windows_[i].name;
+            node["start"] = windows_[i].start;
+            node["stop"]  = windows_[i].stop;
+
+            (*root_node)["rx_win"].push_back(node);
          }
 
-         std::ofstream fout( FILE_NAME.c_str());
-         fout << (*node_);
+         std::ofstream fout( bufferFileName_.c_str());
+         fout << *root_node;
          fout.close();
 
       }

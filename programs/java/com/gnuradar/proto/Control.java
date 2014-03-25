@@ -774,30 +774,30 @@ public final class Control {
      */
     int getNumWindows();
 
-    // required float ipp = 8;
+    // required float pri = 8;
     /**
-     * <code>required float ipp = 8;</code>
+     * <code>required float pri = 8;</code>
      */
-    boolean hasIpp();
+    boolean hasPri();
     /**
-     * <code>required float ipp = 8;</code>
+     * <code>required float pri = 8;</code>
      */
-    float getIpp();
+    float getPri();
 
-    // required string ippUnits = 9;
+    // required string priUnits = 9;
     /**
-     * <code>required string ippUnits = 9;</code>
+     * <code>required string priUnits = 9;</code>
      */
-    boolean hasIppUnits();
+    boolean hasPriUnits();
     /**
-     * <code>required string ippUnits = 9;</code>
+     * <code>required string priUnits = 9;</code>
      */
-    java.lang.String getIppUnits();
+    java.lang.String getPriUnits();
     /**
-     * <code>required string ippUnits = 9;</code>
+     * <code>required string priUnits = 9;</code>
      */
     com.google.protobuf.ByteString
-        getIppUnitsBytes();
+        getPriUnitsBytes();
 
     // required float txCarrier = 10;
     /**
@@ -1076,12 +1076,12 @@ public final class Control {
             }
             case 69: {
               bitField0_ |= 0x00000080;
-              ipp_ = input.readFloat();
+              pri_ = input.readFloat();
               break;
             }
             case 74: {
               bitField0_ |= 0x00000100;
-              ippUnits_ = input.readBytes();
+              priUnits_ = input.readBytes();
               break;
             }
             case 85: {
@@ -1370,36 +1370,36 @@ public final class Control {
       return numWindows_;
     }
 
-    // required float ipp = 8;
-    public static final int IPP_FIELD_NUMBER = 8;
-    private float ipp_;
+    // required float pri = 8;
+    public static final int PRI_FIELD_NUMBER = 8;
+    private float pri_;
     /**
-     * <code>required float ipp = 8;</code>
+     * <code>required float pri = 8;</code>
      */
-    public boolean hasIpp() {
+    public boolean hasPri() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
-     * <code>required float ipp = 8;</code>
+     * <code>required float pri = 8;</code>
      */
-    public float getIpp() {
-      return ipp_;
+    public float getPri() {
+      return pri_;
     }
 
-    // required string ippUnits = 9;
-    public static final int IPPUNITS_FIELD_NUMBER = 9;
-    private java.lang.Object ippUnits_;
+    // required string priUnits = 9;
+    public static final int PRIUNITS_FIELD_NUMBER = 9;
+    private java.lang.Object priUnits_;
     /**
-     * <code>required string ippUnits = 9;</code>
+     * <code>required string priUnits = 9;</code>
      */
-    public boolean hasIppUnits() {
+    public boolean hasPriUnits() {
       return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
-     * <code>required string ippUnits = 9;</code>
+     * <code>required string priUnits = 9;</code>
      */
-    public java.lang.String getIppUnits() {
-      java.lang.Object ref = ippUnits_;
+    public java.lang.String getPriUnits() {
+      java.lang.Object ref = priUnits_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -1407,22 +1407,22 @@ public final class Control {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          ippUnits_ = s;
+          priUnits_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>required string ippUnits = 9;</code>
+     * <code>required string priUnits = 9;</code>
      */
     public com.google.protobuf.ByteString
-        getIppUnitsBytes() {
-      java.lang.Object ref = ippUnits_;
+        getPriUnitsBytes() {
+      java.lang.Object ref = priUnits_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        ippUnits_ = b;
+        priUnits_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -1864,8 +1864,8 @@ public final class Control {
       bandwidth_ = 0F;
       bandwidthUnits_ = "";
       numWindows_ = 0;
-      ipp_ = 0F;
-      ippUnits_ = "";
+      pri_ = 0F;
+      priUnits_ = "";
       txCarrier_ = 0F;
       organization_ = "";
       site_ = "";
@@ -1912,11 +1912,11 @@ public final class Control {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasIpp()) {
+      if (!hasPri()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasIppUnits()) {
+      if (!hasPriUnits()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1999,10 +1999,10 @@ public final class Control {
         output.writeInt32(7, numWindows_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeFloat(8, ipp_);
+        output.writeFloat(8, pri_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeBytes(9, getIppUnitsBytes());
+        output.writeBytes(9, getPriUnitsBytes());
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeFloat(10, txCarrier_);
@@ -2079,11 +2079,11 @@ public final class Control {
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(8, ipp_);
+          .computeFloatSize(8, pri_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(9, getIppUnitsBytes());
+          .computeBytesSize(9, getPriUnitsBytes());
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
@@ -2266,9 +2266,9 @@ public final class Control {
         bitField0_ = (bitField0_ & ~0x00000020);
         numWindows_ = 0;
         bitField0_ = (bitField0_ & ~0x00000040);
-        ipp_ = 0F;
+        pri_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000080);
-        ippUnits_ = "";
+        priUnits_ = "";
         bitField0_ = (bitField0_ & ~0x00000100);
         txCarrier_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000200);
@@ -2365,11 +2365,11 @@ public final class Control {
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000080;
         }
-        result.ipp_ = ipp_;
+        result.pri_ = pri_;
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000100;
         }
-        result.ippUnits_ = ippUnits_;
+        result.priUnits_ = priUnits_;
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000200;
         }
@@ -2473,12 +2473,12 @@ public final class Control {
         if (other.hasNumWindows()) {
           setNumWindows(other.getNumWindows());
         }
-        if (other.hasIpp()) {
-          setIpp(other.getIpp());
+        if (other.hasPri()) {
+          setPri(other.getPri());
         }
-        if (other.hasIppUnits()) {
+        if (other.hasPriUnits()) {
           bitField0_ |= 0x00000100;
-          ippUnits_ = other.ippUnits_;
+          priUnits_ = other.priUnits_;
           onChanged();
         }
         if (other.hasTxCarrier()) {
@@ -2610,11 +2610,11 @@ public final class Control {
           
           return false;
         }
-        if (!hasIpp()) {
+        if (!hasPri()) {
           
           return false;
         }
-        if (!hasIppUnits()) {
+        if (!hasPriUnits()) {
           
           return false;
         }
@@ -3003,109 +3003,109 @@ public final class Control {
         return this;
       }
 
-      // required float ipp = 8;
-      private float ipp_ ;
+      // required float pri = 8;
+      private float pri_ ;
       /**
-       * <code>required float ipp = 8;</code>
+       * <code>required float pri = 8;</code>
        */
-      public boolean hasIpp() {
+      public boolean hasPri() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>required float ipp = 8;</code>
+       * <code>required float pri = 8;</code>
        */
-      public float getIpp() {
-        return ipp_;
+      public float getPri() {
+        return pri_;
       }
       /**
-       * <code>required float ipp = 8;</code>
+       * <code>required float pri = 8;</code>
        */
-      public Builder setIpp(float value) {
+      public Builder setPri(float value) {
         bitField0_ |= 0x00000080;
-        ipp_ = value;
+        pri_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required float ipp = 8;</code>
+       * <code>required float pri = 8;</code>
        */
-      public Builder clearIpp() {
+      public Builder clearPri() {
         bitField0_ = (bitField0_ & ~0x00000080);
-        ipp_ = 0F;
+        pri_ = 0F;
         onChanged();
         return this;
       }
 
-      // required string ippUnits = 9;
-      private java.lang.Object ippUnits_ = "";
+      // required string priUnits = 9;
+      private java.lang.Object priUnits_ = "";
       /**
-       * <code>required string ippUnits = 9;</code>
+       * <code>required string priUnits = 9;</code>
        */
-      public boolean hasIppUnits() {
+      public boolean hasPriUnits() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>required string ippUnits = 9;</code>
+       * <code>required string priUnits = 9;</code>
        */
-      public java.lang.String getIppUnits() {
-        java.lang.Object ref = ippUnits_;
+      public java.lang.String getPriUnits() {
+        java.lang.Object ref = priUnits_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          ippUnits_ = s;
+          priUnits_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>required string ippUnits = 9;</code>
+       * <code>required string priUnits = 9;</code>
        */
       public com.google.protobuf.ByteString
-          getIppUnitsBytes() {
-        java.lang.Object ref = ippUnits_;
+          getPriUnitsBytes() {
+        java.lang.Object ref = priUnits_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          ippUnits_ = b;
+          priUnits_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>required string ippUnits = 9;</code>
+       * <code>required string priUnits = 9;</code>
        */
-      public Builder setIppUnits(
+      public Builder setPriUnits(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000100;
-        ippUnits_ = value;
+        priUnits_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string ippUnits = 9;</code>
+       * <code>required string priUnits = 9;</code>
        */
-      public Builder clearIppUnits() {
+      public Builder clearPriUnits() {
         bitField0_ = (bitField0_ & ~0x00000100);
-        ippUnits_ = getDefaultInstance().getIppUnits();
+        priUnits_ = getDefaultInstance().getPriUnits();
         onChanged();
         return this;
       }
       /**
-       * <code>required string ippUnits = 9;</code>
+       * <code>required string priUnits = 9;</code>
        */
-      public Builder setIppUnitsBytes(
+      public Builder setPriUnitsBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000100;
-        ippUnits_ = value;
+        priUnits_ = value;
         onChanged();
         return this;
       }
@@ -7181,7 +7181,7 @@ public final class Control {
       "pleRate\030\002 \002(\002\022\022\n\ndecimation\030\003 \002(\005\022\023\n\013num" +
       "Channels\030\004 \002(\005\022\021\n\tbandwidth\030\005 \002(\002\022\026\n\016ban" +
       "dwidthUnits\030\006 \002(\t\022\022\n\nnumWindows\030\007 \002(\005\022\013\n" +
-      "\003ipp\030\010 \002(\002\022\020\n\010ippUnits\030\t \002(\t\022\021\n\ttxCarrie" +
+      "\003pri\030\010 \002(\002\022\020\n\010priUnits\030\t \002(\t\022\021\n\ttxCarrie" +
       "r\030\n \002(\002\022\024\n\014organization\030\013 \002(\t\022\014\n\004site\030\014 " +
       "\002(\t\022\014\n\004user\030\r \002(\t\022\r\n\005radar\030\016 \002(\t\022\020\n\010rece" +
       "iver\030\017 \002(\t\022\021\n\tfpgaImage\030\020 \002(\t\022\024\n\014baseFil",
@@ -7217,7 +7217,7 @@ public final class Control {
           internal_static_gnuradar_File_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_gnuradar_File_descriptor,
-              new java.lang.String[] { "Version", "SampleRate", "Decimation", "NumChannels", "Bandwidth", "BandwidthUnits", "NumWindows", "Ipp", "IppUnits", "TxCarrier", "Organization", "Site", "User", "Radar", "Receiver", "FpgaImage", "BaseFileName", "OutputRate", "Channel", "Window", "RadarParameters", });
+              new java.lang.String[] { "Version", "SampleRate", "Decimation", "NumChannels", "Bandwidth", "BandwidthUnits", "NumWindows", "Pri", "PriUnits", "TxCarrier", "Organization", "Site", "User", "Radar", "Receiver", "FpgaImage", "BaseFileName", "OutputRate", "Channel", "Window", "RadarParameters", });
           internal_static_gnuradar_Channel_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_gnuradar_Channel_fieldAccessorTable = new

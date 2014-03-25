@@ -30,7 +30,8 @@ namespace gnuradar{
             gnuradar::ResponseMessage reply_msg;
 
             try {
-               std::cout << "EXECUTE COMMAND: " << msg.name() << std::endl;
+
+               std::cout << "RequestServer : Parsing command " << msg.name() << std::endl;
 
                command::CommandPtr commandPtr = commands_.Find ( msg.name() );
 
@@ -42,7 +43,7 @@ namespace gnuradar{
             } catch ( std::exception& e ) {
                reply_msg.set_value( gnuradar::ResponseMessage::ERROR );
                reply_msg.set_message(e.what());
-               std::cerr << "Invalid command " << e.what() << std::endl;
+               std::cerr << "ReguestServer : Invalid command " << e.what() << std::endl;
             }
 
             return reply_msg;
@@ -86,7 +87,7 @@ namespace gnuradar{
             gnuradar::ResponseMessage response_msg;
             zmq::message_t request;
 
-            std::cout << "RequestServer: START " << std::endl;
+            std::cout << "RequestServer started. Listening for commands..." << std::endl;
 
             while( active_ )
             {
@@ -104,7 +105,8 @@ namespace gnuradar{
 
             }
 
-            std::cout << "RequestServer: STOP " << std::endl;
+            std::cout << "Stopping RequestServer..." << std::endl;
+
             socket_->close();
          }
 

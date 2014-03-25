@@ -30,7 +30,7 @@ namespace gnuradar{
             socket_ = SocketPtr( new zmq::socket_t(ctx, ZMQ_PUB));
 				//socket_->setsockopt( ZMQ_HWM, &gnuradar::constants::HWM, sizeof(gnuradar::constants::HWM));
             socket_->bind (ipAddr.c_str());
-				std::cout << "STATUS ADDRESS : " << ipAddr << std::endl;
+				std::cout << "Connect to " << ipAddr << " for Status feed" << std::endl;
          }
 
          //////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,8 @@ namespace gnuradar{
          //////////////////////////////////////////////////////////////////////////
          void Run()
          {
-            std::cout << "StatusServer: START " << std::endl;
+            std::cout << "StatusServer started..." << std::endl;
+
             active_ = true;
             gnuradar::StatusMessage status_msg;
 
@@ -60,7 +61,7 @@ namespace gnuradar{
 					Sleep(thread::MSEC, gnuradar::constants::STATUS_REFRESH_RATE_MSEC);
 				}
 
-				std::cout << "StatusServer: STOP " << std::endl;
+				std::cout << "StatusServer Stopping... " << std::endl;
 				socket_->close();
 			}
 

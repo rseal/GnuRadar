@@ -232,8 +232,6 @@ usrp_open_interface (libusb_device *dev, int interface, int altinterface)
     return 0;
   }
 
-  fprintf(stderr,"USRP USB COMMUNICATION SUCCESS. \n");
-
   return udh;
 }
 

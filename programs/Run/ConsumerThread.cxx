@@ -22,7 +22,7 @@ void ConsumerThread::Run()
    static const char* LOCK_FILE = "/dev/shm/gnuradar.lock";
    running_ = true;
 
-	std::cout << "Consumer Thread Started " << std::endl;
+	std::cout << "ConsumerThread started... " << std::endl;
 
    while( running_ ){
 
@@ -59,5 +59,5 @@ void ConsumerThread::Run()
       boost::filesystem::remove_all( LOCK_FILE );
    }
    h5File_->Close();
-   std::cout << "Consumer Thread Exiting " << std::endl;
+   std::cout << "ConsumerThread stopped... " << std::endl;
 }

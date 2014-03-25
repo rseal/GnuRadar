@@ -253,24 +253,24 @@ class File : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 numwindows() const;
   inline void set_numwindows(::google::protobuf::int32 value);
 
-  // required float ipp = 8;
-  inline bool has_ipp() const;
-  inline void clear_ipp();
-  static const int kIppFieldNumber = 8;
-  inline float ipp() const;
-  inline void set_ipp(float value);
+  // required float pri = 8;
+  inline bool has_pri() const;
+  inline void clear_pri();
+  static const int kPriFieldNumber = 8;
+  inline float pri() const;
+  inline void set_pri(float value);
 
-  // required string ippUnits = 9;
-  inline bool has_ippunits() const;
-  inline void clear_ippunits();
-  static const int kIppUnitsFieldNumber = 9;
-  inline const ::std::string& ippunits() const;
-  inline void set_ippunits(const ::std::string& value);
-  inline void set_ippunits(const char* value);
-  inline void set_ippunits(const char* value, size_t size);
-  inline ::std::string* mutable_ippunits();
-  inline ::std::string* release_ippunits();
-  inline void set_allocated_ippunits(::std::string* ippunits);
+  // required string priUnits = 9;
+  inline bool has_priunits() const;
+  inline void clear_priunits();
+  static const int kPriUnitsFieldNumber = 9;
+  inline const ::std::string& priunits() const;
+  inline void set_priunits(const ::std::string& value);
+  inline void set_priunits(const char* value);
+  inline void set_priunits(const char* value, size_t size);
+  inline ::std::string* mutable_priunits();
+  inline ::std::string* release_priunits();
+  inline void set_allocated_priunits(::std::string* priunits);
 
   // required float txCarrier = 10;
   inline bool has_txcarrier() const;
@@ -419,10 +419,10 @@ class File : public ::google::protobuf::Message {
   inline void clear_has_bandwidthunits();
   inline void set_has_numwindows();
   inline void clear_has_numwindows();
-  inline void set_has_ipp();
-  inline void clear_has_ipp();
-  inline void set_has_ippunits();
-  inline void clear_has_ippunits();
+  inline void set_has_pri();
+  inline void clear_has_pri();
+  inline void set_has_priunits();
+  inline void clear_has_priunits();
   inline void set_has_txcarrier();
   inline void clear_has_txcarrier();
   inline void set_has_organization();
@@ -453,8 +453,8 @@ class File : public ::google::protobuf::Message {
   float bandwidth_;
   ::std::string* bandwidthunits_;
   ::google::protobuf::int32 numwindows_;
-  float ipp_;
-  ::std::string* ippunits_;
+  float pri_;
+  ::std::string* priunits_;
   ::std::string* organization_;
   ::std::string* site_;
   ::std::string* user_;
@@ -1263,95 +1263,95 @@ inline void File::set_numwindows(::google::protobuf::int32 value) {
   numwindows_ = value;
 }
 
-// required float ipp = 8;
-inline bool File::has_ipp() const {
+// required float pri = 8;
+inline bool File::has_pri() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }
-inline void File::set_has_ipp() {
+inline void File::set_has_pri() {
   _has_bits_[0] |= 0x00000080u;
 }
-inline void File::clear_has_ipp() {
+inline void File::clear_has_pri() {
   _has_bits_[0] &= ~0x00000080u;
 }
-inline void File::clear_ipp() {
-  ipp_ = 0;
-  clear_has_ipp();
+inline void File::clear_pri() {
+  pri_ = 0;
+  clear_has_pri();
 }
-inline float File::ipp() const {
-  return ipp_;
+inline float File::pri() const {
+  return pri_;
 }
-inline void File::set_ipp(float value) {
-  set_has_ipp();
-  ipp_ = value;
+inline void File::set_pri(float value) {
+  set_has_pri();
+  pri_ = value;
 }
 
-// required string ippUnits = 9;
-inline bool File::has_ippunits() const {
+// required string priUnits = 9;
+inline bool File::has_priunits() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
-inline void File::set_has_ippunits() {
+inline void File::set_has_priunits() {
   _has_bits_[0] |= 0x00000100u;
 }
-inline void File::clear_has_ippunits() {
+inline void File::clear_has_priunits() {
   _has_bits_[0] &= ~0x00000100u;
 }
-inline void File::clear_ippunits() {
-  if (ippunits_ != &::google::protobuf::internal::kEmptyString) {
-    ippunits_->clear();
+inline void File::clear_priunits() {
+  if (priunits_ != &::google::protobuf::internal::kEmptyString) {
+    priunits_->clear();
   }
-  clear_has_ippunits();
+  clear_has_priunits();
 }
-inline const ::std::string& File::ippunits() const {
-  return *ippunits_;
+inline const ::std::string& File::priunits() const {
+  return *priunits_;
 }
-inline void File::set_ippunits(const ::std::string& value) {
-  set_has_ippunits();
-  if (ippunits_ == &::google::protobuf::internal::kEmptyString) {
-    ippunits_ = new ::std::string;
+inline void File::set_priunits(const ::std::string& value) {
+  set_has_priunits();
+  if (priunits_ == &::google::protobuf::internal::kEmptyString) {
+    priunits_ = new ::std::string;
   }
-  ippunits_->assign(value);
+  priunits_->assign(value);
 }
-inline void File::set_ippunits(const char* value) {
-  set_has_ippunits();
-  if (ippunits_ == &::google::protobuf::internal::kEmptyString) {
-    ippunits_ = new ::std::string;
+inline void File::set_priunits(const char* value) {
+  set_has_priunits();
+  if (priunits_ == &::google::protobuf::internal::kEmptyString) {
+    priunits_ = new ::std::string;
   }
-  ippunits_->assign(value);
+  priunits_->assign(value);
 }
-inline void File::set_ippunits(const char* value, size_t size) {
-  set_has_ippunits();
-  if (ippunits_ == &::google::protobuf::internal::kEmptyString) {
-    ippunits_ = new ::std::string;
+inline void File::set_priunits(const char* value, size_t size) {
+  set_has_priunits();
+  if (priunits_ == &::google::protobuf::internal::kEmptyString) {
+    priunits_ = new ::std::string;
   }
-  ippunits_->assign(reinterpret_cast<const char*>(value), size);
+  priunits_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* File::mutable_ippunits() {
-  set_has_ippunits();
-  if (ippunits_ == &::google::protobuf::internal::kEmptyString) {
-    ippunits_ = new ::std::string;
+inline ::std::string* File::mutable_priunits() {
+  set_has_priunits();
+  if (priunits_ == &::google::protobuf::internal::kEmptyString) {
+    priunits_ = new ::std::string;
   }
-  return ippunits_;
+  return priunits_;
 }
-inline ::std::string* File::release_ippunits() {
-  clear_has_ippunits();
-  if (ippunits_ == &::google::protobuf::internal::kEmptyString) {
+inline ::std::string* File::release_priunits() {
+  clear_has_priunits();
+  if (priunits_ == &::google::protobuf::internal::kEmptyString) {
     return NULL;
   } else {
-    ::std::string* temp = ippunits_;
-    ippunits_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    ::std::string* temp = priunits_;
+    priunits_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
     return temp;
   }
 }
-inline void File::set_allocated_ippunits(::std::string* ippunits) {
-  if (ippunits_ != &::google::protobuf::internal::kEmptyString) {
-    delete ippunits_;
+inline void File::set_allocated_priunits(::std::string* priunits) {
+  if (priunits_ != &::google::protobuf::internal::kEmptyString) {
+    delete priunits_;
   }
-  if (ippunits) {
-    set_has_ippunits();
-    ippunits_ = ippunits;
+  if (priunits) {
+    set_has_priunits();
+    priunits_ = priunits;
   } else {
-    clear_has_ippunits();
-    ippunits_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    clear_has_priunits();
+    priunits_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   }
 }
 

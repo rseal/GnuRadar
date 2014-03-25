@@ -49,6 +49,8 @@ namespace gnuradar {
             response_msg.set_value(gnuradar::ResponseMessage::OK);
             response_msg.set_message("Data collection halted.");
 
+            std::cout << "System has been stopped by the user..." << std::endl;
+
             return response_msg;
          }
       };

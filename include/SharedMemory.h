@@ -80,12 +80,9 @@ public:
         ftruncate ( desc_, size_ );
     }
 
-    void LockPages() {
-        mlock ( address_, size_ );
-    }
-    void* GetPtr() {
-        return address_;
-    }
+    void LockPages() { mlock ( address_, size_ ); }
+
+    void* GetPtr() { return address_; }
 
     void Resize ( int size ) {
         size_ = size;

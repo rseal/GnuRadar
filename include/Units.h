@@ -36,6 +36,9 @@ using std::endl;
 using std::map;
 using namespace boost;
 
+//////////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////////
 struct UnitType{
 	public:
 	const std::string units;
@@ -43,16 +46,21 @@ struct UnitType{
 	UnitType( const std::string& u, const double m ) : units(u), multiplier(m) {}
 };
 
-///\brief Parses various defined time units and returns time with double precision
+//////////////////////////////////////////////////////////////////////////////
+///Parses various defined time units and returns time with double precision
+//////////////////////////////////////////////////////////////////////////////
 struct Units {
 
 	typedef map<string, UnitType > UnitTypeMap;
 	UnitTypeMap unitMap;
 
-	// finds a matching unit and returns a UnitType object.
+   ///////////////////////////////////////////////////////////////////////////
+	/// finds a matching unit and returns a UnitType object.
+   ///////////////////////////////////////////////////////////////////////////
 	UnitType Find( const string& token )
 	{
 		std::string str = token;
+
 		//remove everything to the left of 'units'
 		str.erase ( 0, str.find_last_of ( " " ) + 1 );
 
@@ -62,7 +70,9 @@ struct Units {
 		return iter->second;
 	}
 
-	// converts incoming token to lower for standardization.
+   ///////////////////////////////////////////////////////////////////////////
+   ///converts incoming token to lower for standardization.
+   ///////////////////////////////////////////////////////////////////////////
 	std::string Format( const string& token )
 	{
 		string str = token;
@@ -72,6 +82,9 @@ struct Units {
 
 	public:
 
+   ///////////////////////////////////////////////////////////////////////////
+   ///
+   ///////////////////////////////////////////////////////////////////////////
 	Units() {
 
 		// resulting unit : hz
@@ -94,10 +107,12 @@ struct Units {
 		unitMap.insert( std::pair<std::string,UnitType>("samples",UnitType("samples",1e0)));
 	}
 
+   ///////////////////////////////////////////////////////////////////////////
+   ///
+   ///////////////////////////////////////////////////////////////////////////
 	const UnitType operator() ( const string& token ) {
 		return this->Find(this->Format(token));
 	}
-
 };
 
 #endif

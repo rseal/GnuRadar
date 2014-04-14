@@ -56,7 +56,7 @@ class GnuRadarDevice: public Device {
 
     // define flags
     bool overFlow_;
-    bool isFirstDataRequest_;
+    bool dataSynchronized_;
 
     //StreamBuffer<int16_t> stBuf_;
     std::vector<int> sequence_;
@@ -74,7 +74,7 @@ public:
             FX2_FLUSH_FIFO_SIZE_BYTES ( 2048 ),
             grSettings_ ( grSettings ),
             overFlow_ ( false ),
-            isFirstDataRequest_ ( true ),
+            dataSynchronized_ ( false ),
             sequence_ ( grSettings->numChannels, 16384 ) {
 
         // static helper function to initialize USRP settings
@@ -120,7 +120,7 @@ public:
         int readRequestSizeSamples = bytes / sizeof ( iq_t );
 
         //start data collection and flush fx2 buffer
-        if ( isFirstDataRequest_ ) {
+        if ( !dataSynchronized_ ) {
 
             // Initialize stream buffer
             synchroBuffer_ = SynchronizationBufferPtr (
@@ -148,58 +148,39 @@ public:
 
             // synchronize the data stream
             synchroBuffer_->Sync();
+        } 
 
-            // write a another buffer after synchronizing.
-            // This is a requirement of the StreamBuffer class.
-            usrp_->read (
-                synchroBuffer_->WritePtr(),
-                synchroBuffer_->WriteSizeBytes(),
-                &overrun
-            );
+        //read data from USRP
+        usrp_->read (
+              synchroBuffer_->WritePtr(),
+              synchroBuffer_->WriteSizeBytes(),
+              &overFlow_
+              );
 
+        //Transfer data to shared memory buffer
+        memcpy (
+              address,
+              synchroBuffer_->ReadPtr(),
+              synchroBuffer_->ReadSizeBytes()
+              );
 
-            // copy 1 second of data from synchro buffer
-            memcpy (
-                address,
-                synchroBuffer_->ReadPtr(),
-                synchroBuffer_->ReadSizeBytes()
-            );
+        // update read and write pointers
+        synchroBuffer_->Update();
 
-            // update read and write pointers
-            synchroBuffer_->Update();
-
-            isFirstDataRequest_ = false;
-
-        } else {
-
-            //read data from USRP
-            usrp_->read (
-                  synchroBuffer_->WritePtr(),
-                  synchroBuffer_->WriteSizeBytes(),
-                  &overFlow_
-                  );
-
-            //Transfer data to shared memory buffer
-            memcpy (
-                address,
-                synchroBuffer_->ReadPtr(),
-                synchroBuffer_->ReadSizeBytes()
-            );
-
-            // update read and write pointers
-            synchroBuffer_->Update();
-
-            if ( overFlow_ ) {
-                //TODO: throw exception here
-                std::cerr << "GnuRadarDevice: Data overflow detected !!!"
-                          << std::endl;
-            }
+        if ( overFlow_ ) {
+           //TODO: throw exception here
+           std::cerr << "GnuRadarDevice: Data overflow detected !!!"
+              << std::endl;
         }
     }
 
     /// Stops data collection.
     virtual void Stop() {
-        usrp_->stop();
+
+       usrp_->stop();
+
+       // reset synchronization flag
+       dataSynchronized_ = false;
     }
 };
 };

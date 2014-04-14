@@ -148,6 +148,8 @@ public:
 
             // synchronize the data stream
             synchroBuffer_->Sync();
+
+            dataSynchronized_ = true;
         } 
 
         //read data from USRP

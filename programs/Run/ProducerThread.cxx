@@ -26,8 +26,14 @@ void ProducerThread::Run()
 
    while( running_ ){
 
-      device_->RequestData ( bufferManager_->WriteTo() , 
+      const int bytes_read = device_->RequestData ( bufferManager_->WriteTo() , 
             bufferManager_->BytesPerBuffer() );
+
+      // don't process buffer if read error occurred
+      if( bytes_read < 0)
+      {
+         continue;
+      }
 
       bufferManager_->IncrementHead();
 

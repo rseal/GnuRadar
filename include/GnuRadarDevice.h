@@ -114,9 +114,10 @@ public:
     ///
     ///\param address shared memory write address.
     ///\param bytes number of bytes to write.
-    virtual void RequestData ( void* address, const int bytes ) {
+    virtual int RequestData ( void* address, const int bytes ) {
 
         bool overrun;
+        int bytes_read = -1;
         int readRequestSizeSamples = bytes / sizeof ( iq_t );
 
         //start data collection and flush fx2 buffer
@@ -140,11 +141,17 @@ public:
             usrp_->read ( buf, FX2_FLUSH_FIFO_SIZE_BYTES, &overFlow_ );
 
             // write aligned data into the synchro buffer
-            usrp_->read (
+            bytes_read = usrp_->read (
                 synchroBuffer_->WritePtr(),
                 synchroBuffer_->WriteSizeBytes(),
                 &overrun
             );
+
+            // capture error and return if true
+            if( bytes_read < 0)
+            {
+               return bytes_read;
+            }
 
             // synchronize the data stream
             synchroBuffer_->Sync();
@@ -153,11 +160,17 @@ public:
         } 
 
         //read data from USRP
-        usrp_->read (
+        bytes_read = usrp_->read (
               synchroBuffer_->WritePtr(),
               synchroBuffer_->WriteSizeBytes(),
               &overFlow_
               );
+
+        // capture error and return if true
+        if( bytes_read < 0)
+        {
+           return bytes_read;
+        }
 
         //Transfer data to shared memory buffer
         memcpy (
@@ -174,6 +187,8 @@ public:
            std::cerr << "GnuRadarDevice: Data overflow detected !!!"
               << std::endl;
         }
+
+        return bytes_read;
     }
 
     /// Stops data collection.

@@ -20,7 +20,7 @@
 /// Interface for data source hardware
 class Device {
 public:
-    virtual void RequestData ( void* address, const int bytes ) = 0;
+    virtual int RequestData ( void* address, const int bytes ) = 0;
     virtual void Stop() = 0;
 };
 

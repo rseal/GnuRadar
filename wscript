@@ -38,68 +38,27 @@ def build(bld):
 
    ## build the usrp library
    bld.recurse('usrp')
-   bld.recurse('protobuf')
-   bld.recurse('programs/java')
 
    bld.add_group()
 
-   ### build Run server
+   ### build Main program
    bld(
-         name     = 'run-server',
+         name     = 'pisco',
          features = 'cxx cxxprogram',
          cxxflags = ['-march=native', '-Wall', '-W'],
-         includes = common_include + ['programs/Run','protobuf'],
-         source   = ['programs/Run/GnuRadarRun.cxx',
+         includes = common_include + ['programs/Run'],
+         source   = ['programs/Run/IonosondeRxRun.cpp', 
                      'programs/Run/ProducerThread.cxx',
-                     'programs/Run/ConsumerThread.cxx'], 
-         target   = 'gradar-run-server',
+                     'programs/Run/ConsumerThread.cxx'
+                    ], 
+         target   = 'pisco',
          libpath  = ['usrp','/usr/lib','/usr/local/lib'],
          lib      = ['boost_system','boost_filesystem','zmq',
                      'yaml-cpp','pthread','gnuradar','protobuf',
                      'usb-1.0','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
-         use = 'proto'
+         #use = 'proto'
    )
 
-   ### build Replay
-   bld(
-         name     = 'replay',
-         features = 'cxx cxxprogram',
-         cxxflags = ['-march=native', '-Wall', '-W'],
-         includes = common_include + ['programs/Replay'],
-         source   = ['programs/Replay/GnuRadarReplay.cxx'],
-         target   = 'gradar-replay',
-         libpath  = ['usrp','/usr/lib','/usr/local/lib'],
-         lib      = ['boost_system','boost_filesystem','protobuf',
-                     'yaml-cpp','pthread','gnuradar', 
-                     'usb-1.0','hdf5_hl_cpp','hdf5_cpp','hdf5','rt'],
-         use = 'proto'
-   )
-
-   bld.add_group()
-   bld(
-        rule   = 'cp ${SRC} ${TGT}',
-        source = bld.path.ant_glob('programs/java/com/lib/snakeyaml-1.10.jar'),
-        target ='programs/java/snakeyaml-1.10.jar' 
-    )
-
-   bld(
-        rule   = 'cp ${SRC} ${TGT}',
-        source = bld.path.ant_glob('programs/java/com/lib/zmq.jar'),
-        target ='programs/java/zmq.jar' 
-    )
-
-   bld(
-        rule   = 'cp ${SRC} ${TGT}',
-        source = bld.path.ant_glob('programs/java/com/lib/protobuf-java-2.5.0.jar'),
-        target ='programs/java/protobuf-java-2.5.0.jar'
-    )
-
-
-   bld.add_group()
-   bld.install_files(
-         '${PREFIX}/gnuradar', 
-         bld.path.get_bld().ant_glob('programs/java/*.jar')
-   )
 
    bld.install_files(
          '${PREFIX}/gnuradar', 

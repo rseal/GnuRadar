@@ -51,9 +51,6 @@ class GnuRadarDevice: public Device {
     const int ALIGNMENT_SIZE_BYTES;
     const int FX2_FLUSH_FIFO_SIZE_BYTES;
 
-    // configuration settings class
-    GnuRadarSettingsPtr grSettings_;
-
     // define flags
     bool overFlow_;
     bool dataSynchronized_;
@@ -61,52 +58,59 @@ class GnuRadarDevice: public Device {
     //StreamBuffer<int16_t> stBuf_;
     std::vector<int> sequence_;
 
+   protected:
+
     // this is a gnuradio pointer of some sort.
     // older versions did not use this.
     usrp_standard_rx_sptr usrp_;
 
-public:
+    // configuration settings class
+    GnuRadarSettingsPtr grSettings_;
+
+
+
+   public:
 
     /// Constructor.
     GnuRadarDevice ( GnuRadarSettingsPtr grSettings ) :
-            ALIGNMENT_SIZE ( 256 ),
-            ALIGNMENT_SIZE_BYTES ( ALIGNMENT_SIZE*sizeof ( iq_t ) ),
-            FX2_FLUSH_FIFO_SIZE_BYTES ( 2048 ),
-            grSettings_ ( grSettings ),
-            overFlow_ ( false ),
-            dataSynchronized_ ( false ),
-            sequence_ ( grSettings->numChannels, 16384 ) {
+       ALIGNMENT_SIZE ( 256 ),
+       ALIGNMENT_SIZE_BYTES ( ALIGNMENT_SIZE*sizeof ( iq_t ) ),
+       FX2_FLUSH_FIFO_SIZE_BYTES ( 2048 ),
+       grSettings_ ( grSettings ),
+       overFlow_ ( false ),
+       dataSynchronized_ ( false ),
+       sequence_ ( grSettings->numChannels, 16384 ) {
 
-        // static helper function to initialize USRP settings
-        usrp_ = usrp_standard_rx::make (
-                    grSettings_->whichBoard,
-                    grSettings_->decimationRate,
-                    grSettings_->numChannels,
-                    grSettings_->mux,
-                    grSettings_->mode,
-                    grSettings_->fUsbBlockSize,
-                    grSettings_->fUsbNblocks,
-                    grSettings_->fpgaFileName,
-                    grSettings_->firmwareFileName
+          // static helper function to initialize USRP settings
+          usrp_ = usrp_standard_rx::make (
+                grSettings_->whichBoard,
+                grSettings_->decimationRate,
+                grSettings_->numChannels,
+                grSettings_->mux,
+                grSettings_->mode,
+                grSettings_->fUsbBlockSize,
+                grSettings_->fUsbNblocks,
+                grSettings_->fpgaFileName,
+                grSettings_->firmwareFileName
                 );
 
-        //check to see if device is connected
-        if ( usrp_.get() == 0 ) {
-            throw std::runtime_error( "No USRP found - check your connections" );
-            //exit ( 0 );
-        }
+          //check to see if device is connected
+          if ( usrp_.get() == 0 ) {
+             throw std::runtime_error( "No USRP found - check your connections" );
+             //exit ( 0 );
+          }
 
-        // setup frequency and phase for each ddc
-        for ( int i = 0; i < grSettings_->numChannels; ++i ) {
-            usrp_->set_rx_freq ( i, grSettings_->Tune ( i ) );
-            usrp_->set_ddc_phase ( i, 0 );
-        }
+          // setup frequency and phase for each ddc
+          for ( int i = 0; i < grSettings_->numChannels; ++i ) {
+             usrp_->set_rx_freq ( i, grSettings_->Tune ( i ) );
+             usrp_->set_ddc_phase ( i, 0 );
+          }
 
-        //set all gain to 0dB by default
-        // TODO: Make this programmable from the top-level at some point.
-        for ( int i = 0; i < 4; ++i )
-            usrp_->set_pga ( i, 0 );
-    }
+          //set all gain to 0dB by default
+          // TODO: Make this programmable from the top-level at some point.
+          for ( int i = 0; i < 4; ++i )
+             usrp_->set_pga ( i, 0 );
+       }
 
     /// This method is called from the Producer thread and transfers
     /// data from the hardware device to a specified buffer given
@@ -116,79 +120,79 @@ public:
     ///\param bytes number of bytes to write.
     virtual int RequestData ( void* address, const int bytes ) {
 
-        bool overrun;
-        int bytes_read = -1;
-        int readRequestSizeSamples = bytes / sizeof ( iq_t );
+       bool overrun;
+       int bytes_read = -1;
+       int readRequestSizeSamples = bytes / sizeof ( iq_t );
 
-        //start data collection and flush fx2 buffer
-        if ( !dataSynchronized_ ) {
+       //start data collection and flush fx2 buffer
+       if ( !dataSynchronized_ ) {
 
-            // Initialize stream buffer
-            synchroBuffer_ = SynchronizationBufferPtr (
-                                 new SynchronizationBuffer (
-                                     readRequestSizeSamples,
-                                     ALIGNMENT_SIZE,
-                                     sequence_
-                                 )
-                             );
+          // Initialize stream buffer
+          synchroBuffer_ = SynchronizationBufferPtr (
+                new SynchronizationBuffer (
+                   readRequestSizeSamples,
+                   ALIGNMENT_SIZE,
+                   sequence_
+                   )
+                );
 
-            //create temporary buffer to sync data
-            iq_t buf[FX2_FLUSH_FIFO_SIZE_BYTES/sizeof ( iq_t ) ];
+          //create temporary buffer to sync data
+          iq_t buf[FX2_FLUSH_FIFO_SIZE_BYTES/sizeof ( iq_t ) ];
 
-            // Read some data to flush the FX2 buffers in the USRP.
-            // This data is discarded.
-            usrp_->start();
-            usrp_->read ( buf, FX2_FLUSH_FIFO_SIZE_BYTES, &overFlow_ );
+          // Read some data to flush the FX2 buffers in the USRP.
+          // This data is discarded.
+          usrp_->start();
+          usrp_->read ( buf, FX2_FLUSH_FIFO_SIZE_BYTES, &overFlow_ );
 
-            // write aligned data into the synchro buffer
-            bytes_read = usrp_->read (
+          // write aligned data into the synchro buffer
+          bytes_read = usrp_->read (
                 synchroBuffer_->WritePtr(),
                 synchroBuffer_->WriteSizeBytes(),
                 &overrun
-            );
+                );
 
-            // capture error and return if true
-            if( bytes_read < 0)
-            {
-               return bytes_read;
-            }
+          // capture error and return if true
+          if( bytes_read < 0)
+          {
+             return bytes_read;
+          }
 
-            // synchronize the data stream
-            synchroBuffer_->Sync();
+          // synchronize the data stream
+          synchroBuffer_->Sync();
 
-            dataSynchronized_ = true;
-        } 
+          dataSynchronized_ = true;
+       } 
 
-        //read data from USRP
-        bytes_read = usrp_->read (
-              synchroBuffer_->WritePtr(),
-              synchroBuffer_->WriteSizeBytes(),
-              &overFlow_
-              );
+       //read data from USRP
+       bytes_read = usrp_->read (
+             synchroBuffer_->WritePtr(),
+             synchroBuffer_->WriteSizeBytes(),
+             &overFlow_
+             );
 
-        // capture error and return if true
-        if( bytes_read < 0)
-        {
-           return bytes_read;
-        }
+       // capture error and return if true
+       if( bytes_read < 0)
+       {
+          return bytes_read;
+       }
 
-        //Transfer data to shared memory buffer
-        memcpy (
-              address,
-              synchroBuffer_->ReadPtr(),
-              synchroBuffer_->ReadSizeBytes()
-              );
+       //Transfer data to shared memory buffer
+       memcpy (
+             address,
+             synchroBuffer_->ReadPtr(),
+             synchroBuffer_->ReadSizeBytes()
+             );
 
-        // update read and write pointers
-        synchroBuffer_->Update();
+       // update read and write pointers
+       synchroBuffer_->Update();
 
-        if ( overFlow_ ) {
-           //TODO: throw exception here
-           std::cerr << "GnuRadarDevice: Data overflow detected !!!"
-              << std::endl;
-        }
+       if ( overFlow_ ) {
+          //TODO: throw exception here
+          std::cerr << "GnuRadarDevice: Data overflow detected !!!"
+             << std::endl;
+       }
 
-        return bytes_read;
+       return bytes_read;
     }
 
     /// Stops data collection.

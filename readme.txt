@@ -1,40 +1,16 @@
 GnuRadar Project 
-Date: August 22, 2012
-Version: 3.0.0_22-AuG-2012
+Date: August 9, 2015
+Version: 1.0.0_09-AuG-2015
 Author: Ryan Seal
 
-Introduction:
-
-The GnuRadar project is a derivative work of the original USRP software
-project by Ettus. This software features the following:
-
-1. External trigger for pulsed radar recording.
-2. Data tags inserted into the data stream for proper data alignment.
-3. HDF5-based data recording. 
-4. Parameter based configuration program for radar mode configuration.
-5. CLI-based run-time software to start/stop data recording. 
-6. C++ interface currently functional with the Basic RX daughterboard.
-7. Networked programs for configuration,verification, and data collection.
-
-Programs:
-
-1. gradar-configure : Configuration GUI to setup the receiver.
-2. gradar-verify: Validation tool to ensure that both receiver and pulse
-   generator are properly synchronized.
-3. gradar-run : Data collection tool for the USRP receiver.
-4. gradar-replay: Data replay tool for HDF5 files. Requires rtPlotter for
-   display. 
+The pisco branch removes all java and zmq requirements, using only a command-line
+interface. The main entry point of the program is located in program/Run/IonosondeRxRun
 
 Dependencies:
 
 1. Latest version of the boost libraries ( http://www.boost.org ).
-2. Sun Java Version 1.7
 3. Waf build system.
 4. HDF5 library.
-5. protobuf ( i.e google protocol buffers )
-   a. gnuradar v2.0 uses protobuf 2.6.1-1
-6. zeromq ( a.k.a 0MQ or zmq )
-   a. gnuradar v2.0 uses zeromq 4.1.2-3
 7. yaml-cpp parser.
    a. gnuradar v2.0 uses yaml-cpp 0.5.2-2
 8. local deps in github repository ( see below ).
@@ -44,10 +20,6 @@ Local Dependency installation:
 1. From the root project directory:
    a. git submodule init
    b. git submodule update
-   c. cd deps/jzmq
-       i. ./autogen
-      ii. ./configure
-     iii. make; make install
 
 Primary installation:
 

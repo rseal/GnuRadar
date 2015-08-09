@@ -1,5 +1,0 @@
-#!/bin/bash
-
-LOCATION=/usr/local/gnuradar
-
-java -jar $LOCATION/gradar-configure.jar

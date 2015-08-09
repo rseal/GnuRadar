@@ -8,10 +8,10 @@ public final class Control {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface ControlMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ControlMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:gnuradar.ControlMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required string name = 1;
     /**
      * <code>required string name = 1;</code>
      */
@@ -26,7 +26,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // optional .gnuradar.File file = 2;
     /**
      * <code>optional .gnuradar.File file = 2;</code>
      */
@@ -44,8 +43,9 @@ public final class Control {
    * Protobuf type {@code gnuradar.ControlMessage}
    */
   public static final class ControlMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements ControlMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:gnuradar.ControlMessage)
+      ControlMessageOrBuilder {
     // Use ControlMessage.newBuilder() to construct.
     private ControlMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -92,8 +92,9 @@ public final class Control {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
             case 18: {
@@ -149,7 +150,6 @@ public final class Control {
     }
 
     private int bitField0_;
-    // required string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
     private java.lang.Object name_;
     /**
@@ -192,7 +192,6 @@ public final class Control {
       }
     }
 
-    // optional .gnuradar.File file = 2;
     public static final int FILE_FIELD_NUMBER = 2;
     private com.gnuradar.proto.Control.File file_;
     /**
@@ -221,7 +220,8 @@ public final class Control {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasName()) {
         memoizedIsInitialized = 0;
@@ -345,8 +345,9 @@ public final class Control {
      * Protobuf type {@code gnuradar.ControlMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.gnuradar.proto.Control.ControlMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:gnuradar.ControlMessage)
+        com.gnuradar.proto.Control.ControlMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.gnuradar.proto.Control.internal_static_gnuradar_ControlMessage_descriptor;
@@ -489,7 +490,6 @@ public final class Control {
       }
       private int bitField0_;
 
-      // required string name = 1;
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 1;</code>
@@ -503,9 +503,12 @@ public final class Control {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -563,7 +566,6 @@ public final class Control {
         return this;
       }
 
-      // optional .gnuradar.File file = 2;
       private com.gnuradar.proto.Control.File file_ = com.gnuradar.proto.Control.File.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.gnuradar.proto.Control.File, com.gnuradar.proto.Control.File.Builder, com.gnuradar.proto.Control.FileOrBuilder> fileBuilder_;
@@ -672,7 +674,7 @@ public final class Control {
         if (fileBuilder_ == null) {
           fileBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.gnuradar.proto.Control.File, com.gnuradar.proto.Control.File.Builder, com.gnuradar.proto.Control.FileOrBuilder>(
-                  file_,
+                  getFile(),
                   getParentForChildren(),
                   isClean());
           file_ = null;
@@ -691,10 +693,10 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:gnuradar.ControlMessage)
   }
 
-  public interface FileOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface FileOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:gnuradar.File)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required string version = 1;
     /**
      * <code>required string version = 1;</code>
      */
@@ -709,7 +711,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getVersionBytes();
 
-    // required float sampleRate = 2;
     /**
      * <code>required float sampleRate = 2;</code>
      */
@@ -719,7 +720,6 @@ public final class Control {
      */
     float getSampleRate();
 
-    // required int32 decimation = 3;
     /**
      * <code>required int32 decimation = 3;</code>
      */
@@ -729,7 +729,6 @@ public final class Control {
      */
     int getDecimation();
 
-    // required int32 numChannels = 4;
     /**
      * <code>required int32 numChannels = 4;</code>
      */
@@ -739,7 +738,6 @@ public final class Control {
      */
     int getNumChannels();
 
-    // required float bandwidth = 5;
     /**
      * <code>required float bandwidth = 5;</code>
      */
@@ -749,7 +747,6 @@ public final class Control {
      */
     float getBandwidth();
 
-    // required string bandwidthUnits = 6;
     /**
      * <code>required string bandwidthUnits = 6;</code>
      */
@@ -764,7 +761,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getBandwidthUnitsBytes();
 
-    // required int32 numWindows = 7;
     /**
      * <code>required int32 numWindows = 7;</code>
      */
@@ -774,7 +770,6 @@ public final class Control {
      */
     int getNumWindows();
 
-    // required float pri = 8;
     /**
      * <code>required float pri = 8;</code>
      */
@@ -784,7 +779,6 @@ public final class Control {
      */
     float getPri();
 
-    // required string priUnits = 9;
     /**
      * <code>required string priUnits = 9;</code>
      */
@@ -799,7 +793,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getPriUnitsBytes();
 
-    // required float txCarrier = 10;
     /**
      * <code>required float txCarrier = 10;</code>
      */
@@ -809,7 +802,6 @@ public final class Control {
      */
     float getTxCarrier();
 
-    // required string organization = 11;
     /**
      * <code>required string organization = 11;</code>
      */
@@ -824,7 +816,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getOrganizationBytes();
 
-    // required string site = 12;
     /**
      * <code>required string site = 12;</code>
      */
@@ -839,7 +830,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getSiteBytes();
 
-    // required string user = 13;
     /**
      * <code>required string user = 13;</code>
      */
@@ -854,7 +844,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getUserBytes();
 
-    // required string radar = 14;
     /**
      * <code>required string radar = 14;</code>
      */
@@ -869,7 +858,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getRadarBytes();
 
-    // required string receiver = 15;
     /**
      * <code>required string receiver = 15;</code>
      */
@@ -884,7 +872,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getReceiverBytes();
 
-    // required string fpgaImage = 16;
     /**
      * <code>required string fpgaImage = 16;</code>
      */
@@ -899,7 +886,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getFpgaImageBytes();
 
-    // required string baseFileName = 17;
     /**
      * <code>required string baseFileName = 17;</code>
      */
@@ -914,7 +900,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getBaseFileNameBytes();
 
-    // optional float outputRate = 18;
     /**
      * <code>optional float outputRate = 18;</code>
      */
@@ -924,7 +909,6 @@ public final class Control {
      */
     float getOutputRate();
 
-    // repeated .gnuradar.Channel channel = 19;
     /**
      * <code>repeated .gnuradar.Channel channel = 19;</code>
      */
@@ -949,7 +933,6 @@ public final class Control {
     com.gnuradar.proto.Control.ChannelOrBuilder getChannelOrBuilder(
         int index);
 
-    // repeated .gnuradar.Window window = 20;
     /**
      * <code>repeated .gnuradar.Window window = 20;</code>
      */
@@ -974,7 +957,6 @@ public final class Control {
     com.gnuradar.proto.Control.WindowOrBuilder getWindowOrBuilder(
         int index);
 
-    // optional .gnuradar.RadarParameters radarParameters = 21;
     /**
      * <code>optional .gnuradar.RadarParameters radarParameters = 21;</code>
      */
@@ -992,8 +974,9 @@ public final class Control {
    * Protobuf type {@code gnuradar.File}
    */
   public static final class File extends
-      com.google.protobuf.GeneratedMessage
-      implements FileOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:gnuradar.File)
+      FileOrBuilder {
     // Use File.newBuilder() to construct.
     private File(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -1040,8 +1023,9 @@ public final class Control {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              version_ = input.readBytes();
+              version_ = bs;
               break;
             }
             case 21: {
@@ -1065,8 +1049,9 @@ public final class Control {
               break;
             }
             case 50: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              bandwidthUnits_ = input.readBytes();
+              bandwidthUnits_ = bs;
               break;
             }
             case 56: {
@@ -1080,8 +1065,9 @@ public final class Control {
               break;
             }
             case 74: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000100;
-              priUnits_ = input.readBytes();
+              priUnits_ = bs;
               break;
             }
             case 85: {
@@ -1090,38 +1076,45 @@ public final class Control {
               break;
             }
             case 90: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000400;
-              organization_ = input.readBytes();
+              organization_ = bs;
               break;
             }
             case 98: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000800;
-              site_ = input.readBytes();
+              site_ = bs;
               break;
             }
             case 106: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00001000;
-              user_ = input.readBytes();
+              user_ = bs;
               break;
             }
             case 114: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00002000;
-              radar_ = input.readBytes();
+              radar_ = bs;
               break;
             }
             case 122: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00004000;
-              receiver_ = input.readBytes();
+              receiver_ = bs;
               break;
             }
             case 130: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00008000;
-              fpgaImage_ = input.readBytes();
+              fpgaImage_ = bs;
               break;
             }
             case 138: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00010000;
-              baseFileName_ = input.readBytes();
+              baseFileName_ = bs;
               break;
             }
             case 149: {
@@ -1204,7 +1197,6 @@ public final class Control {
     }
 
     private int bitField0_;
-    // required string version = 1;
     public static final int VERSION_FIELD_NUMBER = 1;
     private java.lang.Object version_;
     /**
@@ -1247,7 +1239,6 @@ public final class Control {
       }
     }
 
-    // required float sampleRate = 2;
     public static final int SAMPLERATE_FIELD_NUMBER = 2;
     private float sampleRate_;
     /**
@@ -1263,7 +1254,6 @@ public final class Control {
       return sampleRate_;
     }
 
-    // required int32 decimation = 3;
     public static final int DECIMATION_FIELD_NUMBER = 3;
     private int decimation_;
     /**
@@ -1279,7 +1269,6 @@ public final class Control {
       return decimation_;
     }
 
-    // required int32 numChannels = 4;
     public static final int NUMCHANNELS_FIELD_NUMBER = 4;
     private int numChannels_;
     /**
@@ -1295,7 +1284,6 @@ public final class Control {
       return numChannels_;
     }
 
-    // required float bandwidth = 5;
     public static final int BANDWIDTH_FIELD_NUMBER = 5;
     private float bandwidth_;
     /**
@@ -1311,7 +1299,6 @@ public final class Control {
       return bandwidth_;
     }
 
-    // required string bandwidthUnits = 6;
     public static final int BANDWIDTHUNITS_FIELD_NUMBER = 6;
     private java.lang.Object bandwidthUnits_;
     /**
@@ -1354,7 +1341,6 @@ public final class Control {
       }
     }
 
-    // required int32 numWindows = 7;
     public static final int NUMWINDOWS_FIELD_NUMBER = 7;
     private int numWindows_;
     /**
@@ -1370,7 +1356,6 @@ public final class Control {
       return numWindows_;
     }
 
-    // required float pri = 8;
     public static final int PRI_FIELD_NUMBER = 8;
     private float pri_;
     /**
@@ -1386,7 +1371,6 @@ public final class Control {
       return pri_;
     }
 
-    // required string priUnits = 9;
     public static final int PRIUNITS_FIELD_NUMBER = 9;
     private java.lang.Object priUnits_;
     /**
@@ -1429,7 +1413,6 @@ public final class Control {
       }
     }
 
-    // required float txCarrier = 10;
     public static final int TXCARRIER_FIELD_NUMBER = 10;
     private float txCarrier_;
     /**
@@ -1445,7 +1428,6 @@ public final class Control {
       return txCarrier_;
     }
 
-    // required string organization = 11;
     public static final int ORGANIZATION_FIELD_NUMBER = 11;
     private java.lang.Object organization_;
     /**
@@ -1488,7 +1470,6 @@ public final class Control {
       }
     }
 
-    // required string site = 12;
     public static final int SITE_FIELD_NUMBER = 12;
     private java.lang.Object site_;
     /**
@@ -1531,7 +1512,6 @@ public final class Control {
       }
     }
 
-    // required string user = 13;
     public static final int USER_FIELD_NUMBER = 13;
     private java.lang.Object user_;
     /**
@@ -1574,7 +1554,6 @@ public final class Control {
       }
     }
 
-    // required string radar = 14;
     public static final int RADAR_FIELD_NUMBER = 14;
     private java.lang.Object radar_;
     /**
@@ -1617,7 +1596,6 @@ public final class Control {
       }
     }
 
-    // required string receiver = 15;
     public static final int RECEIVER_FIELD_NUMBER = 15;
     private java.lang.Object receiver_;
     /**
@@ -1660,7 +1638,6 @@ public final class Control {
       }
     }
 
-    // required string fpgaImage = 16;
     public static final int FPGAIMAGE_FIELD_NUMBER = 16;
     private java.lang.Object fpgaImage_;
     /**
@@ -1703,7 +1680,6 @@ public final class Control {
       }
     }
 
-    // required string baseFileName = 17;
     public static final int BASEFILENAME_FIELD_NUMBER = 17;
     private java.lang.Object baseFileName_;
     /**
@@ -1746,7 +1722,6 @@ public final class Control {
       }
     }
 
-    // optional float outputRate = 18;
     public static final int OUTPUTRATE_FIELD_NUMBER = 18;
     private float outputRate_;
     /**
@@ -1762,7 +1737,6 @@ public final class Control {
       return outputRate_;
     }
 
-    // repeated .gnuradar.Channel channel = 19;
     public static final int CHANNEL_FIELD_NUMBER = 19;
     private java.util.List<com.gnuradar.proto.Control.Channel> channel_;
     /**
@@ -1798,7 +1772,6 @@ public final class Control {
       return channel_.get(index);
     }
 
-    // repeated .gnuradar.Window window = 20;
     public static final int WINDOW_FIELD_NUMBER = 20;
     private java.util.List<com.gnuradar.proto.Control.Window> window_;
     /**
@@ -1834,7 +1807,6 @@ public final class Control {
       return window_.get(index);
     }
 
-    // optional .gnuradar.RadarParameters radarParameters = 21;
     public static final int RADARPARAMETERS_FIELD_NUMBER = 21;
     private com.gnuradar.proto.Control.RadarParameters radarParameters_;
     /**
@@ -1882,7 +1854,8 @@ public final class Control {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasVersion()) {
         memoizedIsInitialized = 0;
@@ -2215,8 +2188,9 @@ public final class Control {
      * Protobuf type {@code gnuradar.File}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.gnuradar.proto.Control.FileOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:gnuradar.File)
+        com.gnuradar.proto.Control.FileOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.gnuradar.proto.Control.internal_static_gnuradar_File_descriptor;
@@ -2690,7 +2664,6 @@ public final class Control {
       }
       private int bitField0_;
 
-      // required string version = 1;
       private java.lang.Object version_ = "";
       /**
        * <code>required string version = 1;</code>
@@ -2704,9 +2677,12 @@ public final class Control {
       public java.lang.String getVersion() {
         java.lang.Object ref = version_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          version_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            version_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2764,7 +2740,6 @@ public final class Control {
         return this;
       }
 
-      // required float sampleRate = 2;
       private float sampleRate_ ;
       /**
        * <code>required float sampleRate = 2;</code>
@@ -2797,7 +2772,6 @@ public final class Control {
         return this;
       }
 
-      // required int32 decimation = 3;
       private int decimation_ ;
       /**
        * <code>required int32 decimation = 3;</code>
@@ -2830,7 +2804,6 @@ public final class Control {
         return this;
       }
 
-      // required int32 numChannels = 4;
       private int numChannels_ ;
       /**
        * <code>required int32 numChannels = 4;</code>
@@ -2863,7 +2836,6 @@ public final class Control {
         return this;
       }
 
-      // required float bandwidth = 5;
       private float bandwidth_ ;
       /**
        * <code>required float bandwidth = 5;</code>
@@ -2896,7 +2868,6 @@ public final class Control {
         return this;
       }
 
-      // required string bandwidthUnits = 6;
       private java.lang.Object bandwidthUnits_ = "";
       /**
        * <code>required string bandwidthUnits = 6;</code>
@@ -2910,9 +2881,12 @@ public final class Control {
       public java.lang.String getBandwidthUnits() {
         java.lang.Object ref = bandwidthUnits_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          bandwidthUnits_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            bandwidthUnits_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2970,7 +2944,6 @@ public final class Control {
         return this;
       }
 
-      // required int32 numWindows = 7;
       private int numWindows_ ;
       /**
        * <code>required int32 numWindows = 7;</code>
@@ -3003,7 +2976,6 @@ public final class Control {
         return this;
       }
 
-      // required float pri = 8;
       private float pri_ ;
       /**
        * <code>required float pri = 8;</code>
@@ -3036,7 +3008,6 @@ public final class Control {
         return this;
       }
 
-      // required string priUnits = 9;
       private java.lang.Object priUnits_ = "";
       /**
        * <code>required string priUnits = 9;</code>
@@ -3050,9 +3021,12 @@ public final class Control {
       public java.lang.String getPriUnits() {
         java.lang.Object ref = priUnits_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          priUnits_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            priUnits_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3110,7 +3084,6 @@ public final class Control {
         return this;
       }
 
-      // required float txCarrier = 10;
       private float txCarrier_ ;
       /**
        * <code>required float txCarrier = 10;</code>
@@ -3143,7 +3116,6 @@ public final class Control {
         return this;
       }
 
-      // required string organization = 11;
       private java.lang.Object organization_ = "";
       /**
        * <code>required string organization = 11;</code>
@@ -3157,9 +3129,12 @@ public final class Control {
       public java.lang.String getOrganization() {
         java.lang.Object ref = organization_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          organization_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            organization_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3217,7 +3192,6 @@ public final class Control {
         return this;
       }
 
-      // required string site = 12;
       private java.lang.Object site_ = "";
       /**
        * <code>required string site = 12;</code>
@@ -3231,9 +3205,12 @@ public final class Control {
       public java.lang.String getSite() {
         java.lang.Object ref = site_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          site_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            site_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3291,7 +3268,6 @@ public final class Control {
         return this;
       }
 
-      // required string user = 13;
       private java.lang.Object user_ = "";
       /**
        * <code>required string user = 13;</code>
@@ -3305,9 +3281,12 @@ public final class Control {
       public java.lang.String getUser() {
         java.lang.Object ref = user_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          user_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            user_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3365,7 +3344,6 @@ public final class Control {
         return this;
       }
 
-      // required string radar = 14;
       private java.lang.Object radar_ = "";
       /**
        * <code>required string radar = 14;</code>
@@ -3379,9 +3357,12 @@ public final class Control {
       public java.lang.String getRadar() {
         java.lang.Object ref = radar_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          radar_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            radar_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3439,7 +3420,6 @@ public final class Control {
         return this;
       }
 
-      // required string receiver = 15;
       private java.lang.Object receiver_ = "";
       /**
        * <code>required string receiver = 15;</code>
@@ -3453,9 +3433,12 @@ public final class Control {
       public java.lang.String getReceiver() {
         java.lang.Object ref = receiver_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          receiver_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            receiver_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3513,7 +3496,6 @@ public final class Control {
         return this;
       }
 
-      // required string fpgaImage = 16;
       private java.lang.Object fpgaImage_ = "";
       /**
        * <code>required string fpgaImage = 16;</code>
@@ -3527,9 +3509,12 @@ public final class Control {
       public java.lang.String getFpgaImage() {
         java.lang.Object ref = fpgaImage_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          fpgaImage_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            fpgaImage_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3587,7 +3572,6 @@ public final class Control {
         return this;
       }
 
-      // required string baseFileName = 17;
       private java.lang.Object baseFileName_ = "";
       /**
        * <code>required string baseFileName = 17;</code>
@@ -3601,9 +3585,12 @@ public final class Control {
       public java.lang.String getBaseFileName() {
         java.lang.Object ref = baseFileName_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          baseFileName_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            baseFileName_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3661,7 +3648,6 @@ public final class Control {
         return this;
       }
 
-      // optional float outputRate = 18;
       private float outputRate_ ;
       /**
        * <code>optional float outputRate = 18;</code>
@@ -3694,7 +3680,6 @@ public final class Control {
         return this;
       }
 
-      // repeated .gnuradar.Channel channel = 19;
       private java.util.List<com.gnuradar.proto.Control.Channel> channel_ =
         java.util.Collections.emptyList();
       private void ensureChannelIsMutable() {
@@ -3836,7 +3821,8 @@ public final class Control {
           java.lang.Iterable<? extends com.gnuradar.proto.Control.Channel> values) {
         if (channelBuilder_ == null) {
           ensureChannelIsMutable();
-          super.addAll(values, channel_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, channel_);
           onChanged();
         } else {
           channelBuilder_.addAllMessages(values);
@@ -3934,7 +3920,6 @@ public final class Control {
         return channelBuilder_;
       }
 
-      // repeated .gnuradar.Window window = 20;
       private java.util.List<com.gnuradar.proto.Control.Window> window_ =
         java.util.Collections.emptyList();
       private void ensureWindowIsMutable() {
@@ -4076,7 +4061,8 @@ public final class Control {
           java.lang.Iterable<? extends com.gnuradar.proto.Control.Window> values) {
         if (windowBuilder_ == null) {
           ensureWindowIsMutable();
-          super.addAll(values, window_);
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, window_);
           onChanged();
         } else {
           windowBuilder_.addAllMessages(values);
@@ -4174,7 +4160,6 @@ public final class Control {
         return windowBuilder_;
       }
 
-      // optional .gnuradar.RadarParameters radarParameters = 21;
       private com.gnuradar.proto.Control.RadarParameters radarParameters_ = com.gnuradar.proto.Control.RadarParameters.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.gnuradar.proto.Control.RadarParameters, com.gnuradar.proto.Control.RadarParameters.Builder, com.gnuradar.proto.Control.RadarParametersOrBuilder> radarParametersBuilder_;
@@ -4283,7 +4268,7 @@ public final class Control {
         if (radarParametersBuilder_ == null) {
           radarParametersBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.gnuradar.proto.Control.RadarParameters, com.gnuradar.proto.Control.RadarParameters.Builder, com.gnuradar.proto.Control.RadarParametersOrBuilder>(
-                  radarParameters_,
+                  getRadarParameters(),
                   getParentForChildren(),
                   isClean());
           radarParameters_ = null;
@@ -4302,10 +4287,10 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:gnuradar.File)
   }
 
-  public interface ChannelOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface ChannelOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:gnuradar.Channel)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required float frequency = 1;
     /**
      * <code>required float frequency = 1;</code>
      */
@@ -4315,7 +4300,6 @@ public final class Control {
      */
     float getFrequency();
 
-    // required string frequencyUnits = 2;
     /**
      * <code>required string frequencyUnits = 2;</code>
      */
@@ -4330,7 +4314,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getFrequencyUnitsBytes();
 
-    // required float phase = 3;
     /**
      * <code>required float phase = 3;</code>
      */
@@ -4340,7 +4323,6 @@ public final class Control {
      */
     float getPhase();
 
-    // required string phaseUnits = 4;
     /**
      * <code>required string phaseUnits = 4;</code>
      */
@@ -4359,8 +4341,9 @@ public final class Control {
    * Protobuf type {@code gnuradar.Channel}
    */
   public static final class Channel extends
-      com.google.protobuf.GeneratedMessage
-      implements ChannelOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:gnuradar.Channel)
+      ChannelOrBuilder {
     // Use Channel.newBuilder() to construct.
     private Channel(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -4412,8 +4395,9 @@ public final class Control {
               break;
             }
             case 18: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              frequencyUnits_ = input.readBytes();
+              frequencyUnits_ = bs;
               break;
             }
             case 29: {
@@ -4422,8 +4406,9 @@ public final class Control {
               break;
             }
             case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              phaseUnits_ = input.readBytes();
+              phaseUnits_ = bs;
               break;
             }
           }
@@ -4466,7 +4451,6 @@ public final class Control {
     }
 
     private int bitField0_;
-    // required float frequency = 1;
     public static final int FREQUENCY_FIELD_NUMBER = 1;
     private float frequency_;
     /**
@@ -4482,7 +4466,6 @@ public final class Control {
       return frequency_;
     }
 
-    // required string frequencyUnits = 2;
     public static final int FREQUENCYUNITS_FIELD_NUMBER = 2;
     private java.lang.Object frequencyUnits_;
     /**
@@ -4525,7 +4508,6 @@ public final class Control {
       }
     }
 
-    // required float phase = 3;
     public static final int PHASE_FIELD_NUMBER = 3;
     private float phase_;
     /**
@@ -4541,7 +4523,6 @@ public final class Control {
       return phase_;
     }
 
-    // required string phaseUnits = 4;
     public static final int PHASEUNITS_FIELD_NUMBER = 4;
     private java.lang.Object phaseUnits_;
     /**
@@ -4593,7 +4574,8 @@ public final class Control {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasFrequency()) {
         memoizedIsInitialized = 0;
@@ -4737,8 +4719,9 @@ public final class Control {
      * Protobuf type {@code gnuradar.Channel}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.gnuradar.proto.Control.ChannelOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:gnuradar.Channel)
+        com.gnuradar.proto.Control.ChannelOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.gnuradar.proto.Control.internal_static_gnuradar_Channel_descriptor;
@@ -4898,7 +4881,6 @@ public final class Control {
       }
       private int bitField0_;
 
-      // required float frequency = 1;
       private float frequency_ ;
       /**
        * <code>required float frequency = 1;</code>
@@ -4931,7 +4913,6 @@ public final class Control {
         return this;
       }
 
-      // required string frequencyUnits = 2;
       private java.lang.Object frequencyUnits_ = "";
       /**
        * <code>required string frequencyUnits = 2;</code>
@@ -4945,9 +4926,12 @@ public final class Control {
       public java.lang.String getFrequencyUnits() {
         java.lang.Object ref = frequencyUnits_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          frequencyUnits_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            frequencyUnits_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5005,7 +4989,6 @@ public final class Control {
         return this;
       }
 
-      // required float phase = 3;
       private float phase_ ;
       /**
        * <code>required float phase = 3;</code>
@@ -5038,7 +5021,6 @@ public final class Control {
         return this;
       }
 
-      // required string phaseUnits = 4;
       private java.lang.Object phaseUnits_ = "";
       /**
        * <code>required string phaseUnits = 4;</code>
@@ -5052,9 +5034,12 @@ public final class Control {
       public java.lang.String getPhaseUnits() {
         java.lang.Object ref = phaseUnits_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          phaseUnits_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            phaseUnits_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5123,10 +5108,10 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:gnuradar.Channel)
   }
 
-  public interface WindowOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface WindowOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:gnuradar.Window)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required string name = 1;
     /**
      * <code>required string name = 1;</code>
      */
@@ -5141,7 +5126,6 @@ public final class Control {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // required float start = 2;
     /**
      * <code>required float start = 2;</code>
      */
@@ -5151,7 +5135,6 @@ public final class Control {
      */
     float getStart();
 
-    // required float stop = 3;
     /**
      * <code>required float stop = 3;</code>
      */
@@ -5161,7 +5144,6 @@ public final class Control {
      */
     float getStop();
 
-    // optional float width = 4;
     /**
      * <code>optional float width = 4;</code>
      */
@@ -5171,7 +5153,6 @@ public final class Control {
      */
     float getWidth();
 
-    // required string units = 5;
     /**
      * <code>required string units = 5;</code>
      */
@@ -5190,8 +5171,9 @@ public final class Control {
    * Protobuf type {@code gnuradar.Window}
    */
   public static final class Window extends
-      com.google.protobuf.GeneratedMessage
-      implements WindowOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:gnuradar.Window)
+      WindowOrBuilder {
     // Use Window.newBuilder() to construct.
     private Window(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -5238,8 +5220,9 @@ public final class Control {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
             case 21: {
@@ -5258,8 +5241,9 @@ public final class Control {
               break;
             }
             case 42: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              units_ = input.readBytes();
+              units_ = bs;
               break;
             }
           }
@@ -5302,7 +5286,6 @@ public final class Control {
     }
 
     private int bitField0_;
-    // required string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
     private java.lang.Object name_;
     /**
@@ -5345,7 +5328,6 @@ public final class Control {
       }
     }
 
-    // required float start = 2;
     public static final int START_FIELD_NUMBER = 2;
     private float start_;
     /**
@@ -5361,7 +5343,6 @@ public final class Control {
       return start_;
     }
 
-    // required float stop = 3;
     public static final int STOP_FIELD_NUMBER = 3;
     private float stop_;
     /**
@@ -5377,7 +5358,6 @@ public final class Control {
       return stop_;
     }
 
-    // optional float width = 4;
     public static final int WIDTH_FIELD_NUMBER = 4;
     private float width_;
     /**
@@ -5393,7 +5373,6 @@ public final class Control {
       return width_;
     }
 
-    // required string units = 5;
     public static final int UNITS_FIELD_NUMBER = 5;
     private java.lang.Object units_;
     /**
@@ -5446,7 +5425,8 @@ public final class Control {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasName()) {
         memoizedIsInitialized = 0;
@@ -5597,8 +5577,9 @@ public final class Control {
      * Protobuf type {@code gnuradar.Window}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.gnuradar.proto.Control.WindowOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:gnuradar.Window)
+        com.gnuradar.proto.Control.WindowOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.gnuradar.proto.Control.internal_static_gnuradar_Window_descriptor;
@@ -5767,7 +5748,6 @@ public final class Control {
       }
       private int bitField0_;
 
-      // required string name = 1;
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 1;</code>
@@ -5781,9 +5761,12 @@ public final class Control {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -5841,7 +5824,6 @@ public final class Control {
         return this;
       }
 
-      // required float start = 2;
       private float start_ ;
       /**
        * <code>required float start = 2;</code>
@@ -5874,7 +5856,6 @@ public final class Control {
         return this;
       }
 
-      // required float stop = 3;
       private float stop_ ;
       /**
        * <code>required float stop = 3;</code>
@@ -5907,7 +5888,6 @@ public final class Control {
         return this;
       }
 
-      // optional float width = 4;
       private float width_ ;
       /**
        * <code>optional float width = 4;</code>
@@ -5940,7 +5920,6 @@ public final class Control {
         return this;
       }
 
-      // required string units = 5;
       private java.lang.Object units_ = "";
       /**
        * <code>required string units = 5;</code>
@@ -5954,9 +5933,12 @@ public final class Control {
       public java.lang.String getUnits() {
         java.lang.Object ref = units_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          units_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            units_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -6025,10 +6007,10 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:gnuradar.Window)
   }
 
-  public interface RadarParametersOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface RadarParametersOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:gnuradar.RadarParameters)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required int32 samplesPerPri = 1;
     /**
      * <code>required int32 samplesPerPri = 1;</code>
      */
@@ -6038,7 +6020,6 @@ public final class Control {
      */
     int getSamplesPerPri();
 
-    // required int32 samplesPerBuffer = 2;
     /**
      * <code>required int32 samplesPerBuffer = 2;</code>
      */
@@ -6048,7 +6029,6 @@ public final class Control {
      */
     int getSamplesPerBuffer();
 
-    // required int32 bytesPerBuffer = 3;
     /**
      * <code>required int32 bytesPerBuffer = 3;</code>
      */
@@ -6058,7 +6038,6 @@ public final class Control {
      */
     int getBytesPerBuffer();
 
-    // required float bytesPerSecond = 4;
     /**
      * <code>required float bytesPerSecond = 4;</code>
      */
@@ -6068,7 +6047,6 @@ public final class Control {
      */
     float getBytesPerSecond();
 
-    // required float pri = 5;
     /**
      * <code>required float pri = 5;</code>
      */
@@ -6078,7 +6056,6 @@ public final class Control {
      */
     float getPri();
 
-    // required float prf = 6;
     /**
      * <code>required float prf = 6;</code>
      */
@@ -6088,7 +6065,6 @@ public final class Control {
      */
     float getPrf();
 
-    // required int32 prisPerBuffer = 7;
     /**
      * <code>required int32 prisPerBuffer = 7;</code>
      */
@@ -6098,7 +6074,6 @@ public final class Control {
      */
     int getPrisPerBuffer();
 
-    // required int32 bytesPerSample = 8;
     /**
      * <code>required int32 bytesPerSample = 8;</code>
      */
@@ -6108,7 +6083,6 @@ public final class Control {
      */
     int getBytesPerSample();
 
-    // required float secondsPerBuffer = 9;
     /**
      * <code>required float secondsPerBuffer = 9;</code>
      */
@@ -6122,8 +6096,9 @@ public final class Control {
    * Protobuf type {@code gnuradar.RadarParameters}
    */
   public static final class RadarParameters extends
-      com.google.protobuf.GeneratedMessage
-      implements RadarParametersOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:gnuradar.RadarParameters)
+      RadarParametersOrBuilder {
     // Use RadarParameters.newBuilder() to construct.
     private RadarParameters(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -6254,7 +6229,6 @@ public final class Control {
     }
 
     private int bitField0_;
-    // required int32 samplesPerPri = 1;
     public static final int SAMPLESPERPRI_FIELD_NUMBER = 1;
     private int samplesPerPri_;
     /**
@@ -6270,7 +6244,6 @@ public final class Control {
       return samplesPerPri_;
     }
 
-    // required int32 samplesPerBuffer = 2;
     public static final int SAMPLESPERBUFFER_FIELD_NUMBER = 2;
     private int samplesPerBuffer_;
     /**
@@ -6286,7 +6259,6 @@ public final class Control {
       return samplesPerBuffer_;
     }
 
-    // required int32 bytesPerBuffer = 3;
     public static final int BYTESPERBUFFER_FIELD_NUMBER = 3;
     private int bytesPerBuffer_;
     /**
@@ -6302,7 +6274,6 @@ public final class Control {
       return bytesPerBuffer_;
     }
 
-    // required float bytesPerSecond = 4;
     public static final int BYTESPERSECOND_FIELD_NUMBER = 4;
     private float bytesPerSecond_;
     /**
@@ -6318,7 +6289,6 @@ public final class Control {
       return bytesPerSecond_;
     }
 
-    // required float pri = 5;
     public static final int PRI_FIELD_NUMBER = 5;
     private float pri_;
     /**
@@ -6334,7 +6304,6 @@ public final class Control {
       return pri_;
     }
 
-    // required float prf = 6;
     public static final int PRF_FIELD_NUMBER = 6;
     private float prf_;
     /**
@@ -6350,7 +6319,6 @@ public final class Control {
       return prf_;
     }
 
-    // required int32 prisPerBuffer = 7;
     public static final int PRISPERBUFFER_FIELD_NUMBER = 7;
     private int prisPerBuffer_;
     /**
@@ -6366,7 +6334,6 @@ public final class Control {
       return prisPerBuffer_;
     }
 
-    // required int32 bytesPerSample = 8;
     public static final int BYTESPERSAMPLE_FIELD_NUMBER = 8;
     private int bytesPerSample_;
     /**
@@ -6382,7 +6349,6 @@ public final class Control {
       return bytesPerSample_;
     }
 
-    // required float secondsPerBuffer = 9;
     public static final int SECONDSPERBUFFER_FIELD_NUMBER = 9;
     private float secondsPerBuffer_;
     /**
@@ -6412,7 +6378,8 @@ public final class Control {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasSamplesPerPri()) {
         memoizedIsInitialized = 0;
@@ -6611,8 +6578,9 @@ public final class Control {
      * Protobuf type {@code gnuradar.RadarParameters}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.gnuradar.proto.Control.RadarParametersOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:gnuradar.RadarParameters)
+        com.gnuradar.proto.Control.RadarParametersOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.gnuradar.proto.Control.internal_static_gnuradar_RadarParameters_descriptor;
@@ -6833,7 +6801,6 @@ public final class Control {
       }
       private int bitField0_;
 
-      // required int32 samplesPerPri = 1;
       private int samplesPerPri_ ;
       /**
        * <code>required int32 samplesPerPri = 1;</code>
@@ -6866,7 +6833,6 @@ public final class Control {
         return this;
       }
 
-      // required int32 samplesPerBuffer = 2;
       private int samplesPerBuffer_ ;
       /**
        * <code>required int32 samplesPerBuffer = 2;</code>
@@ -6899,7 +6865,6 @@ public final class Control {
         return this;
       }
 
-      // required int32 bytesPerBuffer = 3;
       private int bytesPerBuffer_ ;
       /**
        * <code>required int32 bytesPerBuffer = 3;</code>
@@ -6932,7 +6897,6 @@ public final class Control {
         return this;
       }
 
-      // required float bytesPerSecond = 4;
       private float bytesPerSecond_ ;
       /**
        * <code>required float bytesPerSecond = 4;</code>
@@ -6965,7 +6929,6 @@ public final class Control {
         return this;
       }
 
-      // required float pri = 5;
       private float pri_ ;
       /**
        * <code>required float pri = 5;</code>
@@ -6998,7 +6961,6 @@ public final class Control {
         return this;
       }
 
-      // required float prf = 6;
       private float prf_ ;
       /**
        * <code>required float prf = 6;</code>
@@ -7031,7 +6993,6 @@ public final class Control {
         return this;
       }
 
-      // required int32 prisPerBuffer = 7;
       private int prisPerBuffer_ ;
       /**
        * <code>required int32 prisPerBuffer = 7;</code>
@@ -7064,7 +7025,6 @@ public final class Control {
         return this;
       }
 
-      // required int32 bytesPerSample = 8;
       private int bytesPerSample_ ;
       /**
        * <code>required int32 bytesPerSample = 8;</code>
@@ -7097,7 +7057,6 @@ public final class Control {
         return this;
       }
 
-      // required float secondsPerBuffer = 9;
       private float secondsPerBuffer_ ;
       /**
        * <code>required float secondsPerBuffer = 9;</code>
@@ -7141,27 +7100,27 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:gnuradar.RadarParameters)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_gnuradar_ControlMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_gnuradar_ControlMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_gnuradar_File_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_gnuradar_File_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_gnuradar_Channel_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_gnuradar_Channel_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_gnuradar_Window_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_gnuradar_Window_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_gnuradar_RadarParameters_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -7202,47 +7161,47 @@ public final class Control {
       "oto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_gnuradar_ControlMessage_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_gnuradar_ControlMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_gnuradar_ControlMessage_descriptor,
-              new java.lang.String[] { "Name", "File", });
-          internal_static_gnuradar_File_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_gnuradar_File_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_gnuradar_File_descriptor,
-              new java.lang.String[] { "Version", "SampleRate", "Decimation", "NumChannels", "Bandwidth", "BandwidthUnits", "NumWindows", "Pri", "PriUnits", "TxCarrier", "Organization", "Site", "User", "Radar", "Receiver", "FpgaImage", "BaseFileName", "OutputRate", "Channel", "Window", "RadarParameters", });
-          internal_static_gnuradar_Channel_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_gnuradar_Channel_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_gnuradar_Channel_descriptor,
-              new java.lang.String[] { "Frequency", "FrequencyUnits", "Phase", "PhaseUnits", });
-          internal_static_gnuradar_Window_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_gnuradar_Window_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_gnuradar_Window_descriptor,
-              new java.lang.String[] { "Name", "Start", "Stop", "Width", "Units", });
-          internal_static_gnuradar_RadarParameters_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_gnuradar_RadarParameters_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_gnuradar_RadarParameters_descriptor,
-              new java.lang.String[] { "SamplesPerPri", "SamplesPerBuffer", "BytesPerBuffer", "BytesPerSecond", "Pri", "Prf", "PrisPerBuffer", "BytesPerSample", "SecondsPerBuffer", });
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
+    internal_static_gnuradar_ControlMessage_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_gnuradar_ControlMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_gnuradar_ControlMessage_descriptor,
+        new java.lang.String[] { "Name", "File", });
+    internal_static_gnuradar_File_descriptor =
+      getDescriptor().getMessageTypes().get(1);
+    internal_static_gnuradar_File_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_gnuradar_File_descriptor,
+        new java.lang.String[] { "Version", "SampleRate", "Decimation", "NumChannels", "Bandwidth", "BandwidthUnits", "NumWindows", "Pri", "PriUnits", "TxCarrier", "Organization", "Site", "User", "Radar", "Receiver", "FpgaImage", "BaseFileName", "OutputRate", "Channel", "Window", "RadarParameters", });
+    internal_static_gnuradar_Channel_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_gnuradar_Channel_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_gnuradar_Channel_descriptor,
+        new java.lang.String[] { "Frequency", "FrequencyUnits", "Phase", "PhaseUnits", });
+    internal_static_gnuradar_Window_descriptor =
+      getDescriptor().getMessageTypes().get(3);
+    internal_static_gnuradar_Window_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_gnuradar_Window_descriptor,
+        new java.lang.String[] { "Name", "Start", "Stop", "Width", "Units", });
+    internal_static_gnuradar_RadarParameters_descriptor =
+      getDescriptor().getMessageTypes().get(4);
+    internal_static_gnuradar_RadarParameters_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_gnuradar_RadarParameters_descriptor,
+        new java.lang.String[] { "SamplesPerPri", "SamplesPerBuffer", "BytesPerBuffer", "BytesPerSecond", "Pri", "Prf", "PrisPerBuffer", "BytesPerSample", "SecondsPerBuffer", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

@@ -8,10 +8,10 @@ public final class Status {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface StatusMessageOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
+  public interface StatusMessageOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:gnuradar.StatusMessage)
+      com.google.protobuf.MessageOrBuilder {
 
-    // required string name = 1;
     /**
      * <code>required string name = 1;</code>
      */
@@ -26,7 +26,6 @@ public final class Status {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // required int32 head = 2;
     /**
      * <code>required int32 head = 2;</code>
      */
@@ -36,7 +35,6 @@ public final class Status {
      */
     int getHead();
 
-    // required int32 tail = 3;
     /**
      * <code>required int32 tail = 3;</code>
      */
@@ -46,7 +44,6 @@ public final class Status {
      */
     int getTail();
 
-    // required int32 depth = 4;
     /**
      * <code>required int32 depth = 4;</code>
      */
@@ -56,7 +53,6 @@ public final class Status {
      */
     int getDepth();
 
-    // required int32 over_flow = 5;
     /**
      * <code>required int32 over_flow = 5;</code>
      */
@@ -66,7 +62,6 @@ public final class Status {
      */
     int getOverFlow();
 
-    // required int32 bytes_per_buffer = 6;
     /**
      * <code>required int32 bytes_per_buffer = 6;</code>
      */
@@ -80,8 +75,9 @@ public final class Status {
    * Protobuf type {@code gnuradar.StatusMessage}
    */
   public static final class StatusMessage extends
-      com.google.protobuf.GeneratedMessage
-      implements StatusMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage implements
+      // @@protoc_insertion_point(message_implements:gnuradar.StatusMessage)
+      StatusMessageOrBuilder {
     // Use StatusMessage.newBuilder() to construct.
     private StatusMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -128,8 +124,9 @@ public final class Status {
               break;
             }
             case 10: {
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              name_ = input.readBytes();
+              name_ = bs;
               break;
             }
             case 16: {
@@ -197,7 +194,6 @@ public final class Status {
     }
 
     private int bitField0_;
-    // required string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
     private java.lang.Object name_;
     /**
@@ -240,7 +236,6 @@ public final class Status {
       }
     }
 
-    // required int32 head = 2;
     public static final int HEAD_FIELD_NUMBER = 2;
     private int head_;
     /**
@@ -256,7 +251,6 @@ public final class Status {
       return head_;
     }
 
-    // required int32 tail = 3;
     public static final int TAIL_FIELD_NUMBER = 3;
     private int tail_;
     /**
@@ -272,7 +266,6 @@ public final class Status {
       return tail_;
     }
 
-    // required int32 depth = 4;
     public static final int DEPTH_FIELD_NUMBER = 4;
     private int depth_;
     /**
@@ -288,7 +281,6 @@ public final class Status {
       return depth_;
     }
 
-    // required int32 over_flow = 5;
     public static final int OVER_FLOW_FIELD_NUMBER = 5;
     private int overFlow_;
     /**
@@ -304,7 +296,6 @@ public final class Status {
       return overFlow_;
     }
 
-    // required int32 bytes_per_buffer = 6;
     public static final int BYTES_PER_BUFFER_FIELD_NUMBER = 6;
     private int bytesPerBuffer_;
     /**
@@ -331,7 +322,8 @@ public final class Status {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
 
       if (!hasName()) {
         memoizedIsInitialized = 0;
@@ -497,8 +489,9 @@ public final class Status {
      * Protobuf type {@code gnuradar.StatusMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.gnuradar.proto.Status.StatusMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:gnuradar.StatusMessage)
+        com.gnuradar.proto.Status.StatusMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.gnuradar.proto.Status.internal_static_gnuradar_StatusMessage_descriptor;
@@ -682,7 +675,6 @@ public final class Status {
       }
       private int bitField0_;
 
-      // required string name = 1;
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 1;</code>
@@ -696,9 +688,12 @@ public final class Status {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            name_ = s;
+          }
           return s;
         } else {
           return (java.lang.String) ref;
@@ -756,7 +751,6 @@ public final class Status {
         return this;
       }
 
-      // required int32 head = 2;
       private int head_ ;
       /**
        * <code>required int32 head = 2;</code>
@@ -789,7 +783,6 @@ public final class Status {
         return this;
       }
 
-      // required int32 tail = 3;
       private int tail_ ;
       /**
        * <code>required int32 tail = 3;</code>
@@ -822,7 +815,6 @@ public final class Status {
         return this;
       }
 
-      // required int32 depth = 4;
       private int depth_ ;
       /**
        * <code>required int32 depth = 4;</code>
@@ -855,7 +847,6 @@ public final class Status {
         return this;
       }
 
-      // required int32 over_flow = 5;
       private int overFlow_ ;
       /**
        * <code>required int32 over_flow = 5;</code>
@@ -888,7 +879,6 @@ public final class Status {
         return this;
       }
 
-      // required int32 bytes_per_buffer = 6;
       private int bytesPerBuffer_ ;
       /**
        * <code>required int32 bytes_per_buffer = 6;</code>
@@ -932,7 +922,7 @@ public final class Status {
     // @@protoc_insertion_point(class_scope:gnuradar.StatusMessage)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_gnuradar_StatusMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -953,23 +943,23 @@ public final class Status {
       "proto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_gnuradar_StatusMessage_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_gnuradar_StatusMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_gnuradar_StatusMessage_descriptor,
-              new java.lang.String[] { "Name", "Head", "Tail", "Depth", "OverFlow", "BytesPerBuffer", });
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
+    internal_static_gnuradar_StatusMessage_descriptor =
+      getDescriptor().getMessageTypes().get(0);
+    internal_static_gnuradar_StatusMessage_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_gnuradar_StatusMessage_descriptor,
+        new java.lang.String[] { "Name", "Head", "Tail", "Depth", "OverFlow", "BytesPerBuffer", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

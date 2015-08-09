@@ -28,15 +28,15 @@ Programs:
 Dependencies:
 
 1. Latest version of the boost libraries ( http://www.boost.org ).
-2. Sun Java Version 1.6 (1.7 may work but hasn't been tested)
+2. Sun Java Version 1.7
 3. Waf build system.
 4. HDF5 library.
 5. protobuf ( i.e google protocol buffers )
-   a. gnuradar v2.0 uses protobuf 2.5.0-3
+   a. gnuradar v2.0 uses protobuf 2.6.1-1
 6. zeromq ( a.k.a 0MQ or zmq )
-   a. gnuradar v2.0 uses zeromq 4.0.3-1
+   a. gnuradar v2.0 uses zeromq 4.1.2-3
 7. yaml-cpp parser.
-   a. gnuradar v2.0 uses yaml-cpp 0.5.1-1
+   a. gnuradar v2.0 uses yaml-cpp 0.5.2-2
 8. local deps in github repository ( see below ).
 
 Local Dependency installation:

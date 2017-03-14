@@ -32,11 +32,11 @@ Dependencies:
 3. Waf build system.
 4. HDF5 library.
 5. protobuf ( i.e google protocol buffers )
-   a. gnuradar v2.0 uses protobuf 2.6.1-1
+   a. gnuradar v2.0 uses protobuf 3.0.0
 6. zeromq ( a.k.a 0MQ or zmq )
    a. gnuradar v2.0 uses zeromq 4.1.2-3
 7. yaml-cpp parser.
-   a. gnuradar v2.0 uses yaml-cpp 0.5.2-2
+   a. gnuradar v2.0 uses yaml-cpp 0.5.3-1
 8. local deps in github repository ( see below ).
 
 Local Dependency installation:

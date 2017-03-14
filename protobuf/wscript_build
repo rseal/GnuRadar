@@ -1,4 +1,3 @@
-
 ################################################################################
 # Builds google protocol buffers, compile objects, and place in static library
 ################################################################################
@@ -6,10 +5,20 @@ proto_src = bld.path.ant_glob('*.proto')
 bld_rel = '../protobuf'
 cpp_dir = bld_rel + '/cpp'
 java_dir = bld_rel + '/java'
-proto_bld = bld(rule='protoc --cpp_out=%r --proto_path=%s ${SRC}'%(cpp_dir,bld_rel), source=proto_src)
-proto_bld = bld(rule='protoc --java_out=%r --proto_path=%s ${SRC}'%(java_dir,bld_rel), source=proto_src)
+proto_bld = bld(
+   rule='protoc --cpp_out=%r --proto_path=%s ${SRC}'%(cpp_dir,bld_rel), 
+   source=proto_src,
+)
+proto_bld = bld(
+   rule='protoc --java_out=%r --proto_path=%s ${SRC}'%(java_dir,bld_rel), 
+   source=proto_src, 
+)
+
 bld.add_group()
-bld.stlib( source=bld.path.ant_glob('cpp/*.cc'), target='proto')
+bld.stlib( 
+   source=bld.path.ant_glob('cpp/*.cc'), 
+   target='proto',
+)
 
 bld.add_group()
 bld(

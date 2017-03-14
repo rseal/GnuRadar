@@ -1,3 +1,4 @@
+syntax = "proto2";
 package gnuradar;
 option java_package="com.gnuradar.proto";
 

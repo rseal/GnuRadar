@@ -6,7 +6,13 @@ package com.gnuradar.proto;
 public final class Status {
   private Status() {}
   public static void registerAllExtensions(
+      com.google.protobuf.ExtensionRegistryLite registry) {
+  }
+
+  public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
+    registerAllExtensions(
+        (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface StatusMessageOrBuilder extends
       // @@protoc_insertion_point(interface_extends:gnuradar.StatusMessage)
@@ -74,37 +80,33 @@ public final class Status {
   /**
    * Protobuf type {@code gnuradar.StatusMessage}
    */
-  public static final class StatusMessage extends
-      com.google.protobuf.GeneratedMessage implements
+  public  static final class StatusMessage extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:gnuradar.StatusMessage)
       StatusMessageOrBuilder {
     // Use StatusMessage.newBuilder() to construct.
-    private StatusMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private StatusMessage(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
-      this.unknownFields = builder.getUnknownFields();
     }
-    private StatusMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final StatusMessage defaultInstance;
-    public static StatusMessage getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public StatusMessage getDefaultInstanceForType() {
-      return defaultInstance;
+    private StatusMessage() {
+      name_ = "";
+      head_ = 0;
+      tail_ = 0;
+      depth_ = 0;
+      overFlow_ = 0;
+      bytesPerBuffer_ = 0;
     }
 
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
+    getUnknownFields() {
       return this.unknownFields;
     }
     private StatusMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
+      this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -160,7 +162,7 @@ public final class Status {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
+            e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -171,31 +173,16 @@ public final class Status {
       return com.gnuradar.proto.Status.internal_static_gnuradar_StatusMessage_descriptor;
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return com.gnuradar.proto.Status.internal_static_gnuradar_StatusMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               com.gnuradar.proto.Status.StatusMessage.class, com.gnuradar.proto.Status.StatusMessage.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<StatusMessage> PARSER =
-        new com.google.protobuf.AbstractParser<StatusMessage>() {
-      public StatusMessage parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new StatusMessage(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<StatusMessage> getParserForType() {
-      return PARSER;
-    }
-
     private int bitField0_;
     public static final int NAME_FIELD_NUMBER = 1;
-    private java.lang.Object name_;
+    private volatile java.lang.Object name_;
     /**
      * <code>required string name = 1;</code>
      */
@@ -311,14 +298,6 @@ public final class Status {
       return bytesPerBuffer_;
     }
 
-    private void initFields() {
-      name_ = "";
-      head_ = 0;
-      tail_ = 0;
-      depth_ = 0;
-      overFlow_ = 0;
-      bytesPerBuffer_ = 0;
-    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -355,9 +334,8 @@ public final class Status {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getNameBytes());
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, name_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(2, head_);
@@ -374,18 +352,16 @@ public final class Status {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeInt32(6, bytesPerBuffer_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
-    private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
-      int size = memoizedSerializedSize;
+      int size = memoizedSize;
       if (size != -1) return size;
 
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getNameBytes());
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, name_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -407,16 +383,91 @@ public final class Status {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(6, bytesPerBuffer_);
       }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.gnuradar.proto.Status.StatusMessage)) {
+        return super.equals(obj);
+      }
+      com.gnuradar.proto.Status.StatusMessage other = (com.gnuradar.proto.Status.StatusMessage) obj;
+
+      boolean result = true;
+      result = result && (hasName() == other.hasName());
+      if (hasName()) {
+        result = result && getName()
+            .equals(other.getName());
+      }
+      result = result && (hasHead() == other.hasHead());
+      if (hasHead()) {
+        result = result && (getHead()
+            == other.getHead());
+      }
+      result = result && (hasTail() == other.hasTail());
+      if (hasTail()) {
+        result = result && (getTail()
+            == other.getTail());
+      }
+      result = result && (hasDepth() == other.hasDepth());
+      if (hasDepth()) {
+        result = result && (getDepth()
+            == other.getDepth());
+      }
+      result = result && (hasOverFlow() == other.hasOverFlow());
+      if (hasOverFlow()) {
+        result = result && (getOverFlow()
+            == other.getOverFlow());
+      }
+      result = result && (hasBytesPerBuffer() == other.hasBytesPerBuffer());
+      if (hasBytesPerBuffer()) {
+        result = result && (getBytesPerBuffer()
+            == other.getBytesPerBuffer());
+      }
+      result = result && unknownFields.equals(other.unknownFields);
+      return result;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasName()) {
+        hash = (37 * hash) + NAME_FIELD_NUMBER;
+        hash = (53 * hash) + getName().hashCode();
+      }
+      if (hasHead()) {
+        hash = (37 * hash) + HEAD_FIELD_NUMBER;
+        hash = (53 * hash) + getHead();
+      }
+      if (hasTail()) {
+        hash = (37 * hash) + TAIL_FIELD_NUMBER;
+        hash = (53 * hash) + getTail();
+      }
+      if (hasDepth()) {
+        hash = (37 * hash) + DEPTH_FIELD_NUMBER;
+        hash = (53 * hash) + getDepth();
+      }
+      if (hasOverFlow()) {
+        hash = (37 * hash) + OVER_FLOW_FIELD_NUMBER;
+        hash = (53 * hash) + getOverFlow();
+      }
+      if (hasBytesPerBuffer()) {
+        hash = (37 * hash) + BYTES_PER_BUFFER_FIELD_NUMBER;
+        hash = (53 * hash) + getBytesPerBuffer();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
     }
 
     public static com.gnuradar.proto.Status.StatusMessage parseFrom(
@@ -442,46 +493,57 @@ public final class Status {
     }
     public static com.gnuradar.proto.Status.StatusMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static com.gnuradar.proto.Status.StatusMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static com.gnuradar.proto.Status.StatusMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
     }
     public static com.gnuradar.proto.Status.StatusMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static com.gnuradar.proto.Status.StatusMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return PARSER.parseFrom(input);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
     }
     public static com.gnuradar.proto.Status.StatusMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
-    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.gnuradar.proto.Status.StatusMessage prototype) {
-      return newBuilder().mergeFrom(prototype);
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
     }
-    public Builder toBuilder() { return newBuilder(this); }
+    public static Builder newBuilder(com.gnuradar.proto.Status.StatusMessage prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -489,7 +551,7 @@ public final class Status {
      * Protobuf type {@code gnuradar.StatusMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:gnuradar.StatusMessage)
         com.gnuradar.proto.Status.StatusMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
@@ -497,7 +559,7 @@ public final class Status {
         return com.gnuradar.proto.Status.internal_static_gnuradar_StatusMessage_descriptor;
       }
 
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return com.gnuradar.proto.Status.internal_static_gnuradar_StatusMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -510,18 +572,15 @@ public final class Status {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
         }
       }
-      private static Builder create() {
-        return new Builder();
-      }
-
       public Builder clear() {
         super.clear();
         name_ = "";
@@ -537,10 +596,6 @@ public final class Status {
         bytesPerBuffer_ = 0;
         bitField0_ = (bitField0_ & ~0x00000020);
         return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -593,6 +648,32 @@ public final class Status {
         return result;
       }
 
+      public Builder clone() {
+        return (Builder) super.clone();
+      }
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.setField(field, value);
+      }
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return (Builder) super.clearField(field);
+      }
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return (Builder) super.clearOneof(oneof);
+      }
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, Object value) {
+        return (Builder) super.setRepeatedField(field, index, value);
+      }
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          Object value) {
+        return (Builder) super.addRepeatedField(field, value);
+      }
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.gnuradar.proto.Status.StatusMessage) {
           return mergeFrom((com.gnuradar.proto.Status.StatusMessage)other);
@@ -624,33 +705,28 @@ public final class Status {
         if (other.hasBytesPerBuffer()) {
           setBytesPerBuffer(other.getBytesPerBuffer());
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasName()) {
-          
           return false;
         }
         if (!hasHead()) {
-          
           return false;
         }
         if (!hasTail()) {
-          
           return false;
         }
         if (!hasDepth()) {
-          
           return false;
         }
         if (!hasOverFlow()) {
-          
           return false;
         }
         if (!hasBytesPerBuffer()) {
-          
           return false;
         }
         return true;
@@ -665,7 +741,7 @@ public final class Status {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (com.gnuradar.proto.Status.StatusMessage) e.getUnfinishedMessage();
-          throw e;
+          throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
             mergeFrom(parsedMessage);
@@ -910,29 +986,66 @@ public final class Status {
         onChanged();
         return this;
       }
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
 
       // @@protoc_insertion_point(builder_scope:gnuradar.StatusMessage)
     }
 
+    // @@protoc_insertion_point(class_scope:gnuradar.StatusMessage)
+    private static final com.gnuradar.proto.Status.StatusMessage DEFAULT_INSTANCE;
     static {
-      defaultInstance = new StatusMessage(true);
-      defaultInstance.initFields();
+      DEFAULT_INSTANCE = new com.gnuradar.proto.Status.StatusMessage();
     }
 
-    // @@protoc_insertion_point(class_scope:gnuradar.StatusMessage)
+    public static com.gnuradar.proto.Status.StatusMessage getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<StatusMessage>
+        PARSER = new com.google.protobuf.AbstractParser<StatusMessage>() {
+      public StatusMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+          return new StatusMessage(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<StatusMessage> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<StatusMessage> getParserForType() {
+      return PARSER;
+    }
+
+    public com.gnuradar.proto.Status.StatusMessage getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_gnuradar_StatusMessage_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_gnuradar_StatusMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }
-  private static com.google.protobuf.Descriptors.FileDescriptor
+  private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
     java.lang.String[] descriptorData = {
@@ -957,7 +1070,7 @@ public final class Status {
     internal_static_gnuradar_StatusMessage_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_gnuradar_StatusMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_gnuradar_StatusMessage_descriptor,
         new java.lang.String[] { "Name", "Head", "Tail", "Depth", "OverFlow", "BytesPerBuffer", });
   }

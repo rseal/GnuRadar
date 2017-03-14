@@ -1,5 +1,9 @@
+syntax = "proto2";
+
 package gnuradar;
+
 option java_package="com.gnuradar.proto";
+
 
 message ControlMessage{
    required string name = 1;
